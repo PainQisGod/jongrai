@@ -1,0 +1,145 @@
+# Roster + roles: MLBB patch 2.2.16, 133 heroes (names/roles from mlbbhub.com).
+# Lanes: typical lanes from mlbb.io (Oct 2026): EXP, JUNGLE, MID, GOLD, ROAM. First one = main lane.
+# tier / winrate / banrate: from the tier-list screenshots PainQ provided (overall win rate in %).
+#   banrate is only shown there when above 15%, so a blank banrate means 'under 15% or unknown'.
+# Counters: Moonton's official in-game relations only (strong against / weak against), via github.com/p3hndrx/MLBB-API (MIT).
+#   'counters' column = heroes THIS hero is good against. No head-to-head win-rate numbers yet.
+# Synergies: Moonton's official in-game synergy lists only (same source). The engine counts a synergy in either direction.
+# durability / offense / control: Moonton's in-game hero ratings (10-100). tags: Moonton's hero speciality tags (Burst, Push, Regen, ...).
+# spike: when the hero's power spikes (EARLY / MID / LATE), from the community dataset github.com/Amirul-Hakimi/MLBB-DRAFT-ANALYSIS (ISC license).
+#   It is that author's own judgement, not official data - edit any hero you disagree with.
+# Dual roles/lanes use '/'. Lists use ';'.
+name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip
+Aamon,ASSASSIN,JUNGLE,C,49.62,,Cecilion;Diggie;Ixia;Vexana;Xavier,Floryn;Rafaela,30,70,10,Chase;Magic Damage,MID,Your job is to wait for the backline, then burst the squishies and slip away.
+Akai,TANK,ROAM/JUNGLE,B,49.93,,Barats;Eudora;Karina;Leomord;Odette,Eudora;Saber,90,30,90,Guard;Crowd Control,MID,
+Aldous,FIGHTER,EXP,D,50.84,,Leomord;Zilong,Balmond;Bruno,70,30,50,Burst;Support,LATE
+Alice,TANK/MAGE,EXP/JUNGLE,B,50.63,,Cecilion;Chang'e,Balmond;Dyrroth,50,50,70,Charge;Regen,LATE
+Alpha,FIGHTER,JUNGLE/EXP,C,47.41,,Ixia;Layla,Selena;Vexana,60,40,70,Charge;Damage,EARLY
+Alucard,FIGHTER/ASSASSIN,JUNGLE/EXP,D,48.16,,Aamon;Cyclops;Harley,Gatotkaca;Xavier,50,50,10,Chase;Damage,MID
+Angela,SUPPORT,ROAM/MID,B,49.44,,Belerick;Uranus,Aamon;Lancelot,30,20,50,Guard;Support,MID
+Argus,FIGHTER,EXP,D,55.35,,Aurora;Gord,Angela;Rafaela,70,50,50,Charge;Burst,LATE
+Arlott,FIGHTER/ASSASSIN,EXP,B,47.98,,Hanzo;Sora;Sun;Terizla;Zilong,Atlas;Gatotkaca,60,60,50,Charge;Burst,EARLY
+Atlas,TANK,ROAM/EXP,S,51.99,,Eudora;Vexana,Ixia;Vale,80,10,90,Crowd Control;Initiator,MID
+Aulus,FIGHTER,JUNGLE/EXP,S,58.99,,Gord;Hanabi;Minsitthar;Miya,Angela;Floryn,60,60,10,Damage;Charge,LATE
+Aurora,MAGE,MID,B,48.26,,Leomord;Phoveus;Terizla;Thamuz,Freya;Ixia;Karrie,40,70,100,Crowd Control;Poke,MID
+Badang,FIGHTER,ROAM/EXP,A,50.12,,Franco;Guinevere;Irithel;Layla;Odette;Suyou;Yin,Luo Yi;Tigreal,40,70,50,Charge;Burst,MID
+Balmond,FIGHTER,JUNGLE/EXP,C,45.72,,Aamon;Eudora;Layla,Angela;Rafaela,80,30,20,Damage;Regen,EARLY
+Bane,FIGHTER/MAGE,JUNGLE/EXP,C,50.92,,Belerick;Hylos,Luo Yi;Tigreal,50,60,40,Push;Burst,MID
+Barats,TANK/FIGHTER,EXP/JUNGLE,S,51.79,,Belerick;Chip;Lolita,Angela;Mathilda,100,30,90,Damage;Crowd Control,MID
+Baxia,TANK,JUNGLE/ROAM,B,47.12,,Alice;Chang'e;Silvanna,Alpha;Thamuz,100,30,60,Support;Damage,MID
+Beatrix,MARKSMAN,GOLD,B,51.71,,Belerick;Hylos;Kadita,Atlas;Khufra,30,80,10,Finisher;Damage,ALL
+Belerick,TANK,ROAM/EXP,A,52.42,55.28,Dyrroth;Helcurt;Lancelot;Ling,Miya;Natan,90,40,100,Crowd Control;Regen,LATE
+Benedetta,ASSASSIN/FIGHTER,EXP,B,52.71,,Guinevere;Jawhead;Xavier,Gatotkaca;Johnson,60,50,20,Chase;Burst,MID
+Brody,MARKSMAN,GOLD,S,50.45,,Aamon;Yin,Hylos;Minsitthar,40,70,50,Burst;Finisher,EARLY
+Bruno,MARKSMAN,GOLD,S,53.49,,Hanabi;Miya;Obsidia,Franco;Khufra,20,60,20,Finisher;Burst,LATE
+Carmilla,SUPPORT/TANK,ROAM/EXP,S,53.67,,Dyrroth;Lapu-Lapu,Aurora;Cecilion,90,20,80,Crowd Control;Damage,MID
+Cecilion,MAGE,MID,A,50.92,,Balmond;Terizla;Zhask,Carmilla;Minotaur,40,100,50,Poke;Burst,LATE
+Chang'e,MAGE,MID,D,47.92,,Eudora;Odette;Tigreal,Gatotkaca;Tigreal,40,80,20,Poke;Burst,MID
+Chip,SUPPORT/TANK,ROAM,C,47.28,,Ixia;Layla;Vexana,Alpha;Hanabi;Kadita,80,20,60,Support;Crowd Control,EARLY
+Chou,FIGHTER,ROAM/EXP,B,45.18,,Alpha;Guinevere;Khaleed;Terizla,Angela;Rafaela,50,30,80,Chase;Control,ALL
+Cici,FIGHTER,EXP/GOLD,A,49.15,,Fredrinn;Minotaur,Angela;Floryn,50,60,30,Damage;Regen,MID
+Claude,MARKSMAN,GOLD,A,48.95,,Floryn;Masha;Vexana,Angela;Faramis,30,60,10,Burst;Chase,LATE
+Clint,MARKSMAN,GOLD,S,51.33,,Kadita;Miya;Moskov,Angela;Rafaela,30,70,40,Finisher;Burst,MID
+Cyclops,MAGE,MID,D,51.05,,Alpha;Terizla,Belerick;Minsitthar,30,100,70,Damage;Control,MID
+Diggie,SUPPORT,ROAM,B,53.76,,Akai;Atlas;Gatotkaca;Kalea;Lolita,Layla;Miya,40,40,20,Guard;Poke,EARLY
+Dyrroth,FIGHTER,EXP/JUNGLE,B,47.3,,Aldous;Gord;Hanabi;X.Borg,Franco;Kaja,50,50,20,Charge;Burst,EARLY
+Edith,TANK/MARKSMAN,EXP/ROAM,B,52.69,,Aulus;Jawhead;Odette;Zilong,Atlas;Minotaur,70,30,100,Control;Burst,MID
+Esmeralda,TANK/MAGE,EXP,B,47.64,,Akai;Lolita,Atlas;Tigreal,90,30,60,Regen;Mixed Damage,MID
+Estes,SUPPORT,ROAM,C,53.25,35.95,Alice;Saber;Valir,Hanabi;Lesley,70,10,20,Regen;Guard,MID
+Eudora,MAGE,MID,S,51.25,59.7,Beatrix;Claude;Estes;Ling;Moskov;Natan;Sora,Diggie;Tigreal,10,80,80,Control;Burst,EARLY
+Fanny,ASSASSIN,JUNGLE,A,42.87,,Cecilion;Franco;Gord;Hanzo;Irithel;Karrie;Lukas;Masha;Sora;Valir;Zhuxin,Gatotkaca;Minotaur,60,70,10,Chase;Finisher,EARLY
+Faramis,SUPPORT/MAGE,MID/ROAM,C,51.67,,Eudora;Saber,Leomord;Martis,40,60,10,Guard;Charge,MID
+Floryn,SUPPORT,ROAM,C,54.5,,Lolita;Uranus,Terizla;Thamuz,60,10,70,Poke;Guard,MID
+Franco,TANK,ROAM,B,41.53,,Alucard;Aulus;Claude;Estes;Gusion;Hayabusa;Layla;Leomord;Mathilda;Paquito;Pharsa;Vale;Yi Sun-shin;Zilong,Brody;Karina;Vale,80,10,100,Initiator;Control,EARLY
+Fredrinn,FIGHTER/TANK,JUNGLE,A,51.42,,Aamon;Arlott;Bruno;Eudora;Helcurt;Khufra;Luo Yi;Martis;Nolan;Vale;Yin,Angela;Floryn,80,50,60,Damage;Chase,MID
+Freya,FIGHTER,EXP/GOLD,S,47.61,,Ixia;Lesley,Belerick;Gatotkaca,60,70,60,Chase;Damage,EARLY
+Gatotkaca,TANK/FIGHTER,ROAM/EXP,A,44.19,,Argus;Bruno;Helcurt;Layla;Popol and Kupa,Kagura;Vale,90,30,90,Crowd Control;Burst,MID
+Gloo,TANK,ROAM/EXP,A,53.95,37.79,Cecilion;Chang'e;Khufra,Eudora;Saber,100,30,100,Regen;Control,MID
+Gord,MAGE,MID,C,52.91,,Barats;Fredrinn;Wanwan,Belerick;Hylos,10,70,80,Poke;Burst,MID
+Granger,MARKSMAN,GOLD,B,43.59,,Cecilion;Chang'e,Franco;Kaja,30,70,10,Burst;Finisher,EARLY
+Grock,TANK/FIGHTER,ROAM,C,47.12,,Gord;Layla,Odette;Pharsa,90,40,80,Crowd Control;Initiator,EARLY
+Guinevere,FIGHTER,JUNGLE/ROAM,B,51.38,,Aurora;Silvanna;Zilong,Franco;Hylos,40,50,70,Burst;Magic Damage,EARLY
+Gusion,ASSASSIN,JUNGLE/MID,D,48.23,,Alpha;Hanabi;Layla;Popol and Kupa,Pharsa;Vexana,30,90,10,Burst;Magic Damage,EARLY
+Hanabi,MARKSMAN,GOLD,B,51.76,,Belerick;Carmilla;Edith;Selena;Tigreal,Atlas;Carmilla,20,70,80,Finisher;Damage,LATE
+Hanzo,ASSASSIN,JUNGLE,C,49.72,18.95,Chang'e;Ixia;Layla;Valentina;Zhuxin,Aurora;Belerick;Tigreal,70,80,20,Poke;Burst,MID
+Harith,MAGE,GOLD,B,46.91,,Belerick;Johnson;Julian,Minotaur;Minsitthar,40,50,10,Chase;Damage,MID
+Harley,ASSASSIN/MAGE,JUNGLE/MID,B,47.81,,Angela;Cecilion;Chang'e;Grock;Ixia,Akai;Khufra,30,90,10,Burst;Poke,EARLY
+Hayabusa,ASSASSIN,JUNGLE,C,48.33,,Cecilion;Chang'e;Eudora;Granger;Novaria;Rafaela;Vale;Valentina;Xavier,Alpha;Lapu-Lapu,40,50,10,Chase;Burst,MID
+Helcurt,ASSASSIN,ROAM/JUNGLE,D,46.96,,Chang'e;Layla;Vale,Esmeralda;Terizla;Tigreal,30,50,50,Push;Burst,EARLY
+Hilda,FIGHTER/TANK,ROAM/EXP,A,50.16,,Layla;Zilong,Franco;Rafaela,90,40,40,Damage;Regen,EARLY
+Hirara,ASSASSIN,JUNGLE,S,54.04,65.83,Gusion;Ixia;Pharsa;Yin,Angela;Minotaur,40,70,40,Chase;Finisher,MID
+Hylos,TANK,ROAM/EXP,A,48.2,,Gord;Layla,Minsitthar;Terizla,100,20,80,Guard;Initiator,EARLY
+Irithel,MARKSMAN,GOLD,C,52.35,,Alpha;Balmond;Miya;Ruby;Thamuz,Hylos;Valir,10,80,10,Finisher;Burst,LATE
+Ixia,MARKSMAN,GOLD,C,49.77,,Bane;Fredrinn,Bane;Fredrinn,30,70,50,Finisher;Damage,LATE
+Jawhead,FIGHTER,ROAM/EXP,C,46.81,,Eudora;Ling;Saber,Belerick;Odette,60,30,60,Charge;Burst,EARLY
+Johnson,TANK/SUPPORT,ROAM,D,47.65,,Alucard;Zilong,Kadita;Odette,80,30,90,Support;Crowd Control,MID
+Joy,ASSASSIN,JUNGLE,C,49.17,,Julian;Kagura;Vexana;Xavier,Angela;Hylos,30,70,10,Chase;Damage,MID
+Julian,ASSASSIN/FIGHTER,JUNGLE/EXP,C,49.9,,Aldous;Cecilion;Lukas,Angela;Diggie,60,60,70,Chase;Magic Damage,EARLY
+Kadita,MAGE/ASSASSIN,MID,C,51.49,,Aurora;Eudora,Atlas;Tigreal,40,80,80,Burst;Charge,EARLY
+Kagura,MAGE,MID,B,52.35,,Cyclops;Eudora;Johnson;Kaja;Layla,Atlas;Tigreal,30,90,40,Poke;Finisher,MID
+Kaja,SUPPORT,ROAM,B,49.87,20.62,Cici;Fanny;Gusion;Hayabusa;Ixia;Layla;Natalia;Paquito;Vexana;Yi Sun-shin,Ixia;Odette;Pharsa,80,20,70,Initiator;Charge,MID
+Kalea,SUPPORT/FIGHTER,ROAM,B,44.66,,Chang'e;Layla,Clint;Eudora;Harley,60,20,90,Control;Regen,MID
+Karina,ASSASSIN,JUNGLE,B,47.45,,Aulus;Floryn;Hanabi;Layla;Popol and Kupa;Vexana;Yve,Faramis;Tigreal,50,70,10,Finisher;Magic Damage,MID
+Karrie,MARKSMAN,GOLD,B,48.55,,Baxia;Clint;Esmeralda;Fredrinn;Gloo;Hylos;Thamuz;Tigreal;Yu Zhong,Aamon;Saber,30,80,10,Finisher;Damage,MID
+Khaleed,FIGHTER,ROAM/EXP,B,50.93,,Cyclops;Xavier,Karina;Roger,80,50,50,Damage;Regen,EARLY
+Khufra,TANK,ROAM,B,54.67,,Fanny;Joy;Karina;Lancelot;Roger,Eudora;Pharsa,90,20,100,Initiator;Crowd Control,MID
+Kimmy,MARKSMAN/MAGE,MID/GOLD,A,48.63,,Cecilion;Granger;Grock,Badang;Ruby,30,80,50,Damage;Magic Damage,MID
+Lancelot,ASSASSIN,JUNGLE,C,43.17,,Cecilion;Cyclops;Gord;Hanabi;Hanzo;Kimmy;Lesley;Moskov;Pharsa;Valir;Wanwan,Atlas;Tigreal,40,50,10,Chase;Burst,EARLY
+Lapu-Lapu,FIGHTER,EXP,B,48.78,,Eudora;Layla,Atlas;Tigreal,80,40,40,Chase;Burst,MID
+Layla,MARKSMAN,GOLD,C,48.62,,Belerick;Karrie;Minotaur;Obsidia;Tigreal;Uranus,Belerick;Minsitthar,10,80,10,Finisher;Damage,LATE
+Leomord,FIGHTER,JUNGLE,B,50.45,,Cecilion;Odette;Pharsa;Yve,Pharsa;Vexana,70,50,30,Chase;Burst,MID
+Lesley,MARKSMAN/ASSASSIN,GOLD,C,48.22,,Balmond;Baxia;Chou;Esmeralda;Fredrinn;Gatotkaca;Gloo;Hylos;Lapu-Lapu;Minotaur;Terizla;Uranus;Yu Zhong,Baxia;Minotaur,10,70,20,Finisher;Burst,LATE
+Ling,ASSASSIN,JUNGLE,C,52.86,,Angela;Aurora;Badang;Beatrix;Cecilion;Diggie;Hanabi;Layla;Lesley;Lolita;Lunox;Lylia;Marcel;Rafaela;Vale,Angela;Khufra,50,60,30,Chase;Burst,LATE
+Lolita,SUPPORT/TANK,ROAM,C,54.13,,Cyclops;Harley;Kimmy,Hanabi;Layla,100,10,90,Guard;Crowd Control,MID
+Lukas,FIGHTER,EXP/JUNGLE,A,53.48,26.12,Hanabi;Ixia,Atlas;Gatotkaca;Tigreal,70,50,60,Regen;Damage,MID
+Lunox,MAGE,MID,B,49.23,,Lylia;Yve,Franco;Minotaur,30,90,20,Burst;Damage,LATE
+Luo Yi,MAGE,MID,B,47.89,,Eudora;Gord,Aamon;Karina,20,100,40,Support;Crowd Control,EARLY
+Lylia,MAGE,MID,S,49.58,,Carmilla;Hylos,Franco;Minotaur,50,100,20,Push;Damage,EARLY
+Marcel,SUPPORT,ROAM,S,58.36,31.99,Layla;Vexana,Hanabi;Ixia,70,30,100,Crowd Control;Support,MID
+Martis,FIGHTER,JUNGLE/EXP,B,46.75,,Aldous;Alice;Brody;Kagura;Layla;Odette;Silvanna;X.Borg,Alpha;Khaleed,60,30,50,Finisher;Charge,EARLY
+Masha,FIGHTER/TANK,EXP/ROAM,S,58.8,22.39,Eudora;Kadita,Atlas;Minotaur,50,70,30,Push;Damage,LATE
+Mathilda,SUPPORT/ASSASSIN,ROAM,A,45.79,,Gord;Vale,Eudora;Saber,80,20,40,Initiator;Guard,EARLY
+Melissa,MARKSMAN,GOLD,B,48.51,,Aulus;Clint;Sun;Suyou;Zilong,Minotaur;Tigreal,20,90,40,Finisher;Damage,LATE
+Minotaur,TANK/SUPPORT,ROAM/EXP,S,55.1,,Julian;Kalea;Odette;Paquito,Granger;Melissa,100,10,80,Crowd Control,MID
+Minsitthar,FIGHTER,EXP/ROAM,C,50.94,,Arlott;Benedetta;Joy;Lancelot;Mathilda;Natalia;Pharsa;Roger,Hanabi;Melissa,60,40,80,Initiator;Crowd Control,MID
+Miya,MARKSMAN,GOLD,A,49.16,,Eudora;Saber;Sun,Belerick;Tigreal,10,70,40,Finisher;Damage,LATE
+Moskov,MARKSMAN,GOLD,A,50.61,,Atlas;Balmond;Barats;Lapu-Lapu;Thamuz,Fredrinn;Gatotkaca,20,60,60,Finisher;Chase,LATE
+Nana,MAGE,MID,C,46.82,,Akai;Eudora;Kadita;Karrie;Leomord;Melissa;Zilong,Franco;Rafaela,50,60,100,Poke;Burst,MID
+Natalia,ASSASSIN,ROAM/JUNGLE,D,50.85,,Hirara;Irithel;Moskov;Nana;Novaria;Valentina;Xavier,Vexana;Yi Sun-shin,10,60,60,Chase;Finisher,EARLY
+Natan,MARKSMAN,GOLD,C,51.23,,Gatotkaca;Tigreal,Alpha;Johnson,20,60,20,Burst;Magic Damage,LATE
+Nolan,ASSASSIN,JUNGLE,S,49.06,,Eudora;Hanabi;Lunox;Lylia,Gatotkaca;Tigreal,30,60,20,Chase;Burst,EARLY
+Novaria,MAGE,MID,A,50.12,,Eudora;Faramis;Harith;Odette,Beatrix;Layla,30,90,30,Burst;Poke,LATE
+Obsidia,MARKSMAN,GOLD,S,53.69,,Freya;Hayabusa;Lancelot,Angela;Estes,30,80,10,Finisher;Damage,MID
+Odette,MAGE,MID,B,49.46,,Irithel;Layla,Jawhead;Johnson,30,100,70,Burst;Poke,MID
+Paquito,FIGHTER/ASSASSIN,JUNGLE/EXP,S,50.44,46.65,Gord;Layla;Lolita,Angela;Rafaela,60,50,40,Chase;Damage,MID
+Pharsa,MAGE,MID,B,47.23,,Chou;Faramis;Hanabi;Harith;Layla;Miya;Xavier;Zhask,Atlas;Franco,20,90,50,Burst;Poke,MID
+Phoveus,FIGHTER,EXP,B,47.77,,Arlott;Benedetta;Chou;Freya;Lancelot;Leomord;Wanwan,Gatotkaca;Minotaur;Tigreal,60,80,50,Regen;Damage,MID
+Popol and Kupa,MARKSMAN,JUNGLE/GOLD,D,53.84,,Brody;Lesley,Alpha;Khaleed,30,70,70,Push;Burst,EARLY
+Rafaela,SUPPORT,ROAM/MID,A,59.38,15.54,Barats;Masha,Freya;Lapu-Lapu,60,20,70,Regen;Guard,EARLY
+Roger,FIGHTER/MARKSMAN,JUNGLE/GOLD,D,49.27,,Hanabi;Odette,Pharsa;Vexana,60,40,10,Finisher;Burst,MID
+Ruby,FIGHTER,EXP/ROAM,B,49.55,,Aldous;Guinevere;Sun,Kadita;Pharsa,90,20,90,Crowd Control;Regen,MID
+Saber,ASSASSIN,JUNGLE/ROAM,D,48.93,21.46,Cici;Estes;Eudora;Floryn;Granger;Hirara;Ixia;Kimmy;Layla;Natan;Novaria;Vexana;Yve;Zhuxin,Cyclops;Kadita,20,60,60,Charge;Finisher,EARLY
+Selena,ASSASSIN/MAGE,MID/ROAM,A,49.38,,Gord;Layla,Beatrix;Xavier,30,70,100,Initiator;Finisher,EARLY
+Silvanna,FIGHTER,EXP/JUNGLE,D,50.46,,Irithel;Layla;Valir,Atlas;Tigreal,50,40,70,Initiator;Magic Damage,EARLY
+Sora,FIGHTER/ASSASSIN,EXP,A,49.57,,Hanabi;Layla;Miya,Gatotkaca;Minotaur;Tigreal,60,60,50,Charge;Burst,MID
+Sun,FIGHTER,EXP/JUNGLE,C,52.32,18.6,Franco;Gatotkaca,Belerick;Tigreal,50,50,10,Push;Damage,LATE
+Suyou,ASSASSIN/FIGHTER,JUNGLE,A,49.79,,Ixia;Kaja;Xavier,Rafaela;Tigreal,60,60,50,Chase;Burst,MID
+Terizla,FIGHTER/TANK,EXP,B,50.59,,Sun;Zilong,Atlas;Gatotkaca,90,30,40,Burst;Crowd Control,EARLY
+Thamuz,FIGHTER,EXP/JUNGLE,B,48.25,,Arlott;Hilda;Jawhead;Martis;Nolan;Sun;Zilong,Angela;Rafaela,70,40,20,Chase;Damage,EARLY
+Tigreal,TANK,ROAM,C,43.99,,Argus;Chip;Freya;Zilong,Odette;Vexana,80,10,100,Crowd Control,MID
+Uranus,TANK,EXP,S,49.46,,Franco;Harley;Hilda;Luo Yi;Tigreal,Beatrix;Hanabi,100,20,20,Regen,MID
+Vale,MAGE,MID,D,49.71,,Bane;Hilda;Terizla,Belerick;Lolita,20,100,70,Burst;Crowd Control,MID
+Valentina,MAGE,MID,S,45.5,,Faramis;Hanabi;Zetian,Atlas;Carmilla,50,40,40,Burst;Finisher,MID
+Valir,MAGE,MID,D,53.01,,Atlas;Balmond;Belerick;Fredrinn;Lukas;Phoveus;Sora,Khaleed;Yu Zhong,20,70,70,Damage;Guard,EARLY
+Vexana,MAGE,MID,B,49.1,,Dyrroth;Irithel;Layla;Phoveus;Xavier,Atlas;Beatrix,20,90,50,Poke;Control,MID
+Wanwan,MARKSMAN,GOLD,C,48.64,,Badang;Brody;Carmilla;Edith;Franco;Fredrinn;Gatotkaca;Luo Yi;Ruby;Selena,Belerick;Franco,20,60,30,Finisher;Burst,LATE
+X.Borg,FIGHTER,EXP/JUNGLE,B,49.73,,Aulus;Khaleed;Marcel;Terizla,Karina;Martis,80,30,10,Regen;Burst,MID
+Xavier,MAGE,MID,C,50.05,,Bane;Belerick;Faramis;Hanabi;Karrie;Melissa,Atlas;Carmilla,20,100,80,Damage;Burst,LATE
+Yi Sun-shin,ASSASSIN/MARKSMAN,JUNGLE/GOLD,A,50.19,,Kaja;Terizla;Uranus,Alpha;Khaleed,40,90,40,Finisher;Chase,LATE
+Yin,FIGHTER/ASSASSIN,JUNGLE/EXP,D,48.3,,Cecilion;Layla;Yve,Mathilda;Rafaela,50,60,80,Burst;Control,MID
+Yu Zhong,FIGHTER,EXP,B,49.34,,Aulus;Zilong,Vexana;Xavier,70,40,70,Regen;Damage,EARLY
+Yve,MAGE,MID,B,52.66,,Aulus;Barats;Fredrinn;Miya,Atlas;Gatotkaca;Minotaur,40,80,40,Poke;Burst,MID
+Zetian,MAGE,MID,B,51.01,,Balmond;Zilong,Floryn;Rafaela,40,70,50,Damage;Crowd Control,MID
+Zhask,MAGE,MID,C,52.12,,Aldous;Paquito;Tigreal,Belerick;Lolita,10,100,40,Chase;Damage,MID
+Zhuxin,MAGE,MID,A,50.1,,Cyclops;Popol and Kupa,Belerick;Cici;Kimmy,40,80,80,Damage;Crowd Control,MID
+Zilong,FIGHTER/ASSASSIN,EXP,D,45.05,,Hanabi;Layla;Lylia;Minsitthar;Nana;Pharsa,Hanabi;Pharsa,20,50,60,Chase;Damage,LATE

@@ -1,0 +1,7 @@
+# Professional League teams: team_id, league_id, name, short_name, logo, founded, city, coach, status
+# status: active, inactive, disbanded
+team_id,league_id,name,short_name,logo,founded,city,coach,status
+cfb,mpl_kh,CFB Esports,CFB,cfb_esports.png,2021,Phnom Penh,Coach Kim,active
+bnc,mpl_kh,Burn x Flash,BNC,burn_x_flash.png,2022,Phnom Penh,Coach Lee,active
+lgl,mpl_kh,Legends Gaming,LGL,legends_gaming.png,2020,Phnom Penh,Coach Park,active
+see,mpl_kh,SeeYou Soon,SYS,see_you_soon.png,2021,Siem Reap,Coach Chen,active
