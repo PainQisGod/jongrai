@@ -1,4 +1,0 @@
-# Professional League data: league_id, name, region, country, season, year, status, logo
-# status: active, completed, upcoming
-league_id,name,region,country,season,year,status,logo
-mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 4,2025,active,mpl_cambodia.png
