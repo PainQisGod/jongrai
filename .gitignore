@@ -1,0 +1,7 @@
+ai-config.txt
+out/
+
+# Scraping debris - never commit the raw captures
+script_debug.txt
+page_text.txt
+large_script.json
