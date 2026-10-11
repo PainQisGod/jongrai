@@ -1,8 +1,0 @@
-# Pro Drafts: draft_id, match_id, league_id, season, game_number, blue_team_id, red_team_id, blue_bans, red_bans, blue_picks, red_picks, blue_side, winner_team_id, patch
-# bans/picks are semicolon-separated hero names in order
-# blue_side: 1=blue, 0=red
-draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch
-mpl_kh_1_g1,mpl_kh_1,mpl_kh,Season 4,1,cfb,lgl,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,cfb,2.2.16
-mpl_kh_1_g2,mpl_kh_1,mpl_kh,Season 4,2,cfb,lgl,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,cfb,2.2.16
-mpl_kh_2_g1,mpl_kh_2,mpl_kh,Season 4,1,bnc,see,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,see,2.2.16
-mpl_kh_2_g2,mpl_kh_2,mpl_kh,Season 4,2,bnc,see,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,see,2.2.16
