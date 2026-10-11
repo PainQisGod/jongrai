@@ -1,0 +1,50 @@
+/* Project Jongrai - shared shell: palette, topbar, buttons, footer.
+   Page-specific CSS lives inline in each page. */
+
+:root{
+  --bg:#0f1117; --card:#181b24; --card2:#12141b; --line:#2a2f3d;
+  --tx:#e8eaf0; --mut:#8b91a3; --blue:#3b82f6; --red:#ef4444; --gold:#d4a73a; --gold2:#f0c75e;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px system-ui,sans-serif;line-height:1.5}
+a{color:inherit}
+
+/* ---------- topbar ---------- */
+header{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);
+  background:#12141b;position:sticky;top:0;z-index:20}
+header h1{font-size:18px;margin:0 8px 0 0;line-height:0}
+header h1 a{display:block;text-decoration:none}
+.brand-logo{display:block;width:128px;height:auto;max-height:40px;object-fit:contain}
+.patch{color:var(--gold2);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  background:#2b2413;border:1px solid #7a6224;border-radius:20px;padding:3px 11px;white-space:nowrap}
+nav.top{display:flex;gap:4px;flex-wrap:wrap}
+nav.top a{text-decoration:none;color:var(--mut);padding:6px 12px;border-radius:8px;font-size:13px;border:1px solid transparent}
+nav.top a:hover{color:var(--tx);background:#1e2230}
+nav.top a.on{color:var(--tx);background:#262b3a;border-color:var(--line)}
+.draft-rule{flex-basis:100%;width:100%;height:0;margin:0;border:0;border-top:1px solid var(--line)}
+.draft-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
+.draft-filters{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.draft-music{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-1px;bottom:-1px}
+
+/* ---------- controls ---------- */
+button{background:var(--card);color:var(--tx);border:0;padding:7px 14px;cursor:pointer;font:inherit;border-radius:6px}
+button:hover{background:#232838}
+input,select{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit}
+.btn{display:inline-block;text-decoration:none;background:var(--blue);color:#fff;padding:9px 18px;border-radius:8px;
+  font-weight:600;font-size:14px;border:0}
+.btn:hover{background:#2f6fe0;color:#fff}
+.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
+.btn.ghost:hover{background:#1e2230;color:var(--tx)}
+.btn.gold{background:var(--gold);color:#1a1405}
+.btn.gold:hover{background:var(--gold2);color:#1a1405}
+
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button.on{background:#334}.seg button.on.b{background:var(--blue)}.seg button.on.r{background:var(--red)}
+#msg{color:#fca5a5;margin-left:auto}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;color:var(--mut);font-size:12px;
+  display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .sp{margin-left:auto}
+footer span:has(+ span:last-child){opacity:.7}
+.build{position:fixed;right:8px;bottom:6px;color:#4b5265;font-size:10px;font-family:ui-monospace,Consolas,monospace}

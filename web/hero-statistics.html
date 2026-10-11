@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Hero Statistics - Project Jongrai</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/style.css">
+<style>
+.wrap{max-width:1180px;margin:0 auto;padding:22px 16px 40px}
+.eyebrow{color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600;margin:0 0 6px}
+h2.t{font-size:26px;margin:0 0 6px}
+p.l{color:var(--mut);max-width:70ch;margin:0 0 18px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+input,select{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit}
+#q{min-width:210px}
+.count{color:var(--mut);font-size:12px;margin-left:auto}
+.tiers{display:flex;height:30px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:14px}
+.tiers a{display:flex;align-items:center;justify-content:center;color:#12151c;font-weight:700;font-size:12px;text-decoration:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:10px}
+.h{background:var(--card);border:1px solid var(--line);border-left-width:4px;border-radius:10px;padding:10px;cursor:pointer;text-align:left;color:var(--tx);font:inherit;display:block;width:100%}
+.h:hover{border-color:#3c4358;background:#1c2130}
+.h .top{display:flex;gap:10px;align-items:center}
+.av{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:#222736;overflow:hidden;flex:none;
+  display:flex;align-items:center;justify-content:center}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.h .nm{flex:1;min-width:0}
+.h .nm b{display:block;font-size:14px}
+.h .nm small{color:var(--mut);font-size:11px}
+.badge{display:inline-block;font-weight:700;font-size:11px;border-radius:5px;padding:1px 7px;color:#12151c}
+.h .m{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.h .m span{background:#12141b;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:11px;color:var(--mut)}
+.h .w{margin-top:7px;font-size:12px;color:#c3c8d6;display:flex;justify-content:space-between}
+.bar2{height:5px;background:#1c2030;border-radius:3px;overflow:hidden;margin-top:4px}
+.bar2 i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--gold2))}
+/* detail */
+.back{margin-bottom:14px}
+.dwrap{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+@media(max-width:820px){.dwrap{grid-template-columns:1fr}}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.dcard .av{width:96px;height:96px;border-width:3px;border-color:#3c4358;margin:0 auto 12px}
+.dcard h3{text-align:center;margin:0 0 4px;font-size:19px}
+.dcard .sub{text-align:center;color:var(--mut);font-size:12px;margin-bottom:12px}
+.kv{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1d2130;font-size:13px}
+.kv b{color:var(--gold2);font-variant-numeric:tabular-nums}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tags span{background:#12141b;border:1px solid var(--line);border-radius:5px;padding:2px 7px;font-size:11px;color:var(--mut)}
+.rel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px}
+.rel h4{margin:0 0 8px;font-size:12px;letter-spacing:1px;color:var(--gold);text-transform:uppercase}
+.rel .c{display:flex;flex-wrap:wrap;gap:6px}
+.rel .chip{display:flex;align-items:center;gap:7px;background:#12141b;border:1px solid var(--line);border-radius:20px;padding:4px 11px 4px 4px;font-size:13px}
+.rel .chip i{width:24px;height:24px;border-radius:50%;background:#222736;overflow:hidden;flex:none}
+.rel .chip i img{width:100%;height:100%;object-fit:cover;display:block}
+.rel .chip{cursor:pointer}
+.rel .chip:hover{border-color:var(--blue);color:#fff}
+.rel .empty{color:var(--mut);font-size:13px}
+.hero-tip{background:linear-gradient(135deg,#1b1a20,#171c29);border:1px solid #4c4121;border-left:3px solid var(--gold);border-radius:10px;padding:14px;min-height:116px}.hero-tip h4{margin:0 0 8px;font-size:12px;letter-spacing:1px;color:var(--gold);text-transform:uppercase}.hero-tip p{margin:0;color:#c3c8d6;font-size:13px;line-height:1.55}.hero-tip p+p{margin-top:7px}.hero-tip b{color:var(--tx)}.hero-tip .tip-meta{color:var(--gold2);font-size:11px;letter-spacing:.6px}
+/* curated core builds */
+.builds{display:flex;flex-direction:column;gap:10px}
+.bd{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:11px}
+.bd .bh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+.bd .bh b{font-size:14px}
+.bd .bh .cost{margin-left:auto;color:var(--mut);font-size:12px;font-variant-numeric:tabular-nums}
+.slots{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+@media(max-width:700px){.slots{grid-template-columns:repeat(3,1fr)}}
+.slot{background:#181b24;border:1px solid var(--line);border-radius:8px;padding:7px 4px;text-align:center;
+  text-decoration:none;color:var(--mut)}
+.slot:hover{border-color:#3c4358}
+.slot.core{border-color:var(--gold);background:#241d0c;color:var(--tx)}
+.slot img{width:38px;height:38px;object-fit:contain;display:block;margin:0 auto 5px}
+.slot span{font-size:10.5px;line-height:1.25;display:block}
+.extra{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.extra span{background:#181b24;border:1px solid var(--line);border-radius:5px;padding:2px 7px;font-size:11px;color:var(--mut)}
+.flex{color:var(--mut);font-size:12px;margin-top:9px}
+.flex b{color:var(--gold2)}
+</style></head><body>
+
+<header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
+<nav class="top"><a href="/">Home</a><a href="/heroes" class="on">Hero Statistics</a><a href="/items">Items</a><a href="/league">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
+<span class="patch">as of Patch 2.2.16</span></header>
+
+<main class="wrap" id="list">
+ <p class="eyebrow">HERO STATISTICS</p>
+ <h2 class="t">Every hero, ranked</h2>
+ <p class="l">All 133 heroes with tier, win and ban rate, Moonton's in-game ratings, power spike and the
+ official head-to-head relations. Click a hero for the full breakdown.</p>
+ <div class="tiers" id="tiers"></div>
+ <div class="bar">
+  <input id="q" placeholder="Search hero...">
+  <select id="role"><option value="">All roles</option></select>
+  <select id="lane"><option value="">All lanes</option></select>
+  <select id="tier"><option value="">All tiers</option></select>
+  <select id="sort"><option value="tier">Sort: tier</option><option value="win">Sort: win rate</option><option value="ban">Sort: ban rate</option><option value="name">Sort: name</option><option value="offense">Sort: offense</option><option value="control">Sort: control</option><option value="durability">Sort: durability</option></select>
+  <span class="count" id="count"></span>
+ </div>
+ <div class="grid" id="grid"></div>
+</main>
+
+<main class="wrap" id="detail" hidden></main>
+
+<footer><span>Project Jongrai</span><span>Tiers and win rates as of patch 2.2.16</span>
+<span class="sp">Counters and synergies from Moonton's official in-game relations</span></footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const TC={S:'#f5c518',A:'#22c55e',B:'#3b82f6',C:'#8b91a3',D:'#ef4444'};
+const TO={S:0,A:1,B:2,C:3,D:4};
+// The CSV stores bare power-spike codes; spell them out so they read as phases of the game.
+const SPIKE={EARLY:'Early game',MID:'Mid game',LATE:'Late game',ALL:'All game'};
+const spike=s=>SPIKE[s]||s;
+// Reverse index: hero name -> heroes whose counters list points at it (its struggles).
+const countersMe={};
+let heroes=[],byName={},byLower={},bySlug={},f={q:'',role:'',lane:'',tier:'',sort:'tier'};
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const av=n=>{const h=byName[n];return h&&h.icon?`<img src="/icons/${h.icon}" alt="" onerror="this.remove()">`:''};
+const cir=n=>`<div class="av">${av(n)}</div>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function filtered(){
+ let r=heroes.filter(h=>
+  (!f.q||h.name.toLowerCase().includes(f.q))&&
+  (!f.role||h.roles.includes(f.role))&&
+  (!f.lane||h.lanes.includes(f.lane))&&
+  (!f.tier||h.tier===f.tier));
+ const s=f.sort;
+ r.sort((a,b)=> s==='name'? a.name.localeCompare(b.name)
+  : s==='tier'? TO[a.tier]-TO[b.tier]||b.winRate-a.winRate
+  : (b[s]||0)-(a[s]||0));
+ return r;
+}
+function card(h){
+  const c=TC[h.tier];
+  const laneIcons=h.lanes.map(l=>{const i=laneIcon(l);return i?`<img src="/icons/${i}" alt="" onerror="this.remove()" style="width:14px;height:14px;margin-right:2px" title="${l}">`:''}).join('');
+  return`<button class="h t${h.tier}" style="border-left-color:${c}" data-n="${esc(h.name)}">
+   <div class="top">${cir(h.name)}<div class="nm"><b>${esc(h.name)}</b>
+    <small>${h.roles.join('/')} · ${laneIcons}${h.lanes.join('/')}</small></div>
+    <span class="badge" style="background:${c}">${h.tier}</span></div>
+   <div class="m"><span>${h.winRate.toFixed(2)}% win</span>${h.banRate>0?`<span>${h.banRate.toFixed(1)}% ban</span>`:''}<span>${spike(h.spike)}</span></div>
+   <div class="bar2"><i style="width:${h.winRate*2}%"></i></div></button>`;
+}
+function render(){
+ const r=filtered();
+ $('#count').textContent=r.length+' of '+heroes.length+' heroes';
+ $('#grid').innerHTML=r.map(card).join('')||'<p class="l">No hero matches those filters.</p>';
+}
+function chips(names){
+ // counters/synergies are stored lowercase, so resolve through the lowercase index
+ // rather than guessing the capitalisation ('yi sun-shin' must stay 'Yi Sun-shin').
+ const real=names.map(n=>byLower[n.toLowerCase()]).filter(Boolean);
+ if(!real.length) return '<div class="empty">No official entries.</div>';
+ return'<div class="c">'+real.map(h=>`<span class="chip" data-n="${esc(h.name)}" title="${esc(h.name)}"><i>${av(h.name)}</i>${esc(h.name)}</span>`).join('')+'</div>';
+}
+function heroTip(h){
+ const lane=(h.lanes[0]||'lane').toLowerCase();
+ const spike=spikeTip(h.spike);
+ const job=h.control>=70?'Use your control to create picks or start clean fights.'
+  :h.offense>=70?'Look for damage windows after key enemy skills are down.'
+  :h.durability>=70?'Play as the frontline and make room for your carries.'
+  :'Play around safe trades and the strengths of your team composition.';
+ const partner=(h.synergies||[]).map(n=>byLower[n.toLowerCase()]).find(Boolean);
+ const pair=partner?` Pair with <b>${esc(partner.name)}</b> when possible to use the listed synergy.`:'';
+ return `<div class="hero-tip"><h4>Jongrai Tip <span class="tip-meta">${spike}</span></h4><p><b>${esc(h.name)}</b> is best approached as a ${h.roles[0].toLowerCase()} in ${lane}. ${job}</p><p>${spikeSentence(h.spike)}${pair}</p></div>`;
+}
+function spikeTip(s){return s==='EARLY'?'EARLY GAME':s==='LATE'?'LATE GAME':'MID GAME'}
+function spikeSentence(s){return s==='EARLY'?'Press the early advantage: rotate after lane pressure and convert it into objectives.'
+ :s==='LATE'?'Protect your farm and avoid low-value fights until your key items and levels are online.'
+ :'Use the mid-game power window to force objectives and establish vision before major fights.'}
+function showList(push){
+ $('#detail').hidden=true;$('#list').hidden=false;
+ if(push&&!/\/heroes\/?$/.test(location.pathname))history.pushState({},'',location.pathname.replace(/\/heroes\/.*$/,'/heroes'));
+}
+/** Opens whatever the current URL points at: /heroes or /heroes/<slug>. */
+function route(){
+ const m=location.pathname.match(/^\/heroes\/([a-z0-9-]+)\/?$/i);
+ const h=m?bySlug[m[1].toLowerCase()]:null;
+ if(h)showHero(h.name,false); else showList(false);
+}
+function showHero(name,push){
+ const h=byName[name]; if(!h)return showList(false);
+ if(push)history.pushState({hero:name},'','/heroes/'+slug(name));
+const rel=(list,cls)=>`<div class="rel"><h4>${cls}</h4>${chips(list)}</div>`;
+  const laneIcons=h.lanes.map(l=>{const i=laneIcon(l);return i?`<img src="/icons/${i}" alt="" onerror="this.remove()" style="width:16px;height:16px;margin-right:2px;vertical-align:middle" title="${l}">`:''}).join('');
+  $('#list').hidden=true; $('#detail').hidden=false;
+  $('#detail').innerHTML=`
+   <div class="back"><button class="btn ghost" id="backBtn">&larr; All heroes</button></div>
+   <div class="dwrap">
+    <div class="dcard">${cir(h.name)}<h3>${esc(h.name)}</h3>
+     <div class="sub">${h.roles.join(' / ')} · ${laneIcons}${h.lanes.join(' / ')} · /heroes/${slug(h.name)}</div>
+    <div class="kv"><span>Tier</span><b style="color:${TC[h.tier]}">${h.tier}</b></div>
+    <div class="kv"><span>Win rate</span><b>${h.winRate.toFixed(2)}%</b></div>
+    <div class="kv"><span>Ban rate</span><b>${h.banRate>0?h.banRate.toFixed(2)+'%':'under 15%'}</b></div>
+    <div class="kv"><span>Power spike</span><b>${spike(h.spike)}</b></div>
+    <div class="kv"><span>Durability</span><b>${h.durability}</b></div>
+    <div class="kv"><span>Offense</span><b>${h.offense}</b></div>
+    <div class="kv" style="border-bottom:0"><span>Control</span><b>${h.control}</b></div>
+    ${h.tags.length?`<div class="tags">${h.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+   </div>
+<div>${rel(h.counters,'Strong against')}${rel(countersMe[h.name.toLowerCase()]||[],'Struggle against')}${rel(h.synergies,'Synergy with')}${heroTip(h)}</div>
+   </div>
+   <div class="rel" id="buildBox"><h4>Core items</h4><div class="empty">Loading builds...</div></div>`;
+  $('#backBtn').onclick=()=>showList(true);
+  loadBuilds(h.name);
+  window.scrollTo(0,0);
+ }
+function emblemIcon(text){
+  if(!text) return '';
+  const t=text.toLowerCase();
+  if(t.includes('tank')) return 'Emblem_Tank.png';
+  if(t.includes('marksman')) return 'Emblem_Marksman.png';
+  if(t.includes('mage')) return 'Emblem_Mage.png';
+  if(t.includes('fighter')) return 'Emblem_Fighter.png';
+  if(t.includes('assassin')) return 'Emblem_Assassin.png';
+  if(t.includes('support')) return 'Emblem_Support.png';
+  if(t.includes('common basic') || t.includes('basic common') || (t==='common' || t.startsWith('common with'))) return 'Basic_Common_Emblem.png';
+  return '';
+}
+function spellIcon(name){
+  if(!name) return '';
+  const n=name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_');
+  const map={flicker:'Flicker.png',execute:'Execute.png',retribution:'Retribution.png',ice_retribution:'Ice_Retribution.png',flame_retribution:'Flame_Retribution.png',bloody_retribution:'Bloody_Retribution.png',vengeance:'Vengeance.png',purify:'Purify.png',favor:'Item_Favor.png',flameshot:'Flameshot.png',inspire:'Inspire.png',aegis:'Aegis.png',sprint:'Sprint.png',arrival:'Arrival.png',conceal:'Item_Conceal.png',encourage:'Item_Encourage.png',dire_hit:'Item_Dire_Hit.png',petrify:'Petrify.png',revitalize:'Revitalize.png'};
+  return map[n] || '';
+}
+function blessingIcon(name){
+  if(!name) return '';
+  const n=name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_');
+  const map={ice_retribution:'Ice_Retribution.png',flame_retribution:'Flame_Retribution.png',bloody_retribution:'Bloody_Retribution.png',conceal:'Item_Conceal.png',encourage:'Item_Encourage.png',favor:'Item_Favor.png',dire_hit:'Item_Dire_Hit.png'};
+  return map[n] || '';
+}
+function talentIcon(name){
+  if(!name) return '';
+  const n=name.trim().replace(/\s+/g,'_');
+  return 'Talent_'+n+'.png';
+}
+function laneIcon(name){
+  if(!name) return '';
+  const n=name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_');
+  const map={
+    exp:'Mobile_Legends_EXP_Lane.png',
+    exp_lane:'Mobile_Legends_EXP_Lane.png',
+    gold:'Mobile_Legends_Gold_Lane.png',
+    gold_lane:'Mobile_Legends_Gold_Lane.png',
+    mid:'Mobile_Legends_Mid_Lane.png',
+    mid_lane:'Mobile_Legends_Mid_Lane.png',
+    jungle:'Mobile_Legends_Jungle.png',
+    roamer:'Mobile_Legends_Roamer.png',
+    roam:'Mobile_Legends_Roamer.png'
+  };
+  return map[n] || '';
+}
+function parseEmblem(text){
+  if(!text) return {set:'', talents:[]};
+  const parts=text.split(/\s+with\s+/i);
+  const set=parts[0].trim();
+  const talents=parts[1]?parts[1].split(',').map(t=>t.trim()).filter(Boolean):[];
+  return {set, talents};
+}
+const ROAM_BLESSINGS=new Set(['conceal','encourage','dire_hit','favor']);
+function isRoamBlessing(name){
+  if(!name) return false;
+  return ROAM_BLESSINGS.has(name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_'));
+}
+/** One build card: the six items in buying order. */
+function buildCard(b){
+  const sp=spellIcon(b.battleSpell), bl=blessingIcon(b.blessing);
+  const {set, talents}=parseEmblem(b.emblem);
+  const em=emblemIcon(set);
+  const roamBless=isRoamBlessing(b.blessing);
+  const lc=laneIcon(b.lane);
+  return`<div class="bd">
+   <div class="bh"><b>${esc(b.name)}</b>${b.lane?`<span class="badge" style="background:var(--blue)">${lc?`<img src="/icons/${lc}" alt="" onerror="this.remove()" style="width:14px;height:14px;vertical-align:middle;margin-right:4px">`:''}${esc(b.lane)}</span>`:''}
+    <span class="cost">${b.totalCost} gold</span></div>
+   <div class="slots">${b.items.map(i=>`<a class="slot" href="/items/${slug(i.name)}" title="${esc(i.name)}">${
+    i.icon?`<img src="/icons/${i.icon}" alt="" onerror="this.remove()">`:''}<span>${esc(i.name)}</span></a>`).join('')}</div>
+   <div class="extra">
+    ${em?`<span class="chip"><i><img src="/icons/${em}" alt="" onerror="this.remove()"></i>${esc(set)}</span>`:''}
+    ${talents.map(t=>`<span class="chip"><i><img src="/icons/${talentIcon(t)}" alt="" onerror="this.remove()"></i>${esc(t)}</span>`).join('')}
+    ${b.battleSpell?`<span class="chip"><i><img src="/icons/${sp}" alt="" onerror="this.remove()"></i>${esc(b.battleSpell)}</span>`:''}
+    ${roamBless && b.blessing?`<span class="chip"><i><img src="/icons/${bl}" alt="" onerror="this.remove()"></i>${esc(b.blessing)}</span>`:''}
+    ${b.blessing && !roamBless?`<span class="chip"><i><img src="/icons/${bl}" alt="" onerror="this.remove()"></i>${esc(b.blessing)}</span>`:''}
+   </div>
+   ${b.flex?`<div class="flex"><b>Flex</b> ${esc(b.flex)}</div>`:''}
+  </div>`;
+}
+/** Builds come from their own endpoint so this page never carries the whole catalog. */
+async function loadBuilds(name){
+ const box=$('#buildBox');if(!box)return;
+ try{
+  const b=await (await fetch('/api/builds?hero='+encodeURIComponent(name))).json();
+  box.innerHTML='<h4>Core items</h4>'+(b.length
+   ?`<div class="builds">${b.map(buildCard).join('')}</div>`
+   :'<div class="empty">No curated build recorded for this hero.</div>');
+ }catch(e){box.innerHTML='<h4>Core items</h4><div class="empty">Builds unavailable.</div>';}
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-n]'); if(b){showHero(b.dataset.n,true);return}
+ const t=e.target.closest('[data-tier]'); if(t){showList(true);$('#tier').value=t.dataset.tier;f.tier=t.dataset.tier;render();}
+});
+window.addEventListener('popstate',()=>{route();window.scrollTo(0,0);});
+['q','role','lane','tier','sort'].forEach(id=>$('#'+id).addEventListener('input',e=>{
+ f[id==='q'?'q':id]=e.target.value;render();}));
+(async()=>{
+ try{
+  heroes=await (await fetch('/api/heroes')).json();
+  heroes.forEach(h=>{byName[h.name]=h;byLower[h.name.toLowerCase()]=h;bySlug[slug(h.name)]=h;});
+  heroes.forEach(h=>h.counters.forEach(c=>{(countersMe[c]=countersMe[c]||[]).push(h.name);}));
+  // Order each struggle list strongest-counter-first, then alphabetically.
+ Object.keys(countersMe).forEach(k=>countersMe[k].sort((a,b)=>
+  TO[byLower[a.toLowerCase()].tier]-TO[byLower[b.toLowerCase()].tier]||a.localeCompare(b)));
+  for(const[id,k]of[['role','roles'],['lane','lanes']]){
+   [...new Set(heroes.flatMap(h=>h[k]))].sort().forEach(v=>$('#'+id).add(new Option(v,v)));}
+  [...new Set(heroes.map(h=>h.tier))].sort((a,b)=>TO[a]-TO[b]).forEach(t=>$('#tier').add(new Option('Tier '+t,t)));
+  const by={};heroes.forEach(h=>(by[h.tier]=by[h.tier]||[]).push(h));
+  const total=heroes.length;
+  $('#tiers').innerHTML=['S','A','B','C','D'].filter(t=>by[t]).map(t=>{
+   const n=by[t].length,pct=n/total*100;
+   return`<a href="/heroes?t=${t}" data-tier="${t}" style="width:${pct.toFixed(1)}%;background:${TC[t]}" title="Tier ${t}: ${n} heroes">${pct>9?t+' '+n:''}</a>`}).join('');
+  render();
+  route();
+  const qs=new URLSearchParams(location.search).get('t');
+  if(qs&&TC[qs.toUpperCase()]){$('#tier').value=qs.toUpperCase();f.tier=qs.toUpperCase();render();}
+ }catch(e){$('#grid').innerHTML='<p class="l">Roster unavailable.</p>';}
+})();
+</script>
+</body></html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Project Jongrai - MLBB draft helper</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/style.css">
+<style>
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+section{padding:34px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.eyebrow{color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600;margin:0 0 10px}
+h2.sec{font-size:22px;margin:0 0 6px}
+p.lede{color:var(--mut);margin:0 0 20px;max-width:70ch}
+
+/* hero */
+.hp-hero{
+  position:relative;
+  padding:120px 0 80px;
+  overflow:hidden;
+  color:#fff;
+}
+.hp-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url("/icons/season 42.jpg");
+  background-size:cover;
+  background-position:center;
+  filter:brightness(0.35);
+  z-index:-2;
+}
+.hp-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url("/icons/season 42 2.jpg");
+  background-size:cover;
+  background-position:center;
+  opacity:0.15;
+  mix-blend-mode:overlay;
+  z-index:-1;
+}
+.hp-hero h2{
+  font-size:72px;
+  line-height:1.1;
+  margin:0 0 8px;
+  font-weight:800;
+  letter-spacing:-2px;
+  text-shadow:0 4px 24px rgba(0,0,0,0.6);
+}
+.hp-hero .subtitle{
+  font-size:22px;
+  color:var(--gold2);
+  margin:0 0 28px;
+  font-weight:500;
+  letter-spacing:1px;
+  text-shadow:0 2px 12px rgba(0,0,0,0.5);
+}
+.hp-hero p{
+  color:rgba(255,255,255,0.85);
+  font-size:17px;
+  max-width:62ch;
+  margin:0 0 28px;
+  text-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.hp-cta{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.15)}
+.stats div b{display:block;font-size:30px;line-height:1.1}
+.stats div span{color:rgba(255,255,255,0.6);font-size:12px;letter-spacing:.5px}
+
+/* feature cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{margin:0 0 6px;font-size:15px}
+.card p{margin:0;color:var(--mut);font-size:13px}
+.card .k{color:var(--gold);font-size:11px;letter-spacing:2px;font-weight:600;margin:0 0 8px}
+
+/* live tier bar */
+.tbar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line)}
+.tbar a{display:flex;align-items:center;justify-content:center;color:#12151c;font-weight:700;font-size:12px;
+  text-decoration:none;white-space:nowrap;overflow:hidden}
+.tkey{display:flex;gap:16px;flex-wrap:wrap;color:var(--mut);font-size:12px}
+.tkey span{display:flex;align-items:center;gap:6px}
+.tkey i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.tkey b{color:var(--tx)}
+
+/* top heroes */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{background:var(--card);border:1px solid var(--line);border-left-width:4px;border-radius:8px;
+  padding:7px 11px;font-size:13px;display:flex;align-items:center;gap:8px}
+.chip small{color:var(--mut);font-size:11px}
+
+/* scoring table */
+table.score{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+table.score th{text-align:left;color:var(--mut);font-weight:500;font-size:11px;letter-spacing:1px;
+  text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.score td{padding:7px 8px;border-bottom:1px solid #1d2130}
+table.score td.n{text-align:right;color:var(--gold2);font-variant-numeric:tabular-nums}
+table.score tr:last-child td{border-bottom:0}
+.bar2{height:6px;background:#1c2030;border-radius:3px;overflow:hidden}
+.bar2 i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--gold2))}
+.note{color:var(--mut);font-size:12px;margin-top:12px}
+@media(max-width:640px){
+  .hp-hero h2{font-size:44px}
+  .hp-hero .subtitle{font-size:16px}
+  .stats{gap:18px}
+}
+</style></head><body>
+
+<header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
+<nav class="top"><a href="/" class="on">Home</a><a href="/heroes">Hero Statistics</a><a href="/items">Items</a><a href="/league">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
+<span class="patch">as of Patch 2.2.16</span></header>
+
+<main>
+
+<section class="hp-hero"><div class="wrap">
+ <p class="eyebrow">MOBILE LEGENDS: BANG BANG</p>
+ <h2>ចង្រៃ</h2>
+ <p class="subtitle">Jongrai</p>
+ <p>Project Jongrai is a draft board for Mobile Legends ranked. It tracks counters, synergies, lanes and
+ power spikes as you pick, scores both sides in real time, and hands the finished draft to an AI coach that
+ explains what actually decides the game.</p>
+ <div class="hp-cta"><a class="btn" href="/draft">Open Draft Analysis</a><a class="btn ghost" href="/heroes">Browse all 133 heroes</a></div>
+<div class="stats">
+   <div><b id="sHeroes">-</b><span>HEROES TRACKED</span></div>
+   <div><b id="sItems">-</b><span>ITEMS CATALOGUED</span></div>
+   <div><b id="sLanes">5</b><span>LANES</span></div>
+   <div><b id="sCats">5</b><span>EDGE CATEGORIES</span></div>
+   <div><b>0</b><span>API CALLS DURING DRAFT</span></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+ <p class="eyebrow">WHAT IT DOES</p><h2 class="sec">Five things, one board</h2>
+ <p class="lede">Everything runs locally from plain data files. No accounts, no database, no build step.</p>
+ <div class="cards">
+  <div class="card"><p class="k">DRAFT BOARD</p><h3>Pick, ban and assign lanes</h3>
+   <p>Five picks and five bans a side, with flex-lane assignment and one-click undo of a misclick.</p></div>
+  <div class="card"><p class="k">COUNTERS</p><h3>Official head-to-head data</h3>
+   <p>Moonton's own strong-against and synergy relations, for all 133 heroes.</p></div>
+  <div class="card"><p class="k">CORE BUILDS</p><h3>What to actually build</h3>
+   <p>Three curated builds per hero, core pieces marked, plus all 104 shop items and their passives.</p></div>
+  <div class="card"><p class="k">EDGE SCORE</p><h3>Both sides, five categories</h3>
+   <p>A weighted 0-100 read on counters, meta power, synergy, lockdown and comp balance.</p></div>
+  <div class="card"><p class="k">AI COACH</p><h3>A verdict once the draft ends</h3>
+   <p>It stays silent while you pick, then comments on both sides and names the key fight to watch.</p></div>
+ </div>
+</div></section>
+
+<section><div class="wrap">
+ <p class="eyebrow">LIVE FROM THE ROSTER</p><h2 class="sec">Meta snapshot</h2>
+ <p class="lede">Read straight from <code>data/heroes.csv</code>, the file the whole app runs on.</p>
+ <div class="tbar" id="tbar"></div>
+ <div class="tkey" id="tkey"></div>
+ <h3 style="font-size:15px;margin:26px 0 0">S-tier picks</h3>
+ <div class="chips" id="topHeroes"></div>
+</div></section>
+
+<section><div class="wrap">
+ <p class="eyebrow">METHOD</p><h2 class="sec">How the draft edge is scored</h2>
+ <p class="lede">The edge is a weighted blend of five categories, each measured separately so you can see
+ <em>why</em> a side is ahead instead of just that it is.</p>
+ <table class="score"><thead><tr><th>Category</th><th>Weight</th><th>Measured from</th></tr></thead><tbody>
+  <tr><td>Counters</td><td class="n">25%</td><td>Pick-vs-pick matchups won, from Moonton's relations</td></tr>
+  <tr><td>Meta power</td><td class="n">20%</td><td>Average overall win rate of the picks</td></tr>
+  <tr><td>Synergy</td><td class="n">15%</td><td>Official synergy pairs on the same team</td></tr>
+  <tr><td>Lockdown</td><td class="n">15%</td><td>Heroes with a heavy control rating (70+)</td></tr>
+  <tr><td>Comp balance</td><td class="n">25%</td><td>Lane coverage, frontline, damage and role spread</td></tr>
+ </tbody></table>
+ <p class="note">The AI coach receives this readout as evidence, but is told to trust its own read when the
+ two disagree.</p>
+</div></section>
+
+<section><div class="wrap">
+ <p class="eyebrow">READY</p><h2 class="sec">Start a draft</h2>
+ <p class="lede">Pick a side, choose Pick or Ban, and click heroes. The coach speaks when the tenth pick lands.</p>
+ <div class="hp-cta"><a class="btn gold" href="/draft">Open Draft Analysis</a></div>
+</div></section>
+
+</main>
+
+<footer><span>Project Jongrai</span><span>Hero data as of patch 2.2.16</span>
+<span class="sp">Counts, tiers and win rates from the shipped roster file</span></footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const TC={S:'#f5c518',A:'#22c55e',B:'#3b82f6',C:'#8b91a3',D:'#ef4444'};
+const LABEL={S:'top',A:'strong',B:'solid',C:'average',D:'weak'};
+(async()=>{try{
+ const heroes=await (await fetch('/api/heroes')).json();
+ $('#sHeroes').textContent=heroes.length;
+  fetch('/api/items').then(r=>r.json()).then(it=>{$('#sItems').textContent=it.length}).catch(()=>{});
+ const by={};heroes.forEach(h=>(by[h.tier]=by[h.tier]||[]).push(h));
+ const order=['S','A','B','C','D'],total=heroes.length;
+ $('#tbar').innerHTML=order.filter(t=>by[t]).map(t=>{
+  const n=by[t].length,pct=n/total*100,c=TC[t];
+  return`<a href="/draft" style="width:${pct.toFixed(1)}%;background:${c}" title="Tier ${t}: ${n} heroes, ${pct.toFixed(1)}% of the roster">${pct>9?t+' '+n:''}</a>`}).join('');
+ $('#tkey').innerHTML=order.filter(t=>by[t]).map(t=>
+  `<span><i style="background:${TC[t]}"></i><b style="color:${TC[t]}">${t}</b> ${LABEL[t]} · ${by[t].length} heroes</span>`).join('');
+ $('#topHeroes').innerHTML=(by.S||[]).sort((a,b)=>b.winRate-a.winRate).slice(0,12)
+  .map(h=>`<span class="chip t${h.tier}" style="border-left-color:${TC[h.tier]}"><b>${h.name}</b><small>${h.winRate.toFixed(1)}%</small></span>`).join('');
+}catch(e){$('#tbar').textContent='Roster unavailable';}}})();
+</script>
+</body></html>

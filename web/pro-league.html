@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Professional League - Project Jongrai</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/style.css">
+<style>
+.wrap{max-width:1180px;margin:0 auto;padding:22px 16px 40px}
+.eyebrow{color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600;margin:0 0 6px}
+h2.t{font-size:26px;margin:0 0 6px}
+p.l{color:var(--mut);max-width:70ch;margin:0 0 18px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+input,select{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit}
+#q{min-width:210px}
+.count{color:var(--mut);font-size:12px;margin-left:auto}
+
+/* league subbar */
+.league-bar{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.league-btn{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--tx);cursor:pointer;transition:all 0.15s}
+.league-btn:hover{border-color:var(--blue);color:var(--blue)}
+.league-btn.active{background:var(--blue);border-color:var(--blue);color:#12151c;font-weight:600}
+@media(max-width:640px){.league-btn{font-size:11px;padding:4px 8px}}
+
+/* tabs */
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.tab{background:transparent;border:none;color:var(--mut);padding:10px 16px;font:inherit;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-size:13px;font-weight:500}
+.tab:hover{color:var(--tx)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* standings table */
+table.stand{width:100%;border-collapse:collapse;font-size:13px}
+table.stand th{text-align:left;color:var(--mut);font-weight:500;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line)}
+table.stand td{padding:10px;border-bottom:1px solid #1d2130;vertical-align:middle}
+table.stand tr:hover td{background:#181b24}
+table.stand tr:last-child td{border-bottom:0}
+.team-cell{display:flex;align-items:center;gap:10px}
+.team-logo{width:28px;height:28px;border-radius:4px;object-fit:cover}
+.team-name{font-weight:500}
+.team-short{color:var(--mut);font-size:11px}
+.pos{font-weight:700;font-variant-numeric:tabular-nums;color:var(--gold2)}
+.win{color:#22c55e}.loss{color:#ef4444}.draw{color:#f5c518}
+.form{font-family:monospace;font-size:11px;color:var(--mut)}
+.streak{font-weight:600;font-size:11px}
+
+/* matches */
+.match-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:8px}
+.match-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.match-teams{display:flex;align-items:center;gap:12px}
+.match-team{display:flex;align-items:center;gap:8px;flex:1}
+.match-team.right{justify-content:flex-end;flex-direction:row-reverse}
+.match-team-logo{width:32px;height:32px;border-radius:4px;object-fit:cover}
+.match-team-name{font-weight:500;font-size:13px}
+.match-score{font-weight:700;font-size:16px;color:var(--gold2);min-width:60px;text-align:center}
+.match-meta{display:flex;gap:12px;font-size:11px;color:var(--mut)}
+.match-status{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
+.match-status.completed{background:#1a2e1a;color:#22c55e}
+.match-status.scheduled{background:#2e2a1a;color:#f5c518}
+.match-status.live{background:#2e1a1a;color:#ef4444;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+/* drafts */
+.draft-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:8px}
+.draft-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.draft-bans-picks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.draft-side{border-radius:6px;padding:8px}
+.draft-side.blue{background:#0d1b2e;border:1px solid #1a3a5c}
+.draft-side.red{background:#2e0d0d;border:1px solid #5c1a1a}
+.draft-side h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.draft-side.bans h4{color:var(--mut)}
+.draft-side.picks h4{color:var(--gold2)}
+.draft-list{display:flex;flex-wrap:wrap;gap:4px}
+.draft-hero{background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:11px}
+.draft-hero.ban{opacity:0.6;text-decoration:line-through}
+
+/* empty state */
+.empty{color:var(--mut);font-size:13px;padding:40px;text-align:center}
+</style></head><body>
+
+<header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
+<nav class="top"><a href="/">Home</a><a href="/heroes">Hero Statistics</a><a href="/items">Items</a><a href="/league" class="on">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
+<span class="patch">as of Patch 2.2.16</span></header>
+
+<main class="wrap">
+ <p class="eyebrow">PROFESSIONAL LEAGUE</p>
+ <h2 class="t">Pro drafts & standings</h2>
+ <p class="l">Live standings, match history, and pro drafts from MPL and regional leagues.</p>
+
+ <div class="league-bar" id="leagueBar"></div>
+
+ <div class="tabs" id="tabs">
+  <button class="tab active" data-tab="standings">Standings</button>
+  <button class="tab" data-tab="matches">Matches</button>
+  <button class="tab" data-tab="teams">Teams</button>
+  <button class="tab" data-tab="drafts">Drafts</button>
+ </div>
+
+ <div id="standingsPanel">
+  <table class="stand"><thead><tr><th style="width:48px">#</th><th>Team</th><th style="width:60px">P</th><th style="width:60px">W</th><th style="width:60px">L</th><th style="width:60px">D</th><th style="width:60px">GF</th><th style="width:60px">GA</th><th style="width:60px">GD</th><th style="width:72px">Pts</th><th style="width:72px">Streak</th><th style="width:120px">Form</th></tr></thead>
+  <tbody id="standingsBody"></tbody>
+  </table>
+  <div id="standingsEmpty" class="empty" hidden>Select a league</div>
+ </div>
+
+ <div id="matchesPanel" hidden>
+  <div id="matchesList"></div>
+  <div id="matchesEmpty" class="empty" hidden>No matches</div>
+ </div>
+
+ <div id="teamsPanel" hidden>
+  <div class="grid" id="teamsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px"></div>
+  <div id="teamsEmpty" class="empty" hidden>No teams</div>
+ </div>
+
+ <div id="draftsPanel" hidden>
+  <div id="draftsList"></div>
+  <div id="draftsEmpty" class="empty" hidden>No drafts</div>
+ </div>
+</main>
+
+<footer><span>Project Jongrai</span><span>Pro data as of patch 2.2.16</span>
+<span class="sp">Standings, matches and drafts from pro league data files</span></footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const TC={S:'#f5c518',A:'#22c55e',B:'#3b82f6',C:'#8b91a3',D:'#ef4444'};
+const STATUS_CLS={completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
+let leagues=[], currentLeague=null, currentSeason=null, teamsById={};
+
+async function loadLeagues(){
+ try{
+  const res=await fetch('/api/leagues');
+  leagues=await res.json();
+  renderLeagueBar();
+  if(leagues.length) selectLeague(leagues[0].id);
+ }catch(e){$('#leagueBar').innerHTML='<span style="color:var(--mut)">Failed to load leagues</span>';}
+}
+function renderLeagueBar(){
+ const bar=$('#leagueBar');
+ bar.innerHTML=leagues.map(l=>`<button class="league-btn${l.id===currentLeague?' active':''}" data-id="${l.id}" title="${l.region} - ${l.season}">${l.name}</button>`).join('');
+ bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.id));
+}
+async function selectLeague(id){
+ currentLeague=id;
+ const league=leagues.find(l=>l.id===id);
+ currentSeason=league?.season||'';
+ renderLeagueBar();
+ await loadData();
+}
+function setTab(tab){
+ $$('#tabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+ $$('#standingsPanel,#matchesPanel,#teamsPanel,#draftsPanel').forEach(p=>p.hidden=true);
+ $('#'+tab+'Panel').hidden=false;
+}
+$$('#tabs .tab').forEach(t=>t.onclick=()=>setTab(t.dataset.tab));
+
+async function loadData(){
+ if(!currentLeague) return;
+ try{
+  const [standingsRes, matchesRes, teamsRes, draftsRes]=await Promise.all([
+   fetch('/api/standings?league='+encodeURIComponent(currentLeague)+'&season='+encodeURIComponent(currentSeason)),
+   fetch('/api/matches?league='+encodeURIComponent(currentLeague)+'&season='+encodeURIComponent(currentSeason)),
+   fetch('/api/teams?league='+encodeURIComponent(currentLeague)),
+   fetch('/api/drafts?league='+encodeURIComponent(currentLeague)+'&season='+encodeURIComponent(currentSeason))
+  ]);
+  const standings=await standingsRes.json();
+  const matches=await matchesRes.json();
+  const teams=await teamsRes.json();
+  const drafts=await draftsRes.json();
+
+  teams.forEach(t=>teamsById[t.id]=t);
+  renderStandings(standings);
+  renderMatches(matches);
+  renderTeams(teams);
+  renderDrafts(drafts);
+ }catch(e){
+  console.error(e);
+  $('#standingsEmpty').hidden=false;
+  $('#matchesEmpty').hidden=false;
+  $('#teamsEmpty').hidden=false;
+  $('#draftsEmpty').hidden=false;
+ }
+}
+function renderStandings(data){
+ const body=$('#standingsBody'), empty=$('#standingsEmpty');
+ if(!data.length){body.innerHTML='';empty.hidden=false;return}
+ empty.hidden=true;
+ body.innerHTML=data.map(s=>{
+  const t=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
+  return `<tr>
+   <td class="pos">${s.position}</td>
+   <td class="team-cell"><img class="team-logo" src="/icons/${t.logo||''}" alt="" onerror="this.remove()"><div><div class="team-name">${t.name||s.teamId}</div><div class="team-short">${t.shortName||''}</div></div></td>
+   <td>${s.played}</td>
+   <td class="win">${s.won}</td>
+   <td class="loss">${s.lost}</td>
+   <td class="draw">${s.draw}</td>
+   <td>${s.gf}</td>
+   <td>${s.ga}</td>
+   <td class="${s.gd>=0?'win':'loss'}">${s.gd>=0?'+':''}${s.gd}</td>
+   <td class="pos">${s.points}</td>
+   <td><span class="streak ${s.streak?.startsWith('W')?'win':s.streak?.startsWith('L')?'loss':'draw'}">${s.streak||'-'}</span></td>
+   <td class="form">${s.form||'-'}</td>
+  </tr>`;
+ }).join('');
+}
+function renderMatches(data){
+ const list=$('#matchesList'), empty=$('#matchesEmpty');
+ if(!data.length){list.innerHTML='';empty.hidden=false;return}
+ empty.hidden=true;
+ list.innerHTML=data.map(m=>{
+  const t1=teamsById[m.team1Id]||{name:m.team1Id,logo:''};
+  const t2=teamsById[m.team2Id]||{name:m.team2Id,logo:''};
+  const score=m.status==='completed'?`${m.team1Score} - ${m.team2Score}`:'vs';
+  return `<div class="match-card">
+   <div class="match-header"><span class="match-status ${STATUS_CLS[m.status]||''}">${m.status}</span><div class="match-meta">Week ${m.week} · Day ${m.day} · ${m.matchType}</div></div>
+   <div class="match-teams">
+    <div class="match-team"><img class="match-team-logo" src="/icons/${t1.logo||''}" alt="" onerror="this.remove()"><span class="match-team-name">${t1.name||m.team1Id}</span></div>
+    <div class="match-score">${score}</div>
+    <div class="match-team right"><span class="match-team-name">${t2.name||m.team2Id}</span><img class="match-team-logo" src="/icons/${t2.logo||''}" alt="" onerror="this.remove()"></div>
+   </div>
+   <div class="match-meta">${m.scheduledTime}${m.completedTime?' · '+m.completedTime:''}</div>
+  </div>`;
+ }).join('');
+}
+function renderTeams(data){
+ const grid=$('#teamsGrid'), empty=$('#teamsEmpty');
+ if(!data.length){grid.innerHTML='';empty.hidden=false;return}
+ empty.hidden=true;
+ grid.innerHTML=data.map(t=>`<div class="card" style="text-align:center">
+  <img src="/icons/${t.logo||''}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
+  <div style="font-weight:600">${t.name}</div>
+  <div style="color:var(--mut);font-size:12px">${t.shortName} · ${t.city}</div>
+  <div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${t.coach||'Unknown'}</div>
+  <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${t.status}</span></div>
+ </div>`).join('');
+}
+function renderDrafts(data){
+ const list=$('#draftsList'), empty=$('#draftsEmpty');
+ if(!data.length){list.innerHTML='';empty.hidden=false;return}
+ empty.hidden=true;
+ list.innerHTML=data.map(d=>{
+  const bt=teamsById[d.blueTeamId]||{name:d.blueTeamId,logo:''};
+  const rt=teamsById[d.redTeamId]||{name:d.redTeamId,logo:''};
+  return `<div class="draft-card">
+   <div class="draft-header"><div><strong>Game ${d.gameNumber}</strong> · ${d.matchId} · Patch ${d.patch}</div><div class="match-status ${d.winnerTeamId===d.blueTeamId?'completed':''}">${bt.name} ${d.winnerTeamId===d.blueTeamId?'won':'lost'}</div></div>
+   <div class="draft-bans-picks">
+    <div class="draft-side bans blue"><h4>Blue Bans</h4><div class="draft-list">${d.blueBans.map(h=>`<span class="draft-hero ban">${h}</span>`).join('')}</div></div>
+    <div class="draft-side bans red"><h4>Red Bans</h4><div class="draft-list">${d.redBans.map(h=>`<span class="draft-hero ban">${h}</span>`).join('')}</div></div>
+    <div class="draft-side picks blue"><h4>Blue Picks</h4><div class="draft-list">${d.bluePicks.map(h=>`<span class="draft-hero">${h}</span>`).join('')}</div></div>
+    <div class="draft-side picks red"><h4>Red Picks</h4><div class="draft-list">${d.redPicks.map(h=>`<span class="draft-hero">${h}</span>`).join('')}</div></div>
+   </div>
+  </div>`;
+ }).join('');
+}
+loadLeagues();
+</script>
+</body></html>
