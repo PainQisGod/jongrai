@@ -1,0 +1,12 @@
+# Copy this file to ai-config.txt and fill in your key. ai-config.txt is gitignored: never commit it.
+# Environment variables with the same names override this file. Restart the server after editing.
+
+# Your API key (required to turn the AI coach on).
+JONGRAI_AI_KEY=
+
+# Any OpenAI-compatible service works: OpenAI, DeepSeek, Groq, OpenRouter, Ollama (see the README table).
+JONGRAI_AI_MODEL=deepseek-v4-flash
+JONGRAI_AI_BASE_URL=https://api.deepseek.com/v1
+
+# Seconds to wait for one reply from the service.
+JONGRAI_AI_TIMEOUT=90

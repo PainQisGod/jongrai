@@ -73,12 +73,12 @@ input,select{background:var(--card);color:var(--tx);border:1px solid var(--line)
 
 <header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
 <nav class="top"><a href="/">Home</a><a href="/heroes" class="on">Hero Statistics</a><a href="/items">Items</a><a href="/league">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
-<span class="patch">as of Patch 2.2.16</span></header>
+<span class="patch">as of Patch <span data-patch></span></span></header>
 
 <main class="wrap" id="list">
  <p class="eyebrow">HERO STATISTICS</p>
  <h2 class="t">Every hero, ranked</h2>
- <p class="l">All 133 heroes with tier, win and ban rate, Moonton's in-game ratings, power spike and the
+ <p class="l">All <span data-hero-count></span> heroes with tier, win and ban rate, Moonton's in-game ratings, power spike and the
  official head-to-head relations. Click a hero for the full breakdown.</p>
  <div class="tiers" id="tiers"></div>
  <div class="bar">
@@ -94,12 +94,11 @@ input,select{background:var(--card);color:var(--tx);border:1px solid var(--line)
 
 <main class="wrap" id="detail" hidden></main>
 
-<footer><span>Project Jongrai</span><span>Tiers and win rates as of patch 2.2.16</span>
+<footer><span>Project Jongrai</span><span>Tiers and win rates as of patch <span data-patch></span></span>
 <span class="sp">Counters and synergies from Moonton's official in-game relations</span></footer>
 
+<script src="/app.js"></script>
 <script>
-const $=s=>document.querySelector(s);
-const TC={S:'#f5c518',A:'#22c55e',B:'#3b82f6',C:'#8b91a3',D:'#ef4444'};
 const TO={S:0,A:1,B:2,C:3,D:4};
 // The CSV stores bare power-spike codes; spell them out so they read as phases of the game.
 const SPIKE={EARLY:'Early game',MID:'Mid game',LATE:'Late game',ALL:'All game'};
@@ -107,10 +106,8 @@ const spike=s=>SPIKE[s]||s;
 // Reverse index: hero name -> heroes whose counters list points at it (its struggles).
 const countersMe={};
 let heroes=[],byName={},byLower={},bySlug={},f={q:'',role:'',lane:'',tier:'',sort:'tier'};
-const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const av=n=>{const h=byName[n];return h&&h.icon?`<img src="/icons/${h.icon}" alt="" onerror="this.remove()">`:''};
 const cir=n=>`<div class="av">${av(n)}</div>`;
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function filtered(){
  let r=heroes.filter(h=>
@@ -125,7 +122,7 @@ function filtered(){
  return r;
 }
 function card(h){
-  const c=TC[h.tier];
+  const c=TIER_COLORS[h.tier];
   const laneIcons=h.lanes.map(l=>{const i=laneIcon(l);return i?`<img src="/icons/${i}" alt="" onerror="this.remove()" style="width:14px;height:14px;margin-right:2px" title="${l}">`:''}).join('');
   return`<button class="h t${h.tier}" style="border-left-color:${c}" data-n="${esc(h.name)}">
    <div class="top">${cir(h.name)}<div class="nm"><b>${esc(h.name)}</b>
@@ -155,11 +152,12 @@ function heroTip(h){
   :'Play around safe trades and the strengths of your team composition.';
  const partner=(h.synergies||[]).map(n=>byLower[n.toLowerCase()]).find(Boolean);
  const pair=partner?` Pair with <b>${esc(partner.name)}</b> when possible to use the listed synergy.`:'';
- return `<div class="hero-tip"><h4>Jongrai Tip <span class="tip-meta">${spike}</span></h4><p><b>${esc(h.name)}</b> is best approached as a ${h.roles[0].toLowerCase()} in ${lane}. ${job}</p><p>${spikeSentence(h.spike)}${pair}</p></div>`;
+ return `<div class="hero-tip"><h4>Jongrai Tip <span class="tip-meta">${spike}</span></h4>${h.tip?`<p>${esc(h.tip)}</p>`:''}<p><b>${esc(h.name)}</b> is best approached as a ${esc(h.roles[0].toLowerCase())} in ${esc(lane)}. ${job}</p><p>${spikeSentence(h.spike)}${pair}</p></div>`;
 }
-function spikeTip(s){return s==='EARLY'?'EARLY GAME':s==='LATE'?'LATE GAME':'MID GAME'}
+function spikeTip(s){return s==='EARLY'?'EARLY GAME':s==='LATE'?'LATE GAME':s==='ALL'?'ALL GAME':'MID GAME'}
 function spikeSentence(s){return s==='EARLY'?'Press the early advantage: rotate after lane pressure and convert it into objectives.'
  :s==='LATE'?'Protect your farm and avoid low-value fights until your key items and levels are online.'
+ :s==='ALL'?'You stay strong all game: take fights and objectives whenever your team is ready.'
  :'Use the mid-game power window to force objectives and establish vision before major fights.'}
 function showList(push){
  $('#detail').hidden=true;$('#list').hidden=false;
@@ -173,7 +171,7 @@ function route(){
 }
 function showHero(name,push){
  const h=byName[name]; if(!h)return showList(false);
- if(push)history.pushState({hero:name},'','/heroes/'+slug(name));
+ if(push)history.pushState({hero:name},'','/heroes/'+h.slug);
 const rel=(list,cls)=>`<div class="rel"><h4>${cls}</h4>${chips(list)}</div>`;
   const laneIcons=h.lanes.map(l=>{const i=laneIcon(l);return i?`<img src="/icons/${i}" alt="" onerror="this.remove()" style="width:16px;height:16px;margin-right:2px;vertical-align:middle" title="${l}">`:''}).join('');
   $('#list').hidden=true; $('#detail').hidden=false;
@@ -181,8 +179,8 @@ const rel=(list,cls)=>`<div class="rel"><h4>${cls}</h4>${chips(list)}</div>`;
    <div class="back"><button class="btn ghost" id="backBtn">&larr; All heroes</button></div>
    <div class="dwrap">
     <div class="dcard">${cir(h.name)}<h3>${esc(h.name)}</h3>
-     <div class="sub">${h.roles.join(' / ')} · ${laneIcons}${h.lanes.join(' / ')} · /heroes/${slug(h.name)}</div>
-    <div class="kv"><span>Tier</span><b style="color:${TC[h.tier]}">${h.tier}</b></div>
+     <div class="sub">${h.roles.join(' / ')} · ${laneIcons}${h.lanes.join(' / ')} · /heroes/${esc(h.slug)}</div>
+    <div class="kv"><span>Tier</span><b style="color:${TIER_COLORS[h.tier]}">${h.tier}</b></div>
     <div class="kv"><span>Win rate</span><b>${h.winRate.toFixed(2)}%</b></div>
     <div class="kv"><span>Ban rate</span><b>${h.banRate>0?h.banRate.toFixed(2)+'%':'under 15%'}</b></div>
     <div class="kv"><span>Power spike</span><b>${spike(h.spike)}</b></div>
@@ -227,22 +225,6 @@ function talentIcon(name){
   const n=name.trim().replace(/\s+/g,'_');
   return 'Talent_'+n+'.png';
 }
-function laneIcon(name){
-  if(!name) return '';
-  const n=name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_');
-  const map={
-    exp:'Mobile_Legends_EXP_Lane.png',
-    exp_lane:'Mobile_Legends_EXP_Lane.png',
-    gold:'Mobile_Legends_Gold_Lane.png',
-    gold_lane:'Mobile_Legends_Gold_Lane.png',
-    mid:'Mobile_Legends_Mid_Lane.png',
-    mid_lane:'Mobile_Legends_Mid_Lane.png',
-    jungle:'Mobile_Legends_Jungle.png',
-    roamer:'Mobile_Legends_Roamer.png',
-    roam:'Mobile_Legends_Roamer.png'
-  };
-  return map[n] || '';
-}
 function parseEmblem(text){
   if(!text) return {set:'', talents:[]};
   const parts=text.split(/\s+with\s+/i);
@@ -250,29 +232,22 @@ function parseEmblem(text){
   const talents=parts[1]?parts[1].split(',').map(t=>t.trim()).filter(Boolean):[];
   return {set, talents};
 }
-const ROAM_BLESSINGS=new Set(['conceal','encourage','dire_hit','favor']);
-function isRoamBlessing(name){
-  if(!name) return false;
-  return ROAM_BLESSINGS.has(name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_'));
-}
 /** One build card: the six items in buying order. */
 function buildCard(b){
   const sp=spellIcon(b.battleSpell), bl=blessingIcon(b.blessing);
   const {set, talents}=parseEmblem(b.emblem);
   const em=emblemIcon(set);
-  const roamBless=isRoamBlessing(b.blessing);
   const lc=laneIcon(b.lane);
   return`<div class="bd">
    <div class="bh"><b>${esc(b.name)}</b>${b.lane?`<span class="badge" style="background:var(--blue)">${lc?`<img src="/icons/${lc}" alt="" onerror="this.remove()" style="width:14px;height:14px;vertical-align:middle;margin-right:4px">`:''}${esc(b.lane)}</span>`:''}
     <span class="cost">${b.totalCost} gold</span></div>
-   <div class="slots">${b.items.map(i=>`<a class="slot" href="/items/${slug(i.name)}" title="${esc(i.name)}">${
-    i.icon?`<img src="/icons/${i.icon}" alt="" onerror="this.remove()">`:''}<span>${esc(i.name)}</span></a>`).join('')}</div>
+   <div class="slots">${b.items.map(i=>`<a class="slot${i.core?' core':''}" href="/items/${esc(i.slug)}" title="${esc(i.name)}">${
+    i.icon?`<img src="/icons/${esc(i.icon)}" alt="" onerror="this.remove()">`:''}<span>${esc(i.name)}</span></a>`).join('')}</div>
    <div class="extra">
     ${em?`<span class="chip"><i><img src="/icons/${em}" alt="" onerror="this.remove()"></i>${esc(set)}</span>`:''}
-    ${talents.map(t=>`<span class="chip"><i><img src="/icons/${talentIcon(t)}" alt="" onerror="this.remove()"></i>${esc(t)}</span>`).join('')}
+    ${talents.map(t=>`<span class="chip"><i><img src="/icons/${esc(talentIcon(t))}" alt="" onerror="this.remove()"></i>${esc(t)}</span>`).join('')}
     ${b.battleSpell?`<span class="chip"><i><img src="/icons/${sp}" alt="" onerror="this.remove()"></i>${esc(b.battleSpell)}</span>`:''}
-    ${roamBless && b.blessing?`<span class="chip"><i><img src="/icons/${bl}" alt="" onerror="this.remove()"></i>${esc(b.blessing)}</span>`:''}
-    ${b.blessing && !roamBless?`<span class="chip"><i><img src="/icons/${bl}" alt="" onerror="this.remove()"></i>${esc(b.blessing)}</span>`:''}
+    ${b.blessing?`<span class="chip"><i><img src="/icons/${bl}" alt="" onerror="this.remove()"></i>${esc(b.blessing)}</span>`:''}
    </div>
    ${b.flex?`<div class="flex"><b>Flex</b> ${esc(b.flex)}</div>`:''}
   </div>`;
@@ -281,7 +256,8 @@ function buildCard(b){
 async function loadBuilds(name){
  const box=$('#buildBox');if(!box)return;
  try{
-  const b=await (await fetch('/api/builds?hero='+encodeURIComponent(name))).json();
+  const b=await call('/api/builds?hero='+encodeURIComponent(name));
+  if(b.error)throw new Error(b.error);
   box.innerHTML='<h4>Core items</h4>'+(b.length
    ?`<div class="builds">${b.map(buildCard).join('')}</div>`
    :'<div class="empty">No curated build recorded for this hero.</div>');
@@ -289,15 +265,18 @@ async function loadBuilds(name){
 }
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-n]'); if(b){showHero(b.dataset.n,true);return}
- const t=e.target.closest('[data-tier]'); if(t){showList(true);$('#tier').value=t.dataset.tier;f.tier=t.dataset.tier;render();}
+ const t=e.target.closest('[data-tier]');
+ if(t){e.preventDefault();showList(false);$('#tier').value=t.dataset.tier;f.tier=t.dataset.tier;render();
+  history.pushState({},'','/heroes?t='+t.dataset.tier);}
 });
 window.addEventListener('popstate',()=>{route();window.scrollTo(0,0);});
 ['q','role','lane','tier','sort'].forEach(id=>$('#'+id).addEventListener('input',e=>{
- f[id==='q'?'q':id]=e.target.value;render();}));
+ f[id]=id==='q'?e.target.value.toLowerCase():e.target.value;render();}));
 (async()=>{
  try{
-  heroes=await (await fetch('/api/heroes')).json();
-  heroes.forEach(h=>{byName[h.name]=h;byLower[h.name.toLowerCase()]=h;bySlug[slug(h.name)]=h;});
+  heroes=await call('/api/heroes');
+  if(heroes.error)throw new Error(heroes.error);
+  heroes.forEach(h=>{byName[h.name]=h;byLower[h.name.toLowerCase()]=h;bySlug[h.slug]=h;});
   heroes.forEach(h=>h.counters.forEach(c=>{(countersMe[c]=countersMe[c]||[]).push(h.name);}));
   // Order each struggle list strongest-counter-first, then alphabetically.
  Object.keys(countersMe).forEach(k=>countersMe[k].sort((a,b)=>
@@ -309,11 +288,11 @@ window.addEventListener('popstate',()=>{route();window.scrollTo(0,0);});
   const total=heroes.length;
   $('#tiers').innerHTML=['S','A','B','C','D'].filter(t=>by[t]).map(t=>{
    const n=by[t].length,pct=n/total*100;
-   return`<a href="/heroes?t=${t}" data-tier="${t}" style="width:${pct.toFixed(1)}%;background:${TC[t]}" title="Tier ${t}: ${n} heroes">${pct>9?t+' '+n:''}</a>`}).join('');
-  render();
+   return`<a href="/heroes?t=${t}" data-tier="${t}" style="width:${pct.toFixed(1)}%;background:${TIER_COLORS[t]}" title="Tier ${t}: ${n} heroes">${pct>9?t+' '+n:''}</a>`}).join('');
+  render();meta();
   route();
   const qs=new URLSearchParams(location.search).get('t');
-  if(qs&&TC[qs.toUpperCase()]){$('#tier').value=qs.toUpperCase();f.tier=qs.toUpperCase();render();}
+  if(qs&&TIER_COLORS[qs.toUpperCase()]){$('#tier').value=qs.toUpperCase();f.tier=qs.toUpperCase();render();}
  }catch(e){$('#grid').innerHTML='<p class="l">Roster unavailable.</p>';}
 })();
 </script>

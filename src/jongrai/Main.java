@@ -2,6 +2,7 @@ package jongrai;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -33,17 +34,17 @@ public class Main {
                 switch (cmd) {
                     case "pick", "ban" -> {
                         if (p.length < 3) { System.out.println("Usage: " + cmd + " <blue|red> <hero>"); break; }
-                        Draft.Side side = parseSide(p[1]);
+                        Draft.Side side = Draft.Side.parse(p[1]);
                         if (cmd.equals("pick")) draft.pick(side, p[2]); else draft.ban(side, p[2]);
                         show(draft);
                     }
                     case "suggest" -> {
                         if (p.length < 2) { System.out.println("Usage: suggest <blue|red>"); break; }
-                        suggest(engine, draft, parseSide(p[1]));
+                        suggest(engine, draft, Draft.Side.parse(p[1]));
                     }
                     case "suggestbans" -> {
                         if (p.length < 2) { System.out.println("Usage: suggestbans <blue|red>"); break; }
-                        Draft.Side side = parseSide(p[1]);
+                        Draft.Side side = Draft.Side.parse(p[1]);
                         printList("Best bans for " + draft.team(side).name() + ":", engine.suggestBans(draft, side, 5));
                     }
                     case "show" -> show(draft);
@@ -62,14 +63,6 @@ public class Main {
         }
     }
 
-    private static Draft.Side parseSide(String text) {
-        return switch (text.toLowerCase()) {
-            case "blue", "b" -> Draft.Side.BLUE;
-            case "red", "r" -> Draft.Side.RED;
-            default -> throw new IllegalArgumentException("Side must be blue or red.");
-        };
-    }
-
     private static void suggest(SuggestionEngine engine, Draft draft, Draft.Side side) {
         printList("Best next picks for " + draft.team(side).name() + ":", engine.suggest(draft, side, 3));
     }
@@ -79,7 +72,7 @@ public class Main {
         int i = 1;
         for (SuggestionEngine.Suggestion s : top) {
             String why = s.reasons().isEmpty() ? "no strong reason yet" : String.join(", ", s.reasons());
-            System.out.printf("  %d. %-12s score %+.1f  (%s)%n", i++, s.hero().name(), s.score(), why);
+            System.out.printf(Locale.ROOT, "  %d. %-12s score %+.1f  (%s)%n", i++, s.hero().name(), s.score(), why);
         }
     }
 
@@ -102,8 +95,8 @@ public class Main {
     /** Prints one hero's profile: who it is strong against, who counters it, and its synergies. */
     private static void heroInfo(Draft draft, String name) {
         Hero hero = draft.find(name);
-        System.out.println(hero + " | tier " + hero.tier() + " | win rate " + hero.winRate() + "%"
-                + (hero.banRate() > 0 ? " | ban rate " + hero.banRate() + "%" : ""));
+        System.out.println(hero + " | tier " + hero.tier() + " | win rate " + String.format(Locale.ROOT, "%.1f", hero.winRate()) + "%"
+                + (hero.banRate() > 0 ? " | ban rate " + String.format(Locale.ROOT, "%.1f", hero.banRate()) + "%" : ""));
 
         List<String> strongAgainst = draft.allHeroes().stream()
                 .filter(hero::counters).map(Hero::name).sorted().toList();

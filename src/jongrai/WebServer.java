@@ -4,150 +4,243 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-/** Tiny web server (JDK only, no libraries): serves web/index.html and a JSON API over the draft engine. */
+/** Tiny web server (JDK only, no libraries): serves the pages in web/ and a JSON API over the draft engine. */
 public class WebServer {
 
+    private static Path home;                               // folder holding data/ and web/
+    private static int port;
     private static Map<String, Hero> pool;
+    private static final Map<String, Hero> heroBySlug = new HashMap<>();
+    private static final Map<String, Item> itemBySlug = new HashMap<>();
     private static Draft draft;
     private static ItemRepository gear;
     private static ProLeagueRepository pro;
-    private static final Set<String> iconFiles = new HashSet<>(); // every icon basename in web/icons
-
-    /** Server start time, shown in the page footer so a stale browser copy is obvious. */
-    private static final String BUILD = java.time.LocalDateTime.now()
-            .withNano(0).toString().replace('T', ' ');
     private static final Map<String, String> icons = new HashMap<>(); // hero name -> icon file name
     private static final SuggestionEngine engine = new SuggestionEngine();
 
-    public static void main(String[] args) throws Exception {
-        pool = HeroRepository.loadCsv(Path.of("data/heroes.csv"));
-        draft = new Draft(pool);
-        gear = ItemRepository.load(Path.of("data/items.csv"), Path.of("data/hero-builds.csv"));
-        pro = ProLeagueRepository.load(Path.of("data"));
-        loadIcons(Path.of("data/hero-icons.csv"));
-        int port = args.length > 0 ? Integer.parseInt(args[0]) : 8080;
+    /** Guards every read and write of {@link #draft}. Never held across the AI call. */
+    private static final Object DRAFT_LOCK = new Object();
+    /** Finished AI reads by prompt. A failed future is removed so the user can retry. */
+    private static final ConcurrentHashMap<String, CompletableFuture<String>> wisdomCache = new ConcurrentHashMap<>();
 
-        for (String w : gear.validate(heroKeys())) System.out.println("gear warning: " + w);
+    /** Server start time, shown in the page footer so a stale browser copy is obvious. */
+    private static final Instant START = Instant.now();
+    private static final String BUILD = java.time.LocalDateTime.now()
+            .withNano(0).toString().replace('T', ' ');
 
-        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
-        server.createContext("/", WebServer::handle);
-        server.start();
-        System.out.println("Jongrai draft board running at http://localhost:" + port + "  (Ctrl+C to stop)");
-        System.out.println("AI coach " + (AiCoach.configured() ? "ON - model " + AiCoach.model() + " via " + AiCoach.baseUrl()
-                : "OFF - no key found (" + AiCoach.keySource() + ")"));
-        if (!AiCoach.configured()) {
-            System.out.println("  To turn it on, create ai-config.txt next to this project with:");
-            System.out.println("    JONGRAI_AI_KEY=sk-your-key");
-            System.out.println("    JONGRAI_AI_MODEL=gpt-4o-mini");
-            System.out.println("    JONGRAI_AI_BASE_URL=https://api.openai.com/v1");
-        }
-    }
-
-    private static synchronized void handle(HttpExchange ex) throws IOException {
-        Map<String, String> q = query(ex.getRequestURI().getRawQuery());
-        try {
-            String path = ex.getRequestURI().getPath();
-            if (path.startsWith("/icons/")) { serveIcon(ex, path.substring(7)); return; }
-            if (path.startsWith("/video/")) { serveVideo(ex, path.substring(7)); return; }
-            switch (path) {
-                case "/" -> send(ex, 200, "text/html; charset=utf-8", page("home.html"));
-                case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" ->
-                        send(ex, 200, "text/html; charset=utf-8", page(PAGES.get(path)));
-                case "/style.css" -> send(ex, 200, "text/css; charset=utf-8", asset("style.css"));
-                case "/api/heroes" -> send(ex, 200, "application/json", heroesJson());
-                case "/api/items" -> send(ex, 200, "application/json", itemsJson());
-                case "/api/builds" -> send(ex, 200, "application/json", buildsJson(q.getOrDefault("hero", "")));
-                case "/api/leagues" -> send(ex, 200, "application/json", leaguesJson());
-                case "/api/teams" -> send(ex, 200, "application/json", teamsJson(q.getOrDefault("league", "")));
-                case "/api/standings" -> send(ex, 200, "application/json", standingsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
-                case "/api/matches" -> send(ex, 200, "application/json", matchesJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("status", "")));
-                case "/api/drafts" -> send(ex, 200, "application/json", draftsJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("match", "")));
-                case "/api/state" -> send(ex, 200, "application/json", stateJson());
-                case "/api/pick" -> { draft.pick(side(q), q.getOrDefault("hero", "")); send(ex, 200, "application/json", stateJson()); }
-                case "/api/ban" -> { draft.ban(side(q), q.getOrDefault("hero", "")); send(ex, 200, "application/json", stateJson()); }
-                case "/api/lane" -> { draft.setLane(side(q), q.getOrDefault("hero", ""), Lane.parse(q.getOrDefault("lane", ""))); send(ex, 200, "application/json", stateJson()); }
-                case "/api/remove" -> { draft.remove(side(q), q.getOrDefault("hero", "")); send(ex, 200, "application/json", stateJson()); }
-                case "/api/analysis" -> send(ex, 200, "application/json", analysisJson());
-                case "/api/coordination" -> send(ex, 200, "application/json", coordinationJson());
-                case "/api/wisdom" -> send(ex, 200, "application/json", wisdomJson(q.getOrDefault("force", "0").equals("1")));
-                case "/api/aidebug" -> send(ex, 200, "application/json", AiCoach.debugJson());
-                case "/api/auto-suggest" -> send(ex, 200, "application/json", autoSuggestJson(q));
-                case "/api/reset" -> { draft = new Draft(pool); send(ex, 200, "application/json", stateJson()); }
-                case "/api/suggest" -> send(ex, 200, "application/json", suggestionsJson(engine.suggest(draft, side(q), 5)));
-                case "/api/bans" -> send(ex, 200, "application/json", suggestionsJson(engine.suggestBans(draft, side(q), 5)));
-                default -> {
-                    if (path.equals("/style.css")) send(ex, 200, "text/css; charset=utf-8", asset("style.css"));
-                    // Per-hero pages such as /heroes/obsidia render client-side from this same file.
-                    else if (path.startsWith("/heroes/")) send(ex, 200, "text/html; charset=utf-8", page("hero-statistics.html"));
-                    // Likewise /items/war-axe.
-                    else if (path.startsWith("/items/")) send(ex, 200, "text/html; charset=utf-8", page("items.html"));
-                    else send(ex, 404, "text/html; charset=utf-8", page("404.html"));
-                }
-            }
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            send(ex, 400, "application/json", "{\"error\":" + str(e.getMessage()) + "}");
-        }
-    }
+    private static final Set<String> MUTATING = Set.of(
+            "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset", "/api/wisdom");
+    private static final DateTimeFormatter HTTP_DATE =
+            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US).withZone(ZoneOffset.UTC);
 
     /** URL path -> HTML file. Static assets are served from web/ by name. */
     private static final Map<String, String> PAGES = Map.of(
-            "/", "home.html",
             "/home", "home.html",
             "/heroes", "hero-statistics.html",
             "/league", "pro-league.html",
             "/draft", "draft.html",
             "/items", "items.html",
             "/about", "about.html",
-            // old bookmark
-            "/index.html", "draft.html");
+            "/index.html", "draft.html"); // old bookmark
 
-    private static String page(String file) throws IOException {
-        // Stamp the build into the footer so "what version am I looking at" is always answerable.
-        String html = Files.readString(Path.of("web", file));
-        String stamp = "<span>build " + BUILD + "</span>";
-        return html.contains("</footer>")
-                ? html.replace("</footer>", stamp + "</footer>")
-                : html.replace("</body>", "<span class='build'>" + BUILD + "</span></body>");
+    public static void main(String[] args) throws Exception {
+        port = parsePort(args);
+        home = resolveHome();
+        AiCoach.init(home);
+
+        pool = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
+        draft = new Draft(pool);
+        gear = ItemRepository.load(home.resolve("data/items.csv"), home.resolve("data/hero-builds.csv"));
+        pro = ProLeagueRepository.load(home.resolve("data"));
+        loadIcons(home.resolve("data/hero-icons.csv"));
+        pool.values().forEach(h -> heroBySlug.put(h.slug(), h));
+        gear.items().forEach(i -> itemBySlug.put(i.slug(), i));
+
+        List<String> warnings = new ArrayList<>(HeroRepository.validate(pool));
+        warnings.addAll(gear.validate(pool.keySet(), home.resolve("web/icons")));
+        warnings.addAll(pro.validate(pool.keySet()));
+        icons.forEach((hero, file) -> {
+            if (!Files.isRegularFile(home.resolve("web/icons").resolve(file))) warnings.add("hero icon '" + file + "' for " + hero + " is missing");
+        });
+        warnings.forEach(w -> System.out.println("warning: " + w));
+
+        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
+        server.createContext("/", WebServer::handle);
+        server.setExecutor(Executors.newFixedThreadPool(8));
+        server.start();
+        System.out.println("Jongrai draft board running at http://localhost:" + port + "  (Ctrl+C to stop)");
+        System.out.println("AI coach " + (AiCoach.configured() ? "ON - model " + AiCoach.model() + " via " + AiCoach.baseUrl()
+                : "OFF - no key found (" + AiCoach.keySource() + ")"));
+        if (!AiCoach.configured()) {
+            System.out.println("  To turn it on, copy ai-config.example.txt to ai-config.txt, add your key, and restart.");
+        }
     }
 
-    private static String asset(String name) throws IOException {
-        return Files.readString(Path.of("web", name));
+    private static int parsePort(String[] args) {
+        try {
+            int p = args.length > 0 ? Integer.parseInt(args[0]) : 8080;
+            if (p >= 1 && p <= 65535) return p;
+        } catch (NumberFormatException e) {
+            // falls through to the usage message
+        }
+        System.err.println("Usage: java -cp out jongrai.WebServer [port 1-65535]");
+        System.exit(2);
+        return 0;
     }
 
-    private static Draft.Side side(Map<String, String> q) {
-        return Draft.Side.valueOf(q.getOrDefault("side", "blue").toUpperCase());
+    /** -Djongrai.home, else the working directory if it holds data/ and web/, else the folder above out/. */
+    private static Path resolveHome() {
+        String prop = System.getProperty("jongrai.home");
+        List<Path> candidates = new ArrayList<>();
+        if (prop != null && !prop.isBlank()) candidates.add(Path.of(prop));
+        else {
+            candidates.add(Path.of(""));
+            try {
+                Path code = Path.of(WebServer.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+                if (code.getParent() != null) candidates.add(code.getParent());
+            } catch (Exception e) {
+                // not running from a folder or jar we can locate; the working directory is all we have
+            }
+        }
+        return candidates.stream().map(p -> p.toAbsolutePath().normalize())
+                .filter(p -> Files.isDirectory(p.resolve("data")) && Files.isDirectory(p.resolve("web")))
+                .findFirst().orElseThrow(() -> new IllegalStateException(
+                        "Cannot find the project folder (it holds data/ and web/). Run from it, or pass -Djongrai.home=<folder>."));
+    }
+
+    private static void handle(HttpExchange ex) throws IOException {
+        try {
+            route(ex);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            sendJson(ex, 400, "{\"error\":" + Json.str(e.getMessage()) + "}");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            sendJson(ex, 500, "{\"error\":\"Internal error\"}");
+        }
+    }
+
+    private static void route(HttpExchange ex) throws IOException {
+        String host = ex.getRequestHeaders().getFirst("Host");
+        if (!Set.of("localhost:" + port, "127.0.0.1:" + port, "[::1]:" + port).contains(host)) {
+            send(ex, 421, "text/plain", "Misdirected request");
+            return;
+        }
+        String path = ex.getRequestURI().getPath();
+        boolean mutating = MUTATING.contains(path);
+        if (!ex.getRequestMethod().equals(mutating ? "POST" : "GET")) {
+            ex.getResponseHeaders().set("Allow", mutating ? "POST" : "GET");
+            send(ex, 405, "text/plain", mutating ? "POST only" : "GET only");
+            return;
+        }
+        String site = ex.getRequestHeaders().getFirst("Sec-Fetch-Site");
+        if (mutating && site != null && !site.equals("same-origin")) {
+            send(ex, 403, "text/plain", "Cross-site request refused");
+            return;
+        }
+
+        Map<String, String> q = query(ex.getRequestURI().getRawQuery());
+        if (mutating) q.putAll(query(new String(ex.getRequestBody().readNBytes(65536), StandardCharsets.UTF_8)));
+
+        if (path.startsWith("/icons/")) { serveFile(ex, "icons", path.substring(7), true); return; }
+        if (path.startsWith("/video/")) { serveFile(ex, "video", path.substring(7), true); return; }
+        switch (path) {
+            case "/" -> servePage(ex, "home.html");
+            case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" -> servePage(ex, PAGES.get(path));
+            case "/style.css", "/app.js" -> serveFile(ex, "", path.substring(1), false);
+            case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH)
+                    + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
+            case "/api/heroes" -> sendJson(ex, 200, heroesJson());
+            case "/api/items" -> sendJson(ex, 200, itemsJson());
+            case "/api/builds" -> sendJson(ex, 200, buildsJson(q.getOrDefault("hero", "")));
+            case "/api/leagues" -> sendJson(ex, 200, leaguesJson());
+            case "/api/teams" -> sendJson(ex, 200, teamsJson(q.getOrDefault("league", "")));
+            case "/api/standings" -> sendJson(ex, 200, standingsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
+            case "/api/matches" -> sendJson(ex, 200, matchesJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("status", "")));
+            case "/api/drafts" -> sendJson(ex, 200, draftsJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("match", "")));
+            case "/api/state" -> sendJson(ex, 200, locked(WebServer::stateJson));
+            case "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset" -> mutate(ex, path, q);
+            case "/api/analysis" -> sendJson(ex, 200, locked(WebServer::analysisJson));
+            case "/api/wisdom" -> sendJson(ex, 200, wisdomJson(q.getOrDefault("force", "0").equals("1"),
+                    q.getOrDefault("refresh", "0").equals("1")));
+            case "/api/auto-suggest" -> sendJson(ex, 200, locked(WebServer::autoSuggestJson));
+            case "/api/suggest" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue"));
+                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft, s, 5)))); }
+            case "/api/bans" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue"));
+                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft, s, 5)))); }
+            default -> {
+                // Per-hero pages such as /heroes/obsidia render client-side from the same file.
+                if (path.startsWith("/heroes/") && heroBySlug.containsKey(path.substring(8))) servePage(ex, "hero-statistics.html");
+                else if (path.startsWith("/items/") && itemBySlug.containsKey(path.substring(7))) servePage(ex, "items.html");
+                else servePage(ex, 404, "404.html");
+            }
+        }
+    }
+
+    private static String locked(java.util.function.Supplier<String> body) {
+        synchronized (DRAFT_LOCK) { return body.get(); }
+    }
+
+    /** One draft change. A client that sends v=<version> is refused with 409 when its board is out of date. */
+    private static void mutate(HttpExchange ex, String path, Map<String, String> q) throws IOException {
+        String hero = q.getOrDefault("hero", "");
+        String body;
+        synchronized (DRAFT_LOCK) {
+            if (q.containsKey("v") && !q.get("v").equals(Long.toString(draft.version()))) {
+                sendJson(ex, 409, "{\"error\":\"The board changed in another window.\",\"state\":" + stateJson() + "}");
+                return;
+            }
+            if (path.equals("/api/reset")) draft.reset();
+            else {
+                Draft.Side side = Draft.Side.parse(q.getOrDefault("side", "blue"));
+                switch (path) {
+                    case "/api/pick" -> draft.pick(side, hero);
+                    case "/api/ban" -> draft.ban(side, hero);
+                    case "/api/lane" -> draft.setLane(side, hero, Lane.parse(q.getOrDefault("lane", "")));
+                    default -> draft.remove(side, hero);
+                }
+            }
+            body = stateJson();
+        }
+        sendJson(ex, 200, body);
     }
 
     private static String heroesJson() {
         return pool.values().stream().map(h -> String.format(Locale.ROOT,
-                "{\"name\":%s,\"roles\":%s,\"lanes\":%s,\"tier\":%s,\"winRate\":%.2f,\"banRate\":%.2f,\"icon\":%s"
-                        + ",\"durability\":%d,\"offense\":%d,\"control\":%d,\"tags\":%s,\"spike\":%s"
+                "{\"name\":%s,\"slug\":%s,\"roles\":%s,\"lanes\":%s,\"tier\":%s,\"winRate\":%.2f,\"banRate\":%.2f,\"icon\":%s"
+                        + ",\"durability\":%d,\"offense\":%d,\"control\":%d,\"tags\":%s,\"spike\":%s,\"tip\":%s"
                         + ",\"counters\":%s,\"synergies\":%s}",
-                str(h.name()), strList(h.roles().stream().map(Enum::name).toList()),
-                strList(h.lanes().stream().map(Enum::name).toList()), str(h.tier()), h.winRate(), h.banRate(),
-                str(icons.getOrDefault(h.name(), "")), h.durability(), h.offense(), h.control(),
-                strList(h.tags().stream().sorted().toList()), str(h.spike()),
-                strList(h.counters().stream().sorted().toList()), strList(h.synergies().stream().sorted().toList())))
+                Json.str(h.name()), Json.str(h.slug()), Json.list(h.roles().stream().map(Enum::name).toList()),
+                Json.list(h.lanes().stream().map(Enum::name).toList()), Json.str(h.tier()), h.winRate(), h.banRate(),
+                Json.str(icons.getOrDefault(h.name(), "")), h.durability(), h.offense(), h.control(),
+                Json.list(h.tags().stream().sorted().toList()), Json.str(h.spike().name()), Json.str(h.tip()),
+                Json.list(h.counters().stream().sorted().toList()), Json.list(h.synergies().stream().sorted().toList())))
                 .collect(Collectors.joining(",", "[", "]"));
-    }
-
-    private static Set<String> heroKeys() {
-        return pool.keySet();
     }
 
     /** The whole item catalog, each item carrying the heroes that core-build it and that merely use it. */
@@ -157,10 +250,10 @@ public class WebServer {
         return gear.items().stream().map(it -> String.format(Locale.ROOT,
                 "{\"name\":%s,\"slug\":%s,\"tier\":%d,\"cost\":%d,\"stats\":%s,\"statList\":%s,\"passives\":%s,"
                         + "\"availability\":%s,\"categories\":%s,\"icon\":%s,\"cores\":%s,\"users\":%s}",
-                str(it.name()), str(it.slug()), it.tier(), it.cost(),
-                str(it.stats()), strList(statList(it.stats())), str(it.passives()), str(it.availability()),
-                strList(it.categories()), str(it.icon()),
-                strList(cores.getOrDefault(it.key(), List.of())), strList(users.getOrDefault(it.key(), List.of()))))
+                Json.str(it.name()), Json.str(it.slug()), it.tier(), it.cost(),
+                Json.str(it.stats()), Json.list(statList(it.stats())), Json.str(it.passives()), Json.str(it.availability()),
+                Json.list(it.categories()), Json.str(it.icon()),
+                Json.list(cores.getOrDefault(it.key(), List.of())), Json.list(users.getOrDefault(it.key(), List.of()))))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -179,51 +272,49 @@ public class WebServer {
         Hero h = hero == null ? null : pool.get(hero.trim().toLowerCase());
         if (h == null) return "[]";
 
-        List<HeroBuild> builds = gear.builds(h.name());
-        return builds.stream().map(b -> String.format(Locale.ROOT,
+        return gear.builds(h.name()).stream().map(b -> String.format(Locale.ROOT,
                 "{\"order\":%d,\"name\":%s,\"lane\":%s,\"items\":%s,\"emblem\":%s,\"battleSpell\":%s,"
                         + "\"blessing\":%s,\"flex\":%s,\"totalCost\":%d}",
-                b.order(), str(b.name()), str(b.lane()), buildItemsJson(b), str(b.emblem()),
-                str(b.battleSpell()), str(b.blessing()), str(b.flex()), b.totalCost()))
+                b.order(), Json.str(b.name()), Json.str(b.lane()), buildItemsJson(b), Json.str(b.emblem()),
+                Json.str(b.battleSpell()), Json.str(b.blessing()), Json.str(b.flex()), b.totalCost()))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String buildItemsJson(HeroBuild b) {
         return b.items().stream().map(name -> {
             Item it = gear.item(name);
-            return String.format(Locale.ROOT, "{\"name\":%s,\"icon\":%s,\"cost\":%d,\"core\":%s}",
-                    str(name), str(it == null ? "" : it.icon()), it == null ? 0 : it.cost(), b.isCore(name));
+            return String.format(Locale.ROOT, "{\"name\":%s,\"slug\":%s,\"icon\":%s,\"cost\":%d,\"core\":%b}",
+                    Json.str(name), Json.str(it == null ? "" : it.slug()), Json.str(it == null ? "" : it.icon()),
+                    it == null ? 0 : it.cost(), b.isCore(name));
         }).collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String leaguesJson() {
         return pro.leagues().stream().map(l -> String.format(Locale.ROOT,
                 "{\"id\":%s,\"name\":%s,\"region\":%s,\"country\":%s,\"season\":%s,\"year\":%d,\"status\":%s,\"logo\":%s}",
-                str(l.id()), str(l.name()), str(l.region()), str(l.country()),
-                str(l.season()), l.year(), str(l.status()), str(l.logo())))
+                Json.str(l.id()), Json.str(l.name()), Json.str(l.region()), Json.str(l.country()),
+                Json.str(l.season()), l.year(), Json.str(l.status()), Json.str(l.logo())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String teamsJson(String leagueId) {
-        if (leagueId == null || leagueId.isBlank()) {
-            return pro.teams().stream().map(t -> teamJson(t)).collect(Collectors.joining(",", "[", "]"));
-        }
-        return pro.teamsInLeague(leagueId).stream().map(t -> teamJson(t)).collect(Collectors.joining(",", "[", "]"));
+        List<ProLeagueRepository.ProTeam> list = leagueId == null || leagueId.isBlank() ? pro.teams() : pro.teamsInLeague(leagueId);
+        return list.stream().map(WebServer::teamJson).collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String teamJson(ProLeagueRepository.ProTeam t) {
         return String.format(Locale.ROOT,
                 "{\"id\":%s,\"leagueId\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s}",
-                str(t.id()), str(t.leagueId()), str(t.name()), str(t.shortName()), str(t.logo()),
-                t.founded(), str(t.city()), str(t.coach()), str(t.status()));
+                Json.str(t.id()), Json.str(t.leagueId()), Json.str(t.name()), Json.str(t.shortName()), Json.str(t.logo()),
+                t.founded(), Json.str(t.city()), Json.str(t.coach()), Json.str(t.status()));
     }
 
     private static String standingsJson(String leagueId, String season) {
         if (leagueId == null || leagueId.isBlank() || season == null || season.isBlank()) return "[]";
         return pro.standings(leagueId, season).stream().map(s -> String.format(Locale.ROOT,
                 "{\"leagueId\":%s,\"teamId\":%s,\"season\":%s,\"position\":%d,\"played\":%d,\"won\":%d,\"lost\":%d,\"draw\":%d,\"gf\":%d,\"ga\":%d,\"gd\":%d,\"points\":%d,\"streak\":%s,\"form\":%s,\"lastUpdated\":%s}",
-                str(s.leagueId()), str(s.teamId()), str(s.season()), s.position(), s.played(), s.won(), s.lost(),
-                s.draw(), s.gf(), s.ga(), s.gd(), s.points(), str(s.streak()), str(s.form()), str(s.lastUpdated())))
+                Json.str(s.leagueId()), Json.str(s.teamId()), Json.str(s.season()), s.position(), s.played(), s.won(), s.lost(),
+                s.draw(), s.gf(), s.ga(), s.gd(), s.points(), Json.str(s.streak()), Json.str(s.form()), Json.str(s.lastUpdated())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -233,9 +324,9 @@ public class WebServer {
                 .filter(m -> status == null || status.isBlank() || m.status().equals(status))
                 .map(m -> String.format(Locale.ROOT,
                         "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"week\":%d,\"day\":%d,\"team1Id\":%s,\"team2Id\":%s,\"team1Score\":%d,\"team2Score\":%d,\"status\":%s,\"scheduledTime\":%s,\"completedTime\":%s,\"matchType\":%s}",
-                        str(m.id()), str(m.leagueId()), str(m.season()), m.week(), m.day(),
-                        str(m.team1Id()), str(m.team2Id()), m.team1Score(), m.team2Score(),
-                        str(m.status()), str(m.scheduledTime()), str(m.completedTime()), str(m.matchType())))
+                        Json.str(m.id()), Json.str(m.leagueId()), Json.str(m.season()), m.week(), m.day(),
+                        Json.str(m.team1Id()), Json.str(m.team2Id()), m.team1Score(), m.team2Score(),
+                        Json.str(m.status()), Json.str(m.scheduledTime()), Json.str(m.completedTime()), Json.str(m.matchType())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -245,48 +336,47 @@ public class WebServer {
                 .filter(d -> matchId == null || matchId.isBlank() || d.matchId().equals(matchId))
                 .map(d -> String.format(Locale.ROOT,
                         "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s}",
-                        str(d.id()), str(d.matchId()), str(d.leagueId()), str(d.season()), d.gameNumber(),
-                        str(d.blueTeamId()), str(d.redTeamId()), strList(d.blueBans()), strList(d.redBans()),
-                        strList(d.bluePicks()), strList(d.redPicks()), d.blueSide(), str(d.winnerTeamId()), str(d.patch())))
+                        Json.str(d.id()), Json.str(d.matchId()), Json.str(d.leagueId()), Json.str(d.season()), d.gameNumber(),
+                        Json.str(d.blueTeamId()), Json.str(d.redTeamId()), Json.list(d.blueBans()), Json.list(d.redBans()),
+                        Json.list(d.bluePicks()), Json.list(d.redPicks()), d.blueSide(), Json.str(d.winnerTeamId()), Json.str(d.patch())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
+    /** Caller holds {@link #DRAFT_LOCK}. */
     private static String stateJson() {
-        return "{\"blue\":" + teamJson(draft.team(Draft.Side.BLUE)) + ",\"red\":" + teamJson(draft.team(Draft.Side.RED)) + "}";
+        return "{\"version\":" + draft.version() + ",\"blue\":" + teamJson(draft.team(Draft.Side.BLUE))
+                + ",\"red\":" + teamJson(draft.team(Draft.Side.RED)) + "}";
     }
 
     private static String teamJson(Team t) {
         String picks = t.picks().stream()
-                .map(h -> "{\"name\":" + str(h.name()) + ",\"lane\":" + str(t.laneOf(h).name()) + "}")
+                .map(h -> "{\"name\":" + Json.str(h.name()) + ",\"lane\":" + Json.str(t.laneOf(h).name()) + "}")
                 .collect(Collectors.joining(",", "[", "]"));
         return "{\"picks\":" + picks
-                + ",\"bans\":" + strList(t.bans().stream().map(Hero::name).toList()) + "}";
+                + ",\"bans\":" + Json.list(t.bans().stream().map(Hero::name).toList()) + "}";
     }
 
     private static String suggestionsJson(List<SuggestionEngine.Suggestion> list) {
         return list.stream().map(s -> String.format(Locale.ROOT, "{\"hero\":%s,\"score\":\"%+.1f\",\"reasons\":%s}",
-                str(s.hero().name()), s.score(), strList(s.reasons())))
+                Json.str(s.hero().name()), s.score(), Json.list(s.reasons())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
+    /** Caller holds {@link #DRAFT_LOCK}. The analysis, with team coordination folded in. */
     private static String analysisJson() {
-        DraftAnalyzer.Analysis a = new DraftAnalyzer().analyze(draft);
-        String cats = a.categories().stream().map(c -> String.format(Locale.ROOT,
-                "{\"name\":%s,\"blueShare\":%.1f,\"detail\":%s}", str(c.name()), c.blueShare(), str(c.detail())))
+        DraftAnalyzer analyzer = new DraftAnalyzer();
+        DraftAnalyzer.Analysis a = analyzer.analyze(draft);
+        DraftAnalyzer.Coordination c = analyzer.coordination(draft);
+        String cats = a.categories().stream().map(x -> String.format(Locale.ROOT,
+                "{\"name\":%s,\"blueShare\":%.1f,\"detail\":%s}", Json.str(x.name()), x.blueShare(), Json.str(x.detail())))
                 .collect(Collectors.joining(",", "[", "]"));
         String profile = a.profile().stream().map(x -> String.format(Locale.ROOT,
-                "{\"name\":%s,\"blue\":%.1f,\"red\":%.1f}", str(x.name()), x.blue(), x.red()))
+                "{\"name\":%s,\"blue\":%.1f,\"red\":%.1f}", Json.str(x.name()), x.blue(), x.red()))
                 .collect(Collectors.joining(",", "[", "]"));
-        return "{\"blueEdge\":" + a.blueEdge() + ",\"redEdge\":" + a.redEdge() + ",\"lead\":" + str(a.lead())
-                + ",\"headline\":" + str(a.headline()) + ",\"categories\":" + cats
-                + ",\"profile\":" + profile + "}";
-    }
-
-    private static String coordinationJson() {
-        DraftAnalyzer.Coordination c = new DraftAnalyzer().coordination(draft);
-        return String.format(Locale.ROOT,
-                "{\"blue\":%s,\"red\":%s}",
-                sideJson(c.blue()), sideJson(c.red()));
+        return "{\"blueEdge\":" + a.blueEdge() + ",\"redEdge\":" + a.redEdge() + ",\"lead\":" + Json.str(a.lead())
+                + ",\"headline\":" + Json.str(a.headline()) + ",\"categories\":" + cats
+                + ",\"profile\":" + profile
+                + ",\"coordination\":{\"blue\":" + sideJson(c.blue()) + ",\"red\":" + sideJson(c.red()) + "}}";
     }
 
     private static String sideJson(DraftAnalyzer.TeamSide t) {
@@ -295,90 +385,54 @@ public class WebServer {
                 + "\"synergyPairs\":%d,\"heavyControl\":%d,\"avgWinRate\":%.1f,\"spikeTiming\":%s,"
                 + "\"missingLanes\":%s,\"missingRoles\":%s,\"score\":%.1f}",
                 t.lanesCovered(), t.hasTank(), t.hasMarksmanOrMage(), t.roleVariety(),
-                t.synergyPairs(), t.heavyControl(), t.avgWinRate(), str(t.spikeTiming()),
-                strList(t.missingLanes()), strList(t.missingRoles()), t.score());
-    }
-
-    private static String lastPrompt = "", lastWisdom = "";
-
-    /** A draft is finished once both sides have all five picks. */
-    private static boolean draftComplete() {
-        return draft.team(Draft.Side.BLUE).picks().size() >= Team.MAX_PICKS
-                && draft.team(Draft.Side.RED).picks().size() >= Team.MAX_PICKS;
+                t.synergyPairs(), t.heavyControl(), t.avgWinRate(), Json.str(t.spikeTiming()),
+                Json.list(t.missingLanes()), Json.list(t.missingRoles()), t.score());
     }
 
     /**
-     * AI read on the draft. Held back until the draft is finished, so no tokens are spent judging a
-     * half-built board. Cached per prompt, so re-rendering the page never re-bills the API.
+     * AI read on the draft. Held back until the draft is finished (unless force=1), so no tokens are
+     * spent judging a half-built board. Cached per prompt, so re-rendering the page never re-bills the
+     * API; refresh=1 drops the cached read and asks again. The upstream call runs outside the draft lock.
      */
-    private static String wisdomJson(boolean force) {
-        DraftAnalyzer.Analysis a = new DraftAnalyzer().analyze(draft);
-        int bp = draft.team(Draft.Side.BLUE).picks().size(), rp = draft.team(Draft.Side.RED).picks().size();
-        String progress = "{\"ready\":false,\"progress\":" + str(bp + " vs " + rp + " picks")
-                + ",\"complete\":" + draftComplete() + "}";
-
-        if (!AiCoach.configured()) {
-            return "{\"configured\":false,\"error\":\"Coach off: no API key. Create ai-config.txt in the project folder with a line JONGRAI_AI_KEY=... then restart the server.\"}";
-        }
-        if (!draftComplete() && !force) {
-            return "{\"configured\":true," + progress.substring(1);
-        }
-
-        String prompt = AiCoach.prompt(draft, a);
-        if (!prompt.equals(lastPrompt) || lastWisdom.isEmpty()) {
-            try {
-                lastWisdom = AiCoach.verdictJson(AiCoach.judge(draft, a));
-                lastPrompt = prompt;
-            } catch (RuntimeException e) {
-                return "{\"configured\":true,\"ready\":true,\"error\":" + str(e.getMessage()) + "}";
+    private static String wisdomJson(boolean force, boolean refresh) {
+        String prompt;
+        synchronized (DRAFT_LOCK) {
+            if (!AiCoach.configured()) {
+                return "{\"configured\":false,\"error\":\"Coach off: no API key. Copy ai-config.example.txt to ai-config.txt, add your key, then restart the server.\"}";
             }
+            if (!draft.isComplete() && !force) {
+                return "{\"configured\":true,\"ready\":false,\"progress\":" + Json.str(draft.team(Draft.Side.BLUE).picks().size()
+                        + " vs " + draft.team(Draft.Side.RED).picks().size() + " picks") + ",\"complete\":false}";
+            }
+            prompt = AiCoach.prompt(draft, new DraftAnalyzer().analyze(draft));
         }
-        return lastWisdom;
-    }
-
-    /** Returns 3 hero suggestions for the side whose turn it is to pick, or empty if not pick turn. */
-    private static String autoSuggestJson(Map<String, String> q) {
-        // Determine if it's this side's pick turn
-        // Pick order: Blue1, Red1-2, Blue2-3, Red3-4, Blue4-5, Red5
-        int bp = draft.team(Draft.Side.BLUE).picks().size();
-        int rp = draft.team(Draft.Side.RED).picks().size();
-        int totalPicks = bp + rp;
-
-        Draft.Side pickTurn;
-        if (totalPicks == 0) pickTurn = Draft.Side.BLUE;
-        else if (totalPicks <= 2) pickTurn = Draft.Side.RED;
-        else if (totalPicks <= 4) pickTurn = Draft.Side.BLUE;
-        else if (totalPicks <= 6) pickTurn = Draft.Side.RED;
-        else if (totalPicks <= 8) pickTurn = Draft.Side.BLUE;
-        else if (totalPicks <= 9) pickTurn = Draft.Side.RED;
-        else pickTurn = null; // draft complete
-
-        if (pickTurn == null) return "{\"active\":false,\"reason\":\"Draft complete\",\"suggestions\":[]}";
-        Draft.Side side = pickTurn;
-        Team team = draft.team(side);
-        if (team.picks().size() >= Team.MAX_PICKS) {
-            return "{\"active\":false,\"reason\":\"Team already has 5 picks\",\"suggestions\":[]}";
+        if (refresh) wisdomCache.remove(prompt);
+        if (wisdomCache.size() > 32) wisdomCache.clear(); // ponytail: crude cap; an LRU only if drafts get replayed a lot
+        CompletableFuture<String> read = wisdomCache.computeIfAbsent(prompt,
+                p -> CompletableFuture.supplyAsync(() -> AiCoach.verdictJson(AiCoach.judge(p))));
+        try {
+            return read.get();
+        } catch (ExecutionException | InterruptedException e) {
+            wisdomCache.remove(prompt, read);
+            if (e instanceof InterruptedException) Thread.currentThread().interrupt();
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            String message = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getSimpleName();
+            return "{\"configured\":true,\"ready\":true,\"error\":" + Json.str(message) + "}";
         }
-
-        List<SuggestionEngine.Suggestion> suggestions = engine.suggest(draft, side, 3);
-        String json = suggestions.stream().map(s -> String.format(Locale.ROOT,
-                "{\"hero\":%s,\"score\":\"%+.1f\",\"reasons\":%s}",
-                str(s.hero().name()), s.score(), strList(s.reasons())))
-                .collect(Collectors.joining(",", "[", "]"));
-        return "{\"active\":true,\"turn\":\"" + side.name().toLowerCase() + "\",\"suggestions\":" + json + "}";
     }
 
-    private static String strList(List<String> items) {
-        return items.stream().map(WebServer::str).collect(Collectors.joining(",", "[", "]"));
-    }
-
-    private static String str(String s) {
-        return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+    /** Caller holds {@link #DRAFT_LOCK}. Up to 3 suggestions for whoever picks next, or none once the draft is done. */
+    private static String autoSuggestJson() {
+        Optional<Draft.Side> next = draft.nextPick();
+        if (next.isEmpty()) return "{\"active\":false,\"reason\":\"Draft complete\",\"suggestions\":[]}";
+        Draft.Side side = next.get();
+        return "{\"active\":true,\"turn\":\"" + side.name().toLowerCase(Locale.ROOT) + "\",\"suggestions\":"
+                + suggestionsJson(engine.suggest(draft, side, 3)) + "}";
     }
 
     private static Map<String, String> query(String raw) {
         Map<String, String> map = new LinkedHashMap<>();
-        if (raw == null) return map;
+        if (raw == null || raw.isBlank()) return map;
         for (String pair : raw.split("&")) {
             String[] kv = pair.split("=", 2);
             map.put(URLDecoder.decode(kv[0], StandardCharsets.UTF_8),
@@ -388,55 +442,146 @@ public class WebServer {
     }
 
     private static void loadIcons(Path file) throws IOException {
-        if (!Files.exists(file)) return;
-        for (String line : Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            line = line.trim();
-            if (line.isEmpty() || line.startsWith("#") || line.startsWith("name,")) continue;
-            String[] p = line.split(",", 2);
-            if (p.length == 2 && !p[1].isBlank()) icons.put(p[0].trim(), p[1].trim());
+        for (Csv.Row r : Csv.read(file, 2)) {
+            if (!r.text(1).isEmpty()) icons.put(r.text(0), r.text(1));
         }
     }
 
-    private static void serveIcon(HttpExchange ex, String name) throws IOException {
-        Path file = Path.of("web", "icons", name);
-        // Apostrophes and spaces are allowed: several asset names carry one (Item_Athena's_Shield.png, season 42.jpg).
-        if (!name.matches("[A-Za-z0-9._' -]+") || name.contains("..") || !Files.isRegularFile(file)) {
-            send(ex, 404, "text/plain", "No such icon");
-            return;
-        }
-        String n = name.toLowerCase();
-        String type = n.endsWith(".png") ? "image/png" : n.endsWith(".webp") ? "image/webp"
-                : n.endsWith(".svg") ? "image/svg+xml" : n.endsWith(".gif") ? "image/gif"
-                : (n.endsWith(".jpg") || n.endsWith(".jpeg")) ? "image/jpeg" : "application/octet-stream";
-        ex.getResponseHeaders().set("Cache-Control", "no-cache");
-        sendBytes(ex, 200, type, Files.readAllBytes(file));
+    private static void servePage(HttpExchange ex, String file) throws IOException {
+        servePage(ex, 200, file);
     }
 
-    /** Serves the small, local hero clips used by the optional MPL-style draft presentation. */
-    private static void serveVideo(HttpExchange ex, String name) throws IOException {
-        Path file = Path.of("web", "video", name);
-        if (!name.matches("[A-Za-z0-9._' -]+") || name.contains("..")
-                || !name.toLowerCase().endsWith(".mp4") || !Files.isRegularFile(file)) {
-            send(ex, 404, "text/plain", "No such video");
+    /** An HTML page with the build stamp in its footer. Revalidates every time, answering 304 when unchanged. */
+    private static void servePage(HttpExchange ex, int code, String file) throws IOException {
+        Path path = home.resolve("web").resolve(file);
+        String html = Files.readString(path);
+        String stamp = "<span>build " + BUILD + "</span>";
+        html = html.contains("</footer>")
+                ? html.replace("</footer>", stamp + "</footer>")
+                : html.replace("</body>", "<span class='build'>" + BUILD + "</span></body>");
+        // The stamp changes on every restart, so a restart must also invalidate the browser's copy.
+        Instant modified = Files.getLastModifiedTime(path).toInstant();
+        if (modified.isBefore(START)) modified = START;
+        ex.getResponseHeaders().set("Cache-Control", "no-cache, must-revalidate");
+        if (code == 200 && notModified(ex, modified)) return;
+        send(ex, code, "text/html; charset=utf-8", html, modified);
+    }
+
+    /**
+     * A file under web/ (or web/<dir>/). Media and icons cache for a day; CSS and JS revalidate.
+     * Honours If-Modified-Since (304) and a single Range (206, or 416 when out of range).
+     */
+    private static void serveFile(HttpExchange ex, String dir, String name, boolean longCache) throws IOException {
+        Path root = home.resolve("web").resolve(dir).normalize();
+        Path file = root.resolve(name).normalize();
+        // Apostrophes and spaces are allowed: several asset names carry one (Item_Athena's_Shield.png).
+        if (!name.matches("[A-Za-z0-9._' -]+") || name.contains("..") || !file.startsWith(root) || !Files.isRegularFile(file)) {
+            send(ex, 404, "text/plain", "Not found");
             return;
         }
-        ex.getResponseHeaders().set("Cache-Control", "no-cache");
-        sendBytes(ex, 200, "video/mp4", Files.readAllBytes(file));
+        long size = Files.size(file);
+        Instant modified = Files.getLastModifiedTime(file).toInstant();
+        ex.getResponseHeaders().set("Cache-Control", longCache ? "public, max-age=86400" : "no-cache, must-revalidate");
+        ex.getResponseHeaders().set("Content-Type", contentType(name));
+        ex.getResponseHeaders().set("Accept-Ranges", "bytes");
+        if (notModified(ex, modified)) return;
+        ex.getResponseHeaders().set("Last-Modified", HTTP_DATE.format(modified));
+
+        long start = 0, end = size - 1;
+        int code = 200;
+        String range = ex.getRequestHeaders().getFirst("Range");
+        if (range != null && range.startsWith("bytes=") && !range.contains(",")) {
+            long[] r = parseRange(range.substring(6).trim(), size);
+            if (r == null) {
+                ex.getResponseHeaders().set("Content-Range", "bytes */" + size);
+                ex.sendResponseHeaders(416, -1);
+                ex.close();
+                return;
+            }
+            start = r[0];
+            end = r[1];
+            code = 206;
+            ex.getResponseHeaders().set("Content-Range", "bytes " + start + "-" + end + "/" + size);
+        }
+        long length = end - start + 1;
+        ex.sendResponseHeaders(code, length == 0 ? -1 : length);
+        try (OutputStream out = ex.getResponseBody(); InputStream in = Files.newInputStream(file)) {
+            in.skipNBytes(start);
+            byte[] buf = new byte[65536];
+            for (long left = length; left > 0; ) {
+                int n = in.read(buf, 0, (int) Math.min(buf.length, left));
+                if (n < 0) break;
+                out.write(buf, 0, n);
+                left -= n;
+            }
+        }
+    }
+
+    /** "a-b", "a-" or "-n" against a file of this size; {start, end} inclusive, or null when it cannot be served. */
+    private static long[] parseRange(String spec, long size) {
+        try {
+            int dash = spec.indexOf('-');
+            if (dash < 0) return null;
+            String from = spec.substring(0, dash), to = spec.substring(dash + 1);
+            long start, end;
+            if (from.isEmpty()) {                       // suffix: the last n bytes
+                long n = Long.parseLong(to);
+                if (n <= 0) return null;
+                start = Math.max(0, size - n);
+                end = size - 1;
+            } else {
+                start = Long.parseLong(from);
+                end = to.isEmpty() ? size - 1 : Math.min(Long.parseLong(to), size - 1);
+            }
+            return start < 0 || start >= size || end < start ? null : new long[]{start, end};
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    /** Answers 304 and returns true when the browser's copy is as new as {@code modified}. */
+    private static boolean notModified(HttpExchange ex, Instant modified) throws IOException {
+        String since = ex.getRequestHeaders().getFirst("If-Modified-Since");
+        if (since == null) return false;
+        try {
+            if (modified.getEpochSecond() > HTTP_DATE.parse(since, Instant::from).getEpochSecond()) return false;
+        } catch (DateTimeException e) {
+            return false;
+        }
+        ex.getResponseHeaders().set("Last-Modified", HTTP_DATE.format(modified));
+        ex.sendResponseHeaders(304, -1);
+        ex.close();
+        return true;
+    }
+
+    private static String contentType(String name) {
+        String n = name.toLowerCase(Locale.ROOT);
+        if (n.endsWith(".png")) return "image/png";
+        if (n.endsWith(".webp")) return "image/webp";
+        if (n.endsWith(".svg")) return "image/svg+xml";
+        if (n.endsWith(".gif")) return "image/gif";
+        if (n.endsWith(".jpg") || n.endsWith(".jpeg")) return "image/jpeg";
+        if (n.endsWith(".mp4")) return "video/mp4";
+        if (n.endsWith(".css")) return "text/css; charset=utf-8";
+        if (n.endsWith(".js")) return "application/javascript; charset=utf-8";
+        return "application/octet-stream";
+    }
+
+    private static void sendJson(HttpExchange ex, int code, String body) throws IOException {
+        send(ex, code, "application/json; charset=utf-8", body);
     }
 
     private static void send(HttpExchange ex, int code, String type, String body) throws IOException {
-        // Pages and CSS change without a recompile, so never let a browser hold a stale copy.
-        if (type.startsWith("text/html") || type.startsWith("text/css") || type.startsWith("application/javascript")) {
-            ex.getResponseHeaders().set("Cache-Control", "no-cache, must-revalidate");
-        }
-        sendBytes(ex, code, type, body.getBytes(StandardCharsets.UTF_8));
+        send(ex, code, type, body, null);
     }
 
-    private static void sendBytes(HttpExchange ex, int code, String type, byte[] bytes) throws IOException {
+    private static void send(HttpExchange ex, int code, String type, String body, Instant modified) throws IOException {
+        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
         ex.getResponseHeaders().set("Content-Type", type);
-        ex.sendResponseHeaders(code, bytes.length);
-        ex.getResponseBody().write(bytes);
-        ex.close();
+        if (modified != null) ex.getResponseHeaders().set("Last-Modified", HTTP_DATE.format(modified));
+        ex.sendResponseHeaders(code, bytes.length == 0 ? -1 : bytes.length);
+        try (OutputStream out = ex.getResponseBody()) {
+            out.write(bytes);
+        }
     }
 }

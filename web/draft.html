@@ -7,7 +7,7 @@ main{display:grid;grid-template-columns:250px 1fr 250px;gap:12px;padding:12px 16
 .team{background:var(--card);border-radius:10px;padding:10px 12px;border-top:3px solid}.team.blue{border-color:var(--blue)}.team.red{border-color:var(--red)}
 .team h2{margin:0 0 4px;font-size:15px;letter-spacing:2px}.lbl{color:var(--mut);font-size:12px;margin:12px 0 6px;border-top:1px solid var(--line);padding-top:8px}.team h2+.lbl{border:0;margin-top:6px;padding:0}
 .row{display:flex;align-items:center;gap:10px;min-height:54px;padding:4px;border-radius:8px}
-.row.f{cursor:pointer}.row.f:hover{background:#2a1d22}.row.f:hover .nm b::after{content:"  ✕ remove";color:#fca5a5;font-size:11px;font-weight:400}
+.rm{background:transparent;color:#fca5a5;font-size:11px;padding:2px 6px;flex:none}.rm:hover{background:#2a1d22}
 .cir{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);background:#222736;overflow:hidden;flex:none}
 .cir img{width:100%;height:100%;object-fit:cover;display:block}.row.f .cir{border-color:#556}
 .nm{flex:1;min-height:26px;border-bottom:1px solid var(--line);padding-bottom:3px}.row.ban{min-height:42px}.row.ban .cir{width:32px;height:32px}
@@ -25,7 +25,7 @@ main{display:grid;grid-template-columns:250px 1fr 250px;gap:12px;padding:12px 16
 .lg em{font-style:normal;color:var(--mut)}
 .sug{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.box{background:var(--card);border-radius:10px;padding:10px}
 .box h3{margin:0 0 6px;font-size:13px}ul{list-style:none;margin:0;padding:0}
-li{padding:6px;border-radius:6px;cursor:pointer}li:hover{background:#222736}li span{color:#86efac;margin-left:6px}li small{display:block;color:var(--mut)}
+.sg{display:block;width:100%;text-align:left;background:transparent;padding:6px}.sg:hover{background:#222736}.sg span{color:#86efac;margin-left:6px}.sg small{display:block;color:var(--mut)}
 .ep{background:var(--card);border-radius:10px;padding:12px 14px;margin-top:12px}
 .ai-card{border:1px solid #8a6b1d;background:linear-gradient(135deg,#201a0f,#15171f)}.ai-card .ai-picks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ai-choice{background:#12141b;border:1px solid var(--line);border-radius:6px;padding:8px;text-align:left;color:var(--tx);cursor:pointer}.ai-choice:hover{border-color:#d4a73a}.ai-choice b{display:block}.ai-choice small{display:block;color:var(--mut);margin-top:3px;line-height:1.35}.coord-score{display:flex;align-items:center;gap:8px;margin:2px 0 8px}.coord-score b{min-width:37px}.coord-score .bar{flex:1}
 .comparison{padding:14px}.comparison .eh{margin-bottom:12px}.comparison-row{padding:10px 0;border-top:1px solid var(--line)}.comparison-row:first-of-type{border-top:0;padding-top:0}.comparison-title{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:12px;letter-spacing:1px;color:#d4a73a}.comparison-title small{color:var(--mut);letter-spacing:0}.comparison-values{display:grid;grid-template-columns:46px 1fr 46px;gap:8px;align-items:center}.comparison-values b:first-child{color:var(--blue);text-align:right}.comparison-values b:last-child{color:var(--red)}.comparison-bar{height:8px;background:var(--red);border-radius:4px;overflow:hidden}.comparison-bar i{display:block;height:100%;background:var(--blue)}.comparison-detail{margin:6px 0 0;text-align:center;color:var(--mut);font-size:12px}.draft-rating{font-size:13px;text-align:center;color:var(--tx)}.draft-rating.blue{color:var(--blue)}.draft-rating.red{color:var(--red)}
@@ -55,7 +55,7 @@ li{padding:6px;border-radius:6px;cursor:pointer}li:hover{background:#222736}li s
 </style></head><body>
 <header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
 <nav class="top"><a href="/">Home</a><a href="/heroes">Hero Statistics</a><a href="/items">Items</a><a href="/league">Professional League</a><a href="/draft" class="on">Draft Analysis</a><a href="/about">About</a></nav>
-<span class="patch">as of Patch 2.2.16</span>
+<span class="patch">as of Patch <span data-patch></span></span>
 <hr class="draft-rule">
 <div class="draft-controls"><div class="seg" id="sideSeg"><button data-s="blue" class="on b">Blue</button><button data-s="red">Red</button></div>
 <div class="seg" id="modeSeg"><button data-m="pick" class="on">Pick</button><button data-m="ban">Ban</button></div>
@@ -67,81 +67,83 @@ li{padding:6px;border-radius:6px;cursor:pointer}li:hover{background:#222736}li s
 <button id="reset">Reset</button><span id="msg"></span></div></div></header>
 <main>
 <div class="team blue" id="blue"></div>
-<div class="draft-center"><div id="mplBoard" aria-label="MPL style draft board"></div><div class="lg" id="legend"></div><div id="grid"></div>
- <div class="sug"><div class="box"><h3 id="pt">Best picks</h3><ul id="picks"></ul></div><div class="box"><h3 id="bt">Best bans</h3><ul id="bans"></ul></div></div><div id="edge"></div></div>
+<div class="draft-center"><div id="mplBoard" aria-label="MPL style draft board"><div class="mpl-head"><input class="team-name blue" data-team="blue" value="BLUE TEAM" aria-label="Blue team name"><strong>MPL DRAFT</strong><input class="team-name red" data-team="red" value="RED TEAM" aria-label="Red team name"></div><div id="mplBody"></div></div><div class="lg" id="legend"></div><div id="grid"></div>
+ <div class="sug"><div class="box"><h3 id="pt">Best picks</h3><ul id="picks"></ul></div><div class="box"><h3 id="bt">Best bans</h3><ul id="bans"></ul></div></div><div id="aiBox"></div><div id="edge"></div></div>
 <div class="team red" id="red"></div>
 </main>
 <iframe id="draftMusic" class="draft-music" title="Draft Analysis background music" allow="autoplay" tabindex="-1"></iframe>
+<script src="/app.js"></script>
 <script>
-const $=s=>document.querySelector(s);let heroes=[],state={blue:{picks:[],bans:[]},red:{picks:[],bans:[]}},side='blue',mode='pick';
+let heroes=[],state={version:0,blue:{picks:[],bans:[]},red:{picks:[],bans:[]}},side='blue',mode='pick',aiEnabled=true;
 const teamNames={blue:'BLUE TEAM',red:'RED TEAM'};
 const heroVideos={aamon:'Aamon.mp4',akai:'Akai.mp4',granger:'Granger.mp4',claude:'Claude.mp4',marcel:'Marcel.mp4'};
 const byName={},LANES=['EXP','JUNGLE','MID','GOLD','ROAM'];
-function laneIcon(name){
-  if(!name) return '';
-  const n=name.toLowerCase().replace(/\s+/g,'_').replace(/-/g,'_');
-  const map={
-    exp:'Mobile_Legends_EXP_Lane.png',
-    exp_lane:'Mobile_Legends_EXP_Lane.png',
-    gold:'Mobile_Legends_Gold_Lane.png',
-    gold_lane:'Mobile_Legends_Gold_Lane.png',
-    mid:'Mobile_Legends_Mid_Lane.png',
-    mid_lane:'Mobile_Legends_Mid_Lane.png',
-    jungle:'Mobile_Legends_Jungle.png',
-    roamer:'Mobile_Legends_Roamer.png',
-    roam:'Mobile_Legends_Roamer.png'
-  };
-  return map[n] || '';
+const msg=t=>{$('#msg').textContent=t||''};
+/** Takes a state-changing reply: the new board, or a 409 carrying the board as it really is. */
+function adopt(j){
+ if(j.state)state=j.state;else if(!j.error)state=j;
+ msg(j.error);
+ if(j.state||!j.error)refresh();
 }
-async function call(p,post){const r=await fetch(p,{method:post?'POST':'GET'});const j=await r.json();
- if(!r.ok){$('#msg').textContent=j.error;return null}$('#msg').textContent='';return j}
-async function act(path,t,name,extra=''){const s=await call(`/api/${path}?side=${t}&hero=${encodeURIComponent(name)}${extra}`,true);if(s){state=s;draw()}}
+async function act(path,t,name,extra=''){
+ adopt(await call(`/api/${path}?side=${t}&hero=${encodeURIComponent(name)}&v=${state.version}${extra}`,{post:true}));
+}
 const pad=(a,n)=>Array.from({length:n},(_,i)=>a[i]||'');
-const cir=n=>{const h=byName[n];return`<div class="cir">${h&&h.icon?`<img src="/icons/${h.icon}" alt="" onerror="this.remove()">`:''}</div>`};
+const cir=n=>{const h=byName[n];return`<div class="cir">${h&&h.icon?`<img src="/icons/${esc(h.icon)}" alt="" onerror="this.remove()">`:''}</div>`};
+const rmBtn=(t,n)=>`<button type="button" class="rm" data-rm data-t="${t}" data-hero="${esc(n)}" aria-label="Remove ${esc(n)}">✕ remove</button>`;
 function pickRow(t,p){if(!p)return'<div class="row"><div class="cir"></div><div class="nm"></div></div>';
   const own=(byName[p.name]||{lanes:[]}).lanes;
   const opts=[...own,...LANES.filter(l=>!own.includes(l))].map(l=>`<option value="${l}"${l===p.lane?' selected':''}>${l}${own.includes(l)?'':' (flex)'}</option>`).join('');
-  const laneIconHtml=p.lane?laneIcon(p.lane):'';
-  return`<div class="row f" data-rm data-t="${t}" data-hero="${p.name}" title="Click to remove">${cir(p.name)}<div class="nm"><b>${p.name}</b>${laneIconHtml?`<img src="/icons/${laneIconHtml}" alt="" onerror="this.remove()" style="width:14px;height:14px;margin-left:6px;vertical-align:middle" title="${p.lane}">`:''}<select class="ln" data-t="${t}" data-hero="${p.name}">${opts}</select></div></div>`}
-const banRow=(t,n)=>n?`<div class="row ban f" data-rm data-t="${t}" data-hero="${n}" title="Click to remove">${cir(n)}<div class="nm"><b>${n}</b></div></div>`:'<div class="row ban"><div class="cir"></div><div class="nm"></div></div>';
-function draw(){
+  const li=laneIcon(p.lane);
+  return`<div class="row f">${cir(p.name)}<div class="nm"><b>${esc(p.name)}</b>${li?`<img src="/icons/${li}" alt="" onerror="this.remove()" style="width:14px;height:14px;margin-left:6px;vertical-align:middle" title="${esc(p.lane)}">`:''}<select class="ln" data-t="${t}" data-hero="${esc(p.name)}" aria-label="Lane for ${esc(p.name)}">${opts}</select></div>${rmBtn(t,p.name)}</div>`}
+const banRow=(t,n)=>n?`<div class="row ban f">${cir(n)}<div class="nm"><b>${esc(n)}</b></div>${rmBtn(t,n)}</div>`:'<div class="row ban"><div class="cir"></div><div class="nm"></div></div>';
+function drawTeams(){
  for(const t of['blue','red'])$('#'+t).innerHTML=`<h2>${t.toUpperCase()} SIDE</h2><div class="lbl">PICK</div>${pad(state[t].picks,5).map(p=>pickRow(t,p)).join('')}<div class="lbl">BAN</div>${pad(state[t].bans,5).map(n=>banRow(t,n)).join('')}`;
- drawMpl();
+}
+/** The hero grid depends only on local state and the filters, so typing in the search box redraws just this. */
+function drawGrid(){
  const used=new Set([...state.blue.picks.map(p=>p.name),...state.blue.bans,...state.red.picks.map(p=>p.name),...state.red.bans]);
  const q=$('#q').value.toLowerCase(),role=$('#role').value,lane=$('#lane').value;
  $('#grid').innerHTML=heroes.filter(h=>h.name.toLowerCase().includes(q)&&(!role||h.roles.includes(role))&&(!lane||h.lanes.includes(lane)))
-  .map(h=>`<button class="hero t${h.tier}${used.has(h.name)?' used':''}" data-h="${h.name}" title="${h.name} - tier ${h.tier}, ${h.winRate}% win">${cir(h.name)}<i class="tl">${h.tier}</i>${h.name}<small>${h.roles.join('/')} · ${h.lanes.map(l=>{const i=laneIcon(l);return i?`<img src="/icons/${i}" alt="" onerror="this.remove()" style="width:12px;height:12px;vertical-align:middle;margin-right:2px" title="${l}">`:''}).join('')}${h.lanes.join('/')}</small></button>`).join('');
- sugg();analyze()}
+  .map(h=>`<button class="hero t${esc(h.tier)}${used.has(h.name)?' used':''}" data-h="${esc(h.name)}" title="${esc(h.name)} - tier ${esc(h.tier)}, ${h.winRate}% win">${cir(h.name)}<i class="tl">${esc(h.tier)}</i>${esc(h.name)}<small>${esc(h.roles.join('/'))} · ${h.lanes.map(l=>{const i=laneIcon(l);return i?`<img src="/icons/${i}" alt="" onerror="this.remove()" style="width:12px;height:12px;vertical-align:middle;margin-right:2px" title="${esc(l)}">`:''}).join('')}${esc(h.lanes.join('/'))}</small></button>`).join('');
+}
 function mplPick(t,p,i){
  if(!p)return `<div class="mpl-pick empty"><span>${i+1}</span></div>`;
  const icon=laneIcon(p.lane);
  const video=heroVideos[p.name.toLowerCase()];
  const visual=video?`<video class="mpl-video" src="/video/${video}" autoplay muted loop playsinline preload="metadata" onerror="this.remove()"></video>`:cir(p.name);
- return `<button class="mpl-pick ${t}" data-rm data-t="${t}" data-hero="${p.name}" title="${p.name} — click to remove"><span class="mpl-slot">${i+1}</span>${visual}<b>${p.name}</b>${icon?`<img class="mpl-lane" src="/icons/${icon}" alt="${p.lane}" title="${p.lane}">`:''}</button>`;
+ return `<button type="button" class="mpl-pick ${t}" data-rm data-t="${t}" data-hero="${esc(p.name)}" title="${esc(p.name)} — click to remove" aria-label="Remove ${esc(p.name)}"><span class="mpl-slot">${i+1}</span>${visual}<b>${esc(p.name)}</b>${icon?`<img class="mpl-lane" src="/icons/${icon}" alt="${esc(p.lane)}" title="${esc(p.lane)}">`:''}</button>`;
 }
 function mplBan(t,n,i){
  if(!n)return `<div class="mpl-ban empty"><span class="mpl-ban-slot">${i+1}</span></div>`;
- return `<button class="mpl-ban" data-rm data-t="${t}" data-hero="${n}" title="${n} - click to remove ban"><span class="mpl-ban-slot">${i+1}</span>${cir(n)}</button>`;
+ return `<button type="button" class="mpl-ban" data-rm data-t="${t}" data-hero="${esc(n)}" title="${esc(n)} - click to remove ban" aria-label="Remove ban ${esc(n)}"><span class="mpl-ban-slot">${i+1}</span>${cir(n)}</button>`;
 }
+/** Only the picks and bans are redrawn; the team-name inputs live outside this and keep what was typed. */
 function drawMpl(){
- $('#mplBoard').innerHTML=`<div class="mpl-head"><input class="team-name blue" data-team="blue" value="${teamNames.blue}" aria-label="Blue team name"><strong>MPL DRAFT</strong><input class="team-name red" data-team="red" value="${teamNames.red}" aria-label="Red team name"></div>
- <div class="mpl-picks"><div class="mpl-side blue">${pad(state.blue.picks,5).map((p,i)=>mplPick('blue',p,i)).join('')}</div><div class="mpl-versus">VS</div><div class="mpl-side red">${pad(state.red.picks,5).map((p,i)=>mplPick('red',p,i)).join('')}</div></div>
+ $('#mplBody').innerHTML=`<div class="mpl-picks"><div class="mpl-side blue">${pad(state.blue.picks,5).map((p,i)=>mplPick('blue',p,i)).join('')}</div><div class="mpl-versus">VS</div><div class="mpl-side red">${pad(state.red.picks,5).map((p,i)=>mplPick('red',p,i)).join('')}</div></div>
  <div class="mpl-bans"><div class="mpl-ban-side">${pad(state.blue.bans,5).map((n,i)=>mplBan('blue',n,i)).join('')}</div><div class="mpl-ban-title">BANS</div><div class="mpl-ban-side">${pad(state.red.bans,5).map((n,i)=>mplBan('red',n,i)).join('')}</div></div>`;
+}
+/** After a change to the board: redraw it and fetch suggestions and the analysis once each. */
+function refresh(){
+ drawTeams();drawMpl();drawGrid();
+ sugg();analyze();
+ if(aiEnabled)autoSuggest();else removeAutoSuggest();
 }
 function profile(a){const ax=a.profile,n=ax.length,c=95,R=62;
  const pt=(i,v,k=R)=>{const g=-Math.PI/2+i*2*Math.PI/n;return[c+Math.cos(g)*k*v/10,c+Math.sin(g)*k*v/10]};
  const poly=(f,col)=>`<polygon points="${ax.map((x,i)=>pt(i,f(x)).join(',')).join(' ')}" fill="${col}" fill-opacity=".22" stroke="${col}" stroke-width="1.5"/>`;
  const rings=[2.5,5,7.5,10].map(v=>`<polygon points="${ax.map((_,i)=>pt(i,v).join(',')).join(' ')}" fill="none" stroke="#2a2f3d"/>`).join('');
- const lbl=ax.map((x,i)=>{const[px,py]=pt(i,10,R+14);return`<text x="${px}" y="${py+3}" text-anchor="middle" font-size="9" fill="#8b91a3">${x.name}</text>`}).join('');
- const bars=ax.map(x=>`<div class="tb"><small>${x.name}</small><div class="tr"><b>${x.blue}</b><div class="tk l"><i style="width:${x.blue*10}%;background:var(--blue)"></i></div><div class="tk"><i style="width:${x.red*10}%;background:var(--red)"></i></div><b>${x.red}</b></div></div>`).join('');
+ const lbl=ax.map((x,i)=>{const[px,py]=pt(i,10,R+14);return`<text x="${px}" y="${py+3}" text-anchor="middle" font-size="9" fill="#8b91a3">${esc(x.name)}</text>`}).join('');
+ const bars=ax.map(x=>`<div class="tb"><small>${esc(x.name)}</small><div class="tr"><b>${x.blue}</b><div class="tk l"><i style="width:${x.blue*10}%;background:var(--blue)"></i></div><div class="tk"><i style="width:${x.red*10}%;background:var(--red)"></i></div><b>${x.red}</b></div></div>`).join('');
  return`<div class="ep tp"><h3>TACTICAL PROFILE</h3><div class="tpw"><svg viewBox="0 0 190 190">${rings}${poly(x=>x.blue,'#3b82f6')}${poly(x=>x.red,'#ef4444')}${lbl}</svg><div class="tbars">${bars}</div></div></div>`}
-async function analyze(){const [a, c]=await Promise.all([call('/api/analysis'), call('/api/coordination')]);if(!a||!c)return;
-  $('#edge').innerHTML=`${comparison(a,c)}
+async function analyze(){
+  const a=await call('/api/analysis');if(a.error){msg(a.error);return}
+  $('#edge').innerHTML=`${comparison(a,a.coordination)}
   ${profile(a)}<div class="ep notes" id="wisdom"></div>`;
-  wisdom();if(aiEnabled)autoSuggest()}
+  wisdom();fillMeta()}
 
 function comparisonRow(label, blue, red, detail=''){
-  return `<div class="comparison-row"><div class="comparison-title"><span>${label}</span></div><div class="comparison-values"><b>${Math.round(blue)}</b><div class="comparison-bar"><i style="width:${blue}%"></i></div><b>${Math.round(red)}</b></div>${detail?`<p class="comparison-detail">${detail}</p>`:''}</div>`;
+  return `<div class="comparison-row"><div class="comparison-title"><span>${label}</span></div><div class="comparison-values"><b>${Math.round(blue)}</b><div class="comparison-bar"><i style="width:${blue}%"></i></div><b>${Math.round(red)}</b></div>${detail?`<p class="comparison-detail">${esc(detail)}</p>`:''}</div>`;
 }
 function comparison(a,c){
   const cat=name=>a.categories.find(x=>x.name===name)||{blueShare:50,detail:'No draft data yet'};
@@ -151,77 +153,83 @@ function comparison(a,c){
     ${comparisonRow('COUNTER INDEX',counter.blueShare,100-counter.blueShare,counter.detail)}
     ${comparisonRow('TEAM COORDINATION',c.blue.score,c.red.score,`Blue: ${c.blue.lanesCovered}/5 lanes, ${c.blue.synergyPairs} synergies, ${c.blue.heavyControl} lockdown · Red: ${c.red.lanesCovered}/5 lanes, ${c.red.synergyPairs} synergies, ${c.red.heavyControl} lockdown`)}</div>`;
 }
-function coordTeam(label, t, cls){
-  const missL=t.missingLanes.length?`<div class="wd r"><div class="wt">MISSING LANES</div><p>${t.missingLanes.join(', ')}</p></div>`:'<div class="wd v"><div class="wt">ALL LANES COVERED</div><p>✓</p></div>';
-  const missR=t.missingRoles.length?`<div class="wd r"><div class="wt">MISSING ROLES</div><p>${t.missingRoles.join(', ')}</p></div>`:'<div class="wd v"><div class="wt">ALL ROLES PRESENT</div><p>✓</p></div>';
-  return `<div class="wd ${cls}"><div class="wt">${label} SIDE</div><div class="coord-score"><b>${Math.round(t.score)}</b><div class="bar"><i style="width:${t.score}%"></i></div><small>/100</small></div><p>Lanes: ${t.lanesCovered}/5 | ${t.hasTank?'✓ Tank':''} ${t.hasMarksmanOrMage?'✓ Carry':''} | Roles: ${t.roleVariety}/6 | Synergy: ${t.synergyPairs} | Lockdown: ${t.heavyControl} | WinRate: ${t.avgWinRate.toFixed(1)}% | Spike: ${t.spikeTiming}</p></div>${missL}${missR}`;
-}
 let wkey='';
 const isComplete=()=>state.blue.picks.length>=5&&state.red.picks.length>=5;
-const whead=()=>`<h3>JONGRAI'S WISDOM <small>PATCH 2.2.16</small></h3>`;
-async function wisdom(force){const el=$('#wisdom');if(!el)return;
+const whead=()=>`<h3>JONGRAI'S WISDOM <small>PATCH <span data-patch></span></small></h3>`;
+/** Shown while the draft is unfinished (or the server says so). Never asks the server again by itself. */
+function waiting(el){
+ el.dataset.done='';
+ el.innerHTML=whead()+`<div class="wd c"><p>Waiting for the draft to finish: ${state.blue.picks.length} vs ${state.red.picks.length} picks. Jongrai reads the board once all ten are locked in.</p></div>
+  <div class="wd c"><p><button type="button" id="askNow">Read it now anyway</button></p></div>`;
+ $('#askNow').onclick=()=>{wkey='';wisdom(true)};
+}
+async function wisdom(force,refreshRead){const el=$('#wisdom');if(!el)return;
  const sig=JSON.stringify(state)+(force?'!':'');
- if(sig===wkey&&el.dataset.done)return;wkey=sig;
- if(!isComplete()&&!force){el.dataset.done='';
-  el.innerHTML=whead()+`<div class="wd c"><p>Waiting for the draft to finish: ${state.blue.picks.length} vs ${state.red.picks.length} picks. Jongrai reads the board once all ten are locked in.</p></div>
-  <div class="wd c"><p><button id="askNow">Read it now anyway</button></p></div>`;
-  $('#askNow').onclick=()=>{wkey='';wisdom(true)};return}
+ if(sig===wkey&&el.dataset.done&&!refreshRead)return;wkey=sig;
+ if(!isComplete()&&!force){waiting(el);return}
  el.dataset.done='';el.innerHTML=whead()+`<div class="load">Reading the draft...</div>`;
- try{const r=await fetch('/api/wisdom'+(force?'?force=1':''));const w=await r.json();
-  if(w.error){el.innerHTML=whead()+`<div class="wd err"><p>${w.error}</p></div>`;return}
-  if(!w.ready){wkey='';return wisdom(force)}
-  const p=t=>`<div class="wd ${t[0]}"><div class="wt">${t[1]}</div><p>${t[2]}</p></div>`;
-  el.dataset.done='1';
-  el.innerHTML=whead()+`<div class="wd v"><div class="wt">VERDICT</div><p>${w.verdict}</p></div>`
-   +`<div class="wd row">${p(['b','BLUE SIDE',w.blue])}${p(['r','RED SIDE',w.red])}</div>`
-   +(w.closing?`<div class="wd c"><div class="wt">KEY TO WATCH</div><p>${w.closing}</p></div>`:'')
-   +`<div class="wd c"><p><button id="askAgain">Re-read the draft</button></p></div>`;
-  $('#askAgain').onclick=()=>{wkey='';wisdom(true)};
- }catch(e){el.innerHTML=whead()+`<div class="wd err"><p>Coach unreachable.</p></div>`}}
+ const w=await call('/api/wisdom?'+(force?'force=1&':'')+(refreshRead?'refresh=1':''),{post:true});
+ if(sig!==wkey)return;   // the board changed while the coach was reading
+ if(w.error){el.innerHTML=whead()+`<div class="wd err"><p>${esc(w.error)}</p></div>`;fillMeta();return}
+ if(!w.ready){waiting(el);fillMeta();return}
+ const p=t=>`<div class="wd ${t[0]}"><div class="wt">${t[1]}</div><p>${esc(t[2])}</p></div>`;
+ el.dataset.done='1';
+ el.innerHTML=whead()+`<div class="wd v"><div class="wt">VERDICT</div><p>${esc(w.verdict)}</p></div>`
+  +`<div class="wd row">${p(['b','BLUE SIDE',w.blue])}${p(['r','RED SIDE',w.red])}</div>`
+  +(w.closing?`<div class="wd c"><div class="wt">KEY TO WATCH</div><p>${esc(w.closing)}</p></div>`:'')
+  +`<div class="wd c"><p><button type="button" id="askAgain">Re-read the draft</button></p></div>`;
+ $('#askAgain').onclick=()=>{wkey='';wisdom(force,true)};
+ fillMeta();}
 async function sugg(){
   const[p,b]=await Promise.all([call('/api/suggest?side='+side),call('/api/bans?side='+side)]);
   const nm=side[0].toUpperCase()+side.slice(1);$('#pt').textContent='Best picks for '+nm;$('#bt').textContent='Best bans for '+nm;
-  const li=(l,k)=>(l||[]).map(i=>`<li data-k="${k}" data-n="${i.hero}"><b>${i.hero}</b><span>${i.score}</span><small>${i.reasons.join(', ')||'-'}</small></li>`).join('');
-  $('#picks').innerHTML=li(p,'pick');$('#bans').innerHTML=li(b,'ban');
-  if(aiEnabled) autoSuggest(); else removeAutoSuggest()}
+  const li=(l,k)=>(Array.isArray(l)?l:[]).map(i=>`<li><button type="button" class="sg" data-k="${k}" data-n="${esc(i.hero)}"><b>${esc(i.hero)}</b><span>${esc(i.score)}</span><small>${esc(i.reasons.join(', ')||'-')}</small></button></li>`).join('');
+  $('#picks').innerHTML=li(p,'pick');$('#bans').innerHTML=li(b,'ban')}
 
-let aiEnabled=true;
-function removeAutoSuggest(){const existing=document.querySelector('.ep[data-ai]');if(existing)existing.remove()}
+function removeAutoSuggest(){$('#aiBox').innerHTML=''}
 async function autoSuggest(){
   const r=await call('/api/auto-suggest');
-  if(!r||!r.active) return;
-  const box=document.createElement('div');
-  box.className='ep ai-card';
-  box.innerHTML=`<div class="eh"><span>AI SUGGEST · ${r.turn.toUpperCase()} PICK</span><small>Choose one to lock it in</small></div><div class="ai-picks">`
-   +r.suggestions.map(s=>`<button class="ai-choice" data-ai-pick="${s.hero}" data-ai-side="${r.turn}"><b>${s.hero} <span>${s.score}</span></b><small>${s.reasons.join(', ')}</small></button>`).join('')+'</div>';
-  const existing=document.querySelector('.ep[data-ai]');
-  if(existing) existing.remove();
-  box.dataset.ai='1';
-  $('#edge').prepend(box);
+  if(r.error||!r.active||!aiEnabled){removeAutoSuggest();return}
+  $('#aiBox').innerHTML=`<div class="ep ai-card"><div class="eh"><span>AI SUGGEST · ${esc(r.turn.toUpperCase())} PICK</span><small>Choose one to lock it in</small></div><div class="ai-picks">`
+   +r.suggestions.map(s=>`<button type="button" class="ai-choice" data-ai-pick="${esc(s.hero)}" data-ai-side="${esc(r.turn)}"><b>${esc(s.hero)} <span>${esc(s.score)}</span></b><small>${esc(s.reasons.join(', '))}</small></button>`).join('')+'</div></div>';
 }
-$('#aiToggle').onclick=()=>{aiEnabled=!aiEnabled; $('#aiToggle').textContent='AI Suggest: '+(aiEnabled?'ON':'OFF'); $('#aiToggle').className=aiEnabled?'on':''; if(aiEnabled)sugg();else removeAutoSuggest()};
+$('#aiToggle').onclick=()=>{aiEnabled=!aiEnabled; $('#aiToggle').textContent='AI Suggest: '+(aiEnabled?'ON':'OFF'); $('#aiToggle').className=aiEnabled?'on':''; if(aiEnabled)autoSuggest();else removeAutoSuggest()};
+// Background music: nothing is loaded from YouTube until the user picks a track or presses the music button.
 const musicTracks={music1:'KheFsJvAvsU',music2:'TxTprtLZurY',music3:'kgpqMfTZDTw',music4:'GJl_fn_skOM'};
+const MUSIC_ORIGIN='https://www.youtube-nocookie.com';
 let musicMuted=true;
-function musicCommand(func){const frame=$('#draftMusic');if(frame.hasAttribute('src'))frame.contentWindow.postMessage(JSON.stringify({event:'command',func,args:[]}), 'https://www.youtube.com')}
-function setMusic(choice){const id=musicTracks[choice],frame=$('#draftMusic'),button=$('#musicToggle');musicMuted=true;button.textContent='Music: Muted';button.setAttribute('aria-pressed','false');button.disabled=!id;if(!id){musicCommand('stopVideo');frame.removeAttribute('src');return}frame.src=`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&enablejsapi=1&playsinline=1&rel=0`;localStorage.setItem('jongrai-draft-music',choice)}
+function musicCommand(func){const frame=$('#draftMusic');if(frame.hasAttribute('src'))frame.contentWindow.postMessage(JSON.stringify({event:'command',func,args:[]}),MUSIC_ORIGIN)}
+function loadMusic(muted){const id=musicTracks[$('#musicChoice').value],frame=$('#draftMusic');if(!id||frame.hasAttribute('src'))return;
+ frame.src=`${MUSIC_ORIGIN}/embed/${id}?autoplay=1&mute=${muted?1:0}&loop=1&playlist=${id}&controls=0&enablejsapi=1&playsinline=1&rel=0`}
+function musicLabel(){const b=$('#musicToggle');b.textContent='Music: '+(musicMuted?'Muted':'On');b.setAttribute('aria-pressed',String(!musicMuted))}
+function setMusic(choice){const id=musicTracks[choice],frame=$('#draftMusic');musicMuted=true;musicLabel();$('#musicToggle').disabled=!id;
+ musicCommand('stopVideo');frame.removeAttribute('src');store.set('jongrai-draft-music',choice);loadMusic(true)}
 $('#musicChoice').onchange=e=>setMusic(e.target.value);
-$('#musicToggle').onclick=()=>{musicMuted=!musicMuted;musicCommand(musicMuted?'mute':'unMute');if(!musicMuted)musicCommand('playVideo');const b=$('#musicToggle');b.textContent='Music: '+(musicMuted?'Muted':'On');b.setAttribute('aria-pressed',String(!musicMuted))};
+$('#musicToggle').onclick=()=>{
+ if(!$('#draftMusic').hasAttribute('src')){musicMuted=false;loadMusic(false);musicLabel();return}
+ musicMuted=!musicMuted;musicCommand(musicMuted?'mute':'unMute');if(!musicMuted)musicCommand('playVideo');musicLabel()};
 $('#mplToggle').onclick=()=>{const on=document.body.classList.toggle('mpl-style');const b=$('#mplToggle');b.textContent='MPL Style: '+(on?'On':'Off');b.setAttribute('aria-pressed',String(on))};
 document.addEventListener('click',e=>{if(e.target.closest('select'))return;
- const rm=e.target.closest('[data-rm]'),h=e.target.closest('[data-h]'),l=e.target.closest('li[data-n]'),ai=e.target.closest('[data-ai-pick]');
- if(rm)act('remove',rm.dataset.t,rm.dataset.hero);else if(h)act(mode,side,h.dataset.h);else if(l)act(l.dataset.k,side,l.dataset.n);else if(ai)act('pick',ai.dataset.aiSide,ai.dataset.aiPick)});
-document.addEventListener('change',e=>{const s=e.target.closest('select.ln');if(s)act('lane',s.dataset.t,s.dataset.hero,'&lane='+s.value)});
+ const rm=e.target.closest('[data-rm]'),h=e.target.closest('[data-h]'),s=e.target.closest('[data-n]'),ai=e.target.closest('[data-ai-pick]');
+ if(rm)act('remove',rm.dataset.t,rm.dataset.hero);else if(h)act(mode,side,h.dataset.h);else if(s)act(s.dataset.k,side,s.dataset.n);else if(ai)act('pick',ai.dataset.aiSide,ai.dataset.aiPick)});
+document.addEventListener('change',e=>{const s=e.target.closest('select.ln');if(s)act('lane',s.dataset.t,s.dataset.hero,'&lane='+encodeURIComponent(s.value))});
 document.addEventListener('input',e=>{const n=e.target.closest('.team-name');if(n)teamNames[n.dataset.team]=n.value});
 $('#sideSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;side=b.dataset.s;
  document.querySelectorAll('#sideSeg button').forEach(x=>x.className=x===b?'on '+(side==='blue'?'b':'r'):'');sugg()};
 $('#modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;
  document.querySelectorAll('#modeSeg button').forEach(x=>x.className=x===b?'on':'')};
-$('#reset').onclick=async()=>{const s=await call('/api/reset',true);if(s){state=s;draw()}};
-['q','role','lane'].forEach(i=>$('#'+i).oninput=draw);
-(async()=>{heroes=await call('/api/heroes');heroes.forEach(h=>byName[h.name]=h);
+$('#reset').onclick=async()=>adopt(await call('/api/reset?v='+state.version,{post:true}));
+['q','role','lane'].forEach(i=>$('#'+i).oninput=drawGrid);
+(async()=>{
+ const hs=await call('/api/heroes');if(hs.error){msg(hs.error);return}
+ heroes=hs;heroes.forEach(h=>byName[h.name]=h);
  for(const[id,k]of[['role','roles'],['lane','lanes']])[...new Set(heroes.flatMap(h=>h[k]))].forEach(v=>$('#'+id).add(new Option(v,v)));
- $('#legend').innerHTML='<b style="color:#d4a73a">TIER</b><em>meta ranking, patch 2.2.16</em>'+[['S','#f5c518','top'],['A','#22c55e','strong'],['B','#3b82f6','solid'],['C','#8b91a3','average'],['D','#ef4444','weak']]
-  .map(([t,c,l])=>`<span title="Tier ${t}"><i style="background:${c}"></i><b style="color:${c}">${t}</b><em>${l} · ${heroes.filter(h=>h.tier===t).length}</em></span>`).join('');
- const savedMusic=localStorage.getItem('jongrai-draft-music')||'off';$('#musicChoice').value=savedMusic;setMusic(savedMusic);
- state=await call('/api/state');draw()})();
+ const LABELS={S:'top',A:'strong',B:'solid',C:'average',D:'weak'};
+ $('#legend').innerHTML='<b style="color:#d4a73a">TIER</b><em>meta ranking, patch <span data-patch></span></em>'+Object.keys(LABELS)
+  .map(t=>`<span title="Tier ${t}"><i style="background:${TIER_COLORS[t]}"></i><b style="color:${TIER_COLORS[t]}">${t}</b><em>${LABELS[t]} · ${heroes.filter(h=>h.tier===t).length}</em></span>`).join('');
+ // Restore the saved track in the menu only; the player itself waits for a click.
+ const saved=store.get('jongrai-draft-music');
+ if(saved&&musicTracks[saved]){$('#musicChoice').value=saved;$('#musicToggle').disabled=false}
+ const s=await call('/api/state');if(s.error){msg(s.error);return}
+ state=s;refresh();meta()})();
 </script></body></html>

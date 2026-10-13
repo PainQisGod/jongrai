@@ -8,20 +8,38 @@ import java.util.stream.Collectors;
  * One hero.
  * "roles" and "lanes" hold 1 or 2 entries; the first one is the primary one.
  * "tier" is S/A/B/C/D, "winRate" is the overall win rate in % (50.0 if unknown),
- * "spike" is EARLY, MID or LATE (when the hero is strongest).
+ * "spike" is when the hero is strongest.
  * "banRate" is the ban rate in % (0 means under 15% or unknown).
  * "counters" = heroes this hero is good against.
  * "synergies" = heroes this hero works well with.
  * Names inside the counter/synergy sets are stored in lowercase.
+ * "tip" is a hand-written tip for the hero page, or null when none was supplied.
  */
 public record Hero(String name, List<Role> roles, List<Lane> lanes,
                    String tier, double winRate, double banRate,
                    Set<String> counters, Set<String> synergies,
                    int durability, int offense, int control, Set<String> tags,
-                   String spike, String tip) {
+                   Spike spike, String tip) {
+
+    public Hero {
+        roles = List.copyOf(roles);
+        lanes = List.copyOf(lanes);
+        counters = Set.copyOf(counters);
+        synergies = Set.copyOf(synergies);
+        tags = Set.copyOf(tags);
+    }
 
     public String key() {
         return name.toLowerCase();
+    }
+
+    /** URL slug, e.g. "Yi Sun-shin" -> "yi-sun-shin". The browser never derives this itself. */
+    public String slug() {
+        return slugOf(name);
+    }
+
+    static String slugOf(String text) {
+        return text.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
     }
 
     public Role role() {
@@ -51,11 +69,6 @@ public record Hero(String name, List<Role> roles, List<Lane> lanes,
 
     public boolean synergizesWith(Hero other) {
         return synergies.contains(other.key());
-    }
-
-    /** A hand-written tip for the hero page, or null when none was supplied. */
-    public String tip() {
-        return tip;
     }
 
     @Override

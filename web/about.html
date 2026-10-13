@@ -14,7 +14,7 @@ a.btn{margin-top:22px;display:inline-block}</style></head><body>
 
 <header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
 <nav class="top"><a href="/">Home</a><a href="/heroes">Hero Statistics</a><a href="/items">Items</a><a href="/league">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about" class="on">About</a></nav>
-<span class="patch">as of Patch 2.2.16</span></header>
+<span class="patch">as of Patch <span data-patch></span></span></header>
 
 <main class="wrap">
  <p class="eyebrow" style="color:#d4a73a;letter-spacing:2px;font-size:11px;font-weight:600">ABOUT</p>
@@ -27,7 +27,7 @@ a.btn{margin-top:22px;display:inline-block}</style></head><body>
 
  <section><h3>Where the data comes from</h3>
   <ul>
-   <li><b>Roster, tiers, win and ban rates</b> - the shipped <code>data/heroes.csv</code>, patch 2.2.16.</li>
+   <li><b>Roster, tiers, win and ban rates</b> - the shipped <code>data/heroes.csv</code>, patch <span data-patch></span>.</li>
    <li><b>Counters and synergies</b> - Moonton's official in-game relations, via
        github.com/p3hndrx/MLBB-API (MIT).</li>
    <li><b>Durability, offense, control and speciality tags</b> - Moonton's in-game hero ratings.</li>
@@ -36,12 +36,12 @@ a.btn{margin-top:22px;display:inline-block}</style></head><body>
    <li><b>Item catalog (tier, cost, stats, passives)</b> - the shipped <code>data/items.csv</code>, from
        mlbbhub.com, itself derived from Moonton and Liquipedia structural item data.</li>
    <li><b>Core builds per hero</b> - the shipped <code>data/hero-builds.csv</code>: hand-curated loadouts
-       from mlbbhub.com, three per hero, reviewed against patch 2.2.16. Editorial, not official.</li>
+       from mlbbhub.com, five per hero, reviewed against patch <span data-patch></span>. Editorial, not official.</li>
   </ul>
-  <p>Win rates under 15% ban rate are shown as blank, meaning under 15% or unknown.</p></section>
+  <p>Ban rates under 15% are shown as blank, meaning under 15% or unknown.</p></section>
 
  <section><h3>The AI coach</h3>
-  <p>The final verdict comes from an AI model you configure yourself. It is told the draft is patch 2.2.16
+  <p>The final verdict comes from an AI model you configure yourself. It is told the draft is patch <span data-patch></span>
   data and is asked to judge only what is on screen.</p>
   <p>Two rules the app enforces: it does not call the model at all while the draft is in progress, and the
   reply for a given draft is cached so re-rendering never re-bills you. Put your key in
@@ -49,9 +49,9 @@ a.btn{margin-top:22px;display:inline-block}</style></head><body>
   <p>The coach is an opinion, not a source of truth. The counters, tiers and win rates are the data.</p></section>
 
  <section><h3>Running it</h3>
-  <p>Requires Java 17 or newer, no build tool and no dependencies.</p>
+  <p>Requires Java 17 or newer and nothing else: no build tool, no dependencies.</p>
   <p style="color:#e8eaf0;background:#12141b;border:1px solid var(--line);border-radius:6px;padding:10px;font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:1.7">
-  javac -d out (Get-ChildItem src\jongrai\*.java).FullName<br>
+  ./build.sh &nbsp;(Windows: .\build.ps1)<br>
   java -cp out jongrai.WebServer</p></section>
 
  <section><h3>Not affiliated with Moonton</h3>
@@ -60,4 +60,6 @@ a.btn{margin-top:22px;display:inline-block}</style></head><body>
 
  <a class="btn" href="/">Back to Home</a>
 </main>
+<script src="/app.js"></script>
+<script>meta()</script>
 </body></html>

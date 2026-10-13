@@ -1,64 +1,60 @@
 package jongrai;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** Loads heroes from a CSV: name,role,lane,tier,winrate,banrate,counters,synergies  (roles/lanes split by '/', lists by ';'). */
+/**
+ * Loads heroes from a CSV:
+ * name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip
+ * (roles/lanes split by '/', lists by ';'; quote any field that contains a comma).
+ */
 public class HeroRepository {
+
+    /** The game patch every shipped data file describes. Change it here only. */
+    public static final String PATCH = "2.2.16";
+
+    private static final Set<String> TIERS = Set.of("S", "A", "B", "C", "D");
 
     public static Map<String, Hero> loadCsv(Path file) throws IOException {
         Map<String, Hero> heroes = new LinkedHashMap<>();
-        boolean header = true;
-
-        for (String line : Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            line = line.trim();
-            if (line.isEmpty() || line.startsWith("#")) continue;
-            if (header) { header = false; continue; }   // skip the column-name row
-
-            String[] parts = line.split(",", -1);
-            if (parts.length < 8) {
-                throw new IOException("Bad line in " + file + ": " + line);
+        for (Csv.Row r : Csv.read(file, 8)) {
+            String tier = r.text(3).toUpperCase();
+            if (!TIERS.contains(tier)) throw r.fail("tier must be one of " + TIERS + ", found '" + tier + "'");
+            Hero hero;
+            try {
+                hero = new Hero(
+                        r.text(0),
+                        parse(r.text(1), Role::parse),
+                        parse(r.text(2), Lane::parse),
+                        tier,
+                        r.decimal(4, 50.0),
+                        r.decimal(5, 0.0),
+                        toSet(r.text(6)),
+                        toSet(r.text(7)),
+                        r.integer(8, 0),
+                        r.integer(9, 0),
+                        r.integer(10, 0),
+                        toSet(r.text(11)),
+                        r.text(12).isEmpty() ? Spike.MID : Spike.parse(r.text(12)),
+                        r.text(13).isEmpty() ? null : r.text(13));
+            } catch (IllegalArgumentException e) {
+                throw r.fail(e.getMessage());   // unknown role, lane or spike
             }
-            Hero hero = new Hero(
-                    parts[0].trim(),
-                    parseRoles(parts[1]),
-                    parseLanes(parts[2]),
-                    parts[3].trim().toUpperCase(),
-                    parseNumber(parts[4], 50.0),
-                    parseNumber(parts[5], 0.0),
-                    toSet(parts[6]),
-                    toSet(parts[7]),
-                    parts.length > 8 ? (int) parseNumber(parts[8], 0) : 0,
-                    parts.length > 9 ? (int) parseNumber(parts[9], 0) : 0,
-                    parts.length > 10 ? (int) parseNumber(parts[10], 0) : 0,
-                    parts.length > 11 ? toSet(parts[11]) : Set.of(),
-                    parts.length > 12 && !parts[12].isBlank() ? parts[12].trim().toUpperCase() : "MID",
-                    parts.length > 13 && !parts[13].isBlank() ? parts[13].trim() : null);
-            heroes.put(hero.key(), hero);
+            if (heroes.putIfAbsent(hero.key(), hero) != null) throw r.fail("duplicate hero '" + hero.name() + "'");
         }
         return heroes;
     }
 
-    private static List<Role> parseRoles(String field) {
-        return Arrays.stream(field.split("/")).map(Role::parse).toList();
-    }
-
-    private static double parseNumber(String field, double ifBlank) {
-        String text = field.trim();
-        return text.isEmpty() ? ifBlank : Double.parseDouble(text);
-    }
-
-    private static List<Lane> parseLanes(String field) {
-        return Arrays.stream(field.split("/")).map(Lane::parse).toList();
+    private static <T> List<T> parse(String field, java.util.function.Function<String, T> parser) {
+        if (field.isEmpty()) throw new IllegalArgumentException("empty role/lane field");
+        return Arrays.stream(field.split("/")).map(parser).toList();
     }
 
     /** Returns warnings for counters/synergies that name a hero not in the roster (typo check). */

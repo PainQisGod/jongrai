@@ -10,7 +10,7 @@
 #   It is that author's own judgement, not official data - edit any hero you disagree with.
 # Dual roles/lanes use '/'. Lists use ';'.
 name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip
-Aamon,ASSASSIN,JUNGLE,C,49.62,,Cecilion;Diggie;Ixia;Vexana;Xavier,Floryn;Rafaela,30,70,10,Chase;Magic Damage,MID,Your job is to wait for the backline, then burst the squishies and slip away.
+Aamon,ASSASSIN,JUNGLE,C,49.62,,Cecilion;Diggie;Ixia;Vexana;Xavier,Floryn;Rafaela,30,70,10,Chase;Magic Damage,MID,"Your job is to wait for the backline, then burst the squishies and slip away."
 Akai,TANK,ROAM/JUNGLE,B,49.93,,Barats;Eudora;Karina;Leomord;Odette,Eudora;Saber,90,30,90,Guard;Crowd Control,MID,
 Aldous,FIGHTER,EXP,D,50.84,,Leomord;Zilong,Balmond;Bruno,70,30,50,Burst;Support,LATE
 Alice,TANK/MAGE,EXP/JUNGLE,B,50.63,,Cecilion;Chang'e,Balmond;Dyrroth,50,50,70,Charge;Regen,LATE

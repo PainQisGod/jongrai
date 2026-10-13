@@ -1,20 +1,18 @@
 package jongrai;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.Set;
 
-/** Loads professional league data. */
+/** Loads professional league data. Every file is required and read through {@link Csv}. */
 public final class ProLeagueRepository {
 
-    private static final Pattern DIGITS = Pattern.compile("\\d+");
-
-    private final Map<String, ProLeague> leagues;
+    private final Map<String, ProLeague> leagues;          // keyed by id|season
     private final Map<String, ProTeam> teams;
     private final Map<String, List<ProStanding>> standings;
     private final Map<String, List<ProMatch>> matches;
@@ -31,146 +29,108 @@ public final class ProLeagueRepository {
         this.drafts = drafts;
     }
 
-    public static ProLeagueRepository load(Path base) throws java.io.IOException {
-        Path leaguesFile = base.resolve("pro-leagues.csv");
-        Path teamsFile = base.resolve("pro-teams.csv");
-        Path standingsFile = base.resolve("pro-standings.csv");
-        Path matchesFile = base.resolve("pro-matches.csv");
-        Path draftsFile = base.resolve("pro-drafts.csv");
-
-        Map<String, ProLeague> leagues = loadLeagues(leaguesFile);
-        Map<String, ProTeam> teams = loadTeams(teamsFile);
-        Map<String, List<ProStanding>> standings = loadStandings(standingsFile);
-        Map<String, List<ProMatch>> matches = loadMatches(matchesFile);
-        Map<String, List<ProDraft>> drafts = loadDrafts(draftsFile);
-
-        return new ProLeagueRepository(leagues, teams, standings, matches, drafts);
+    public static ProLeagueRepository load(Path base) throws IOException {
+        return new ProLeagueRepository(
+                loadLeagues(base.resolve("pro-leagues.csv")),
+                loadTeams(base.resolve("pro-teams.csv")),
+                loadStandings(base.resolve("pro-standings.csv")),
+                loadMatches(base.resolve("pro-matches.csv")),
+                loadDrafts(base.resolve("pro-drafts.csv")));
     }
 
-    private static Map<String, ProLeague> loadLeagues(Path file) throws java.io.IOException {
+    private static Map<String, ProLeague> loadLeagues(Path file) throws IOException {
         Map<String, ProLeague> leagues = new LinkedHashMap<>();
-        if (!java.nio.file.Files.exists(file)) return leagues;
-
-        boolean header = true;
-        for (String line : java.nio.file.Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            if (line.isBlank() || line.startsWith("#")) continue;
-            if (header) { header = false; continue; }
-
-            List<String> p = splitCsv(line);
-            if (p.size() < 8) continue;
-            ProLeague league = new ProLeague(
-                    p.get(0).trim(), p.get(1).trim(), p.get(2).trim(), p.get(3).trim(),
-                    p.get(4).trim(), (int) number(p.get(5), 0), p.get(6).trim(), p.get(7).trim());
-            leagues.put(league.id(), league);
+        for (Csv.Row r : Csv.read(file, 8)) {
+            ProLeague l = new ProLeague(r.text(0), r.text(1), r.text(2), r.text(3),
+                    r.text(4), r.integer(5, 0), r.text(6), r.text(7));
+            if (leagues.putIfAbsent(l.id() + "|" + l.season(), l) != null) {
+                throw r.fail("duplicate league '" + l.id() + "' season '" + l.season() + "'");
+            }
         }
         return leagues;
     }
 
-    private static Map<String, ProTeam> loadTeams(Path file) throws java.io.IOException {
+    private static Map<String, ProTeam> loadTeams(Path file) throws IOException {
         Map<String, ProTeam> teams = new LinkedHashMap<>();
-        if (!java.nio.file.Files.exists(file)) return teams;
-
-        boolean header = true;
-        for (String line : java.nio.file.Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            if (line.isBlank() || line.startsWith("#")) continue;
-            if (header) { header = false; continue; }
-
-            List<String> p = splitCsv(line);
-            if (p.size() < 9) continue;
-            ProTeam team = new ProTeam(
-                    p.get(0).trim(), p.get(1).trim(), p.get(2).trim(), p.get(3).trim(),
-                    p.get(4).trim(), (int) number(p.get(5), 0), p.get(6).trim(), p.get(7).trim(), p.get(8).trim());
-            teams.put(team.id(), team);
+        for (Csv.Row r : Csv.read(file, 9)) {
+            ProTeam t = new ProTeam(r.text(0), r.text(1), r.text(2), r.text(3),
+                    r.text(4), r.integer(5, 0), r.text(6), r.text(7), r.text(8));
+            if (teams.putIfAbsent(t.id(), t) != null) throw r.fail("duplicate team '" + t.id() + "'");
         }
         return teams;
     }
 
-    private static Map<String, List<ProStanding>> loadStandings(Path file) throws java.io.IOException {
+    private static Map<String, List<ProStanding>> loadStandings(Path file) throws IOException {
         Map<String, List<ProStanding>> standings = new LinkedHashMap<>();
-        if (!java.nio.file.Files.exists(file)) return standings;
-
-        boolean header = true;
-        for (String line : java.nio.file.Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            if (line.isBlank() || line.startsWith("#")) continue;
-            if (header) { header = false; continue; }
-
-            List<String> p = splitCsv(line);
-            if (p.size() < 15) continue;
-            ProStanding s = new ProStanding(
-                    p.get(0).trim(), p.get(1).trim(), p.get(2).trim(),
-                    (int) number(p.get(3), 0), (int) number(p.get(4), 0), (int) number(p.get(5), 0),
-                    (int) number(p.get(6), 0), (int) number(p.get(7), 0), (int) number(p.get(8), 0),
-                    (int) number(p.get(9), 0), (int) number(p.get(10), 0), (int) number(p.get(11), 0),
-                    p.get(12).trim(), p.get(13).trim(), p.get(14).trim());
+        for (Csv.Row r : Csv.read(file, 15)) {
+            ProStanding s = new ProStanding(r.text(0), r.text(1), r.text(2),
+                    r.integer(3, 0), r.integer(4, 0), r.integer(5, 0), r.integer(6, 0), r.integer(7, 0),
+                    r.integer(8, 0), r.integer(9, 0), r.integer(10, 0), r.integer(11, 0),
+                    r.text(12), r.text(13), r.text(14));
             standings.computeIfAbsent(s.leagueId(), k -> new ArrayList<>()).add(s);
         }
         standings.values().forEach(list -> list.sort(Comparator.comparingInt(ProStanding::position)));
         return standings;
     }
 
-    private static Map<String, List<ProMatch>> loadMatches(Path file) throws java.io.IOException {
+    private static Map<String, List<ProMatch>> loadMatches(Path file) throws IOException {
         Map<String, List<ProMatch>> matches = new LinkedHashMap<>();
-        if (!java.nio.file.Files.exists(file)) return matches;
-
-        boolean header = true;
-        for (String line : java.nio.file.Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            if (line.isBlank() || line.startsWith("#")) continue;
-            if (header) { header = false; continue; }
-
-            List<String> p = splitCsv(line);
-            if (p.size() < 13) continue;
-            ProMatch m = new ProMatch(
-                    p.get(0).trim(), p.get(1).trim(), p.get(2).trim(),
-                    (int) number(p.get(3), 0), (int) number(p.get(4), 0),
-                    p.get(5).trim(), p.get(6).trim(),
-                    (int) number(p.get(7), -1), (int) number(p.get(8), -1),
-                    p.get(9).trim(), p.get(10).trim(), p.get(11).trim(), p.get(12).trim());
+        for (Csv.Row r : Csv.read(file, 13)) {
+            ProMatch m = new ProMatch(r.text(0), r.text(1), r.text(2), r.integer(3, 0), r.integer(4, 0),
+                    r.text(5), r.text(6), r.integer(7, -1), r.integer(8, -1),
+                    r.text(9), r.text(10), r.text(11), r.text(12));
             matches.computeIfAbsent(m.leagueId(), k -> new ArrayList<>()).add(m);
         }
         matches.values().forEach(list -> list.sort(Comparator.comparing(ProMatch::scheduledTime)));
         return matches;
     }
 
-    private static Map<String, List<ProDraft>> loadDrafts(Path file) throws java.io.IOException {
+    private static Map<String, List<ProDraft>> loadDrafts(Path file) throws IOException {
         Map<String, List<ProDraft>> drafts = new LinkedHashMap<>();
-        if (!java.nio.file.Files.exists(file)) return drafts;
-
-        boolean header = true;
-        for (String line : java.nio.file.Files.readAllLines(file)) {
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            if (line.isBlank() || line.startsWith("#")) continue;
-            if (header) { header = false; continue; }
-
-            List<String> p = splitCsv(line);
-            if (p.size() < 14) continue;
-            ProDraft d = new ProDraft(
-                    p.get(0).trim(), p.get(1).trim(), p.get(2).trim(), p.get(3).trim(),
-                    (int) number(p.get(4), 0), p.get(5).trim(), p.get(6).trim(),
-                    splitList(p.get(7)), splitList(p.get(8)), splitList(p.get(9)), splitList(p.get(10)),
-                    p.get(11).trim().equals("1"), p.get(12).trim(), p.get(13).trim());
+        for (Csv.Row r : Csv.read(file, 14)) {
+            ProDraft d = new ProDraft(r.text(0), r.text(1), r.text(2), r.text(3), r.integer(4, 0),
+                    r.text(5), r.text(6), r.list(7), r.list(8), r.list(9), r.list(10),
+                    r.text(11).equals("1"), r.text(12), r.text(13));
             drafts.computeIfAbsent(d.leagueId(), k -> new ArrayList<>()).add(d);
         }
         return drafts;
     }
 
+    /**
+     * Warnings for data that does not add up: pro drafts naming a hero outside the roster, standings
+     * for a team that is not listed, and standings whose "played" disagrees with the match list.
+     */
+    public List<String> validate(Set<String> heroKeys) {
+        List<String> warnings = new ArrayList<>();
+        for (List<ProDraft> list : drafts.values()) {
+            for (ProDraft d : list) {
+                List<String> named = new ArrayList<>();
+                for (List<String> part : List.of(d.blueBans(), d.redBans(), d.bluePicks(), d.redPicks())) named.addAll(part);
+                for (String hero : named) {
+                    if (!heroKeys.contains(hero.toLowerCase())) warnings.add("pro draft " + d.id() + " names unknown hero '" + hero + "'");
+                }
+            }
+        }
+        for (List<ProStanding> list : standings.values()) {
+            for (ProStanding s : list) {
+                if (!teams.containsKey(s.teamId())) {
+                    warnings.add("standings for " + s.leagueId() + " list unknown team '" + s.teamId() + "'");
+                    continue;
+                }
+                long played = matches(s.leagueId(), s.season()).stream()
+                        .filter(m -> m.status().equals("completed"))
+                        .filter(m -> m.team1Id().equals(s.teamId()) || m.team2Id().equals(s.teamId())).count();
+                if (played != s.played()) {
+                    warnings.add("standings say " + s.teamId() + " played " + s.played() + " in " + s.leagueId()
+                            + " " + s.season() + " but " + played + " completed matches are listed");
+                }
+            }
+        }
+        return warnings;
+    }
+
     public List<ProLeague> leagues() {
         return List.copyOf(leagues.values());
-    }
-
-    public List<ProLeague> activeLeagues() {
-        return leagues.values().stream().filter(l -> l.status().equals("active")).toList();
-    }
-
-    public ProLeague league(String id) {
-        return leagues.get(id);
-    }
-
-    public ProTeam team(String id) {
-        return teams.get(id);
     }
 
     public List<ProTeam> teamsInLeague(String leagueId) {
@@ -191,65 +151,9 @@ public final class ProLeagueRepository {
                 .filter(m -> m.season().equals(season)).toList();
     }
 
-    public List<ProMatch> upcomingMatches(String leagueId, String season, int limit) {
-        return matches.getOrDefault(leagueId, List.of()).stream()
-                .filter(m -> m.season().equals(season))
-                .filter(m -> m.status().equals("scheduled"))
-                .limit(limit).toList();
-    }
-
     public List<ProDraft> drafts(String leagueId, String season) {
         return drafts.getOrDefault(leagueId, List.of()).stream()
                 .filter(d -> d.season().equals(season)).toList();
-    }
-
-    public ProDraft draft(String draftId) {
-        return drafts.values().stream().flatMap(List::stream)
-                .filter(d -> d.id().equals(draftId)).findFirst().orElse(null);
-    }
-
-    public ProMatch match(String matchId) {
-        return matches.values().stream().flatMap(List::stream)
-                .filter(m -> m.id().equals(matchId)).findFirst().orElse(null);
-    }
-
-    private static List<String> splitCsv(String line) {
-        List<String> cells = new ArrayList<>();
-        StringBuilder cell = new StringBuilder();
-        boolean quoted = false;
-
-        for (int i = 0; i < line.length(); i++) {
-            char c = line.charAt(i);
-            if (quoted) {
-                if (c == '"') {
-                    if (i + 1 < line.length() && line.charAt(i + 1) == '"') { cell.append('"'); i++; }
-                    else quoted = false;
-                } else cell.append(c);
-            } else if (c == '"') {
-                quoted = true;
-            } else if (c == ',') {
-                cells.add(cell.toString());
-                cell.setLength(0);
-            } else {
-                cell.append(c);
-            }
-        }
-        cells.add(cell.toString());
-        return cells;
-    }
-
-    private static List<String> splitList(String field) {
-        if (field == null || field.isBlank()) return List.of();
-        return java.util.Arrays.stream(field.split(";"))
-                .map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private static double number(String field, double ifBlank) {
-        String text = field.trim();
-        if (text.isEmpty()) return ifBlank;
-        var m = DIGITS.matcher(text);
-        if (!m.find()) throw new IllegalArgumentException("Not a number: " + field);
-        return Double.parseDouble(m.group());
     }
 
     public record ProLeague(String id, String name, String region, String country,

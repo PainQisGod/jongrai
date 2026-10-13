@@ -107,7 +107,7 @@ table.score tr:last-child td{border-bottom:0}
 
 <header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
 <nav class="top"><a href="/" class="on">Home</a><a href="/heroes">Hero Statistics</a><a href="/items">Items</a><a href="/league">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
-<span class="patch">as of Patch 2.2.16</span></header>
+<span class="patch">as of Patch <span data-patch></span></span></header>
 
 <main>
 
@@ -118,7 +118,7 @@ table.score tr:last-child td{border-bottom:0}
  <p>Project Jongrai is a draft board for Mobile Legends ranked. It tracks counters, synergies, lanes and
  power spikes as you pick, scores both sides in real time, and hands the finished draft to an AI coach that
  explains what actually decides the game.</p>
- <div class="hp-cta"><a class="btn" href="/draft">Open Draft Analysis</a><a class="btn ghost" href="/heroes">Browse all 133 heroes</a></div>
+ <div class="hp-cta"><a class="btn" href="/draft">Open Draft Analysis</a><a class="btn ghost" href="/heroes">Browse all <span data-hero-count></span> heroes</a></div>
 <div class="stats">
    <div><b id="sHeroes">-</b><span>HEROES TRACKED</span></div>
    <div><b id="sItems">-</b><span>ITEMS CATALOGUED</span></div>
@@ -135,9 +135,9 @@ table.score tr:last-child td{border-bottom:0}
   <div class="card"><p class="k">DRAFT BOARD</p><h3>Pick, ban and assign lanes</h3>
    <p>Five picks and five bans a side, with flex-lane assignment and one-click undo of a misclick.</p></div>
   <div class="card"><p class="k">COUNTERS</p><h3>Official head-to-head data</h3>
-   <p>Moonton's own strong-against and synergy relations, for all 133 heroes.</p></div>
+   <p>Moonton's own strong-against and synergy relations, for all <span data-hero-count></span> heroes.</p></div>
   <div class="card"><p class="k">CORE BUILDS</p><h3>What to actually build</h3>
-   <p>Three curated builds per hero, core pieces marked, plus all 104 shop items and their passives.</p></div>
+   <p>Five curated builds per hero, core pieces marked, plus all <span data-item-count></span> shop items and their passives.</p></div>
   <div class="card"><p class="k">EDGE SCORE</p><h3>Both sides, five categories</h3>
    <p>A weighted 0-100 read on counters, meta power, synergy, lockdown and comp balance.</p></div>
   <div class="card"><p class="k">AI COACH</p><h3>A verdict once the draft ends</h3>
@@ -177,26 +177,25 @@ table.score tr:last-child td{border-bottom:0}
 
 </main>
 
-<footer><span>Project Jongrai</span><span>Hero data as of patch 2.2.16</span>
+<footer><span>Project Jongrai</span><span>Hero data as of patch <span data-patch></span></span>
 <span class="sp">Counts, tiers and win rates from the shipped roster file</span></footer>
 
+<script src="/app.js"></script>
 <script>
-const $=s=>document.querySelector(s);
-const TC={S:'#f5c518',A:'#22c55e',B:'#3b82f6',C:'#8b91a3',D:'#ef4444'};
 const LABEL={S:'top',A:'strong',B:'solid',C:'average',D:'weak'};
 (async()=>{try{
- const heroes=await (await fetch('/api/heroes')).json();
- $('#sHeroes').textContent=heroes.length;
-  fetch('/api/items').then(r=>r.json()).then(it=>{$('#sItems').textContent=it.length}).catch(()=>{});
+ const [heroes,m]=await Promise.all([call('/api/heroes'),meta()]);
+ if(heroes.error)throw new Error(heroes.error);
+ if(!m.error){$('#sHeroes').textContent=m.heroes;$('#sItems').textContent=m.items}
  const by={};heroes.forEach(h=>(by[h.tier]=by[h.tier]||[]).push(h));
  const order=['S','A','B','C','D'],total=heroes.length;
  $('#tbar').innerHTML=order.filter(t=>by[t]).map(t=>{
-  const n=by[t].length,pct=n/total*100,c=TC[t];
+  const n=by[t].length,pct=n/total*100,c=TIER_COLORS[t];
   return`<a href="/draft" style="width:${pct.toFixed(1)}%;background:${c}" title="Tier ${t}: ${n} heroes, ${pct.toFixed(1)}% of the roster">${pct>9?t+' '+n:''}</a>`}).join('');
  $('#tkey').innerHTML=order.filter(t=>by[t]).map(t=>
-  `<span><i style="background:${TC[t]}"></i><b style="color:${TC[t]}">${t}</b> ${LABEL[t]} · ${by[t].length} heroes</span>`).join('');
+  `<span><i style="background:${TIER_COLORS[t]}"></i><b style="color:${TIER_COLORS[t]}">${t}</b> ${LABEL[t]} · ${by[t].length} heroes</span>`).join('');
  $('#topHeroes').innerHTML=(by.S||[]).sort((a,b)=>b.winRate-a.winRate).slice(0,12)
-  .map(h=>`<span class="chip t${h.tier}" style="border-left-color:${TC[h.tier]}"><b>${h.name}</b><small>${h.winRate.toFixed(1)}%</small></span>`).join('');
-}catch(e){$('#tbar').textContent='Roster unavailable';}}})();
+  .map(h=>`<span class="chip t${h.tier}" style="border-left-color:${TIER_COLORS[h.tier]}"><b>${esc(h.name)}</b><small>${h.winRate.toFixed(1)}%</small></span>`).join('');
+}catch(e){$('#tbar').textContent='Roster unavailable';}})();
 </script>
 </body></html>

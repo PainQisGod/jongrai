@@ -27,6 +27,7 @@ nav.top a.on{color:var(--tx);background:#262b3a;border-color:var(--line)}
 .draft-music{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-1px;bottom:-1px}
 
 /* ---------- controls ---------- */
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
 button{background:var(--card);color:var(--tx);border:0;padding:7px 14px;cursor:pointer;font:inherit;border-radius:6px}
 button:hover{background:#232838}
 input,select{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit}
