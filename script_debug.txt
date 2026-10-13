@@ -1,1 +1,0 @@
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://mlbb.io/en"},{"@type":"ListItem","position":2,"name":"Heroes","item":"https://mlbb.io/en/hero-tier"},{"@type":"ListItem","position":3,"name":"Chou","item":"https://mlbb.io/en/hero/chou"},{"@type":"ListItem","position":4,"name":"Build"}]}
