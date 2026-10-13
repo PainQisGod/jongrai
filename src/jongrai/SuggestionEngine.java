@@ -3,6 +3,7 @@ package jongrai;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /** Scores every available hero for one side and returns the best few with reasons. */
@@ -26,7 +27,10 @@ public class SuggestionEngine {
 
     public List<Suggestion> suggest(Draft draft, Draft.Side side, int limit) {
         Team mine = draft.team(side);
+        if (mine.picksFull()) return List.of();
         Team theirs = draft.opponent(side);
+        Set<Lane> covered = mine.coveredLanes();
+        boolean needsTank = mine.countRole(Role.TANK) == 0;
 
         List<Suggestion> results = new ArrayList<>();
         for (Hero candidate : draft.availableHeroes()) {
@@ -51,26 +55,15 @@ public class SuggestionEngine {
                 }
             }
 
-            if (candidate.hasRole(Role.TANK) && mine.countRole(Role.TANK) == 0) {
+            if (candidate.hasRole(Role.TANK) && needsTank) {
                 score += NEED_TANK_BONUS;
                 reasons.add("your team has no tank");
             }
-            Set<Lane> covered = mine.coveredLanes();
-            boolean fillsOpenLane = false;
-            boolean duplicatesLane = false;
-            for (Lane lane : candidate.lanes()) {
-                if (!covered.contains(lane)) {
-                    fillsOpenLane = true;
-                    break;
-                } else {
-                    duplicatesLane = true;
-                }
-            }
+            boolean fillsOpenLane = candidate.lanes().stream().anyMatch(l -> !covered.contains(l));
             if (fillsOpenLane) {
                 score += OPEN_LANE_BONUS;
                 reasons.add("fills open lane");
-            }
-            if (duplicatesLane && !fillsOpenLane) {
+            } else {
                 score -= DUPLICATE_LANE_PENALTY;
                 reasons.add("lane already covered");
             }
@@ -82,20 +75,18 @@ public class SuggestionEngine {
             double winRateBonus = (candidate.winRate() - 50.0) * WINRATE_WEIGHT;
             score += winRateBonus;
             if (Math.abs(winRateBonus) >= 1) {
-                reasons.add(String.format("%s win rate %.1f%%", winRateBonus > 0 ? "high" : "low", candidate.winRate()));
+                reasons.add(String.format(Locale.ROOT, "%s win rate %.1f%%", winRateBonus > 0 ? "high" : "low", candidate.winRate()));
             }
 
             results.add(new Suggestion(candidate, score, reasons));
         }
-
-        results.sort(Comparator.comparingDouble(Suggestion::score).reversed()
-                .thenComparing(s -> s.hero().name()));
-        return results.subList(0, Math.min(limit, results.size()));
+        return best(results, limit);
     }
 
     /** Who should "side" ban? Popular, strong heroes, plus ones that hurt its picks or help the enemy. */
     public List<Suggestion> suggestBans(Draft draft, Draft.Side side, int limit) {
         Team mine = draft.team(side);
+        if (mine.bansFull()) return List.of();
         Team theirs = draft.opponent(side);
 
         List<Suggestion> results = new ArrayList<>();
@@ -105,17 +96,17 @@ public class SuggestionEngine {
 
             if (candidate.banRate() > 0) {
                 score += candidate.banRate() * BAN_RATE_WEIGHT;
-                reasons.add(String.format("ban rate %.1f%%", candidate.banRate()));
+                reasons.add(String.format(Locale.ROOT, "ban rate %.1f%%", candidate.banRate()));
             }
             double winRateBonus = (candidate.winRate() - 50.0) * WINRATE_WEIGHT;
             score += winRateBonus;
             if (winRateBonus >= 1) {
-                reasons.add(String.format("high win rate %.1f%%", candidate.winRate()));
+                reasons.add(String.format(Locale.ROOT, "high win rate %.1f%%", candidate.winRate()));
             }
-            for (Hero mine1 : mine.picks()) {
-                if (candidate.counters(mine1)) {
+            for (Hero ally : mine.picks()) {
+                if (candidate.counters(ally)) {
                     score += THREAT_BONUS;
-                    reasons.add("counters your " + mine1.name());
+                    reasons.add("counters your " + ally.name());
                 }
             }
             for (Hero enemy : theirs.picks()) {
@@ -126,8 +117,12 @@ public class SuggestionEngine {
             }
             results.add(new Suggestion(candidate, score, reasons));
         }
+        return best(results, limit);
+    }
+
+    private static List<Suggestion> best(List<Suggestion> results, int limit) {
         results.sort(Comparator.comparingDouble(Suggestion::score).reversed()
-                .thenComparing(x -> x.hero().name()));
+                .thenComparing(s -> s.hero().name()));
         return results.subList(0, Math.min(limit, results.size()));
     }
 }

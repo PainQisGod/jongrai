@@ -13,11 +13,11 @@ import java.util.List;
 public record Item(String name, String slug, int tier, int cost, String stats,
                    String passives, String availability, List<String> categories, String icon) {
 
-    public String key() {
-        return name.toLowerCase();
+    public Item {
+        categories = List.copyOf(categories);
     }
 
-    public boolean hasCategory(String category) {
-        return categories.contains(category);
+    public String key() {
+        return name.toLowerCase();
     }
 }

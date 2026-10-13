@@ -1,12 +1,14 @@
 package jongrai;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/** One side's picks, bans and lane assignments. Only {@link Draft} changes it, so its rules hold. */
 public class Team {
     public static final int MAX_PICKS = 5;
     public static final int MAX_BANS = 5;
@@ -21,8 +23,25 @@ public class Team {
     }
 
     public String name() { return name; }
-    public List<Hero> picks() { return picks; }
-    public List<Hero> bans() { return bans; }
+    public List<Hero> picks() { return Collections.unmodifiableList(picks); }
+    public List<Hero> bans() { return Collections.unmodifiableList(bans); }
+    public boolean picksFull() { return picks.size() >= MAX_PICKS; }
+    public boolean bansFull() { return bans.size() >= MAX_BANS; }
+
+    void addPick(Hero hero, Lane lane) {
+        picks.add(hero);
+        assignedLanes.put(hero.key(), lane);
+    }
+
+    void clear() {
+        picks.clear();
+        bans.clear();
+        assignedLanes.clear();
+    }
+
+    void addBan(Hero hero) {
+        bans.add(hero);
+    }
 
     /** Lanes already covered by this team's picks (each hero counts for its assigned lane). */
     public Set<Lane> coveredLanes() {
@@ -35,12 +54,12 @@ public class Team {
     }
 
     /** Removes a hero from this team's picks or bans (undo a misclick). */
-    public boolean remove(Hero hero) {
+    boolean remove(Hero hero) {
         assignedLanes.remove(hero.key());
         return picks.remove(hero) || bans.remove(hero);
     }
 
-    public void assignLane(Hero hero, Lane lane) {
+    void assignLane(Hero hero, Lane lane) {
         assignedLanes.put(hero.key(), lane);
     }
 

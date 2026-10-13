@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.Function;
 
 /** Compares the two drafts: an overall edge, team coordination, and the tactical profile. */
 public class DraftAnalyzer {
@@ -13,7 +14,7 @@ public class DraftAnalyzer {
     static final double W_COUNTERS = 0.25, W_META = 0.20, W_SYNERGY = 0.15, W_LOCKDOWN = 0.15, W_COORDINATION = 0.25;
     static final int HEAVY_CONTROL = 70; // control rating that counts as a lockdown hero
 
-/** blueShare = blue's share of the bar (0-100); 50 means even. */
+    /** blueShare = blue's share of the bar (0-100); 50 means even. */
     public record Category(String name, double blueShare, String detail) {}
     public record Axis(String name, double blue, double red) {}   // team scores on a 0-10 scale
     public record Analysis(int blueEdge, int redEdge, String lead, String headline,
@@ -28,7 +29,7 @@ public class DraftAnalyzer {
         int synergyPairs,
         int heavyControl,
         double avgWinRate,
-        String spikeTiming, // EARLY, MID, LATE, MIXED
+        String spikeTiming, // EARLY, MID, LATE, MIXED (tied), NONE (no picks)
         List<String> missingLanes,
         List<String> missingRoles,
         double score
@@ -62,11 +63,13 @@ public class DraftAnalyzer {
 
         // Synergy: pairs on the same team that work well together
         int bs = synergyPairs(blue), rs = synergyPairs(red);
-        cats.add(new Category("SYNERGY", smooth(bs, rs), bs + " combo pairs vs " + rs));
+        double synergyShare = smooth(bs, rs);
+        cats.add(new Category("SYNERGY", synergyShare, bs + " combo pairs vs " + rs));
 
         // Lockdown: heroes with a strong control rating
         int bl = heavyControl(blue), rl = heavyControl(red);
-        cats.add(new Category("LOCKDOWN", smooth(bl, rl), "Heavy-control heroes " + bl + " vs " + rl));
+        double lockdownShare = smooth(bl, rl);
+        cats.add(new Category("LOCKDOWN", lockdownShare, "Heavy-control heroes " + bl + " vs " + rl));
 
         // Coordination rewards drafts that can execute together, rather than merely filling slots.
         TeamSide blueCoord = coord(blue), redCoord = coord(red);
@@ -77,7 +80,7 @@ public class DraftAnalyzer {
 
         boolean empty = blue.picks().isEmpty() && red.picks().isEmpty();
         double edge = empty ? 50 : counterShare * W_COUNTERS + metaShare * W_META
-                + cats.get(2).blueShare() * W_SYNERGY + cats.get(3).blueShare() * W_LOCKDOWN
+                + synergyShare * W_SYNERGY + lockdownShare * W_LOCKDOWN
                 + coordinationShare * W_COORDINATION;
         int blueEdge = (int) Math.round(edge);
         int gap = Math.abs(blueEdge - 50) * 2;
@@ -104,22 +107,12 @@ public class DraftAnalyzer {
             .toList();
 
         Set<Role> roles = EnumSet.noneOf(Role.class);
-        t.picks().forEach(h -> roles.add(h.role()));
+        t.picks().forEach(h -> roles.addAll(h.roles()));
         EnumSet<Role> allRoles = EnumSet.allOf(Role.class);
         List<String> missingRoles = allRoles.stream()
             .filter(r -> !roles.contains(r))
             .map(Role::name)
             .toList();
-
-        // Determine spike timing
-        long early = t.picks().stream().filter(h -> "EARLY".equals(h.spike())).count();
-        long mid = t.picks().stream().filter(h -> "MID".equals(h.spike())).count();
-        long late = t.picks().stream().filter(h -> "LATE".equals(h.spike())).count();
-        String spikeTiming;
-        if (early >= mid && early >= late) spikeTiming = "EARLY";
-        else if (late >= early && late >= mid) spikeTiming = "LATE";
-        else if (mid >= early && mid >= late) spikeTiming = "MID";
-        else spikeTiming = "MIXED";
 
         return new TeamSide(
             covered.size(),
@@ -129,47 +122,65 @@ public class DraftAnalyzer {
             synergyPairs(t),
             heavyControl(t),
             avgWinRate(t),
-            spikeTiming,
+            spikeTiming(t),
             missingLanes,
             missingRoles,
             coordinationScore(t, covered, roles)
         );
     }
 
+    /** The spike most of the team shares; MIXED when the top count is tied, NONE with no picks. ALL heroes don't vote. */
+    private static String spikeTiming(Team t) {
+        if (t.picks().isEmpty()) return "NONE";
+        Spike best = null;
+        long top = -1;
+        boolean tied = false;
+        for (Spike s : List.of(Spike.EARLY, Spike.MID, Spike.LATE)) {
+            long n = countSpike(t, s);
+            if (n > top) { top = n; best = s; tied = false; }
+            else if (n == top) tied = true;
+        }
+        return tied ? "MIXED" : best.name();
+    }
+
+    private static long countSpike(Team t, Spike spike) {
+        return t.picks().stream().filter(h -> h.spike() == spike).count();
+    }
+
     private static int heavyControl(Team t) {
         return (int) t.picks().stream().filter(h -> h.control() >= HEAVY_CONTROL).count();
     }
 
-    /** Team scores (0-10) on seven traits, from Moonton's hero ratings and speciality tags. */
+    /** One profile axis: its name and how it scores a (non-empty) list of picks, 0-10. */
+    private record AxisDef(String name, Function<List<Hero>, Double> score) {}
+
+    private static final List<AxisDef> AXES = List.of(
+            new AxisDef("Control", p -> p.stream().mapToInt(Hero::control).average().orElse(0) / 10),
+            new AxisDef("Damage", p -> p.stream().mapToInt(Hero::offense).average().orElse(0) / 10),
+            new AxisDef("Durability", p -> p.stream().mapToInt(Hero::durability).average().orElse(0) / 10),
+            new AxisDef("Burst", p -> tagScore(p, "burst")),
+            new AxisDef("Engage", p -> tagScore(p, "chase", "initiator", "charge")),
+            new AxisDef("Sustain", p -> tagScore(p, "regen", "guard", "support")),
+            new AxisDef("Push", p -> tagScore(p, "push")),
+            new AxisDef("Early", p -> p.stream().mapToDouble(h -> spikeScore(h, true)).average().orElse(0)),
+            new AxisDef("Late", p -> p.stream().mapToDouble(h -> spikeScore(h, false)).average().orElse(0)));
+
+    /** Team scores (0-10) on nine traits, from Moonton's hero ratings and speciality tags. */
     private static List<Axis> profile(Team b, Team r) {
-        String[] names = {"Control", "Damage", "Durability", "Burst", "Engage", "Sustain", "Push", "Early", "Late"};
-        List<Axis> axes = new ArrayList<>();
-        for (int i = 0; i < names.length; i++) axes.add(new Axis(names[i], axis(b, i), axis(r, i)));
-        return axes;
+        return AXES.stream().map(a -> new Axis(a.name(), axis(a, b), axis(a, r))).toList();
     }
 
-    private static double axis(Team t, int i) {
-        List<Hero> p = t.picks();
-        if (p.isEmpty()) return 0;
-        return switch (i) {
-            case 0 -> p.stream().mapToInt(Hero::control).average().orElse(0) / 10;
-            case 1 -> p.stream().mapToInt(Hero::offense).average().orElse(0) / 10;
-            case 2 -> p.stream().mapToInt(Hero::durability).average().orElse(0) / 10;
-            case 3 -> tagScore(p, "burst");
-            case 4 -> tagScore(p, "chase", "initiator", "charge");
-            case 5 -> tagScore(p, "regen", "guard", "support");
-            case 6 -> tagScore(p, "push");
-            case 7 -> p.stream().mapToDouble(h -> spikeScore(h, true)).average().orElse(0);
-            default -> p.stream().mapToDouble(h -> spikeScore(h, false)).average().orElse(0);
-        };
+    private static double axis(AxisDef a, Team t) {
+        return t.picks().isEmpty() ? 0 : a.score().apply(t.picks());
     }
 
-    /** Early/late strength from the hero's power spike: EARLY 9/3, MID 6/6, LATE 3/9. */
+    /** Early/late strength from the hero's power spike: EARLY 9/3, MID 6/6, LATE 3/9, ALL 7/7 (strong throughout). */
     private static double spikeScore(Hero h, boolean early) {
         return switch (h.spike()) {
-            case "EARLY" -> early ? 9 : 3;
-            case "LATE" -> early ? 3 : 9;
-            default -> 6;
+            case EARLY -> early ? 9 : 3;
+            case LATE -> early ? 3 : 9;
+            case MID -> 6;
+            case ALL -> 7;
         };
     }
 
@@ -208,8 +219,8 @@ public class DraftAnalyzer {
         score += Math.min(roles.size(), 4) / 4.0 * 15;
         score += Math.min(synergyPairs(t), 3) / 3.0 * 15;
         score += Math.min(heavyControl(t), 2) / 2.0 * 10;
-        long early = t.picks().stream().filter(h -> "EARLY".equals(h.spike())).count();
-        long late = t.picks().stream().filter(h -> "LATE".equals(h.spike())).count();
+        long early = countSpike(t, Spike.EARLY);
+        long late = countSpike(t, Spike.LATE);
         if (early > 0 && late > 0) score += 10;
         else if (t.picks().size() < 3 || early > 0 || late > 0) score += 5;
         return score;
