@@ -72,16 +72,19 @@ table.stand tr:last-child td{border-bottom:0}
 
 /* empty state */
 .empty{color:var(--mut);font-size:13px;padding:40px;text-align:center}
+.sample{background:#2b2413;border:1px solid #7a6224;border-left:3px solid var(--gold);border-radius:8px;padding:10px 14px;color:var(--gold2);max-width:80ch;margin:0 0 14px}
 </style></head><body>
 
 <header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
 <nav class="top"><a href="/">Home</a><a href="/heroes">Hero Statistics</a><a href="/items">Items</a><a href="/league" class="on">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
-<span class="patch">as of Patch 2.2.16</span></header>
+<span class="patch">as of Patch <span data-patch></span></span></header>
 
 <main class="wrap">
  <p class="eyebrow">PROFESSIONAL LEAGUE</p>
  <h2 class="t">Pro drafts & standings</h2>
- <p class="l">Live standings, match history, and pro drafts from MPL and regional leagues.</p>
+ <p class="sample" role="note"><b>Sample data, not official results.</b> The standings, matches, teams and drafts below are placeholder
+ values that show how the page works. They do not come from a real league source and do not add up with each other.</p>
+ <p class="l">Standings, match history and pro drafts from MPL and regional leagues, as stored in the pro data files.</p>
 
  <div class="league-bar" id="leagueBar"></div>
 
@@ -115,32 +118,34 @@ table.stand tr:last-child td{border-bottom:0}
  </div>
 </main>
 
-<footer><span>Project Jongrai</span><span>Pro data as of patch 2.2.16</span>
+<footer><span>Project Jongrai</span><span>Pro data as of patch <span data-patch></span></span>
 <span class="sp">Standings, matches and drafts from pro league data files</span></footer>
 
+<script src="/app.js"></script>
 <script>
-const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
-const TC={S:'#f5c518',A:'#22c55e',B:'#3b82f6',C:'#8b91a3',D:'#ef4444'};
 const STATUS_CLS={completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
 let leagues=[], currentLeague=null, currentSeason=null, teamsById={};
+const keyOf=l=>l.id+'|'+l.season;   // one league can run several seasons
 
 async function loadLeagues(){
  try{
-  const res=await fetch('/api/leagues');
-  leagues=await res.json();
+  leagues=await call('/api/leagues');
+  if(leagues.error)throw new Error(leagues.error);
   renderLeagueBar();
-  if(leagues.length) selectLeague(leagues[0].id);
+  if(leagues.length) selectLeague(keyOf(leagues[0]));
  }catch(e){$('#leagueBar').innerHTML='<span style="color:var(--mut)">Failed to load leagues</span>';}
 }
 function renderLeagueBar(){
  const bar=$('#leagueBar');
- bar.innerHTML=leagues.map(l=>`<button class="league-btn${l.id===currentLeague?' active':''}" data-id="${l.id}" title="${l.region} - ${l.season}">${l.name}</button>`).join('');
- bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.id));
+ bar.innerHTML=leagues.map(l=>`<button type="button" class="league-btn${keyOf(l)===selected?' active':''}" data-key="${esc(keyOf(l))}" title="${esc(l.region)} - ${esc(l.season)}">${esc(l.name)} · ${esc(l.season)}</button>`).join('');
+ bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.key));
 }
-async function selectLeague(id){
- currentLeague=id;
- const league=leagues.find(l=>l.id===id);
+let selected='';
+async function selectLeague(key){
+ selected=key;
+ const league=leagues.find(l=>keyOf(l)===key);
+ currentLeague=league?.id||'';
  currentSeason=league?.season||'';
  renderLeagueBar();
  await loadData();
@@ -155,17 +160,13 @@ $$('#tabs .tab').forEach(t=>t.onclick=()=>setTab(t.dataset.tab));
 async function loadData(){
  if(!currentLeague) return;
  try{
-  const [standingsRes, matchesRes, teamsRes, draftsRes]=await Promise.all([
-   fetch('/api/standings?league='+encodeURIComponent(currentLeague)+'&season='+encodeURIComponent(currentSeason)),
-   fetch('/api/matches?league='+encodeURIComponent(currentLeague)+'&season='+encodeURIComponent(currentSeason)),
-   fetch('/api/teams?league='+encodeURIComponent(currentLeague)),
-   fetch('/api/drafts?league='+encodeURIComponent(currentLeague)+'&season='+encodeURIComponent(currentSeason))
-  ]);
-  const standings=await standingsRes.json();
-  const matches=await matchesRes.json();
-  const teams=await teamsRes.json();
-  const drafts=await draftsRes.json();
+  const ls='league='+encodeURIComponent(currentLeague), season=ls+'&season='+encodeURIComponent(currentSeason);
+  const [standings,matches,teams,drafts]=await Promise.all([
+   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+ls),call('/api/drafts?'+season)]);
+  const failed=[standings,matches,teams,drafts].find(r=>r.error);
+  if(failed)throw new Error(failed.error);
 
+  teamsById={};
   teams.forEach(t=>teamsById[t.id]=t);
   renderStandings(standings);
   renderMatches(matches);
@@ -187,7 +188,7 @@ function renderStandings(data){
   const t=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
   return `<tr>
    <td class="pos">${s.position}</td>
-   <td class="team-cell"><img class="team-logo" src="/icons/${t.logo||''}" alt="" onerror="this.remove()"><div><div class="team-name">${t.name||s.teamId}</div><div class="team-short">${t.shortName||''}</div></div></td>
+   <td class="team-cell"><img class="team-logo" src="/icons/${esc(t.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(t.name||s.teamId)}</div><div class="team-short">${esc(t.shortName||'')}</div></div></td>
    <td>${s.played}</td>
    <td class="win">${s.won}</td>
    <td class="loss">${s.lost}</td>
@@ -196,8 +197,8 @@ function renderStandings(data){
    <td>${s.ga}</td>
    <td class="${s.gd>=0?'win':'loss'}">${s.gd>=0?'+':''}${s.gd}</td>
    <td class="pos">${s.points}</td>
-   <td><span class="streak ${s.streak?.startsWith('W')?'win':s.streak?.startsWith('L')?'loss':'draw'}">${s.streak||'-'}</span></td>
-   <td class="form">${s.form||'-'}</td>
+   <td><span class="streak ${s.streak?.startsWith('W')?'win':s.streak?.startsWith('L')?'loss':'draw'}">${esc(s.streak||'-')}</span></td>
+   <td class="form">${esc(s.form||'-')}</td>
   </tr>`;
  }).join('');
 }
@@ -210,13 +211,13 @@ function renderMatches(data){
   const t2=teamsById[m.team2Id]||{name:m.team2Id,logo:''};
   const score=m.status==='completed'?`${m.team1Score} - ${m.team2Score}`:'vs';
   return `<div class="match-card">
-   <div class="match-header"><span class="match-status ${STATUS_CLS[m.status]||''}">${m.status}</span><div class="match-meta">Week ${m.week} · Day ${m.day} · ${m.matchType}</div></div>
+   <div class="match-header"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><div class="match-meta">Week ${m.week} · Day ${m.day} · ${esc(m.matchType)}</div></div>
    <div class="match-teams">
-    <div class="match-team"><img class="match-team-logo" src="/icons/${t1.logo||''}" alt="" onerror="this.remove()"><span class="match-team-name">${t1.name||m.team1Id}</span></div>
+    <div class="match-team"><img class="match-team-logo" src="/icons/${esc(t1.logo||'')}" alt="" onerror="this.remove()"><span class="match-team-name">${esc(t1.name||m.team1Id)}</span></div>
     <div class="match-score">${score}</div>
-    <div class="match-team right"><span class="match-team-name">${t2.name||m.team2Id}</span><img class="match-team-logo" src="/icons/${t2.logo||''}" alt="" onerror="this.remove()"></div>
+    <div class="match-team right"><span class="match-team-name">${esc(t2.name||m.team2Id)}</span><img class="match-team-logo" src="/icons/${esc(t2.logo||'')}" alt="" onerror="this.remove()"></div>
    </div>
-   <div class="match-meta">${m.scheduledTime}${m.completedTime?' · '+m.completedTime:''}</div>
+   <div class="match-meta">${esc(m.scheduledTime)}${m.completedTime?' · '+esc(m.completedTime):''}</div>
   </div>`;
  }).join('');
 }
@@ -225,11 +226,11 @@ function renderTeams(data){
  if(!data.length){grid.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
  grid.innerHTML=data.map(t=>`<div class="card" style="text-align:center">
-  <img src="/icons/${t.logo||''}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
-  <div style="font-weight:600">${t.name}</div>
-  <div style="color:var(--mut);font-size:12px">${t.shortName} · ${t.city}</div>
-  <div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${t.coach||'Unknown'}</div>
-  <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${t.status}</span></div>
+  <img src="/icons/${esc(t.logo||'')}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
+  <div style="font-weight:600">${esc(t.name)}</div>
+  <div style="color:var(--mut);font-size:12px">${esc(t.shortName)} · ${esc(t.city)}</div>
+  <div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${esc(t.coach||'Unknown')}</div>
+  <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${esc(t.status)}</span></div>
  </div>`).join('');
 }
 function renderDrafts(data){
@@ -240,16 +241,16 @@ function renderDrafts(data){
   const bt=teamsById[d.blueTeamId]||{name:d.blueTeamId,logo:''};
   const rt=teamsById[d.redTeamId]||{name:d.redTeamId,logo:''};
   return `<div class="draft-card">
-   <div class="draft-header"><div><strong>Game ${d.gameNumber}</strong> · ${d.matchId} · Patch ${d.patch}</div><div class="match-status ${d.winnerTeamId===d.blueTeamId?'completed':''}">${bt.name} ${d.winnerTeamId===d.blueTeamId?'won':'lost'}</div></div>
+   <div class="draft-header"><div><strong>Game ${d.gameNumber}</strong> · ${esc(d.matchId)} · Patch ${esc(d.patch)}</div><div class="match-status ${d.winnerTeamId===d.blueTeamId?'completed':''}">${esc(bt.name)} ${d.winnerTeamId===d.blueTeamId?'won':'lost'}</div></div>
    <div class="draft-bans-picks">
-    <div class="draft-side bans blue"><h4>Blue Bans</h4><div class="draft-list">${d.blueBans.map(h=>`<span class="draft-hero ban">${h}</span>`).join('')}</div></div>
-    <div class="draft-side bans red"><h4>Red Bans</h4><div class="draft-list">${d.redBans.map(h=>`<span class="draft-hero ban">${h}</span>`).join('')}</div></div>
-    <div class="draft-side picks blue"><h4>Blue Picks</h4><div class="draft-list">${d.bluePicks.map(h=>`<span class="draft-hero">${h}</span>`).join('')}</div></div>
-    <div class="draft-side picks red"><h4>Red Picks</h4><div class="draft-list">${d.redPicks.map(h=>`<span class="draft-hero">${h}</span>`).join('')}</div></div>
+    <div class="draft-side bans blue"><h4>Blue Bans</h4><div class="draft-list">${d.blueBans.map(h=>`<span class="draft-hero ban">${esc(h)}</span>`).join('')}</div></div>
+    <div class="draft-side bans red"><h4>Red Bans</h4><div class="draft-list">${d.redBans.map(h=>`<span class="draft-hero ban">${esc(h)}</span>`).join('')}</div></div>
+    <div class="draft-side picks blue"><h4>Blue Picks</h4><div class="draft-list">${d.bluePicks.map(h=>`<span class="draft-hero">${esc(h)}</span>`).join('')}</div></div>
+    <div class="draft-side picks red"><h4>Red Picks</h4><div class="draft-list">${d.redPicks.map(h=>`<span class="draft-hero">${esc(h)}</span>`).join('')}</div></div>
    </div>
   </div>`;
  }).join('');
 }
-loadLeagues();
+loadLeagues();meta();
 </script>
 </body></html>

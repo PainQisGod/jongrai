@@ -58,12 +58,12 @@ p.l{color:var(--mut);max-width:70ch;margin:0 0 18px}
 
 <header><h1><a href="/" aria-label="Project Jongrai"><img class="brand-logo" src="/icons/Jongrai_logo.png" alt="Project Jongrai"></a></h1>
 <nav class="top"><a href="/">Home</a><a href="/heroes">Hero Statistics</a><a href="/items" class="on">Items</a><a href="/league">Professional League</a><a href="/draft">Draft Analysis</a><a href="/about">About</a></nav>
-<span class="patch">as of Patch 2.2.16</span></header>
+<span class="patch">as of Patch <span data-patch></span></span></header>
 
 <main class="wrap" id="list">
  <p class="eyebrow">ITEM CATALOG</p>
  <h2 class="t">Every item in the shop</h2>
- <p class="l">All 104 shop items with tier, gold cost, stat block and the full text of every passive they
+ <p class="l">All <span data-item-count></span> shop items with tier, gold cost, stat block and the full text of every passive they
  carry, plus the heroes that core-build each one. Click an item for the breakdown.</p>
  <div class="cats" id="cats"></div>
  <div class="bar">
@@ -77,20 +77,18 @@ p.l{color:var(--mut);max-width:70ch;margin:0 0 18px}
 
 <main class="wrap" id="detail" hidden></main>
 
-<footer><span>Project Jongrai</span><span>Catalog as of patch 2.2.16</span>
+<footer><span>Project Jongrai</span><span>Catalog as of patch <span data-patch></span></span>
 <span class="sp">Item structure from mlbbhub.com, derived from Moonton and Liquipedia data</span></footer>
 
+<script src="/app.js"></script>
 <script>
-const $=s=>document.querySelector(s);
 // The source writes three tiers: 3 finished equipment, 2 intermediate pieces, 1 components and specials.
 const TC={3:'T3',2:'T2',1:'T1',0:'T0'};
 let items=[],heroes=[],byItem={},bySlug={},byHeroLower={},f={q:'',tier:'',cat:'',sort:'cost'};
-const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const itemIcon=it=>it.icon?`<img src="/icons/${it.icon}" alt="" onerror="this.remove()">`:'';
-const heroAv=n=>{const h=byHeroLower[n.toLowerCase()];return h&&h.icon?`<img src="/icons/${h.icon}" alt="" onerror="this.remove()">`:''};
+const itemIcon=it=>it.icon?`<img src="/icons/${esc(it.icon)}" alt="" onerror="this.remove()">`:'';
+const heroAv=n=>{const h=byHeroLower[n.toLowerCase()];return h&&h.icon?`<img src="/icons/${esc(h.icon)}" alt="" onerror="this.remove()">`:''};
 const heroChip=n=>{const h=byHeroLower[n.toLowerCase()];if(!h)return '';
- return`<a class="chip" href="/heroes/${slug(h.name)}" title="${esc(h.name)}"><i>${heroAv(h.name)}</i>${esc(h.name)}</a>`};
+ return`<a class="chip" href="/heroes/${esc(h.slug)}" title="${esc(h.name)}"><i>${heroAv(h.name)}</i>${esc(h.name)}</a>`};
 
 // The stat block is one string per item; "None" means the item carries no stats at all.
 function statChips(it){
@@ -114,7 +112,7 @@ function filtered(){
 function card(it){
  return`<button class="it" data-s="${esc(it.slug)}">
   <div class="top"><div class="ii">${itemIcon(it)}</div>
-   <div class="nm"><b>${esc(it.name)}</b><small>${it.categories.join(' / ')}</small></div>
+   <div class="nm"><b>${esc(it.name)}</b><small>${esc(it.categories.join(' / '))}</small></div>
    <span class="tier ${TC[it.tier]||'T0'}">T${it.tier}</span></div>
   <div class="chips"><span>${it.cost?it.cost+' gold':'no price recorded'}</span></div>
   ${statChips(it)}
@@ -170,24 +168,26 @@ function showItem(s,push){
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-s]');if(b){showItem(b.dataset.s,true);return}
  const c=e.target.closest('[data-cat]');
- if(c){showList(true);f.cat=c.dataset.cat;render();
-  document.querySelectorAll('[data-cat]').forEach(a=>a.classList.toggle('on',a.dataset.cat===f.cat));}
+ if(c){e.preventDefault();showList(true);setCat(c.dataset.cat);
+  history.replaceState({},'',f.cat?'/items?c='+encodeURIComponent(f.cat):'/items');}
 });
+/** Selects a category chip; '' is the "All" chip and clears the filter. */
+function setCat(cat){f.cat=cat;render();
+ document.querySelectorAll('[data-cat]').forEach(a=>a.classList.toggle('on',a.dataset.cat===cat));}
 window.addEventListener('popstate',()=>{route();window.scrollTo(0,0);});
-['q','tier','sort'].forEach(id=>$('#'+id).addEventListener('input',e=>{f[id]=e.target.value;render();}));
+['q','tier','sort'].forEach(id=>$('#'+id).addEventListener('input',e=>{f[id]=id==='q'?e.target.value.toLowerCase():e.target.value;render();}));
 (async()=>{
  try{
-  items=await (await fetch('/api/items')).json();
-  heroes=await (await fetch('/api/heroes')).json();
+  [items,heroes]=await Promise.all([call('/api/items'),call('/api/heroes')]);
+  if(items.error||heroes.error)throw new Error(items.error||heroes.error);
   heroes.forEach(h=>byHeroLower[h.name.toLowerCase()]=h);
   items.forEach(i=>byItem[i.slug.toLowerCase()]=i);
-  $('#cats').innerHTML=[...new Set(items.flatMap(i=>i.categories))].sort()
-   .map(c=>`<a href="/items?c=${encodeURIComponent(c)}" data-cat="${esc(c)}">${esc(c)}</a>`).join('');
+  $('#cats').innerHTML=['',...[...new Set(items.flatMap(i=>i.categories))].sort()]
+   .map(c=>`<a href="${c?'/items?c='+encodeURIComponent(c):'/items'}" data-cat="${esc(c)}">${c?esc(c):'All'}</a>`).join('');
   [...new Set(items.map(i=>i.tier))].sort((a,b)=>b-a).forEach(t=>$('#tier').add(new Option('Tier '+t,t)));
-  render();route();
-  const q=new URLSearchParams(location.search);
-  if(q.get('c')){f.cat=q.get('c');
-   document.querySelectorAll('[data-cat]').forEach(a=>a.classList.toggle('on',a.dataset.cat===f.cat));render();}
+  route();meta();
+  const c=new URLSearchParams(location.search).get('c');
+  setCat(c||'');
  }catch(e){$('#grid').innerHTML='<p class="l">Item catalog unavailable.</p>';}
 })();
 </script>
