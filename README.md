@@ -20,25 +20,27 @@ Data is from **patch 2.2.16**.
 
 Requires **Java 17 or newer**. Run everything from the project folder (the one that contains `src` and `data`).
 
-PowerShell:
-
-```powershell
-mkdir out
-javac -d out (Get-ChildItem src\jongrai\*.java).FullName
-java -cp out jongrai.WebServer
-```
-
 macOS / Linux:
 
 ```bash
-mkdir -p out
-javac -d out src/jongrai/*.java
+./build.sh
+java -cp out jongrai.WebServer
+```
+
+PowerShell:
+
+```powershell
+.\build.ps1
 java -cp out jongrai.WebServer
 ```
 
 Then open **http://localhost:8080**. Use `java -cp out jongrai.WebServer 9000` for another port.
 
-Re-run the `javac` line whenever you change the code. Editing only the CSV files in `data/` needs just a server restart.
+The build scripts compile `src/` into `out/` with `-Xlint:all -Werror`, so any compiler warning fails the build. Re-run one whenever you change the code. Editing only the CSV files in `data/` needs just a server restart.
+
+To start the server from another folder, point it at the project: `java -Djongrai.home=/path/to/jongrai -cp /path/to/jongrai/out jongrai.WebServer`.
+
+Check that the data and the core rules still hold with `java -cp out jongrai.SelfCheck`. CI runs the build and this check on every push.
 
 For OBS, add the page as a **Browser Source**.
 
@@ -55,9 +57,10 @@ The coach only speaks once both sides have all 5 picks. Without a key, the panel
 2. Open `ai-config.txt` and fill in your key:
 
 ```
-   JONGRAI_AI_KEY=sk-your-key
-   JONGRAI_AI_MODEL=gpt-4o-mini
-   JONGRAI_AI_BASE_URL=https://api.openai.com/v1
+   JONGRAI_AI_KEY=your-key
+   JONGRAI_AI_MODEL=deepseek-v4-flash
+   JONGRAI_AI_BASE_URL=https://api.deepseek.com/v1
+   JONGRAI_AI_TIMEOUT=90
 ```
 
 3. Start the server. The banner should say `AI coach ON`.
@@ -84,25 +87,26 @@ Results are cached per draft, so reloading the page does not call the API again.
 | `/heroes` | `web/hero-statistics.html` | All heroes, or one hero at `/heroes/<slug>` |
 | `/items` | `web/items.html` | All items, or one item at `/items/<slug>` |
 | `/draft` | `web/draft.html` | The draft board |
-| `/league` | `web/pro-league.html` | Pro draft data (not built yet) |
+| `/league` | `web/pro-league.html` | Pro league standings, matches and drafts (sample data) |
 | `/about` | `web/about.html` | Data sources and credits |
 
-Shared styling lives in `web/style.css`. Hero and item icons go in `web/icons/`.
+Shared styling lives in `web/style.css` and shared script helpers in `web/app.js`. Hero and item icons go in `web/icons/`.
 
 ## Data files
 
 All plain CSV, so you can edit them freely.
 
-- `data/heroes.csv`: `name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike`
+- `data/heroes.csv`: `name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip`
   - Dual roles and lanes use `/` (first one is the main). Lists use `;`.
   - `counters` means the heroes this hero is good against.
   - A blank `banrate` means under 15% or unknown.
+  - `spike` is `EARLY`, `MID`, `LATE` or `ALL`. `tip` is an optional hand-written hero tip; quote it if it contains a comma.
 - `data/items.csv`: `name,slug,tier,cost,stats,passives,availability,categories,icon`
-- `data/hero-builds.csv`: `hero,order,build,lane,items,emblem,battleSpell,blessing,flex,totalCost`
-  - Fields containing a comma, semicolon or quote are wrapped in double quotes.
+- `data/hero-builds.csv`: `hero,order,build,lane,items,emblem,battleSpell,blessing,flex`
+  - Fields containing a comma or a quote are wrapped in double quotes. A build's total cost is the sum of its item prices, worked out at startup.
 - `data/hero-icons.csv` maps each hero to its icon file.
 
-On startup the server checks the item and build files and prints a warning for each problem, such as a build naming an item that doesn't exist. A clean start prints nothing.
+Every data file is required, and a malformed row stops the server with `file:line: reason`. On startup the server also validates all of the data and prints a warning for each problem, such as a build naming an item that doesn't exist or an icon file that is missing. The pro-league sample data currently prints a few warnings because its standings do not match its match list; that is expected.
 
 ## Console commands
 
@@ -123,9 +127,9 @@ help, quit
 ## Project layout
 
 ```
-src/jongrai/   Java source (engine, analyzer, web server, AI coach)
-web/           HTML pages, style.css, icons/
-data/          heroes.csv, items.csv, hero-builds.csv, hero-icons.csv
+src/jongrai/   Java source (engine, analyzer, web server, AI coach, SelfCheck)
+web/           HTML pages, style.css, app.js, icons/
+data/          heroes.csv, items.csv, hero-builds.csv, hero-icons.csv, pro-*.csv
 docs/          readable overview of every hero's counters and synergies
 ```
 
@@ -140,6 +144,7 @@ The bonus and penalty numbers for suggestions are at the top of `src/jongrai/Sug
 - Tiers and win rates: tier-list screenshots, patch 2.2.16.
 - Item data and hero builds: [mlbbhub.com](https://mlbbhub.com), reviewed against patch 2.2.16 on 2026-10-01.
 - Hero and item artwork belongs to Moonton.
+- Full third-party license notices are in [NOTICE](NOTICE).
 
 ## Roadmap
 
