@@ -162,7 +162,7 @@ async function loadData(){
  try{
   const ls='league='+encodeURIComponent(currentLeague), season=ls+'&season='+encodeURIComponent(currentSeason);
   const [standings,matches,teams,drafts]=await Promise.all([
-   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+ls),call('/api/drafts?'+season)]);
+   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+season),call('/api/drafts?'+season)]);
   const failed=[standings,matches,teams,drafts].find(r=>r.error);
   if(failed)throw new Error(failed.error);
 
@@ -188,7 +188,7 @@ function renderStandings(data){
   const t=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
   return `<tr>
    <td class="pos">${s.position}</td>
-   <td class="team-cell"><img class="team-logo" src="/icons/${esc(t.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(t.name||s.teamId)}</div><div class="team-short">${esc(t.shortName||'')}</div></div></td>
+   <td class="team-cell"><img class="team-logo" src="/teams/${esc(t.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(t.name||s.teamId)}</div><div class="team-short">${esc(t.shortName||'')}</div></div></td>
    <td>${s.played}</td>
    <td class="win">${s.won}</td>
    <td class="loss">${s.lost}</td>
@@ -213,9 +213,9 @@ function renderMatches(data){
   return `<div class="match-card">
    <div class="match-header"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><div class="match-meta">Week ${m.week} · Day ${m.day} · ${esc(m.matchType)}</div></div>
    <div class="match-teams">
-    <div class="match-team"><img class="match-team-logo" src="/icons/${esc(t1.logo||'')}" alt="" onerror="this.remove()"><span class="match-team-name">${esc(t1.name||m.team1Id)}</span></div>
+    <div class="match-team"><img class="match-team-logo" src="/teams/${esc(t1.logo||'')}" alt="" onerror="this.remove()"><span class="match-team-name">${esc(t1.name||m.team1Id)}</span></div>
     <div class="match-score">${score}</div>
-    <div class="match-team right"><span class="match-team-name">${esc(t2.name||m.team2Id)}</span><img class="match-team-logo" src="/icons/${esc(t2.logo||'')}" alt="" onerror="this.remove()"></div>
+    <div class="match-team right"><span class="match-team-name">${esc(t2.name||m.team2Id)}</span><img class="match-team-logo" src="/teams/${esc(t2.logo||'')}" alt="" onerror="this.remove()"></div>
    </div>
    <div class="match-meta">${esc(m.scheduledTime)}${m.completedTime?' · '+esc(m.completedTime):''}</div>
   </div>`;
@@ -226,7 +226,7 @@ function renderTeams(data){
  if(!data.length){grid.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
  grid.innerHTML=data.map(t=>`<div class="card" style="text-align:center">
-  <img src="/icons/${esc(t.logo||'')}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
+  <img src="/teams/${esc(t.logo||'')}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
   <div style="font-weight:600">${esc(t.name)}</div>
   <div style="color:var(--mut);font-size:12px">${esc(t.shortName)} · ${esc(t.city)}</div>
   <div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${esc(t.coach||'Unknown')}</div>
