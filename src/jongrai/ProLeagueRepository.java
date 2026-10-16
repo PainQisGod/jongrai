@@ -1,9 +1,11 @@
 package jongrai;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,10 +54,13 @@ public final class ProLeagueRepository {
 
     private static Map<String, ProTeam> loadTeams(Path file) throws IOException {
         Map<String, ProTeam> teams = new LinkedHashMap<>();
-        for (Csv.Row r : Csv.read(file, 9)) {
+        for (Csv.Row r : Csv.read(file, 10)) {
             ProTeam t = new ProTeam(r.text(0), r.text(1), r.text(2), r.text(3),
-                    r.text(4), r.integer(5, 0), r.text(6), r.text(7), r.text(8));
-            if (teams.putIfAbsent(t.id(), t) != null) throw r.fail("duplicate team '" + t.id() + "'");
+                    r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9));
+            String key = t.leagueId() + "|" + t.season() + "|" + t.id();
+            if (teams.putIfAbsent(key, t) != null) {
+                throw r.fail("duplicate team '" + t.id() + "' in " + t.leagueId() + " " + t.season());
+            }
         }
         return teams;
     }
@@ -75,10 +80,12 @@ public final class ProLeagueRepository {
 
     private static Map<String, List<ProMatch>> loadMatches(Path file) throws IOException {
         Map<String, List<ProMatch>> matches = new LinkedHashMap<>();
+        Set<String> seen = new HashSet<>();
         for (Csv.Row r : Csv.read(file, 13)) {
             ProMatch m = new ProMatch(r.text(0), r.text(1), r.text(2), r.integer(3, 0), r.integer(4, 0),
                     r.text(5), r.text(6), r.integer(7, -1), r.integer(8, -1),
                     r.text(9), r.text(10), r.text(11), r.text(12));
+            if (!seen.add(m.id())) throw r.fail("duplicate match '" + m.id() + "'");
             matches.computeIfAbsent(m.leagueId(), k -> new ArrayList<>()).add(m);
         }
         matches.values().forEach(list -> list.sort(Comparator.comparing(ProMatch::scheduledTime)));
@@ -87,10 +94,10 @@ public final class ProLeagueRepository {
 
     private static Map<String, List<ProDraft>> loadDrafts(Path file) throws IOException {
         Map<String, List<ProDraft>> drafts = new LinkedHashMap<>();
-        for (Csv.Row r : Csv.read(file, 14)) {
+        for (Csv.Row r : Csv.read(file, 16)) {
             ProDraft d = new ProDraft(r.text(0), r.text(1), r.text(2), r.text(3), r.integer(4, 0),
                     r.text(5), r.text(6), r.list(7), r.list(8), r.list(9), r.list(10),
-                    r.text(11).equals("1"), r.text(12), r.text(13));
+                    r.text(11).equals("1"), r.text(12), r.text(13), r.text(14), r.integer(15, -1));
             drafts.computeIfAbsent(d.leagueId(), k -> new ArrayList<>()).add(d);
         }
         return drafts;
@@ -98,9 +105,10 @@ public final class ProLeagueRepository {
 
     /**
      * Warnings for data that does not add up: pro drafts naming a hero outside the roster, standings
-     * for a team that is not listed, and standings whose "played" disagrees with the match list.
+     * for a team that is not listed, standings whose "played" disagrees with the match list, and
+     * team logo files that are missing from the given folder.
      */
-    public List<String> validate(Set<String> heroKeys) {
+    public List<String> validate(Set<String> heroKeys, Path logoDir) throws IOException {
         List<String> warnings = new ArrayList<>();
         for (List<ProDraft> list : drafts.values()) {
             for (ProDraft d : list) {
@@ -111,14 +119,19 @@ public final class ProLeagueRepository {
                 }
             }
         }
+        for (ProTeam t : teams.values()) {
+            if (!t.logo().isBlank() && !Files.isRegularFile(logoDir.resolve(t.logo()))) {
+                warnings.add("team logo '" + t.logo() + "' for " + t.id() + " is missing");
+            }
+        }
         for (List<ProStanding> list : standings.values()) {
             for (ProStanding s : list) {
-                if (!teams.containsKey(s.teamId())) {
-                    warnings.add("standings for " + s.leagueId() + " list unknown team '" + s.teamId() + "'");
+                if (teams.get(s.leagueId() + "|" + s.season() + "|" + s.teamId()) == null) {
+                    warnings.add("standings for " + s.leagueId() + " " + s.season() + " list unknown team '" + s.teamId() + "'");
                     continue;
                 }
                 long played = matches(s.leagueId(), s.season()).stream()
-                        .filter(m -> m.status().equals("completed"))
+                        .filter(m -> m.status().equals("completed") || m.status().equals("finished"))
                         .filter(m -> m.team1Id().equals(s.teamId()) || m.team2Id().equals(s.teamId())).count();
                 if (played != s.played()) {
                     warnings.add("standings say " + s.teamId() + " played " + s.played() + " in " + s.leagueId()
@@ -133,12 +146,9 @@ public final class ProLeagueRepository {
         return List.copyOf(leagues.values());
     }
 
-    public List<ProTeam> teamsInLeague(String leagueId) {
-        return teams.values().stream().filter(t -> t.leagueId().equals(leagueId)).toList();
-    }
-
-    public List<ProTeam> teams() {
-        return List.copyOf(teams.values());
+    public List<ProTeam> teamsInLeague(String leagueId, String season) {
+        return teams.values().stream()
+                .filter(t -> t.leagueId().equals(leagueId) && t.season().equals(season)).toList();
     }
 
     public List<ProStanding> standings(String leagueId, String season) {
@@ -159,7 +169,7 @@ public final class ProLeagueRepository {
     public record ProLeague(String id, String name, String region, String country,
                             String season, int year, String status, String logo) {}
 
-    public record ProTeam(String id, String leagueId, String name, String shortName,
+    public record ProTeam(String id, String leagueId, String season, String name, String shortName,
                           String logo, int founded, String city, String coach, String status) {}
 
     public record ProStanding(String leagueId, String teamId, String season, int position,
@@ -174,5 +184,6 @@ public final class ProLeagueRepository {
                            String blueTeamId, String redTeamId,
                            List<String> blueBans, List<String> redBans,
                            List<String> bluePicks, List<String> redPicks,
-                           boolean blueSide, String winnerTeamId, String patch) {}
+                           boolean blueSide, String winnerTeamId, String patch,
+                           String map, int duration) {}
 }
