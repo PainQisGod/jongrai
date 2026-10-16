@@ -84,7 +84,7 @@ public class WebServer {
 
         List<String> warnings = new ArrayList<>(HeroRepository.validate(pool));
         warnings.addAll(gear.validate(pool.keySet(), home.resolve("web/icons")));
-        warnings.addAll(pro.validate(pool.keySet()));
+        warnings.addAll(pro.validate(pool.keySet(), home.resolve("web/teams")));
         icons.forEach((hero, file) -> {
             if (!Files.isRegularFile(home.resolve("web/icons").resolve(file))) warnings.add("hero icon '" + file + "' for " + hero + " is missing");
         });
@@ -168,6 +168,7 @@ public class WebServer {
         if (mutating) q.putAll(query(new String(ex.getRequestBody().readNBytes(65536), StandardCharsets.UTF_8)));
 
         if (path.startsWith("/icons/")) { serveFile(ex, "icons", path.substring(7), true); return; }
+        if (path.startsWith("/teams/")) { serveFile(ex, "teams", path.substring(7), true); return; }
         if (path.startsWith("/video/")) { serveFile(ex, "video", path.substring(7), true); return; }
         switch (path) {
             case "/" -> servePage(ex, "home.html");
@@ -179,7 +180,7 @@ public class WebServer {
             case "/api/items" -> sendJson(ex, 200, itemsJson());
             case "/api/builds" -> sendJson(ex, 200, buildsJson(q.getOrDefault("hero", "")));
             case "/api/leagues" -> sendJson(ex, 200, leaguesJson());
-            case "/api/teams" -> sendJson(ex, 200, teamsJson(q.getOrDefault("league", "")));
+            case "/api/teams" -> sendJson(ex, 200, teamsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
             case "/api/standings" -> sendJson(ex, 200, standingsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
             case "/api/matches" -> sendJson(ex, 200, matchesJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("status", "")));
             case "/api/drafts" -> sendJson(ex, 200, draftsJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("match", "")));
@@ -297,15 +298,15 @@ public class WebServer {
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    private static String teamsJson(String leagueId) {
-        List<ProLeagueRepository.ProTeam> list = leagueId == null || leagueId.isBlank() ? pro.teams() : pro.teamsInLeague(leagueId);
-        return list.stream().map(WebServer::teamJson).collect(Collectors.joining(",", "[", "]"));
+    private static String teamsJson(String leagueId, String season) {
+        if (leagueId == null || leagueId.isBlank() || season == null || season.isBlank()) return "[]";
+        return pro.teamsInLeague(leagueId, season).stream().map(WebServer::teamJson).collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String teamJson(ProLeagueRepository.ProTeam t) {
         return String.format(Locale.ROOT,
-                "{\"id\":%s,\"leagueId\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s}",
-                Json.str(t.id()), Json.str(t.leagueId()), Json.str(t.name()), Json.str(t.shortName()), Json.str(t.logo()),
+                "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s}",
+                Json.str(t.id()), Json.str(t.leagueId()), Json.str(t.season()), Json.str(t.name()), Json.str(t.shortName()), Json.str(t.logo()),
                 t.founded(), Json.str(t.city()), Json.str(t.coach()), Json.str(t.status()));
     }
 
@@ -335,10 +336,11 @@ public class WebServer {
         return pro.drafts(leagueId, season).stream()
                 .filter(d -> matchId == null || matchId.isBlank() || d.matchId().equals(matchId))
                 .map(d -> String.format(Locale.ROOT,
-                        "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s}",
+                        "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s,\"map\":%s,\"duration\":%d}",
                         Json.str(d.id()), Json.str(d.matchId()), Json.str(d.leagueId()), Json.str(d.season()), d.gameNumber(),
                         Json.str(d.blueTeamId()), Json.str(d.redTeamId()), Json.list(d.blueBans()), Json.list(d.redBans()),
-                        Json.list(d.bluePicks()), Json.list(d.redPicks()), d.blueSide(), Json.str(d.winnerTeamId()), Json.str(d.patch())))
+                        Json.list(d.bluePicks()), Json.list(d.redPicks()), d.blueSide(), Json.str(d.winnerTeamId()), Json.str(d.patch()),
+                        Json.str(d.map()), d.duration()))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
