@@ -1,8 +1,11 @@
-# Pro Drafts: draft_id, match_id, league_id, season, game_number, blue_team_id, red_team_id, blue_bans, red_bans, blue_picks, red_picks, blue_side, winner_team_id, patch
+# Pro Drafts: draft_id, match_id, league_id, season, game_number, blue_team_id, red_team_id, blue_bans, red_bans, blue_picks, red_picks, blue_side, winner_team_id, patch, map, duration
 # bans/picks are semicolon-separated hero names in order
-# blue_side: 1=blue, 0=red
-draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch
-mpl_kh_1_g1,mpl_kh_1,mpl_kh,Season 4,1,cfb,lgl,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,cfb,2.2.16
-mpl_kh_1_g2,mpl_kh_1,mpl_kh,Season 4,2,cfb,lgl,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,cfb,2.2.16
-mpl_kh_2_g1,mpl_kh_2,mpl_kh,Season 4,1,bnc,see,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,see,2.2.16
-mpl_kh_2_g2,mpl_kh_2,mpl_kh,Season 4,2,bnc,see,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,see,2.2.16
+# blue_side: 1=blue, 0=red (which team was on blue side)
+# map: the arena version in play. Moonton revamps the map annually and it shifts
+# the draft, so record it for every draft (e.g. "2026"). Leave blank when unknown.
+# duration: game duration in seconds (e.g. "1423" for 23m43s). Leave blank when unknown.
+# Empty for now: per-game bans/picks for MPL KH are not published in a scrapeable
+# source (they need match VODs or Liquipedia match pages). Append verified drafts
+# here - never invent them.
+draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch,map,duration
+mpl_kh_w1_d1_m1_g1,mpl_kh_w1_d1_m1,mpl_kh,Season 11,1,gxl,pro,"Uranus;Atlas;Barats;Miya;Minotaur","Freya;Carmilla;Paquito;Chou;Kalea","Ruby;Hirara;Selena;Belerick;Melissa","Lukas;Nolan;Eudora;Gloo;Clint",0,pro,2.2.16,Default Map,2121
