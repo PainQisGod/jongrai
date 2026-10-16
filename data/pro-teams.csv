@@ -1,7 +1,16 @@
-# Professional League teams: team_id, league_id, name, short_name, logo, founded, city, coach, status
-# status: active, inactive, disbanded
-team_id,league_id,name,short_name,logo,founded,city,coach,status
-cfb,mpl_kh,CFB Esports,CFB,cfb_esports.png,2021,Phnom Penh,Coach Kim,active
-bnc,mpl_kh,Burn x Flash,BNC,burn_x_flash.png,2022,Phnom Penh,Coach Lee,active
-lgl,mpl_kh,Legends Gaming,LGL,legends_gaming.png,2020,Phnom Penh,Coach Park,active
-see,mpl_kh,SeeYou Soon,SYS,see_you_soon.png,2021,Siem Reap,Coach Chen,active
+# Professional League teams: team_id, league_id, season, name, short_name, logo, founded, city, coach, status
+# One row per team per league per season. founded/city/coach are blank where no reliable
+# source was found (the official site and Liquipedia do not list them) - do not invent them.
+# Logos: web/teams/ (from the official MPL KH site).
+team_id,league_id,season,name,short_name,logo,founded,city,coach,status
+flkh,mpl_kh,Season 11,Team Flash KH,FLKH,Team_Flash_KH.png,2019,Phnom Penh,SeoBaby,active
+rvz,mpl_kh,Season 11,Team Rvz,RVZ,Team_RVZ.png,2026,Phnom Penh,K S,active
+vgr,mpl_kh,Season 11,Vigor Apex,VGR,Vigor_Apex.png,2025,Phnom Penh,Naga,active
+pro,mpl_kh,Season 11,PRO Esports,PRO,PRO_Esports.png,2022,Phnom Penh,CatGod,active
+gxl,mpl_kh,Season 11,Galaxy Legends,GXL,Galaxy_Legends.png,2024,Phnom Penh,Chhay,active
+tnr,mpl_kh,Season 11,TNR Esports,TNR,TNR_Esports.png,2026,Phnom Penh,LuTu,active
+eye,mpl_kh,Season 11,Evil Eye Esports,EYE,Evil_Eye_Esports.png,2024,Phnom Penh,Aykii,active
+val,mpl_kh,Season 11,Valhalla,VAL,Valhalla.png,2024,Phnom Penh,XE ON,active
+sys,mpl_kh,Season 11,See You Soon,SYS,See_You_Soon.png,2020,Phnom Penh,ATEV,active
+gxp,mpl_kh,Season 11,Galaxy Phoenix,GXP,Galaxy_Phoenix.png,2025,Phnom Penh,RiRith,active
+
