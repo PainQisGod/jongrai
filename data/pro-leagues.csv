@@ -1,4 +1,7 @@
 # Professional League data: league_id, name, region, country, season, year, status, logo
+# One row per season of a league; league_id groups the seasons. The league bar shows one
+# entry per league_id, the season bar shows its rows in file order (newest first).
 # status: active, completed, upcoming
+# Sources: mplcambodia.com (official MPL KH site) and Liquipedia, verified 2026-10-11.
 league_id,name,region,country,season,year,status,logo
-mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 4,2025,active,mpl_cambodia.png
+mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 11,2026,active,MPL_Cambodia.png
