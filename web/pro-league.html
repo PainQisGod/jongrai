@@ -56,19 +56,41 @@ table.stand tr:last-child td{border-bottom:0}
 .match-status.live{background:#2e1a1a;color:#ef4444;animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
 
-/* drafts */
-.draft-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:8px}
-.draft-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.draft-bans-picks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.draft-side{border-radius:6px;padding:8px}
-.draft-side.blue{background:#0d1b2e;border:1px solid #1a3a5c}
-.draft-side.red{background:#2e0d0d;border:1px solid #5c1a1a}
-.draft-side h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
-.draft-side.bans h4{color:var(--mut)}
-.draft-side.picks h4{color:var(--gold2)}
-.draft-list{display:flex;flex-wrap:wrap;gap:4px}
-.draft-hero{background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:11px}
-.draft-hero.ban{opacity:0.6;text-decoration:line-through}
+/* drafts: one card per match, one block per game */
+.mc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 6px;margin:0 auto 14px;max-width:760px}
+.mc-when{text-align:center;margin-bottom:10px}
+.mc-when span{display:inline-block;background:#12151c;border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
+.mc-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:12px}
+.mc-team{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;min-width:0}
+.mc-team.right{justify-content:flex-end}
+.mc-team img{width:44px;height:44px;border-radius:6px;object-fit:cover;flex:none}
+.mc-team .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-score{text-align:center;font-weight:700;font-size:24px;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.mc-score small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--mut)}
+.mc-score .w{color:var(--gold2)}
+.mc-game{border-top:1px solid var(--line);padding:10px 0 12px}
+.mc-row{display:grid;grid-template-columns:26px 1fr 78px 1fr 26px;align-items:center;gap:8px}
+.mc-picks{display:flex;gap:4px;min-width:0}
+.mc-picks.right{justify-content:flex-end}
+.mc-center{text-align:center;line-height:1.25}
+.mc-center b{display:block;font-size:14px;font-variant-numeric:tabular-nums}
+.mc-center small{color:var(--mut);font-size:11px}
+.mc-res{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.mc-res.W{background:#16a34a}.mc-res.L{background:#dc2626}
+.mc-bans{margin-top:8px}
+.mc-bans .mc-picks{opacity:.9}
+.mc-bans .mc-center{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.mc-mvp{margin-top:10px;text-align:center;background:#2b2413;border:1px solid #7a6224;border-radius:6px;padding:5px 10px;font-size:12px;color:var(--gold2)}
+.mc-mvp b{color:var(--tx)}
+.mc-mvp.none{background:#12151c;border-color:var(--line);color:var(--mut)}
+.hero-ic{width:42px;height:42px;border-radius:6px;object-fit:cover;background:#12151c;border:2px solid var(--line);flex:none}
+.hero-ic.blue{border-color:#3b82f6}.hero-ic.red{border-color:#ef4444}
+.hero-link{display:inline-flex;flex:none;border-radius:6px;text-decoration:none;color:inherit}
+a.hero-link:hover .hero-ic,a.hero-link:focus-visible .hero-ic{border-color:var(--gold);transform:translateY(-2px)}
+.hero-ic{transition:transform .12s,border-color .12s}
+.hero-ic-miss{display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--mut)}
+.mc-bans .hero-ic{width:28px;height:28px;border-width:1px;filter:grayscale(.65)}
+@media(max-width:640px){.hero-ic{width:30px;height:30px}.mc-bans .hero-ic{width:22px;height:22px}.mc-row{grid-template-columns:22px 1fr 56px 1fr 22px;gap:4px}.mc-team img{width:30px;height:30px}.mc-team{font-size:13px}}
 
 /* empty state */
 .empty{color:var(--mut);font-size:13px;padding:40px;text-align:center}
@@ -124,8 +146,8 @@ table.stand tr:last-child td{border-bottom:0}
 <script src="/app.js"></script>
 <script>
 const $$=s=>document.querySelectorAll(s);
-const STATUS_CLS={completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
-let leagues=[], currentLeague=null, currentSeason=null, teamsById={};
+const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
+let leagues=[], currentLeague=null, currentSeason=null, teamsById={}, heroIcons={};
 const keyOf=l=>l.id+'|'+l.season;   // one league can run several seasons
 
 async function loadLeagues(){
@@ -161,17 +183,19 @@ async function loadData(){
  if(!currentLeague) return;
  try{
   const ls='league='+encodeURIComponent(currentLeague), season=ls+'&season='+encodeURIComponent(currentSeason);
-  const [standings,matches,teams,drafts]=await Promise.all([
-   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+season),call('/api/drafts?'+season)]);
+  const [standings,matches,teams,drafts,heroes]=await Promise.all([
+   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+season),call('/api/drafts?'+season),call('/api/heroes').catch(()=>[])]);
   const failed=[standings,matches,teams,drafts].find(r=>r.error);
   if(failed)throw new Error(failed.error);
 
   teamsById={};
   teams.forEach(t=>teamsById[t.id]=t);
+  heroIcons={};
+  if(Array.isArray(heroes))heroes.forEach(h=>{heroIcons[String(h.name).toLowerCase()]={icon:h.icon||'',slug:h.slug||''}});
   renderStandings(standings);
   renderMatches(matches);
   renderTeams(teams);
-  renderDrafts(drafts);
+  renderDrafts(drafts,matches);
  }catch(e){
   console.error(e);
   $('#standingsEmpty').hidden=false;
@@ -209,7 +233,7 @@ function renderMatches(data){
  list.innerHTML=data.map(m=>{
   const t1=teamsById[m.team1Id]||{name:m.team1Id,logo:''};
   const t2=teamsById[m.team2Id]||{name:m.team2Id,logo:''};
-  const score=m.status==='completed'?`${m.team1Score} - ${m.team2Score}`:'vs';
+  const score=(m.status==='completed'||m.status==='finished')?`${m.team1Score} - ${m.team2Score}`:'vs';
   return `<div class="match-card">
    <div class="match-header"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><div class="match-meta">Week ${m.week} · Day ${m.day} · ${esc(m.matchType)}</div></div>
    <div class="match-teams">
@@ -233,23 +257,71 @@ function renderTeams(data){
   <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${esc(t.status)}</span></div>
  </div>`).join('');
 }
-function renderDrafts(data){
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmtWhen(t){const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(t||'');
+ return m?`${MONTHS[+m[2]-1]} ${+m[3]}, ${m[1]} - ${m[4]}${m[5]?' '+m[5]:''}`:(t||'')}
+const fmtDur=s=>s>0?`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`:'';
+function heroFallback(img){const s=document.createElement('span');s.className=img.className+' hero-ic-miss';s.textContent=img.alt.slice(0,2);img.replaceWith(s)}
+function heroHtml(name,side){
+ const h=heroIcons[String(name).toLowerCase()]||{icon:'',slug:''};
+ const pic=h.icon
+  ?`<img class="hero-ic ${side}" src="/icons/${esc(h.icon)}" alt="${esc(name)}" loading="lazy" onerror="heroFallback(this)">`
+  :`<span class="hero-ic hero-ic-miss ${side}">${esc(String(name).slice(0,2))}</span>`;
+ // a hero that is in the roster links to its page: /heroes/<slug>
+ return h.slug?`<a class="hero-link" href="/heroes/${esc(h.slug)}" title="${esc(name)}">${pic}</a>`
+              :`<span class="hero-link" title="${esc(name)}">${pic}</span>`;
+}
+function teamBox(id,right){
+ const t=teamsById[id]||{name:id,logo:''};
+ const logo=t.logo?`<img src="/teams/${esc(t.logo)}" alt="" onerror="this.remove()">`:'';
+ const name=`<span class="nm">${esc(t.name||id)}</span>`;
+ return `<div class="mc-team${right?' right':''}">${right?name+logo:logo+name}</div>`;
+}
+function gameBlock(d,leftId){
+ const leftBlue=d.blueTeamId===leftId;
+ const lSide=leftBlue?'blue':'red', rSide=leftBlue?'red':'blue';
+ const lPicks=leftBlue?d.bluePicks:d.redPicks, rPicks=leftBlue?d.redPicks:d.bluePicks;
+ const lBans=leftBlue?d.blueBans:d.redBans, rBans=leftBlue?d.redBans:d.blueBans;
+ const res=(won)=>d.winnerTeamId?`<span class="mc-res ${won?'W':'L'}">${won?'W':'L'}</span>`:'<span></span>';
+ const lWon=d.winnerTeamId===leftId;
+ const dur=fmtDur(d.duration);
+ return `<div class="mc-game">
+  <div class="mc-row">${res(lWon)}
+   <div class="mc-picks">${lPicks.map(h=>heroHtml(h,lSide)).join('')}</div>
+   <div class="mc-center"><b>${dur||'-'}</b><small>Game ${d.gameNumber}</small></div>
+   <div class="mc-picks right">${rPicks.map(h=>heroHtml(h,rSide)).join('')}</div>
+   ${res(!lWon)}</div>
+  <div class="mc-row mc-bans"><span></span>
+   <div class="mc-picks">${lBans.map(h=>heroHtml(h,lSide)).join('')}</div>
+   <div class="mc-center">Bans</div>
+   <div class="mc-picks right">${rBans.map(h=>heroHtml(h,rSide)).join('')}</div><span></span></div>
+  ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:'<div class="mc-mvp none">MVP: not recorded</div>'}
+ </div>`;
+}
+function matchCard(m,games){
+ const leftId=m?m.team1Id:games[0].blueTeamId;
+ const rightId=m?m.team2Id:games[0].redTeamId;
+ const done=m&&(m.status==='completed'||m.status==='finished');
+ let ls,rs;
+ if(done){ls=m.team1Score;rs=m.team2Score}
+ else{ls=games.filter(g=>g.winnerTeamId===leftId).length;rs=games.filter(g=>g.winnerTeamId===rightId).length}
+ const top=Math.max(ls,rs), bo=done&&top>0?`Bo${2*top-1}`:'';
+ return `<div class="mc">
+  ${m&&m.scheduledTime?`<div class="mc-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
+  <div class="mc-head">${teamBox(leftId,false)}
+   <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>
+   ${teamBox(rightId,true)}</div>
+  ${games.map(g=>gameBlock(g,leftId)).join('')}
+ </div>`;
+}
+function renderDrafts(data,matches){
  const list=$('#draftsList'), empty=$('#draftsEmpty');
  if(!data.length){list.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
- list.innerHTML=data.map(d=>{
-  const bt=teamsById[d.blueTeamId]||{name:d.blueTeamId,logo:''};
-  const rt=teamsById[d.redTeamId]||{name:d.redTeamId,logo:''};
-  return `<div class="draft-card">
-   <div class="draft-header"><div><strong>Game ${d.gameNumber}</strong> · ${esc(d.matchId)} · Patch ${esc(d.patch)}</div><div class="match-status ${d.winnerTeamId===d.blueTeamId?'completed':''}">${esc(bt.name)} ${d.winnerTeamId===d.blueTeamId?'won':'lost'}</div></div>
-   <div class="draft-bans-picks">
-    <div class="draft-side bans blue"><h4>Blue Bans</h4><div class="draft-list">${d.blueBans.map(h=>`<span class="draft-hero ban">${esc(h)}</span>`).join('')}</div></div>
-    <div class="draft-side bans red"><h4>Red Bans</h4><div class="draft-list">${d.redBans.map(h=>`<span class="draft-hero ban">${esc(h)}</span>`).join('')}</div></div>
-    <div class="draft-side picks blue"><h4>Blue Picks</h4><div class="draft-list">${d.bluePicks.map(h=>`<span class="draft-hero">${esc(h)}</span>`).join('')}</div></div>
-    <div class="draft-side picks red"><h4>Red Picks</h4><div class="draft-list">${d.redPicks.map(h=>`<span class="draft-hero">${esc(h)}</span>`).join('')}</div></div>
-   </div>
-  </div>`;
- }).join('');
+ const byId={}; (matches||[]).forEach(m=>byId[m.id]=m);
+ const groups=new Map();
+ data.forEach(d=>{if(!groups.has(d.matchId))groups.set(d.matchId,[]);groups.get(d.matchId).push(d)});
+ list.innerHTML=[...groups].map(([id,g])=>matchCard(byId[id],g.sort((a,b)=>a.gameNumber-b.gameNumber))).join('');
 }
 loadLeagues();meta();
 </script>
