@@ -336,11 +336,11 @@ public class WebServer {
         return pro.drafts(leagueId, season).stream()
                 .filter(d -> matchId == null || matchId.isBlank() || d.matchId().equals(matchId))
                 .map(d -> String.format(Locale.ROOT,
-                        "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s,\"map\":%s,\"duration\":%d}",
+                        "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s,\"map\":%s,\"duration\":%d,\"mvp\":%s}",
                         Json.str(d.id()), Json.str(d.matchId()), Json.str(d.leagueId()), Json.str(d.season()), d.gameNumber(),
                         Json.str(d.blueTeamId()), Json.str(d.redTeamId()), Json.list(d.blueBans()), Json.list(d.redBans()),
                         Json.list(d.bluePicks()), Json.list(d.redPicks()), d.blueSide(), Json.str(d.winnerTeamId()), Json.str(d.patch()),
-                        Json.str(d.map()), d.duration()))
+                        Json.str(d.map()), d.duration(), Json.str(d.mvp())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
