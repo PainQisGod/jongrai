@@ -324,10 +324,10 @@ public class WebServer {
         return pro.matches(leagueId, season).stream()
                 .filter(m -> status == null || status.isBlank() || m.status().equals(status))
                 .map(m -> String.format(Locale.ROOT,
-                        "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"week\":%d,\"day\":%d,\"team1Id\":%s,\"team2Id\":%s,\"team1Score\":%d,\"team2Score\":%d,\"status\":%s,\"scheduledTime\":%s,\"completedTime\":%s,\"matchType\":%s}",
+                        "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"week\":%d,\"day\":%d,\"team1Id\":%s,\"team2Id\":%s,\"team1Score\":%d,\"team2Score\":%d,\"status\":%s,\"scheduledTime\":%s,\"completedTime\":%s,\"matchType\":%s,\"bestOf\":%d}",
                         Json.str(m.id()), Json.str(m.leagueId()), Json.str(m.season()), m.week(), m.day(),
                         Json.str(m.team1Id()), Json.str(m.team2Id()), m.team1Score(), m.team2Score(),
-                        Json.str(m.status()), Json.str(m.scheduledTime()), Json.str(m.completedTime()), Json.str(m.matchType())))
+                        Json.str(m.status()), Json.str(m.scheduledTime()), Json.str(m.completedTime()), Json.str(m.matchType()), m.bestOf()))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
