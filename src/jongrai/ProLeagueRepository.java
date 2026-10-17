@@ -97,10 +97,28 @@ public final class ProLeagueRepository {
         for (Csv.Row r : Csv.read(file, 16)) {
             ProDraft d = new ProDraft(r.text(0), r.text(1), r.text(2), r.text(3), r.integer(4, 0),
                     r.text(5), r.text(6), r.list(7), r.list(8), r.list(9), r.list(10),
-                    r.text(11).equals("1"), r.text(12), r.text(13), r.text(14), r.integer(15, -1));
+                    r.text(11).equals("1"), r.text(12), r.text(13), r.text(14), duration(r, 15), r.text(16));
             drafts.computeIfAbsent(d.leagueId(), k -> new ArrayList<>()).add(d);
         }
         return drafts;
+    }
+
+    /** A game length as "MM:SS" ("35:21"), "H:MM:SS", or plain seconds ("2121"). Blank gives -1. */
+    private static int duration(Csv.Row r, int i) throws IOException {
+        String t = r.text(i);
+        if (t.isEmpty()) return -1;
+        if (!t.contains(":")) return r.integer(i, -1);
+        String[] p = t.split(":", -1);
+        try {
+            if (p.length < 2 || p.length > 3) throw new NumberFormatException();
+            int[] n = new int[p.length];
+            for (int k = 0; k < p.length; k++) n[k] = Integer.parseInt(p[k].trim());
+            int sec = n[n.length - 1], min = n[n.length - 2], hour = p.length == 3 ? n[0] : 0;
+            if (sec < 0 || sec > 59 || min < 0 || (p.length == 3 && min > 59) || hour < 0) throw new NumberFormatException();
+            return hour * 3600 + min * 60 + sec;
+        } catch (NumberFormatException e) {
+            throw r.fail("column " + (i + 1) + " is not a game length (use MM:SS, e.g. 35:21): '" + t + "'");
+        }
     }
 
     /**
@@ -185,5 +203,5 @@ public final class ProLeagueRepository {
                            List<String> blueBans, List<String> redBans,
                            List<String> bluePicks, List<String> redPicks,
                            boolean blueSide, String winnerTeamId, String patch,
-                           String map, int duration) {}
+                           String map, int duration, String mvp) {}
 }
