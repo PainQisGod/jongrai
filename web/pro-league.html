@@ -57,18 +57,29 @@ table.stand tr:last-child td{border-bottom:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
 
 /* drafts: one card per match, one block per game */
-.mc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 6px;margin:0 auto 14px;max-width:760px}
+#draftsList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:14px;align-items:start}
+.mc{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mc[open]{grid-column:1/-1}
+.mc>summary{list-style:none;cursor:pointer;padding:12px 14px 10px}
+.mc>summary::-webkit-details-marker{display:none}
+.mc>summary:hover{background:rgba(255,255,255,.03)}
+.mc>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.mc-body{padding:0 14px 8px;max-width:760px;margin:0 auto}
+.mc-more{text-align:center;font-size:11px;color:var(--mut);margin-top:8px}
+.mc-more::before{content:"Show draft \25BE"}
+.mc[open] .mc-more::before{content:"Hide draft \25B4"}
 .mc-when{text-align:center;margin-bottom:10px}
 .mc-when span{display:inline-block;background:#12151c;border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
-.mc-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:12px}
-.mc-team{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;min-width:0}
-.mc-team.right{justify-content:flex-end}
-.mc-team img{width:44px;height:44px;border-radius:6px;object-fit:cover;flex:none}
-.mc-team .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mc-score{text-align:center;font-weight:700;font-size:24px;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.mc-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.mc-team{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;min-width:0;justify-content:flex-end}
+.mc-team.right{justify-content:flex-start}
+.mc-team img{width:36px;height:36px;border-radius:6px;object-fit:cover;flex:none}
+.mc-team .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.mc-score{text-align:center;font-weight:700;font-size:22px;letter-spacing:2px;font-variant-numeric:tabular-nums}
 .mc-score small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--mut)}
 .mc-score .w{color:var(--gold2)}
-.mc-game{border-top:1px solid var(--line);padding:10px 0 12px}
+.mc-game{border-top:1px solid var(--line);padding:12px 0}
+.mc-game:first-child{border-top:0}
 .mc-row{display:grid;grid-template-columns:26px 1fr 78px 1fr 26px;align-items:center;gap:8px}
 .mc-picks{display:flex;gap:4px;min-width:0}
 .mc-picks.right{justify-content:flex-end}
@@ -275,7 +286,8 @@ function teamBox(id,right){
  const t=teamsById[id]||{name:id,logo:''};
  const logo=t.logo?`<img src="/teams/${esc(t.logo)}" alt="" onerror="this.remove()">`:'';
  const name=`<span class="nm">${esc(t.name||id)}</span>`;
- return `<div class="mc-team${right?' right':''}">${right?name+logo:logo+name}</div>`;
+ // name sits on the outside, logo next to the score
+ return `<div class="mc-team${right?' right':''}">${right?logo+name:name+logo}</div>`;
 }
 function gameBlock(d,leftId){
  const leftBlue=d.blueTeamId===leftId;
@@ -298,21 +310,31 @@ function gameBlock(d,leftId){
   ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:'<div class="mc-mvp none">MVP: not recorded</div>'}
  </div>`;
 }
+function boOf(m,ls,rs,done){
+ if(m&&m.bestOf>0)return 'Bo'+m.bestOf;                 // set best_of in pro-matches.csv
+ if(!done)return '';
+ const hi=Math.max(ls,rs), lo=Math.min(ls,rs);
+ if(hi===1&&lo===1)return 'Bo2';
+ return lo>0&&hi>lo?'Bo'+(2*hi-1):'';                   // a sweep is Bo2 or Bo3, so it needs best_of
+}
 function matchCard(m,games){
  const leftId=m?m.team1Id:games[0].blueTeamId;
  const rightId=m?m.team2Id:games[0].redTeamId;
- const done=m&&(m.status==='completed'||m.status==='finished');
+ const done=!!m&&(m.status==='completed'||m.status==='finished');
  let ls,rs;
  if(done){ls=m.team1Score;rs=m.team2Score}
  else{ls=games.filter(g=>g.winnerTeamId===leftId).length;rs=games.filter(g=>g.winnerTeamId===rightId).length}
- const top=Math.max(ls,rs), bo=done&&top>0?`Bo${2*top-1}`:'';
- return `<div class="mc">
-  ${m&&m.scheduledTime?`<div class="mc-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
-  <div class="mc-head">${teamBox(leftId,false)}
-   <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>
-   ${teamBox(rightId,true)}</div>
-  ${games.map(g=>gameBlock(g,leftId)).join('')}
- </div>`;
+ const bo=boOf(m,ls,rs,done);
+ return `<details class="mc">
+  <summary>
+   ${m&&m.scheduledTime?`<div class="mc-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
+   <div class="mc-head">${teamBox(leftId,false)}
+    <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>
+    ${teamBox(rightId,true)}</div>
+   <div class="mc-more"></div>
+  </summary>
+  <div class="mc-body">${games.map(g=>gameBlock(g,leftId)).join('')}</div>
+ </details>`;
 }
 function renderDrafts(data,matches){
  const list=$('#draftsList'), empty=$('#draftsEmpty');
