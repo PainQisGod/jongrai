@@ -84,7 +84,7 @@ public final class ProLeagueRepository {
         for (Csv.Row r : Csv.read(file, 13)) {
             ProMatch m = new ProMatch(r.text(0), r.text(1), r.text(2), r.integer(3, 0), r.integer(4, 0),
                     r.text(5), r.text(6), r.integer(7, -1), r.integer(8, -1),
-                    r.text(9), r.text(10), r.text(11), r.text(12));
+                    r.text(9), r.text(10), r.text(11), r.text(12), r.integer(13, 0));
             if (!seen.add(m.id())) throw r.fail("duplicate match '" + m.id() + "'");
             matches.computeIfAbsent(m.leagueId(), k -> new ArrayList<>()).add(m);
         }
@@ -196,7 +196,8 @@ public final class ProLeagueRepository {
 
     public record ProMatch(String id, String leagueId, String season, int week, int day,
                            String team1Id, String team2Id, int team1Score, int team2Score,
-                           String status, String scheduledTime, String completedTime, String matchType) {}
+                           String status, String scheduledTime, String completedTime, String matchType,
+                           int bestOf) {}
 
     public record ProDraft(String id, String matchId, String leagueId, String season, int gameNumber,
                            String blueTeamId, String redTeamId,
