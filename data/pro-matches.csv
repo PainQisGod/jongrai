@@ -34,17 +34,17 @@ mpl_kh_s11_w2_d3_m1,mpl_kh,Season 11,2,3,pro,val,2,1,finished,2026-09-27 - 13:00
 mpl_kh_s11_w2_d3_m2,mpl_kh,Season 11,2,3,sys,eye,0,2,finished,2026-09-27 - 15:30 ICT,,regular,3
 mpl_kh_s11_w2_d3_m3,mpl_kh,Season 11,2,3,gxp,gxl,0,2,finished,2026-09-27 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w3_d1_m1,mpl_kh,Season 11,3,1,tnr,rvz,,,scheduled,2026-10-16 - 13:00 ICT,,regular,3
-mpl_kh_s11_w3_d1_m2,mpl_kh,Season 11,3,1,flkh,val,,,scheduled,2026-10-16 - 15:30 ICT,,regular,3
-mpl_kh_s11_w3_d1_m3,mpl_kh,Season 11,3,1,sys,pro,,,scheduled,2026-10-16 - 18:00 ICT,,regular,3
+mpl_kh_s11_w3_d1_m1,mpl_kh,Season 11,3,1,tnr,rvz,1,2,finished,2026-10-16 - 13:00 ICT,,regular,3
+mpl_kh_s11_w3_d1_m2,mpl_kh,Season 11,3,1,flkh,val,1,2,finished,2026-10-16 - 15:30 ICT,,regular,3
+mpl_kh_s11_w3_d1_m3,mpl_kh,Season 11,3,1,sys,pro,0,2,finished,2026-10-16 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w3_d2_m1,mpl_kh,Season 11,3,2,vgr,gxl,,,scheduled,2026-10-17 - 13:00 ICT,,regular,3
-mpl_kh_s11_w3_d2_m2,mpl_kh,Season 11,3,2,pro,eye,,,scheduled,2026-10-17 - 15:30 ICT,,regular,3
-mpl_kh_s11_w3_d2_m3,mpl_kh,Season 11,3,2,gxp,val,,,scheduled,2026-10-17 - 18:00 ICT,,regular,3
+mpl_kh_s11_w3_d2_m1,mpl_kh,Season 11,3,2,vgr,gxl,2,0,finished,2026-10-17 - 13:00 ICT,,regular,3
+mpl_kh_s11_w3_d2_m2,mpl_kh,Season 11,3,2,pro,eye,2,0,finished,2026-10-17 - 15:30 ICT,,regular,3
+mpl_kh_s11_w3_d2_m3,mpl_kh,Season 11,3,2,gxp,val,0,2,finished,2026-10-17 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w3_d3_m1,mpl_kh,Season 11,3,3,flkh,gxl,,,scheduled,2026-10-18 - 13:00 ICT,,regular,3
-mpl_kh_s11_w3_d3_m2,mpl_kh,Season 11,3,3,vgr,tnr,,,scheduled,2026-10-18 - 15:30 ICT,,regular,3
-mpl_kh_s11_w3_d3_m3,mpl_kh,Season 11,3,3,sys,gxp,,,scheduled,2026-10-18 - 18:00 ICT,,regular,3
+mpl_kh_s11_w3_d3_m1,mpl_kh,Season 11,3,3,flkh,gxl,2,0,finished,2026-10-18 - 13:00 ICT,,regular,3
+mpl_kh_s11_w3_d3_m2,mpl_kh,Season 11,3,3,vgr,tnr,2,1,finished,2026-10-18 - 15:30 ICT,,regular,3
+mpl_kh_s11_w3_d3_m3,mpl_kh,Season 11,3,3,sys,gxp,2,0,finished,2026-10-18 - 18:00 ICT,,regular,3
 
 mpl_kh_s11_w4_d1_m1,mpl_kh,Season 11,4,1,sys,val,,,scheduled,2026-10-23 - 13:00 ICT,,regular,3
 mpl_kh_s11_w4_d1_m2,mpl_kh,Season 11,4,1,flkh,gxp,,,scheduled,2026-10-23 - 15:30 ICT,,regular,3
@@ -57,3 +57,15 @@ mpl_kh_s11_w4_d2_m3,mpl_kh,Season 11,4,2,gxl,eye,,,scheduled,2026-10-24 - 18:00 
 mpl_kh_s11_w4_d3_m1,mpl_kh,Season 11,4,3,sys,tnr,,,scheduled,2026-10-25 - 13:00 ICT,,regular,3
 mpl_kh_s11_w4_d3_m2,mpl_kh,Season 11,4,3,vgr,pro,,,scheduled,2026-10-25 - 15:30 ICT,,regular,3
 mpl_kh_s11_w4_d3_m3,mpl_kh,Season 11,4,3,rvz,flkh,,,scheduled,2026-10-25 - 18:00 ICT,,regular,3
+
+mpl_kh_s11_w5_d1_m1,mpl_kh,Season 11,5,1,vgr,eye,,,scheduled,2026-10-30 - 13:00 ICT,,regular,3
+mpl_kh_s11_w5_d1_m2,mpl_kh,Season 11,5,1,rvz,gxl,,,scheduled,2026-10-30 - 15:30 ICT,,regular,3
+mpl_kh_s11_w5_d1_m3,mpl_kh,Season 11,5,1,tnr,val,,,scheduled,2026-10-30 - 18:00 ICT,,regular,3
+
+mpl_kh_s11_w5_d2_m1,mpl_kh,Season 11,5,2,rvz,eye,,,scheduled,2026-10-31 - 13:00 ICT,,regular,3
+mpl_kh_s11_w5_d2_m2,mpl_kh,Season 11,5,2,gxl,val,,,scheduled,2026-10-31 - 15:30 ICT,,regular,3
+mpl_kh_s11_w5_d2_m3,mpl_kh,Season 11,5,2,sys,vgr,,,scheduled,2026-10-31 - 18:00 ICT,,regular,3
+
+mpl_kh_s11_w5_d3_m1,mpl_kh,Season 11,5,3,tnr,flkh,,,scheduled,2026-11-01 - 13:00 ICT,,regular,3
+mpl_kh_s11_w5_d3_m2,mpl_kh,Season 11,5,3,gxp,eye,,,scheduled,2026-11-01 - 15:30 ICT,,regular,3
+mpl_kh_s11_w5_d3_m3,mpl_kh,Season 11,5,3,pro,rvz,,,scheduled,2026-11-01 - 18:00 ICT,,regular,3
