@@ -239,11 +239,36 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
 .yes{color:var(--jade)}.no{color:var(--ember)}
 .needs{grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;margin-top:6px;font-size:11px;color:var(--ink-3)}
 .needs span{color:var(--ember)}
-.coach{position:relative;overflow:hidden;border-color:rgba(228,181,83,.25)}
-.coach::before{content:"ចង្រៃ";position:absolute;right:-6px;bottom:-22px;font:70px/1 var(--khmer);color:rgba(228,181,83,.05);pointer-events:none}
-.coach p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
-.coach .v-lbl{display:block;margin-bottom:4px;font:600 11px/1 var(--display);letter-spacing:.2em}
-.coach .verdict{font-size:15px;color:var(--ink);border-left:2px solid var(--gold);padding-left:12px}
+/* the coach spans the page under the pool: its reads run to a few hundred words */
+.coach{margin-top:22px;padding:22px 26px 24px;border-color:rgba(228,181,83,.22)}
+.coach-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.coach-h h2{margin:0;font:600 11px/1 var(--display);letter-spacing:.22em;color:var(--gold);text-transform:uppercase}
+.coach-h small{color:var(--ink-3);font:500 11px/1 var(--display);letter-spacing:.06em}
+.coach-h .ask{margin-left:auto}
+.coach-h p{margin:0;color:var(--ink-2);font-size:14px}
+.coach p{margin:0}
+.top-read{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:40px;align-items:start;margin-top:18px}
+.verdict{max-width:74ch}
+.tally{padding:16px 18px;border-radius:var(--r-md);background:var(--stone-1);border:1px solid var(--hair)}
+.tally small{display:block;font:600 11px/1 var(--display);letter-spacing:.2em;color:var(--ink-3);text-transform:uppercase}
+.tally .pair{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;font:700 34px/1 var(--display);font-variant-numeric:tabular-nums}
+.tally .pair .b{color:var(--blue)}.tally .pair .r{color:var(--red)}
+.tally .meter{position:relative;height:5px;margin:10px 0 8px;border-radius:3px;background:var(--red)}
+.tally .meter i{position:absolute;inset:0 auto 0 0;border-radius:3px 0 0 3px;background:var(--blue)}
+.tally .names{display:flex;justify-content:space-between;gap:8px;font:500 11px/1.3 var(--display);letter-spacing:.06em;color:var(--ink-2)}
+.tally p{margin-top:12px;font-size:12.5px;line-height:1.5;color:var(--ink-3)}
+.verdict .lead{font:600 21px/1.4 var(--display);letter-spacing:.005em;color:var(--ink);text-wrap:pretty}
+.verdict .rest{margin-top:10px;font-size:15px;line-height:1.65;color:var(--ink-2);text-wrap:pretty}
+.reads{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.read{padding:16px 18px 18px;border-radius:var(--r-md);background:var(--stone-1);border:1px solid var(--hair)}
+.read h3{display:flex;align-items:center;gap:8px;margin:0 0 10px;font:600 11px/1 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
+.read h3::before{content:"";width:7px;height:7px;background:var(--c);transform:rotate(45deg)}
+.read.blue{--c:var(--blue-hi)}.read.red{--c:var(--red-hi)}
+.read p{font-size:14px;line-height:1.65;color:var(--ink-2);text-wrap:pretty}
+.read p b{display:block;margin-bottom:6px;font-weight:500;color:var(--ink)}
+.watch{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:baseline;margin-top:14px;padding:14px 18px;border-radius:var(--r-md);background:var(--gold-wash)}
+.watch span{font:600 11px/1.4 var(--display);letter-spacing:.2em;color:var(--gold-hi);text-transform:uppercase;white-space:nowrap}
+.watch p{font-size:14.5px;line-height:1.6;color:var(--ink)}
 .coach .say{opacity:0;transform:translateY(6px);animation:say .6s var(--ease-out) forwards}
 @keyframes say{to{opacity:1;transform:none}}
 .ask{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 18px;border:0;border-radius:999px;cursor:pointer;
@@ -267,7 +292,7 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
   .side{padding:12px}.doors,.seals{gap:5px}
   .door .face{left:8%;width:84%}.door .nm{font-size:11px}.lanesel{display:none}
   .notches{gap:3px}.notches .pick{width:7px}.notches .gap{width:8px}
-  .lens .keys{display:none}.lotus{grid-template-columns:1fr;justify-items:center}
+  .lens .keys{display:none}.reads,.top-read{grid-template-columns:1fr}.top-read{gap:16px}.coach{padding:18px 16px}.coach-h .ask{margin-left:0}.verdict .lead{font-size:18px}.watch{grid-template-columns:1fr}.lotus{grid-template-columns:1fr;justify-items:center}
   .search{max-width:none}
   .scale svg{width:160px;height:160px}.score{margin-top:-108px;height:108px}.score .pair{font-size:30px}.headline{margin-top:18px}
 }
@@ -317,9 +342,9 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
    <div class="card panel" id="edge"></div>
    <div class="card panel" id="profile"></div>
    <div class="card panel" id="coord"></div>
-   <div class="card panel coach" id="coach"></div>
   </aside>
  </section>
+ <section class="coach panel" id="coach" aria-live="polite"></section>
 </main>
 <script src="/app.js"></script>
 <script src="kit.js"></script>
@@ -484,7 +509,7 @@ function petal(i,n,v,shift){
 }
 async function drawAnalysis(){
  const a=await call('/api/analysis');if(a.error){toast(a.error,'var(--ember)');return}
- coordCache=a.coordination;drawPips();
+ lastA=a;coordCache=a.coordination;drawPips();
  const C=527.8,b=a.blueEdge;
  // Blue's arc is centred on the left (Blue's side of the screen); both boundaries move as the edge shifts.
  $('#arc').setAttribute('stroke-dasharray',`${C*b/100} ${C}`);$('#arc').style.transform=`rotate(${180-b*1.8}deg)`;
@@ -510,30 +535,39 @@ async function drawAnalysis(){
   ${row('Synergies',B.synergyPairs,R.synergyPairs)}${row('Lockdown',B.heavyControl,R.heavyControl)}${row('Spike',B.spikeTiming.toLowerCase(),R.spikeTiming.toLowerCase())}
   <div class="needs"><div>${B.missingLanes.length?`needs <span>${esc(B.missingLanes.join(', ').toLowerCase())}</span>`:'<span class="yes">every lane covered</span>'}</div><div style="text-align:right">${R.missingLanes.length?`needs <span>${esc(R.missingLanes.join(', ').toLowerCase())}</span>`:'<span class="yes">every lane covered</span>'}</div></div></div>`;
 }
-let coachKey='';
+let coachKey='',lastA=null;
 function drawCoach(){
  const b=state.blue.picks.length,r=state.red.picks.length,sig=JSON.stringify([state.blue,state.red]);
  if(coachKey&&coachKey!==sig)coachKey='';
  if(coachKey)return;
  const ready=b===5&&r===5;
- $('#coach').innerHTML=`<h2>Jongrai's wisdom <small>AI coach · patch <span data-patch></span></small></h2>
-  <p>${ready?'Ten heroes are locked. Jongrai can read the whole draft now.':`Jongrai reads the board once all ten picks are in. <span class="num" style="color:var(--ink)">${b} : ${r}</span> so far.`}</p>
-  <button class="ask${ready?'':' quiet'}" id="ask">${ready?'Ask Jongrai':'Read it early'}</button>`;
+ $('#coach').innerHTML=`<div class="coach-h"><h2>Jongrai's wisdom</h2><small>AI coach · patch <span data-patch></span></small>
+  <p>${ready?'Ten heroes are locked. Jongrai can read the whole draft now.':`Reads the board once all ten picks are in: <span class="num" style="color:var(--ink)">${b} : ${r}</span> so far.`}</p>
+  <button class="ask${ready?'':' quiet'}" id="ask">${ready?'Ask Jongrai':'Read it early'}</button></div>`;
  fillMeta();
 }
 async function askCoach(refresh){
  const sig=JSON.stringify([state.blue,state.red]);coachKey=sig;
- $('#coach').innerHTML=`<h2>Jongrai's wisdom <small>reading</small></h2><p>Reading the draft<span class="ink"><i></i><i></i><i></i></span></p>`;
+ $('#coach').innerHTML=`<div class="coach-h"><h2>Jongrai's wisdom</h2><p>Reading the draft<span class="ink"><i></i><i></i><i></i></span></p></div>`;
  const done=state.blue.picks.length===5&&state.red.picks.length===5;
  const w=await call('/api/wisdom?'+(done?'':'force=1&')+(refresh?'refresh=1':''),{post:true});
  if(coachKey!==sig)return;
- if(w.error){$('#coach').innerHTML=`<h2>Jongrai's wisdom <small>coach off</small></h2><p style="color:var(--ember)">${esc(w.error)}</p>`;return}
+ if(w.error){$('#coach').innerHTML=`<div class="coach-h"><h2>Jongrai's wisdom</h2><small>coach off</small><p style="color:var(--ember)">${esc(w.error)}</p></div>`;return}
  if(!w.ready){coachKey='';drawCoach();return}
- const say=(lbl,col,txt,i,cls='')=>txt?`<div class="say" style="animation-delay:${i*.25}s"><span class="v-lbl" style="color:${col}">${lbl}</span><p class="${cls}">${esc(txt)}</p></div>`:'';
- $('#coach').innerHTML=`<h2>Jongrai's wisdom <small>patch <span data-patch></span></small></h2>${say('VERDICT','var(--gold)',w.verdict,0,'verdict')}${say(esc(teamName('blue')).toUpperCase(),'var(--blue)',w.blue,1)}${say(esc(teamName('red')).toUpperCase(),'var(--red)',w.red,2)}${say('KEY TO WATCH','var(--gold)',w.closing,3)}
-  <button class="ask quiet say" style="animation-delay:1s" id="reread">Re-read the draft</button>`;
+ const [lead,rest]=firstSentence(w.verdict);
+ const read=(t,txt,i)=>{if(!txt)return'';const[a,b]=firstSentence(txt);
+  return`<article class="read ${t} say" style="animation-delay:${.2+i*.15}s"><h3>${esc(teamName(t))}</h3><p><b>${esc(a)}</b>${esc(b)}</p></article>`};
+ $('#coach').innerHTML=`<div class="coach-h"><h2>Jongrai's wisdom</h2><small>verdict · patch <span data-patch></span></small><button class="ask quiet" id="reread">Re-read the draft</button></div>
+  <div class="top-read"><div class="verdict say"><p class="lead">${esc(lead)}</p>${rest?`<p class="rest">${esc(rest)}</p>`:''}</div>${tally()}</div>
+  <div class="reads">${read('blue',w.blue,0)}${read('red',w.red,1)}</div>
+  ${w.closing?`<div class="watch say" style="animation-delay:.55s"><span>Key to watch</span><p>${esc(w.closing)}</p></div>`:''}`;
  fillMeta();
 }
+/** The engine's own score beside the coach's opinion, so the two can be compared at a glance. */
+const tally=()=>lastA?`<aside class="tally say" style="animation-delay:.1s"><small>Engine edge</small><div class="pair"><span class="b">${lastA.blueEdge}</span><span class="r">${lastA.redEdge}</span></div>
+  <div class="meter"><i style="width:${lastA.blueEdge}%"></i></div><div class="names"><span>${esc(teamName('blue'))}</span><span>${esc(teamName('red'))}</span></div><p>${esc(lastA.headline)}</p></aside>`:'';
+/** Splits off the first sentence so each read opens with one line you can scan. */
+const firstSentence=t=>{const m=String(t||'').match(/^(.+?[.!?])\s+(\S[\s\S]*)$/);return m?[m[1],m[2]]:[String(t||''),'']};
 const teamName=t=>(document.querySelector(`.tname[data-team=${t}]`)||{}).value||cap(t);
 
 /* ---------- actions ---------- */
