@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "mockups/draft.html"
+        ],
+        "createdAt": "2026-10-24T13:53:28.715Z",
+        "reason": ".ink dots animate only while a /api/wisdom request is in flight, a real loading state"
+      }
+    ]
+  }
+}
