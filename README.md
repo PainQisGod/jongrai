@@ -89,6 +89,7 @@ Results are cached per draft, so reloading the page does not call the API again.
 | `/draft` | `web/draft.html` | The draft board |
 | `/league` | `web/pro-league.html` | Pro league standings, matches and drafts (sample data) |
 | `/about` | `web/about.html` | Data sources and credits |
+| `/mockups/` | `mockups/` | "Dusk at the Temple" UI mockups, on the same live draft |
 
 Shared styling lives in `web/style.css` and shared script helpers in `web/app.js`. Hero and item icons go in `web/icons/`.
 
