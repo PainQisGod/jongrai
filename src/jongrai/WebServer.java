@@ -102,6 +102,7 @@ public class WebServer {
         server.setExecutor(Executors.newFixedThreadPool(8));
         server.start();
         System.out.println("Jongrai draft board running at http://localhost:" + port + "  (Ctrl+C to stop)");
+        System.out.println("UI mockups at http://localhost:" + port + "/mockups/");
         System.out.println("AI coach " + (AiCoach.configured() ? "ON - model " + AiCoach.model() + " via " + AiCoach.baseUrl()
                 : "OFF - no key found (" + AiCoach.keySource() + ")"));
         if (!AiCoach.configured()) {
@@ -266,14 +267,16 @@ public class WebServer {
         Map<String, String> q = query(ex.getRequestURI().getRawQuery());
         if (mutating) q.putAll(query(new String(ex.getRequestBody().readNBytes(65536), StandardCharsets.UTF_8)));
 
-        if (path.startsWith("/icons/")) { serveFile(ex, "icons", path.substring(7), true); return; }
-        if (path.startsWith("/teams/")) { serveFile(ex, "teams", path.substring(7), true); return; }
-        if (path.startsWith("/video/")) { serveFile(ex, "video", path.substring(7), true); return; }
+        if (path.startsWith("/icons/")) { serveFile(ex, "web/icons", path.substring(7), true); return; }
+        if (path.startsWith("/teams/")) { serveFile(ex, "web/teams", path.substring(7), true); return; }
+        if (path.startsWith("/video/")) { serveFile(ex, "web/video", path.substring(7), true); return; }
+        if (path.startsWith("/mockups/")) { serveFile(ex, "mockups", path.length() == 9 ? "index.html" : path.substring(9), false); return; }
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
             case "/" -> servePage(ex, "home.html");
             case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" -> servePage(ex, PAGES.get(path));
-            case "/style.css", "/app.js" -> serveFile(ex, "", path.substring(1), false);
+            case "/style.css", "/app.js" -> serveFile(ex, "web", path.substring(1), false);
+            case "/mockups" -> { ex.getResponseHeaders().set("Location", "/mockups/"); send(ex, 301, "text/plain", ""); }
             case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH)
                     + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
             case "/api/heroes" -> sendJson(ex, 200, heroesJson());
@@ -579,11 +582,11 @@ public class WebServer {
     }
 
     /**
-     * A file under web/ (or web/<dir>/). Media and icons cache for a day; CSS and JS revalidate.
+     * A file in {@code dir}, relative to the project folder. Media and icons cache for a day; CSS and JS revalidate.
      * Honours If-Modified-Since (304) and a single Range (206, or 416 when out of range).
      */
     private static void serveFile(HttpExchange ex, String dir, String name, boolean longCache) throws IOException {
-        Path root = home.resolve("web").resolve(dir).normalize();
+        Path root = home.resolve(dir).normalize();
         Path file = root.resolve(name).normalize();
         // Apostrophes and spaces are allowed: several asset names carry one (Item_Athena's_Shield.png).
         if (!name.matches("[A-Za-z0-9._' -]+") || name.contains("..") || !file.startsWith(root) || !Files.isRegularFile(file)) {
@@ -674,6 +677,7 @@ public class WebServer {
         if (n.endsWith(".jpg") || n.endsWith(".jpeg")) return "image/jpeg";
         if (n.endsWith(".mp4")) return "video/mp4";
         if (n.endsWith(".css")) return "text/css; charset=utf-8";
+        if (n.endsWith(".html")) return "text/html; charset=utf-8";
         if (n.endsWith(".js")) return "application/javascript; charset=utf-8";
         return "application/octet-stream";
     }

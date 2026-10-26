@@ -6,12 +6,6 @@
       "runtimeExecutable": "java",
       "runtimeArgs": ["-cp", "out", "jongrai.WebServer"],
       "port": 8080
-    },
-    {
-      "name": "mockups",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["mockups/serve.py"],
-      "port": 8090
     }
   ]
 }
