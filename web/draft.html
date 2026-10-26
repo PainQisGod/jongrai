@@ -85,9 +85,13 @@ function adopt(j){
  msg(j.error);
  if(j.state||!j.error)refresh();
 }
-async function act(path,t,name,extra=''){
- adopt(await call(`/api/${path}?side=${t}&hero=${encodeURIComponent(name)}&v=${state.version}${extra}`,{post:true}));
+let busy=false;
+/** Sends one board change at a time: a double-click would otherwise send the same version twice and get a 409. */
+async function change(url){
+ if(busy)return;busy=true;
+ try{adopt(await call(url,{post:true}))}finally{busy=false}
 }
+const act=(path,t,name,extra='')=>change(`/api/${path}?side=${t}&hero=${encodeURIComponent(name)}&v=${state.version}${extra}`);
 const pad=(a,n)=>Array.from({length:n},(_,i)=>a[i]||'');
 const cir=n=>{const h=byName[n];return`<div class="cir">${h&&h.icon?`<img src="/icons/${esc(h.icon)}" alt="" onerror="this.remove()">`:''}</div>`};
 const rmBtn=(t,n)=>`<button type="button" class="rm" data-rm data-t="${t}" data-hero="${esc(n)}" aria-label="Remove ${esc(n)}">✕ remove</button>`;
@@ -218,7 +222,9 @@ $('#sideSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;side=b
  document.querySelectorAll('#sideSeg button').forEach(x=>x.className=x===b?'on '+(side==='blue'?'b':'r'):'');sugg()};
 $('#modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;
  document.querySelectorAll('#modeSeg button').forEach(x=>x.className=x===b?'on':'')};
-$('#reset').onclick=async()=>adopt(await call('/api/reset?v='+state.version,{post:true}));
+$('#reset').onclick=()=>change('/api/reset?v='+state.version);
+// Another window may have changed the board; catch up when this one comes back.
+addEventListener('focus',async()=>{const s=await call('/api/state');if(!s.error&&s.version!==state.version)adopt(s)});
 ['q','role','lane'].forEach(i=>$('#'+i).oninput=drawGrid);
 (async()=>{
  const hs=await call('/api/heroes');if(hs.error){msg(hs.error);return}

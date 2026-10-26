@@ -581,10 +581,15 @@ function adopt(j){
  if(JSON.stringify([state.blue,state.red])!==before)refresh(true);else fly=null;
  const used=usedMap();[...seen].forEach(n=>{if(!used[n])seen.delete(n)});
 }
+// One board change at a time: a double-click would otherwise send the same version twice and get a 409.
+let busy=false;
 async function act(path,side,name,extra=''){
- const j=await call(`/api/${path}?side=${side}&hero=${encodeURIComponent(name)}&v=${state.version}${extra}`,{post:true});
- if(!j.error&&(path==='pick'||path==='ban'))undoStack.push({side,name});
- $('#undo').disabled=!undoStack.length;adopt(j);
+ if(busy)return;busy=true;
+ try{
+  const j=await call(`/api/${path}?side=${side}&hero=${encodeURIComponent(name)}&v=${state.version}${extra}`,{post:true});
+  if(!j.error&&(path==='pick'||path==='ban'))undoStack.push({side,name});
+  $('#undo').disabled=!undoStack.length;adopt(j);
+ }finally{busy=false}
 }
 function choose(name,el){
  const a=acting();
@@ -609,7 +614,7 @@ function flyIn(){
 document.addEventListener('click',e=>{
  const t=e.target;if(t.closest('select'))return;
  const rm=t.closest('[data-rm]'),tile=t.closest('.tile'),sg=t.closest('[data-sg]');
- if(rm){act('remove',rm.dataset.t,rm.dataset.hero);undoStack=undoStack.filter(u=>u.name!==rm.dataset.hero);return}
+ if(rm){if(!busy){act('remove',rm.dataset.t,rm.dataset.hero);undoStack=undoStack.filter(u=>u.name!==rm.dataset.hero)}return}
  if(tile){if(!tile.classList.contains('used'))choose(tile.dataset.h,tile);return}
  if(sg){const pt=document.querySelector(`.tile[data-h="${CSS.escape(sg.dataset.sg)}"]`);choose(sg.dataset.sg,pt||sg);return}
  if(t.id==='ask')askCoach(false);else if(t.id==='reread'){coachKey='';askCoach(true)}
@@ -629,10 +634,11 @@ function freeMode(patch){if(follow){manual=acting();follow=false;$('#follow').se
  Object.assign(manual,patch);drawRail();drawSides(false);drawGrid();drawNext()}
 $('#sideSeg').onclick=e=>{const b=e.target.closest('button');if(b)freeMode({side:b.dataset.s})};
 $('#kindSeg').onclick=e=>{const b=e.target.closest('button');if(b)freeMode({kind:b.dataset.k})};
-$('#undo').onclick=()=>{const u=undoStack.pop();$('#undo').disabled=!undoStack.length;if(u)act('remove',u.side,u.name)};
+$('#undo').onclick=()=>{if(busy)return;const u=undoStack.pop();$('#undo').disabled=!undoStack.length;if(u)act('remove',u.side,u.name)};
 // Reset needs a 0.7 s hold (or two presses from the keyboard), so a stray click never wipes a finished draft.
 let holdT,armed=false;
-const doReset=async()=>{undoStack=[];$('#undo').disabled=true;adopt(await call('/api/reset?v='+state.version,{post:true}));toast('Board cleared')};
+const doReset=async()=>{if(busy)return;busy=true;
+ try{undoStack=[];$('#undo').disabled=true;adopt(await call('/api/reset?v='+state.version,{post:true}));toast('Board cleared')}finally{busy=false}};
 $('#reset').onpointerdown=()=>{$('#reset').classList.add('holding');holdT=setTimeout(()=>{$('#reset').classList.remove('holding');doReset()},700)};
 ['pointerup','pointerleave'].forEach(ev=>$('#reset').addEventListener(ev,()=>{clearTimeout(holdT);$('#reset').classList.remove('holding')}));
 $('#reset').onkeydown=e=>{if(e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();
