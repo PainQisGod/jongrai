@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Dusk at the Temple · Jongrai UI proposal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="kit.css">
+<style>
+main{max-width:1240px;margin:0 auto;padding:56px 24px 90px}
+h1{margin:12px 0 14px;font:700 clamp(36px,5vw,60px)/1 var(--display);letter-spacing:.005em}
+h1 em{font-style:normal;color:var(--gold)}
+.lede{max-width:64ch;margin:0 0 12px;font-size:17px;color:var(--ink-2)}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 56px}
+.rules span{padding:6px 12px;border-radius:999px;border:1px solid var(--hair-2);font:500 12px/1.3 var(--display);color:var(--ink-2)}
+.rules b{color:var(--gold-hi);font-weight:600}
+.screen{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:34px;align-items:start;padding:34px 0;border-top:1px solid var(--hair)}
+.thumb{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;border-radius:var(--r-lg);border:1px solid var(--hair-2);background:var(--stone-1);
+  box-shadow:0 30px 60px -30px #000;transition:transform .4s var(--ease-spring),border-color .2s}
+.thumb:hover{transform:translateY(-4px) rotate(-.4deg);border-color:rgba(228,181,83,.5)}
+.thumb iframe{position:absolute;left:0;top:0;width:1440px;height:900px;border:0;transform-origin:0 0;pointer-events:none}
+.thumb .open{position:absolute;right:12px;bottom:12px;padding:8px 12px;border-radius:999px;background:rgba(12,10,15,.8);font:600 11px/1 var(--display);letter-spacing:.14em;color:var(--gold-hi);opacity:0;transition:opacity .2s}
+.thumb:hover .open{opacity:1}
+.screen h2{margin:0 0 10px;font:700 28px/1.05 var(--display)}
+.screen p{margin:0 0 16px;color:var(--ink-2)}
+.details{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.details li{display:grid;grid-template-columns:14px 1fr;gap:10px;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.details li::before{content:"";width:6px;height:6px;margin:7px 0 0 3px;background:var(--gold);transform:rotate(45deg)}
+.details b{color:var(--ink);font-weight:500}
+.kit{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;padding:34px 0;border-top:1px solid var(--hair)}
+.kit h3{margin:0 0 12px;font:600 11px/1 var(--display);letter-spacing:.22em;color:var(--gold);text-transform:uppercase}
+.sw{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sw i{aspect-ratio:1;border-radius:8px;border:1px solid var(--hair)}
+.sw small{display:block;margin-top:4px;font:500 11px var(--display);color:var(--ink-3)}
+.type p{margin:0 0 8px}
+.run{padding:34px 0 0;border-top:1px solid var(--hair);color:var(--ink-2);font-size:14px}
+.run code{font:500 13px ui-monospace,monospace;color:var(--gold-hi);background:var(--stone-2);padding:2px 7px;border-radius:5px}
+@media (max-width:900px){.screen{grid-template-columns:1fr}}
+</style></head><body>
+<main class="page">
+ <span class="eyebrow">UI proposal</span>
+ <h1>Dusk at the <em>Temple</em></h1>
+ <p class="lede">A redesign that gives the draft room a place and a pulse: warm sandstone instead of cold slate, gold leaf used sparingly, and blue against red kept exactly where the game puts them. Every screen runs on the live engine through the existing API. Nothing in <code style="font:inherit;color:var(--ink)">src/</code> changed.</p>
+ <div class="rules"><span><b>Real data only</b> · every number comes from /api</span><span><b>Motion with a job</b> · it signals turn, change or arrival</span><span><b>Reduced motion</b> respected</span><span><b>Keyboard first</b> · / ↵ Esc Ctrl+Z</span><span><b>No glow, no gradient text</b></span></div>
+
+ <section class="screen">
+  <a class="thumb" href="draft.html"><iframe src="draft.html" title="Draft board preview" tabindex="-1" loading="lazy"></iframe><span class="open">OPEN →</span></a>
+  <div><h2>Draft board: a stage, not a form</h2>
+   <p>The board follows the real 20-step tournament order and always says whose turn it is. Picks arrive in temple-arch doors, bans get struck through, and an edge ring tips toward the side that's winning the draft.</p>
+   <ul class="details">
+    <li><span><b>Turn rail</b>: 20 notches (diamonds for bans, bars for picks) worked out from the board itself, so it stays right even if picks went in out of order.</span></li>
+    <li><span><b>Bans switch</b>: turn it off for a picks-only draft in the engine's 10-step snake order, as the original board allowed. The choice is remembered.</span></li>
+    <li><span><b>Fly-in</b>: the portrait you click arcs from the pool into its slot. Hero videos keep playing because only changed slots redraw.</span></li>
+    <li><span><b>Hover lens</b>: hovering a pool hero tags enemy doors <b>STRONG VS</b> or <b>THREAT</b> and your own doors <b>COMBO</b>, using the counter and synergy data.</span></li>
+    <li><span><b>▲/▼ counts</b> on tiles show how many enemy picks a hero counters or is countered by; the engine's top picks get a slowly turning gold ring and their rank.</span></li>
+    <li><span><b>Hold to reset</b> (0.7 s, or two presses from the keyboard) so a stray click never wipes a finished draft; <b>Ctrl+Z</b> undoes your last move.</span></li>
+    <li><span><b>Lotus profile</b>: the nine tactical axes drawn as paired petals; coordination shows the lanes each side still needs.</span></li>
+    <li><span><b>Coach on request</b>: Jongrai only reads when asked, so no API credit is spent by accident. Lines fade in one at a time.</span></li>
+   </ul></div>
+ </section>
+
+ <section class="screen">
+  <a class="thumb" href="heroes.html"><iframe src="heroes.html" title="Hero codex preview" tabindex="-1" loading="lazy"></iframe><span class="open">OPEN →</span></a>
+  <div><h2>Hero codex: the tier river</h2>
+   <p>Instead of 133 identical cards, every hero sits in its tier band at its win rate. You can see at a glance which S-tier heroes are really coin flips, and which heroes outside the top tier are quietly winning.</p>
+   <ul class="details">
+    <li><span><b>Packing</b>: faces nudge up and down until none overlap, and heroes fade in from left to right.</span></li>
+    <li><span><b>Coin-flip line</b> in gold at 50%; <b>red rings</b> on the 14 heroes the meta bans.</span></li>
+    <li><span><b>Search dims, never hides</b>: matches grow, the rest fade, and the river keeps its shape. Enter opens the first match.</span></li>
+    <li><span><b>Profile drawer</b> with deep links (<code style="font-size:12px">#ling</code>), Esc to close, focus returned to the face you came from.</span></li>
+    <li><span><b>Weak vs</b> is worked out by reverse lookup of every other hero's counters, so both directions of a matchup show.</span></li>
+    <li><span><b>Ratings</b> as 10-step gauges, <b>spike</b> as an early/mid/late timeline, builds with core items marked by a gold diamond.</span></li>
+   </ul></div>
+ </section>
+
+ <section class="screen">
+  <a class="thumb" href="home.html"><iframe src="home.html" title="Home preview" tabindex="-1" loading="lazy"></iframe><span class="open">OPEN →</span></a>
+  <div><h2>Home: the room is already alive</h2>
+   <p>The home page shows the draft in progress, the meta's winners and its most-feared heroes, before you click anything.</p>
+   <ul class="details">
+    <li><span><b>Live board card</b>: the current draft in miniature with its edge, refreshed when you come back to the tab.</span></li>
+    <li><span><b>Carved wordmark</b>: ចង្រៃ set in Moul, a traditional Khmer display face, cut into the page rather than glowing on it.</span></li>
+    <li><span><b>Key art drifts</b> over 40 s; embers rise and pause while the tab is hidden.</span></li>
+    <li><span><b>Counters</b> roll up when the stats strip scrolls into view; the ban bars grow in turn.</span></li>
+    <li><span><b>Tip carousel</b> from the heroes' own tips, with a progress bar that pauses on hover.</span></li>
+   </ul></div>
+ </section>
+
+ <section class="kit">
+  <div><h3>Palette</h3><div class="sw">
+   <div><i style="background:var(--night)"></i><small>night</small></div><div><i style="background:var(--stone-2)"></i><small>stone</small></div>
+   <div><i style="background:var(--gold)"></i><small>gold leaf</small></div><div><i style="background:var(--ink)"></i><small>parchment</small></div>
+   <div><i style="background:var(--blue)"></i><small>blue side</small></div><div><i style="background:var(--red)"></i><small>red side</small></div>
+   <div><i style="background:var(--jade)"></i><small>strong vs</small></div><div><i style="background:var(--ember)"></i><small>threat</small></div></div></div>
+  <div class="type"><h3>Type</h3>
+   <p style="font:700 22px var(--display)">Chakra Petch: labels, numbers</p>
+   <p style="font:400 15px var(--body);color:var(--ink-2)">Kantumruy Pro for reading, with Khmer and Latin in one family.</p>
+   <p style="font:26px/1.5 var(--khmer);color:var(--gold)" lang="km">ចង្រៃ <span style="font:500 11px var(--display);letter-spacing:.2em;color:var(--ink-3)">MOUL · WORDMARK ONLY</span></p></div>
+  <div><h3>Shapes</h3><p style="margin:0;color:var(--ink-2);font-size:13.5px">Temple-arch doors for picks, round seals for bans, diamonds for tiers, notched tickets for the patch. Each shape means one thing everywhere it appears.</p></div>
+ </section>
+ <p class="run">Run it: start Jongrai (<code>java -cp out jongrai.WebServer</code>), then <code>python3 mockups/serve.py</code> and open <code>http://localhost:8090</code>. The mockups drive the same shared draft as the real app.</p>
+</main>
+<script src="/app.js"></script>
+<script src="kit.js"></script>
+<script>
+shell('index.html');
+const fit=()=>document.querySelectorAll('.thumb iframe').forEach(f=>f.style.transform=`scale(${f.parentElement.clientWidth/1440})`);
+fit();addEventListener('resize',fit);
+</script></body></html>
