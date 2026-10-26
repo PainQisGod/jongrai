@@ -60,3 +60,29 @@ async function meta() {
   fillMeta();
   return META;
 }
+
+/**
+ * Header sign-in: a "Sign in with Google" button, or the signed-in visitor's name with a Sign out button.
+ * Does nothing when the server has no sign-in set up, so the site looks the same without it.
+ */
+async function initAuth() {
+  const header = document.querySelector('header');
+  if (!header || header.querySelector('.auth')) return;
+  const me = await call('/api/me');
+  if (me.error || !me.configured) return;
+  const box = document.createElement('div');
+  box.className = 'auth';
+  if (me.loggedIn) {
+    const label = String(me.name || me.email || '?');
+    const pic = me.picture
+      ? `<img class="auth-pic" src="${esc(me.picture)}" alt="" referrerpolicy="no-referrer">`
+      : `<span class="auth-pic">${esc(label.trim().charAt(0).toUpperCase())}</span>`;
+    box.innerHTML = `${pic}<span class="auth-name" title="${esc(me.email)}">${esc(label)}</span>`
+      + `${me.admin ? '<span class="auth-admin">Admin</span>' : ''}<button type="button" class="auth-out">Sign out</button>`;
+    box.querySelector('.auth-out').onclick = async () => { await call('/auth/logout', {post: true}); location.reload(); };
+  } else {
+    box.innerHTML = `<a class="auth-in" href="/auth/login?next=${encodeURIComponent(location.pathname + location.search)}">Sign in with Google</a>`;
+  }
+  header.appendChild(box);
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAuth); else initAuth();

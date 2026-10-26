@@ -26,49 +26,103 @@ input,select{background:var(--card);color:var(--tx);border:1px solid var(--line)
 .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 
 /* standings table */
-table.stand{width:100%;border-collapse:collapse;font-size:13px}
-table.stand th{text-align:left;color:var(--mut);font-weight:500;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line)}
-table.stand td{padding:10px;border-bottom:1px solid #1d2130;vertical-align:middle}
-table.stand tr:hover td{background:#181b24}
-table.stand tr:last-child td{border-bottom:0}
-.team-cell{display:flex;align-items:center;gap:10px}
-.team-logo{width:28px;height:28px;border-radius:4px;object-fit:cover}
-.team-name{font-weight:500}
-.team-short{color:var(--mut);font-size:11px}
+.stand-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto;max-width:940px}
+table.stand{width:100%;min-width:600px;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+table.stand th{color:var(--mut);font-weight:600;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--line);text-align:center;background:#12151c}
+table.stand td{padding:10px 8px;border-bottom:1px solid #1d2130;vertical-align:middle;text-align:center}
+table.stand th.c-pos,table.stand td.c-pos{width:56px;padding-left:14px}
+table.stand th.c-team,table.stand td.c-team{text-align:left}
+table.stand tbody tr:hover td{background:#181b24}
+table.stand tbody tr:last-child td{border-bottom:0}
+.team-cell{display:flex;align-items:center;gap:12px}
+.team-logo{width:36px;height:36px;border-radius:6px;object-fit:contain;flex:none}
+.team-name{font-weight:600;font-size:14px}
+.team-short{color:var(--mut);font-size:11px;letter-spacing:.5px}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;font-weight:700;font-size:12px;color:var(--mut)}
+.rank.r1{background:rgba(245,197,24,.16);color:#f5c518}
+.rank.r2{background:rgba(203,213,225,.12);color:#cbd5e1}
+.rank.r3{background:rgba(205,127,50,.16);color:#e0a060}
+.pts{display:inline-block;min-width:34px;padding:3px 9px;border-radius:6px;background:rgba(245,197,24,.12);color:var(--gold2);font-weight:700}
+.dim{opacity:.35}
 .pos{font-weight:700;font-variant-numeric:tabular-nums;color:var(--gold2)}
 .win{color:#22c55e}.loss{color:#ef4444}.draw{color:#f5c518}
-.form{font-family:monospace;font-size:11px;color:var(--mut)}
-.streak{font-weight:600;font-size:11px}
 
 /* matches */
-.match-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:8px}
-.match-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.match-teams{display:flex;align-items:center;gap:12px}
-.match-team{display:flex;align-items:center;gap:8px;flex:1}
-.match-team.right{justify-content:flex-end;flex-direction:row-reverse}
-.match-team-logo{width:32px;height:32px;border-radius:4px;object-fit:cover}
-.match-team-name{font-weight:500;font-size:13px}
-.match-score{font-weight:700;font-size:16px;color:var(--gold2);min-width:60px;text-align:center}
-.match-meta{display:flex;gap:12px;font-size:11px;color:var(--mut)}
+#matchesList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:14px}
+.match-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px 16px;display:flex;flex-direction:column;gap:12px}
+.match-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.match-meta{font-size:11px;color:var(--mut)}
+.match-when{text-align:center}
+.match-when span{display:inline-block;background:#12151c;border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
+.match-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.match-team{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.match-team.is-lose{opacity:.65}
+.match-logo{width:54px;height:54px;display:flex;align-items:center;justify-content:center}
+.match-logo img{max-width:100%;max-height:100%;object-fit:contain}
+.match-logo.nologo::after{content:attr(data-s);width:54px;height:54px;border-radius:8px;background:#12151c;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--mut)}
+.match-team-name{font-weight:600;font-size:13px;line-height:1.25;overflow-wrap:anywhere}
+.match-score{text-align:center;font-weight:700;font-size:26px;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.match-score small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--mut)}
+.match-score .w{color:var(--gold2)}
+.match-score.vs{font-size:16px;font-weight:600;color:var(--mut);letter-spacing:0}
 .match-status{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
 .match-status.completed{background:#1a2e1a;color:#22c55e}
 .match-status.scheduled{background:#2e2a1a;color:#f5c518}
 .match-status.live{background:#2e1a1a;color:#ef4444;animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
 
-/* drafts */
-.draft-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:8px}
-.draft-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.draft-bans-picks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.draft-side{border-radius:6px;padding:8px}
-.draft-side.blue{background:#0d1b2e;border:1px solid #1a3a5c}
-.draft-side.red{background:#2e0d0d;border:1px solid #5c1a1a}
-.draft-side h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
-.draft-side.bans h4{color:var(--mut)}
-.draft-side.picks h4{color:var(--gold2)}
-.draft-list{display:flex;flex-wrap:wrap;gap:4px}
-.draft-hero{background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:11px}
-.draft-hero.ban{opacity:0.6;text-decoration:line-through}
+/* drafts: one card per match, one block per game */
+#draftsList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:14px;align-items:start}
+.mc{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mc[open]{grid-column:1/-1}
+.mc>summary{list-style:none;cursor:pointer;padding:12px 14px 10px}
+.mc>summary::-webkit-details-marker{display:none}
+.mc>summary:hover{background:rgba(255,255,255,.03)}
+.mc>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.mc-body{padding:0 14px 8px;max-width:760px;margin:0 auto}
+.mc:not([open]) .nm-full{display:none}
+.mc[open] .nm-short{display:none}
+.nm-short{letter-spacing:.5px}
+.mc-more{text-align:center;font-size:11px;color:var(--mut);margin-top:8px}
+.mc-more::before{content:"Show draft \25BE"}
+.mc[open] .mc-more::before{content:"Hide draft \25B4"}
+.mc-when{text-align:center;margin-bottom:10px}
+.mc-when span{display:inline-block;background:#12151c;border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
+.mc-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.mc-team{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;min-width:0;justify-content:flex-end}
+.mc-team.right{justify-content:flex-start}
+.mc-team img{width:36px;height:36px;border-radius:6px;object-fit:cover;flex:none}
+.mc-team .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.mc-score{text-align:center;font-weight:700;font-size:22px;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.mc-score small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--mut)}
+.mc-score .w{color:var(--gold2)}
+.mc-game{border-top:1px solid var(--line);padding:12px 0}
+.mc-game:first-child{border-top:0}
+.mc-row{display:grid;grid-template-columns:26px 1fr 78px 1fr 26px;align-items:center;gap:8px}
+.mc-picks{display:flex;gap:4px;min-width:0}
+.mc-picks.right{justify-content:flex-end}
+.mc-center{text-align:center;line-height:1.25}
+.mc-center b{display:block;font-size:14px;font-variant-numeric:tabular-nums}
+.mc-center small{color:var(--mut);font-size:11px}
+.mc-res{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.mc-res.W{background:#16a34a}.mc-res.L{background:#dc2626}
+.mc-bans{margin-top:8px}
+.mc-bans .mc-picks{opacity:.9}
+.mc-bans .mc-center{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.mc-map{margin-top:10px;text-align:center}
+.mc-map span{display:inline-block;background:#12151c;border:1px solid var(--line);border-radius:999px;padding:3px 14px;font-size:12px}
+.mc-map i{font-style:normal;color:var(--mut);margin-right:4px;text-transform:uppercase;letter-spacing:1px;font-size:10px}
+.mc-mvp{margin-top:8px;text-align:center;background:#2b2413;border:1px solid #7a6224;border-radius:6px;padding:5px 10px;font-size:12px;color:var(--gold2)}
+.mc-mvp b{color:var(--tx)}
+.mc-mvp.none{background:#12151c;border-color:var(--line);color:var(--mut)}
+.hero-ic{width:42px;height:42px;border-radius:6px;object-fit:cover;background:#12151c;border:2px solid var(--line);flex:none}
+.hero-ic.blue{border-color:#3b82f6}.hero-ic.red{border-color:#ef4444}
+.hero-link{display:inline-flex;flex:none;border-radius:6px;text-decoration:none;color:inherit}
+a.hero-link:hover .hero-ic,a.hero-link:focus-visible .hero-ic{border-color:var(--gold);transform:translateY(-2px)}
+.hero-ic{transition:transform .12s,border-color .12s}
+.hero-ic-miss{display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--mut)}
+.mc-bans .hero-ic{width:28px;height:28px;border-width:1px;filter:grayscale(.65)}
+@media(max-width:640px){.hero-ic{width:30px;height:30px}.mc-bans .hero-ic{width:22px;height:22px}.mc-row{grid-template-columns:22px 1fr 56px 1fr 22px;gap:4px}.mc-team img{width:30px;height:30px}.mc-team{font-size:13px}}
 
 /* empty state */
 .empty{color:var(--mut);font-size:13px;padding:40px;text-align:center}
@@ -96,9 +150,9 @@ table.stand tr:last-child td{border-bottom:0}
  </div>
 
  <div id="standingsPanel">
-  <table class="stand"><thead><tr><th style="width:48px">#</th><th>Team</th><th style="width:60px">P</th><th style="width:60px">W</th><th style="width:60px">L</th><th style="width:60px">D</th><th style="width:60px">GF</th><th style="width:60px">GA</th><th style="width:60px">GD</th><th style="width:72px">Pts</th><th style="width:72px">Streak</th><th style="width:120px">Form</th></tr></thead>
+  <div class="stand-wrap"><table class="stand"><thead><tr><th class="c-pos">#</th><th class="c-team">Team</th><th title="Matches played">P</th><th title="Wins">W</th><th title="Losses">L</th><th title="Draws">D</th><th title="Games won">GF</th><th title="Games lost">GA</th><th title="Game difference">GD</th><th title="Points">Pts</th></tr></thead>
   <tbody id="standingsBody"></tbody>
-  </table>
+  </table></div>
   <div id="standingsEmpty" class="empty" hidden>Select a league</div>
  </div>
 
@@ -124,8 +178,8 @@ table.stand tr:last-child td{border-bottom:0}
 <script src="/app.js"></script>
 <script>
 const $$=s=>document.querySelectorAll(s);
-const STATUS_CLS={completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
-let leagues=[], currentLeague=null, currentSeason=null, teamsById={};
+const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
+let leagues=[], currentLeague=null, currentSeason=null, teamsById={}, heroIcons={};
 const keyOf=l=>l.id+'|'+l.season;   // one league can run several seasons
 
 async function loadLeagues(){
@@ -161,17 +215,19 @@ async function loadData(){
  if(!currentLeague) return;
  try{
   const ls='league='+encodeURIComponent(currentLeague), season=ls+'&season='+encodeURIComponent(currentSeason);
-  const [standings,matches,teams,drafts]=await Promise.all([
-   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+ls),call('/api/drafts?'+season)]);
+  const [standings,matches,teams,drafts,heroes]=await Promise.all([
+   call('/api/standings?'+season),call('/api/matches?'+season),call('/api/teams?'+season),call('/api/drafts?'+season),call('/api/heroes').catch(()=>[])]);
   const failed=[standings,matches,teams,drafts].find(r=>r.error);
   if(failed)throw new Error(failed.error);
 
   teamsById={};
   teams.forEach(t=>teamsById[t.id]=t);
+  heroIcons={};
+  if(Array.isArray(heroes))heroes.forEach(h=>{heroIcons[String(h.name).toLowerCase()]={icon:h.icon||'',slug:h.slug||''}});
   renderStandings(standings);
   renderMatches(matches);
   renderTeams(teams);
-  renderDrafts(drafts);
+  renderDrafts(drafts,matches);
  }catch(e){
   console.error(e);
   $('#standingsEmpty').hidden=false;
@@ -184,40 +240,43 @@ function renderStandings(data){
  const body=$('#standingsBody'), empty=$('#standingsEmpty');
  if(!data.length){body.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
+ const dim=v=>v===0?' dim':'';
  body.innerHTML=data.map(s=>{
   const t=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
   return `<tr>
-   <td class="pos">${s.position}</td>
-   <td class="team-cell"><img class="team-logo" src="/icons/${esc(t.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(t.name||s.teamId)}</div><div class="team-short">${esc(t.shortName||'')}</div></div></td>
+   <td class="c-pos"><span class="rank${s.position<=3?' r'+s.position:''}">${s.position}</span></td>
+   <td class="c-team"><div class="team-cell"><img class="team-logo" src="/teams/${esc(t.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(t.name||s.teamId)}</div><div class="team-short">${esc(t.shortName||'')}</div></div></div></td>
    <td>${s.played}</td>
-   <td class="win">${s.won}</td>
-   <td class="loss">${s.lost}</td>
-   <td class="draw">${s.draw}</td>
+   <td class="win${dim(s.won)}">${s.won}</td>
+   <td class="loss${dim(s.lost)}">${s.lost}</td>
+   <td class="draw${dim(s.draw)}">${s.draw}</td>
    <td>${s.gf}</td>
    <td>${s.ga}</td>
-   <td class="${s.gd>=0?'win':'loss'}">${s.gd>=0?'+':''}${s.gd}</td>
-   <td class="pos">${s.points}</td>
-   <td><span class="streak ${s.streak?.startsWith('W')?'win':s.streak?.startsWith('L')?'loss':'draw'}">${esc(s.streak||'-')}</span></td>
-   <td class="form">${esc(s.form||'-')}</td>
+   <td class="${s.gd>0?'win':s.gd<0?'loss':'dim'}">${s.gd>0?'+':''}${s.gd}</td>
+   <td><span class="pts">${s.points}</span></td>
   </tr>`;
  }).join('');
+}
+function matchTeam(id,state){
+ const t=teamsById[id]||{name:id,logo:'',shortName:id};
+ const logo=t.logo?`<img src="/teams/${esc(t.logo)}" alt="" loading="lazy" onerror="this.parentElement.classList.add('nologo');this.remove()">`:'';
+ return `<div class="match-team ${state}"><div class="match-logo${t.logo?'':' nologo'}" data-s="${esc(t.shortName||t.name||id)}">${logo}</div><span class="match-team-name">${esc(t.name||id)}</span></div>`;
 }
 function renderMatches(data){
  const list=$('#matchesList'), empty=$('#matchesEmpty');
  if(!data.length){list.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
  list.innerHTML=data.map(m=>{
-  const t1=teamsById[m.team1Id]||{name:m.team1Id,logo:''};
-  const t2=teamsById[m.team2Id]||{name:m.team2Id,logo:''};
-  const score=m.status==='completed'?`${m.team1Score} - ${m.team2Score}`:'vs';
+  const done=m.status==='completed'||m.status==='finished';
+  const ls=m.team1Score, rs=m.team2Score, bo=boOf(m,ls,rs,done);
+  const s1=done&&ls<rs?'is-lose':'', s2=done&&rs<ls?'is-lose':'';
+  const score=done
+   ?`<div class="match-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>`
+   :`<div class="match-score vs">vs${bo?`<small>(${bo})</small>`:''}</div>`;
   return `<div class="match-card">
-   <div class="match-header"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><div class="match-meta">Week ${m.week} · Day ${m.day} · ${esc(m.matchType)}</div></div>
-   <div class="match-teams">
-    <div class="match-team"><img class="match-team-logo" src="/icons/${esc(t1.logo||'')}" alt="" onerror="this.remove()"><span class="match-team-name">${esc(t1.name||m.team1Id)}</span></div>
-    <div class="match-score">${score}</div>
-    <div class="match-team right"><span class="match-team-name">${esc(t2.name||m.team2Id)}</span><img class="match-team-logo" src="/icons/${esc(t2.logo||'')}" alt="" onerror="this.remove()"></div>
-   </div>
-   <div class="match-meta">${esc(m.scheduledTime)}${m.completedTime?' · '+esc(m.completedTime):''}</div>
+   <div class="match-top"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><span class="match-meta">Week ${m.week} · Day ${m.day} · ${esc(m.matchType)}</span></div>
+   ${m.scheduledTime?`<div class="match-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
+   <div class="match-body">${matchTeam(m.team1Id,s1)}${score}${matchTeam(m.team2Id,s2)}</div>
   </div>`;
  }).join('');
 }
@@ -226,30 +285,91 @@ function renderTeams(data){
  if(!data.length){grid.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
  grid.innerHTML=data.map(t=>`<div class="card" style="text-align:center">
-  <img src="/icons/${esc(t.logo||'')}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
+  <img src="/teams/${esc(t.logo||'')}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
   <div style="font-weight:600">${esc(t.name)}</div>
   <div style="color:var(--mut);font-size:12px">${esc(t.shortName)} · ${esc(t.city)}</div>
   <div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${esc(t.coach||'Unknown')}</div>
   <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${esc(t.status)}</span></div>
  </div>`).join('');
 }
-function renderDrafts(data){
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmtWhen(t){const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(t||'');
+ return m?`${MONTHS[+m[2]-1]} ${+m[3]}, ${m[1]} - ${m[4]}${m[5]?' '+m[5]:''}`:(t||'')}
+const fmtDur=s=>s>0?`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`:'';
+function heroFallback(img){const s=document.createElement('span');s.className=img.className+' hero-ic-miss';s.textContent=img.alt.slice(0,2);img.replaceWith(s)}
+function heroHtml(name,side){
+ const h=heroIcons[String(name).toLowerCase()]||{icon:'',slug:''};
+ const pic=h.icon
+  ?`<img class="hero-ic ${side}" src="/icons/${esc(h.icon)}" alt="${esc(name)}" loading="lazy" onerror="heroFallback(this)">`
+  :`<span class="hero-ic hero-ic-miss ${side}">${esc(String(name).slice(0,2))}</span>`;
+ // a hero that is in the roster links to its page: /heroes/<slug>
+ return h.slug?`<a class="hero-link" href="/heroes/${esc(h.slug)}" title="${esc(name)}">${pic}</a>`
+              :`<span class="hero-link" title="${esc(name)}">${pic}</span>`;
+}
+function teamBox(id,right){
+ const t=teamsById[id]||{name:id,logo:''};
+ const full=t.name||id, short=t.shortName||full;
+ const logo=t.logo?`<img src="/teams/${esc(t.logo)}" alt="" onerror="this.remove()">`:'';
+ // collapsed card shows the short name, an opened card shows the full name (switched in CSS)
+ const name=`<span class="nm nm-short" title="${esc(full)}">${esc(short)}</span><span class="nm nm-full">${esc(full)}</span>`;
+ return `<div class="mc-team${right?' right':''}">${right?logo+name:name+logo}</div>`;
+}
+function gameBlock(d,leftId){
+ const leftBlue=d.blueTeamId===leftId;
+ const lSide=leftBlue?'blue':'red', rSide=leftBlue?'red':'blue';
+ const lPicks=leftBlue?d.bluePicks:d.redPicks, rPicks=leftBlue?d.redPicks:d.bluePicks;
+ const lBans=leftBlue?d.blueBans:d.redBans, rBans=leftBlue?d.redBans:d.blueBans;
+ const res=(won)=>d.winnerTeamId?`<span class="mc-res ${won?'W':'L'}">${won?'W':'L'}</span>`:'<span></span>';
+ const lWon=d.winnerTeamId===leftId;
+ const dur=fmtDur(d.duration);
+ return `<div class="mc-game">
+  <div class="mc-row">${res(lWon)}
+   <div class="mc-picks">${lPicks.map(h=>heroHtml(h,lSide)).join('')}</div>
+   <div class="mc-center"><b>${dur||'-'}</b><small>Game ${d.gameNumber}</small></div>
+   <div class="mc-picks right">${rPicks.map(h=>heroHtml(h,rSide)).join('')}</div>
+   ${res(!lWon)}</div>
+  <div class="mc-row mc-bans"><span></span>
+   <div class="mc-picks">${lBans.map(h=>heroHtml(h,lSide)).join('')}</div>
+   <div class="mc-center">Bans</div>
+   <div class="mc-picks right">${rBans.map(h=>heroHtml(h,rSide)).join('')}</div><span></span></div>
+  ${d.map?`<div class="mc-map"><span><i>Map</i> ${esc(d.map)}</span></div>`:''}
+  ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:'<div class="mc-mvp none">MVP: not recorded</div>'}
+ </div>`;
+}
+function boOf(m,ls,rs,done){
+ if(m&&m.bestOf>0)return 'Bo'+m.bestOf;                 // set best_of in pro-matches.csv
+ if(!done)return '';
+ const hi=Math.max(ls,rs), lo=Math.min(ls,rs);
+ if(hi===1&&lo===1)return 'Bo2';
+ return lo>0&&hi>lo?'Bo'+(2*hi-1):'';                   // a sweep is Bo2 or Bo3, so it needs best_of
+}
+function matchCard(m,games){
+ const leftId=m?m.team1Id:games[0].blueTeamId;
+ const rightId=m?m.team2Id:games[0].redTeamId;
+ const done=!!m&&(m.status==='completed'||m.status==='finished');
+ let ls,rs;
+ if(done){ls=m.team1Score;rs=m.team2Score}
+ else{ls=games.filter(g=>g.winnerTeamId===leftId).length;rs=games.filter(g=>g.winnerTeamId===rightId).length}
+ const bo=boOf(m,ls,rs,done);
+ return `<details class="mc">
+  <summary>
+   ${m&&m.scheduledTime?`<div class="mc-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
+   <div class="mc-head">${teamBox(leftId,false)}
+    <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>
+    ${teamBox(rightId,true)}</div>
+   <div class="mc-more"></div>
+  </summary>
+  <div class="mc-body">${games.map(g=>gameBlock(g,leftId)).join('')}</div>
+ </details>`;
+}
+function renderDrafts(data,matches){
  const list=$('#draftsList'), empty=$('#draftsEmpty');
  if(!data.length){list.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
- list.innerHTML=data.map(d=>{
-  const bt=teamsById[d.blueTeamId]||{name:d.blueTeamId,logo:''};
-  const rt=teamsById[d.redTeamId]||{name:d.redTeamId,logo:''};
-  return `<div class="draft-card">
-   <div class="draft-header"><div><strong>Game ${d.gameNumber}</strong> · ${esc(d.matchId)} · Patch ${esc(d.patch)}</div><div class="match-status ${d.winnerTeamId===d.blueTeamId?'completed':''}">${esc(bt.name)} ${d.winnerTeamId===d.blueTeamId?'won':'lost'}</div></div>
-   <div class="draft-bans-picks">
-    <div class="draft-side bans blue"><h4>Blue Bans</h4><div class="draft-list">${d.blueBans.map(h=>`<span class="draft-hero ban">${esc(h)}</span>`).join('')}</div></div>
-    <div class="draft-side bans red"><h4>Red Bans</h4><div class="draft-list">${d.redBans.map(h=>`<span class="draft-hero ban">${esc(h)}</span>`).join('')}</div></div>
-    <div class="draft-side picks blue"><h4>Blue Picks</h4><div class="draft-list">${d.bluePicks.map(h=>`<span class="draft-hero">${esc(h)}</span>`).join('')}</div></div>
-    <div class="draft-side picks red"><h4>Red Picks</h4><div class="draft-list">${d.redPicks.map(h=>`<span class="draft-hero">${esc(h)}</span>`).join('')}</div></div>
-   </div>
-  </div>`;
- }).join('');
+ const byId={}; (matches||[]).forEach(m=>byId[m.id]=m);
+ const groups=new Map();
+ data.forEach(d=>{if(!groups.has(d.matchId))groups.set(d.matchId,[]);groups.get(d.matchId).push(d)});
+ list.innerHTML=[...groups].map(([id,g])=>matchCard(byId[id],g.sort((a,b)=>a.gameNumber-b.gameNumber))).join('');
 }
 loadLeagues();meta();
 </script>

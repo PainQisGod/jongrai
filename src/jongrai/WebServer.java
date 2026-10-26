@@ -38,14 +38,20 @@ public class WebServer {
     private static Map<String, Hero> pool;
     private static final Map<String, Hero> heroBySlug = new HashMap<>();
     private static final Map<String, Item> itemBySlug = new HashMap<>();
-    private static Draft draft;
+    private static Sessions sessions;
     private static ItemRepository gear;
     private static ProLeagueRepository pro;
     private static final Map<String, String> icons = new HashMap<>(); // hero name -> icon file name
     private static final SuggestionEngine engine = new SuggestionEngine();
 
-    /** Guards every read and write of {@link #draft}. Never held across the AI call. */
-    private static final Object DRAFT_LOCK = new Object();
+    /** The calling visitor's board for this request. Set in route() for the draft endpoints, cleared in handle(). */
+    private static final ThreadLocal<Draft> CURRENT = new ThreadLocal<>();
+    /** Only these paths touch a visitor's board (and so create or read their session cookie). */
+    private static final Set<String> DRAFT_PATHS = Set.of(
+            "/api/state", "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset",
+            "/api/analysis", "/api/auto-suggest", "/api/suggest", "/api/bans", "/api/wisdom");
+    /** Behind HTTPS the session cookie gets the Secure flag: automatic when JONGRAI_PUBLIC_URL is https, or force it with -Djongrai.secureCookies=true. */
+    private static boolean secureCookies() { return Boolean.getBoolean("jongrai.secureCookies") || Auth.secureCookies(); }
     /** Finished AI reads by prompt. A failed future is removed so the user can retry. */
     private static final ConcurrentHashMap<String, CompletableFuture<String>> wisdomCache = new ConcurrentHashMap<>();
 
@@ -55,7 +61,7 @@ public class WebServer {
             .withNano(0).toString().replace('T', ' ');
 
     private static final Set<String> MUTATING = Set.of(
-            "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset", "/api/wisdom");
+            "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset", "/api/wisdom", "/auth/logout");
     private static final DateTimeFormatter HTTP_DATE =
             DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US).withZone(ZoneOffset.UTC);
 
@@ -73,9 +79,10 @@ public class WebServer {
         port = parsePort(args);
         home = resolveHome();
         AiCoach.init(home);
+        Auth.init(home, port);
 
         pool = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
-        draft = new Draft(pool);
+        sessions = new Sessions(pool);
         gear = ItemRepository.load(home.resolve("data/items.csv"), home.resolve("data/hero-builds.csv"));
         pro = ProLeagueRepository.load(home.resolve("data"));
         loadIcons(home.resolve("data/hero-icons.csv"));
@@ -84,7 +91,7 @@ public class WebServer {
 
         List<String> warnings = new ArrayList<>(HeroRepository.validate(pool));
         warnings.addAll(gear.validate(pool.keySet(), home.resolve("web/icons")));
-        warnings.addAll(pro.validate(pool.keySet()));
+        warnings.addAll(pro.validate(pool.keySet(), home.resolve("web/teams")));
         icons.forEach((hero, file) -> {
             if (!Files.isRegularFile(home.resolve("web/icons").resolve(file))) warnings.add("hero icon '" + file + "' for " + hero + " is missing");
         });
@@ -100,6 +107,10 @@ public class WebServer {
                 : "OFF - no key found (" + AiCoach.keySource() + ")"));
         if (!AiCoach.configured()) {
             System.out.println("  To turn it on, copy ai-config.example.txt to ai-config.txt, add your key, and restart.");
+        }
+        System.out.println("Sign-in " + Auth.summary());
+        if (!Auth.configured()) {
+            System.out.println("  To turn it on, follow docs/google-signin-setup.md (auth-config.example.txt -> auth-config.txt).");
         }
     }
 
@@ -143,12 +154,100 @@ public class WebServer {
         } catch (RuntimeException e) {
             e.printStackTrace();
             sendJson(ex, 500, "{\"error\":\"Internal error\"}");
+        } finally {
+            CURRENT.remove();
         }
+    }
+
+    /** This computer, plus the site's public address once JONGRAI_PUBLIC_URL is set. Anything else is refused. */
+    private static boolean hostAllowed(String host) {
+        if (host == null) return false;
+        if (Set.of("localhost:" + port, "127.0.0.1:" + port, "[::1]:" + port).contains(host)) return true;
+        String pub = Auth.publicAuthority();
+        return !pub.isEmpty() && pub.equalsIgnoreCase(host);
+    }
+
+    /** The visitor's board for this request; only valid on the DRAFT_PATHS. */
+    private static Draft draft() {
+        Draft d = CURRENT.get();
+        if (d == null) throw new IllegalStateException("No draft session for this request.");
+        return d;
+    }
+
+    /** Finds the visitor's session from their cookie, or starts one and sets the cookie on this response. */
+    private static Sessions.Session sessionFor(HttpExchange ex) {
+        Sessions.Session s = existingSession(ex);
+        if (s == null) s = sessions.create();
+        ex.getResponseHeaders().add("Set-Cookie", sessions.setCookie(s, secureCookies())); // re-sent so an active visitor's cookie slides forward
+        return s;
+    }
+
+    private static Sessions.Session existingSession(HttpExchange ex) {
+        return sessions.find(Sessions.idFrom(ex.getRequestHeaders().getFirst("Cookie")));
+    }
+
+    private static void redirect(HttpExchange ex, String location) throws IOException {
+        ex.getResponseHeaders().set("Location", location);
+        ex.getResponseHeaders().set("Cache-Control", "private, no-store");
+        ex.sendResponseHeaders(302, -1);
+        ex.getResponseBody().close();
+    }
+
+    private static String meJson(HttpExchange ex) {
+        ex.getResponseHeaders().set("Cache-Control", "private, no-store");
+        if (!Auth.configured()) return "{\"configured\":false,\"loggedIn\":false}";
+        Sessions.Session s = existingSession(ex);
+        if (s == null || s.user == null) return "{\"configured\":true,\"loggedIn\":false}";
+        ex.getResponseHeaders().add("Set-Cookie", sessions.setCookie(s, secureCookies())); // keeps a regular visitor signed in
+        Auth.User u = s.user;
+        return "{\"configured\":true,\"loggedIn\":true,\"name\":" + Json.str(u.name()) + ",\"email\":" + Json.str(u.email())
+                + ",\"picture\":" + Json.str(u.picture()) + ",\"admin\":" + u.admin() + "}";
+    }
+
+    private static void login(HttpExchange ex, Map<String, String> q) throws IOException {
+        if (!Auth.configured()) {
+            send(ex, 404, "text/plain; charset=utf-8", "Sign-in is not set up on this server.");
+            return;
+        }
+        redirect(ex, Auth.beginLogin(sessionFor(ex).id, q.get("next")));
+    }
+
+    private static void callback(HttpExchange ex, Map<String, String> q) throws IOException {
+        if (!Auth.configured()) {
+            send(ex, 404, "text/plain; charset=utf-8", "Sign-in is not set up on this server.");
+            return;
+        }
+        if (q.containsKey("error")) { // the visitor said no at Google
+            redirect(ex, "/");
+            return;
+        }
+        Sessions.Session old = existingSession(ex);
+        try {
+            Auth.Result r = Auth.finishLogin(old == null ? null : old.id, q.get("code"), q.get("state"));
+            Auth.Claims c = r.claims();
+            // The admin list is read here, so changing it takes effect the next time someone signs in.
+            Sessions.Session s = sessions.login(old, new Auth.User(c.sub(), c.email(), c.name(), c.picture(), Auth.isAdmin(c.email())));
+            ex.getResponseHeaders().add("Set-Cookie", sessions.setCookie(s, secureCookies()));
+            redirect(ex, r.next());
+        } catch (Auth.AuthException e) {
+            String m = e.getMessage().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+            send(ex, 400, "text/html; charset=utf-8", "<!doctype html><meta charset=utf-8><title>Sign-in failed</title>"
+                    + "<link rel=stylesheet href=/style.css><main style='max-width:520px;margin:15vh auto;padding:0 16px;text-align:center'>"
+                    + "<h2>Sign-in did not finish</h2><p>" + m + "</p><p><a href='/'>Back to Jongrai</a></p></main>");
+        }
+    }
+
+    private static void logout(HttpExchange ex) throws IOException {
+        Sessions.Session s = existingSession(ex);
+        if (s != null) sessions.remove(s);
+        ex.getResponseHeaders().add("Set-Cookie", Sessions.clearCookie(secureCookies()));
+        ex.getResponseHeaders().set("Cache-Control", "private, no-store");
+        sendJson(ex, 200, "{\"ok\":true}");
     }
 
     private static void route(HttpExchange ex) throws IOException {
         String host = ex.getRequestHeaders().getFirst("Host");
-        if (!Set.of("localhost:" + port, "127.0.0.1:" + port, "[::1]:" + port).contains(host)) {
+        if (!hostAllowed(host)) {
             send(ex, 421, "text/plain", "Misdirected request");
             return;
         }
@@ -169,8 +268,10 @@ public class WebServer {
         if (mutating) q.putAll(query(new String(ex.getRequestBody().readNBytes(65536), StandardCharsets.UTF_8)));
 
         if (path.startsWith("/icons/")) { serveFile(ex, "web/icons", path.substring(7), true); return; }
+        if (path.startsWith("/teams/")) { serveFile(ex, "web/teams", path.substring(7), true); return; }
         if (path.startsWith("/video/")) { serveFile(ex, "web/video", path.substring(7), true); return; }
         if (path.startsWith("/mockups/")) { serveFile(ex, "mockups", path.length() == 9 ? "index.html" : path.substring(9), false); return; }
+        if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
             case "/" -> servePage(ex, "home.html");
             case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" -> servePage(ex, PAGES.get(path));
@@ -182,7 +283,7 @@ public class WebServer {
             case "/api/items" -> sendJson(ex, 200, itemsJson());
             case "/api/builds" -> sendJson(ex, 200, buildsJson(q.getOrDefault("hero", "")));
             case "/api/leagues" -> sendJson(ex, 200, leaguesJson());
-            case "/api/teams" -> sendJson(ex, 200, teamsJson(q.getOrDefault("league", "")));
+            case "/api/teams" -> sendJson(ex, 200, teamsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
             case "/api/standings" -> sendJson(ex, 200, standingsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
             case "/api/matches" -> sendJson(ex, 200, matchesJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("status", "")));
             case "/api/drafts" -> sendJson(ex, 200, draftsJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("match", "")));
@@ -193,9 +294,13 @@ public class WebServer {
                     q.getOrDefault("refresh", "0").equals("1")));
             case "/api/auto-suggest" -> sendJson(ex, 200, locked(WebServer::autoSuggestJson));
             case "/api/suggest" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue"));
-                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft, s, 5)))); }
+                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft(), s, 5)))); }
             case "/api/bans" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue"));
-                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft, s, 5)))); }
+                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft(), s, 5)))); }
+            case "/api/me" -> sendJson(ex, 200, meJson(ex));
+            case "/auth/login" -> login(ex, q);
+            case "/auth/callback" -> callback(ex, q);
+            case "/auth/logout" -> logout(ex);
             default -> {
                 // Per-hero pages such as /heroes/obsidia render client-side from the same file.
                 if (path.startsWith("/heroes/") && heroBySlug.containsKey(path.substring(8))) servePage(ex, "hero-statistics.html");
@@ -206,14 +311,15 @@ public class WebServer {
     }
 
     private static String locked(java.util.function.Supplier<String> body) {
-        synchronized (DRAFT_LOCK) { return body.get(); }
+        synchronized (draft()) { return body.get(); }
     }
 
     /** One draft change. A client that sends v=<version> is refused with 409 when its board is out of date. */
     private static void mutate(HttpExchange ex, String path, Map<String, String> q) throws IOException {
         String hero = q.getOrDefault("hero", "");
         String body;
-        synchronized (DRAFT_LOCK) {
+        Draft draft = draft();
+        synchronized (draft) {
             if (q.containsKey("v") && !q.get("v").equals(Long.toString(draft.version()))) {
                 sendJson(ex, 409, "{\"error\":\"The board changed in another window.\",\"state\":" + stateJson() + "}");
                 return;
@@ -300,15 +406,15 @@ public class WebServer {
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    private static String teamsJson(String leagueId) {
-        List<ProLeagueRepository.ProTeam> list = leagueId == null || leagueId.isBlank() ? pro.teams() : pro.teamsInLeague(leagueId);
-        return list.stream().map(WebServer::teamJson).collect(Collectors.joining(",", "[", "]"));
+    private static String teamsJson(String leagueId, String season) {
+        if (leagueId == null || leagueId.isBlank() || season == null || season.isBlank()) return "[]";
+        return pro.teamsInLeague(leagueId, season).stream().map(WebServer::teamJson).collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String teamJson(ProLeagueRepository.ProTeam t) {
         return String.format(Locale.ROOT,
-                "{\"id\":%s,\"leagueId\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s}",
-                Json.str(t.id()), Json.str(t.leagueId()), Json.str(t.name()), Json.str(t.shortName()), Json.str(t.logo()),
+                "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s}",
+                Json.str(t.id()), Json.str(t.leagueId()), Json.str(t.season()), Json.str(t.name()), Json.str(t.shortName()), Json.str(t.logo()),
                 t.founded(), Json.str(t.city()), Json.str(t.coach()), Json.str(t.status()));
     }
 
@@ -326,10 +432,10 @@ public class WebServer {
         return pro.matches(leagueId, season).stream()
                 .filter(m -> status == null || status.isBlank() || m.status().equals(status))
                 .map(m -> String.format(Locale.ROOT,
-                        "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"week\":%d,\"day\":%d,\"team1Id\":%s,\"team2Id\":%s,\"team1Score\":%d,\"team2Score\":%d,\"status\":%s,\"scheduledTime\":%s,\"completedTime\":%s,\"matchType\":%s}",
+                        "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"week\":%d,\"day\":%d,\"team1Id\":%s,\"team2Id\":%s,\"team1Score\":%d,\"team2Score\":%d,\"status\":%s,\"scheduledTime\":%s,\"completedTime\":%s,\"matchType\":%s,\"bestOf\":%d}",
                         Json.str(m.id()), Json.str(m.leagueId()), Json.str(m.season()), m.week(), m.day(),
                         Json.str(m.team1Id()), Json.str(m.team2Id()), m.team1Score(), m.team2Score(),
-                        Json.str(m.status()), Json.str(m.scheduledTime()), Json.str(m.completedTime()), Json.str(m.matchType())))
+                        Json.str(m.status()), Json.str(m.scheduledTime()), Json.str(m.completedTime()), Json.str(m.matchType()), m.bestOf()))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -338,15 +444,17 @@ public class WebServer {
         return pro.drafts(leagueId, season).stream()
                 .filter(d -> matchId == null || matchId.isBlank() || d.matchId().equals(matchId))
                 .map(d -> String.format(Locale.ROOT,
-                        "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s}",
+                        "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s,\"map\":%s,\"duration\":%d,\"mvp\":%s}",
                         Json.str(d.id()), Json.str(d.matchId()), Json.str(d.leagueId()), Json.str(d.season()), d.gameNumber(),
                         Json.str(d.blueTeamId()), Json.str(d.redTeamId()), Json.list(d.blueBans()), Json.list(d.redBans()),
-                        Json.list(d.bluePicks()), Json.list(d.redPicks()), d.blueSide(), Json.str(d.winnerTeamId()), Json.str(d.patch())))
+                        Json.list(d.bluePicks()), Json.list(d.redPicks()), d.blueSide(), Json.str(d.winnerTeamId()), Json.str(d.patch()),
+                        Json.str(d.map()), d.duration(), Json.str(d.mvp())))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    /** Caller holds {@link #DRAFT_LOCK}. */
+    /** Caller holds the draft's lock. */
     private static String stateJson() {
+        Draft draft = draft();
         return "{\"version\":" + draft.version() + ",\"blue\":" + teamJson(draft.team(Draft.Side.BLUE))
                 + ",\"red\":" + teamJson(draft.team(Draft.Side.RED)) + "}";
     }
@@ -365,8 +473,9 @@ public class WebServer {
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    /** Caller holds {@link #DRAFT_LOCK}. The analysis, with team coordination folded in. */
+    /** Caller holds the draft's lock. The analysis, with team coordination folded in. */
     private static String analysisJson() {
+        Draft draft = draft();
         DraftAnalyzer analyzer = new DraftAnalyzer();
         DraftAnalyzer.Analysis a = analyzer.analyze(draft);
         DraftAnalyzer.Coordination c = analyzer.coordination(draft);
@@ -395,11 +504,12 @@ public class WebServer {
     /**
      * AI read on the draft. Held back until the draft is finished (unless force=1), so no tokens are
      * spent judging a half-built board. Cached per prompt, so re-rendering the page never re-bills the
-     * API; refresh=1 drops the cached read and asks again. The upstream call runs outside the draft lock.
+     * API; refresh=1 drops the cached read and asks again. The upstream call runs outside the draft's lock.
      */
     private static String wisdomJson(boolean force, boolean refresh) {
         String prompt;
-        synchronized (DRAFT_LOCK) {
+        Draft draft = draft();
+        synchronized (draft) {
             if (!AiCoach.configured()) {
                 return "{\"configured\":false,\"error\":\"Coach off: no API key. Copy ai-config.example.txt to ai-config.txt, add your key, then restart the server.\"}";
             }
@@ -424,8 +534,9 @@ public class WebServer {
         }
     }
 
-    /** Caller holds {@link #DRAFT_LOCK}. Up to 3 suggestions for whoever picks next, or none once the draft is done. */
+    /** Caller holds the draft's lock. Up to 3 suggestions for whoever picks next, or none once the draft is done. */
     private static String autoSuggestJson() {
+        Draft draft = draft();
         Optional<Draft.Side> next = draft.nextPick();
         if (next.isEmpty()) return "{\"active\":false,\"reason\":\"Draft complete\",\"suggestions\":[]}";
         Draft.Side side = next.get();
@@ -572,6 +683,8 @@ public class WebServer {
     }
 
     private static void sendJson(HttpExchange ex, int code, String body) throws IOException {
+        // a visitor's own board must never be kept by a shared cache
+        if (CURRENT.get() != null) ex.getResponseHeaders().set("Cache-Control", "private, no-store");
         send(ex, code, "application/json; charset=utf-8", body);
     }
 

@@ -1,8 +1,106 @@
-# Pro Drafts: draft_id, match_id, league_id, season, game_number, blue_team_id, red_team_id, blue_bans, red_bans, blue_picks, red_picks, blue_side, winner_team_id, patch
+# Pro Drafts: draft_id, match_id, league_id, season, game_number, blue_team_id, red_team_id, blue_bans, red_bans, blue_picks, red_picks, blue_side, winner_team_id, patch, map, duration, mvp
 # bans/picks are semicolon-separated hero names in order
-# blue_side: 1=blue, 0=red
-draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch
-mpl_kh_1_g1,mpl_kh_1,mpl_kh,Season 4,1,cfb,lgl,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,cfb,2.2.16
-mpl_kh_1_g2,mpl_kh_1,mpl_kh,Season 4,2,cfb,lgl,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,cfb,2.2.16
-mpl_kh_2_g1,mpl_kh_2,mpl_kh,Season 4,1,bnc,see,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,see,2.2.16
-mpl_kh_2_g2,mpl_kh_2,mpl_kh,Season 4,2,bnc,see,"Ling;Phoveus;Kaja;Julian;Yve","Baxia;Khufra;Aulus;Masha;Terizla","Akai;Lunox;Beatrix;Carmilla;Cecilion","Paquito;Lolita;Kagura;Wanwan;Barats",1,see,2.2.16
+# blue_side: 1=blue, 0=red (which team was on blue side)
+# map: the arena version in play. Moonton revamps the map annually and it shifts
+# the draft, so record it for every draft (e.g. "2026"). Leave blank when unknown.
+# duration: game length as MM:SS (e.g. "23:43"). Plain seconds ("1423") still work. Leave blank when unknown.
+# mvp: the MVP player of that one game (one name per game, e.g. "Dingarai"). Leave blank when unknown.
+# match_id must equal a match_id in pro-matches.csv - the Drafts tab groups games into one card per match.
+# Empty for now: per-game bans/picks for MPL KH are not published in a scrapeable
+# source (they need match VODs or Liquipedia match pages). Append verified drafts
+# here - never invent them.
+draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch,map,duration,mvp
+
+mpl_kh_w1_d1_m1_g1,mpl_kh_s11_w1_d1_m1,mpl_kh,Season 11,1,gxl,pro,"Uranus;Atlas;Barats;Miya;Minotaur","Freya;Carmilla;Paquito;Chou;Kalea","Ruby;Hirara;Selena;Belerick;Melissa","Lukas;Nolan;Eudora;Gloo;Clint",0,pro,2.2.16,Default Map,14:08,MP the King
+mpl_kh_w1_d1_m1_g2,mpl_kh_s11_w1_d1_m1,mpl_kh,Season 11,2,gxl,pro,"Atlas;Barats;Gloo;Clint;Miya","Freya;Carmilla;Paquito;Kalea;Phoveus","Uranus;Hirara;Selena;Belerick;Brody","Lukas;Nolan;Eudora;Gatotkaca;Obsidia",0,gxp,2.2.16,Default Map,14:22,Darkside
+mpl_kh_w1_d1_m1_g3,mpl_kh_s11_w1_d1_m1,mpl_kh,Season 11,3,gxl,pro,"Gloo;Atlas;Barats;Miya;Clint","Freya;Carmilla;Uranus;Phoveus;Kalea","Sora;Hirara;Selena;Minotaur;Moskov","Valentina;Nolan;Eudora;Belerick;Brody",0,pro,2.2.16,Default Map,17:05,PPPPP
+
+mpl_kh_w1_d1_m2_g1,mpl_kh_s11_w1_d1_m2,mpl_kh,Season 11,1,tnr,gxp,"Guinevere;Atlas;Selena;Miya;Obsidia","Kaja;Uranus;Hirara;Lylia;Zhuxin","Lukas;Paquito;Novaria;Belerick;Clint","Barats;Suyou;Eudora;Carmilla;Brody",0,tnr,2.2.16,Default Map,13:37,Tyyy
+mpl_kh_w1_d1_m2_g2,mpl_kh_s11_w1_d1_m2,mpl_kh,Season 11,2,tnr,gxp,"Guinevere;Selena;Atlas;Nolan;Suyou","Kaja;Uranus;Hirara;Lukas;Beatrix","Minotaur;Paquito;Zhuxin;Carmilla;Miya","Barats;Harley;Eudora;Belerick;Clint",0,tnr,2.2.16,Default Map,10:00,Nether
+
+mpl_kh_w1_d1_m3_g1,mpl_kh_s11_w1_d1_m3,mpl_kh,Season 11,1,flkh,eye,"Uranus;Rafaela;Mathilda;Cecilion;Eudora","Freya;Hirara;Atlas;Moskov;Chou","Esmeralda;Paquito;Selena;Belerick;Miya","Barats;Fanny;Yve;Carmilla;Claude",0,flkh,2.2.16,Default Map,17:03,Aries
+mpl_kh_w1_d1_m3_g2,mpl_kh_s11_w1_d1_m3,mpl_kh,Season 11,2,eye,flkh,"Atlas;Carmilla;Paquito;Chou;Kalea","Freya;Hirara;Rafaela;Uranus;Esmeralda","Gatotkaca;Fanny;Selena;Carmilla;Brody","Barats;Nolan;Eudora;Marcel;Moskov",0,flkh,2.2.16,Default Map,10:05,Layy
+
+mpl_kh_w1_d2_m1_g1,mpl_kh_s11_w1_d2_m1,mpl_kh,Season 11,1,rvz,gxp,"Guinevere;Atlas;Carmilla;Alice;Uranus","Freya;Hirara;Belerick;Yi Sun-shin;Nolan","Barats;Lukas;Selena;Gatotkaca;Clint","Cici;Paquito;Lylia;Minotaur;Bruno",0,rvz,2.2.16,Default Map,11:31,Nero
+mpl_kh_w1_d2_m1_g2,mpl_kh_s11_w1_d2_m1,mpl_kh,Season 11,2,rvz,gxp,"Guinevere;Carmilla;Atlas;Lukas;Harley","Freya;Hirara;Selena;Esmeralda;Hanabi","Sora;Paquito;Rafaela;Gatotkaca;Claude","Uranus;Hanzo;Zhuxin;Belerick;Obsidia",0,rvz,2.2.16,Default Map,10:28,VBEN
+
+mpl_kh_w1_d2_m2_g1,mpl_kh_s11_w1_d2_m2,mpl_kh,Season 11,1,sys,gxl,"Selena;Uranus;Atlas;Minotaur;Moskov","Freya;Fanny;Marcel;Barats;Brody","Carmilla;Nolan;Cecilion;Gloo;Melissa","Sora;Hirara;Angela;Belerick;Paquito",0,gxl,2.2.16,Default Map,11:42,Linnn
+mpl_kh_w1_d2_m2_g2,mpl_kh_s11_w1_d2_m2,mpl_kh,Season 11,2,sys,gxl,"Uranus;Atlas;Carmilla;Sora;Moskov","Freya;Fanny;Eudora;Barats;Minotaur","Esmeralda;Hirara;Selena;Gatotkaca;Miya","Belerick;Paquito;Valentina;Kalea;Brody",0,gxl,2.2.16,Default Map,15:08,Wickyyy
+
+mpl_kh_w1_d2_m3_g1,mpl_kh_s11_w1_d2_m3,mpl_kh,Season 11,1,vgr,val,"Fanny;Selena;Uranus;Nolan;Obsidia","Marcel;Paquito;Freya;Harith;Cici","Yu Zhong;Hirara;Angela;Gatotkaca;Clint","Hylos;Aulus;Cecilion;Carmilla;Claude",0,val,2.2.16,Default Map,12:25,SECRET
+mpl_kh_w1_d2_m3_g2,mpl_kh_s11_w1_d2_m3,mpl_kh,Season 11,2,vgr,val,"Fanny;Aulus;Carmilla;Minotaur;Gloo","Marcel;Freya;Atlas;Esmeralda;Arlott","Ruby;Hirara;Angela;Belerick;Bruno","Uranus;Paquito;Rafaela;Chou;Karrie",0,vgr,2.2.16,Default Map,15:31,Vincen
+mpl_kh_w1_d2_m3_g3,mpl_kh_s11_w1_d2_m3,mpl_kh,Season 11,3,vgr,val,"Fanny;Aulus;Carmilla;Rafaela;Mathilda","Marcel;Freya;Atlas;Bruno;Brody","Uranus;Hirara;Angela;Gloo;Miya","Ruby;Paquito;Vexana;Belerick;Moskov",0,vgr,2.2.16,Default Map,18:43,Raa
+
+mpl_kh_w1_d3_m1_g1,mpl_kh_s11_w1_d3_m1,mpl_kh,Season 11,1,flkh,sys,"Rafaela;Uranus;Aulus;Gloo;Miya","Freya;Fanny;Carmilla;Barats;Marcel","Esmeralda;Hirara;Selena;Atlas;Bruno","Belerick;Paquito;Valentina;Minotaur;Obsidia",0,flkh,2.2.16,Default Map,14:06,Layy
+mpl_kh_w1_d3_m1_g2,mpl_kh_s11_w1_d3_m1,mpl_kh,Season 11,2,flkh,sys,"Rafaela;Uranus;Aulus;Gloo;Miya","Freya;Fanny;Atlas;Barats;Marcel","Esmeralda;Hirara;Selena;Minotaur;Bruno","Belerick;Paquito;Eudora;Carmilla;Clint",0,flkh,2.2.16,Default Map,10:32,Sakzuu
+
+mpl_kh_w1_d3_m2_g1,mpl_kh_s11_w1_d3_m2,mpl_kh,Season 11,1,pro,tnr,"Carmilla;Uranus;Aulus;Barats;Gloo","Freya;Hirara;Marcel;Valentina;Esmeralda","Sora;Paquito;Lylia;Atlas;Ixia","Minotaur;Lukas;Zhuxin;Mathilda;Bruno",0,pro,2.2.16,Default Map,14:03,MP the King
+mpl_kh_w1_d3_m2_g2,mpl_kh_s11_w1_d3_m2,mpl_kh,Season 11,2,pro,tnr,"Uranus;Carmilla;Aulus;Gloo;Kalea","Freya;Hirara;Atlas;Marcel;Belerick","Lukas;Paquito;Lylia;Minotaur;Obsidia","Barats;Nolan;Eudora;Gatotkaca;Clint",0,pro,2.2.16,Default Map,24:14,Outplayed
+
+mpl_kh_w1_d3_m3_g1,mpl_kh_s11_w1_d3_m3,mpl_kh,Season 11,1,vgr,rvz,"Selena;Barats;Aulus;Mathilda;Lukas","Freya;Marcel;Atlas;Ruby;Bruno","Uranus;Hirara;Angela;Gloo;Miya","Sora;Paquito;Eudora;Belerick;Obsidia",0,vgr,2.2.16,Default Map,19:53,Raa
+mpl_kh_w1_d3_m3_g2,mpl_kh_s11_w1_d3_m3,mpl_kh,Season 11,2,vgr,rvz,"Selena;Barats;Aulus;Obsidia;Ruby","Freya;Marcel;Uranus;Bruno;Moskov","Esmeralda;Hirara;Angela;Gloo;Harith","Belerick;Paquito;Eudora;Kalea;Clint",0,rvz,2.2.16,Default Map,13:31,VBEN
+mpl_kh_w1_d3_m3_g3,mpl_kh_s11_w1_d3_m3,mpl_kh,Season 11,3,rvz,vgr,"Atlas;Carmilla;Marcel;Uranus;Alice","Freya;Aulus;Hirara;Gloo;Clint","Barats;Paquito;Selena;Gatotkaca;Kimmy","Benedetta;Fredrinn;Rafaela;Belerick;Bruno",0,vgr,2.2.16,Default Map,17:43,Vincen
+
+mpl_kh_w2_d1_m1_g1,mpl_kh_s11_w2_d1_m1,mpl_kh,Season 11,1,vgr,gxp,"Guinevere;Selena;Carmilla;Minotaur;Mathilda","Freya;Belerick;Hirara;Bruno;Esmeralda","Masha;Suyou;Eudora;Atlas;Clint","Uranus;Paquito;Valentina;Rafaela;Hanabi",0,vgr,2.2.16,Default Map,10:52,Vincen
+mpl_kh_w2_d1_m1_g2,mpl_kh_s11_w2_d1_m1,mpl_kh,Season 11,2,vgr,gxp,"Guinevere;Selena;Carmilla;Uranus;Barats","Freya;Atlas;Hirara;Zhuxin;Lylia","Kalea;Paquito;Kagura;Gloo;Miya","Belerick;Nolan;Eudora;Marcel;Brody",0,vgr,2.2.16,Default Map,10:10,Shadoww
+
+mpl_kh_w2_d1_m2_g1,mpl_kh_s11_w2_d1_m2,mpl_kh,Season 11,1,val,rvz,"Atlas;Paquito;Selena;Rafaela;Minotaur","Fanny;Carmilla;Freya;Gloo;Karrie","Esmeralda;Hirara;Zhuxin;Belerick;Obsidia","Masha;Aulus;Eudora;Gatotkaca;Bruno",0,rvz,2.2.16,Default Map,11:44,VBEN
+mpl_kh_w2_d1_m2_g2,mpl_kh_s11_w2_d1_m2,mpl_kh,Season 11,2,rvz,val,"Fanny;Carmilla;Atlas;Alpha;Leomord","Paquito;Hirara;Gloo;Gatotkaca;Freya","Lukas;Aulus;Rafaela;Minotaur;Bruno","Cici;Alice;Selena;Masha;Obsidia",0,rvz,2.2.16,Default Map,14:04,Souur
+
+mpl_kh_w2_d1_m3_g1,mpl_kh_s11_w2_d1_m3,mpl_kh,Season 11,1,flkh,pro,"Uranus;Aulus;Masha;Freya;Barats","Fanny;Carmilla;Selena;Miya;Kalea","Esmeralda;Hirara;Belerick;Angela;Bruno","Sora;Nolan;Zhuxin;Atlas;Obsidia",0,flkh,2.2.16,Default Map,14:42,Aries
+mpl_kh_w2_d1_m3_g2,mpl_kh_s11_w2_d1_m3,mpl_kh,Season 11,2,pro,flkh,"Fanny;Selena;Hirara;Esmeralda;Zhuxin","Masha;Aulus;Carmilla;Yi Sun-shin;Lukas","Freya;Alice;Eudora;Belerick;Ixia","Atlas;Nolan;Zetian;Minotaur;Bruno",0,flkh,2.2.16,Default Map,08:50,Cypher
+
+mpl_kh_w2_d2_m1_g1,mpl_kh_s11_w2_d2_m1,mpl_kh,Season 11,1,eye,val,"Atlas;Fanny;Carmilla;Nolan;Harley","Paquito;Hirara;Masha;Cici;Freya","Aulus;Baxia;Eudora;Belerick;Obsidia","Hylos;Suyou;Rafaela;Kalea;Bruno",0,val,2.2.16,Default Map,09:53,Nosia
+mpl_kh_w2_d2_m1_g2,mpl_kh_s11_w2_d2_m1,mpl_kh,Season 11,2,eye,val,"Atlas;Fanny;Bruno;Claude;Miya","Hirara;Paquito;Masha;Nolan;Harley","Cici;Baxia;Zhuxin;Carmilla;Obsidia","Esmeralda;Aulus;Rafaela;Minotaur;Harith",0,val,2.2.16,Default Map,19:21,Nosia
+
+mpl_kh_w2_d2_m2_g1,mpl_kh_s11_w2_d2_m2,mpl_kh,Season 11,1,rvz,sys,"Fanny;Gloo;Carmilla;Obsidia;Rafaela","Selena;Masha;Freya;Minotaur;Gatotkaca","Lukas;Hirara;Angela;Belerick;Bruno","Valentina;Aulus;Kimmy;Atlas;Paquito",0,sys,2.2.16,Default Map,10:59,Aiden
+mpl_kh_w2_d2_m2_g2,mpl_kh_s11_w2_d2_m2,mpl_kh,Season 11,2,rvz,sys,"Atlas;Paquito;Gloo;Uranus;Rafaela","Selena;Masha;Freya;Eudora;Barats","Sora;Hirara;Valentina;Gatotkaca;Obsidia","Phoveus;Nolan;Kimmy;Minotaur;Bruno",0,rvz,2.2.16,Default Map,11:14,Virgil
+mpl_kh_w2_d2_m2_g3,mpl_kh_s11_w2_d2_m2,mpl_kh,Season 11,3,rvz,sys,"Atlas;Paquito;Gloo;Uranus;Lukas","Selena;Masha;Aulus;Valentina;Sora","Phoveus;Hirara;Eudora;Gatotkaca;Bruno","Belerick;Suyou;Kimmy;Kalea;Freya",0,rvz,2.2.16,Default Map,16:00,VBEN
+
+mpl_kh_w2_d2_m3_g1,mpl_kh_s11_w2_d2_m3,mpl_kh,Season 11,1,tnr,gxl,"Atlas;Uranus;Hirara;Obsidia;Brody","Freya;Aulus;Masha;Novaria;Lylia","Alice;Paquito;Zetian;Minotaur;Claude","Barats;Nolan;Cecilion;Carmilla;Bruno",0,gxl,2.2.16,Default Map,16:07,Linnn
+mpl_kh_w2_d2_m3_g2,mpl_kh_s11_w2_d2_m3,mpl_kh,Season 11,2,tnr,gxl,"Atlas;Uranus;Hirara;Lukas;Sora","Freya;Aulus;Masha;Gloo;Alice","Esmeralda;Nolan;Cecilion;Carmilla;Obsidia","Barats;Paquito;Selena;Minotaur;Claude",0,tnr,2.2.16,Default Map,12:45,Tyyy
+mpl_kh_w2_d2_m3_g3,mpl_kh_s11_w2_d2_m3,mpl_kh,Season 11,3,tnr,gxl,"Atlas;Hirara;Uranus;Lukas;Barats","Masha;Aulus;Carmilla;Alice;Belerick","Gatotkaca;Nolan;Kimmy;Kalea;Freya","Minotaur;Paquito;Eudora;Gloo;Brody",0,tnr,2.2.16,Default Map,17:48,Remy
+
+mpl_kh_w2_d3_m1_g1,mpl_kh_s11_w2_d3_m1,mpl_kh,Season 11,1,pro,val,"Fanny;Rafaela;Carmilla;Kalea;Minotaur","Atlas;Paquito;Hirara;Mathilda;Gloo","Uranus;Aulus;Zhuxin;Gatotkaca;Brody","Cici;Alice;Zetian;Masha;Bruno",0,pro,2.2.16,Default Map,13:20,SrylmFelix
+mpl_kh_w2_d3_m1_g2,mpl_kh_s11_w2_d3_m1,mpl_kh,Season 11,2,pro,val,"Fanny;Rafaela;Carmilla;Minotaur;Angela","Atlas;Zhuxin;Paquito;Gloo;Lylia","Uranus;Aulus;Valir;Gatotkaca;Brody","Esmeralda;Hirara;Selena;Masha;Bruno",0,val,2.2.16,Default Map,21:34,Flick
+mpl_kh_w2_d3_m1_g3,mpl_kh_s11_w2_d3_m1,mpl_kh,Season 11,3,val,pro,"Atlas;Brody;Zhuxin;Ixia;Clint","Fanny;Rafaela;Selena;Alice;Hirara","Uranus;Paquito;Cecilion;Carmilla;Bruno","Sora;Aulus;Valentina;Masha;Obsidia",0,pro,2.2.16,Default Map,09:47,MP the King
+
+mpl_kh_w2_d3_m2_g1,mpl_kh_s11_w2_d3_m2,mpl_kh,Season 11,1,sys,eye,"Masha;Carmilla;Fanny;Gatotkaca;Sora","Atlas;Paquito;Angela;Eudora;Kimmy","Uranus;Hirara;Valentina;Gloo;Brody","Barats;Nolan;Selena;Belerick;Bruno",0,eye,2.2.16,Default Map,13:44,Hyunn
+mpl_kh_w2_d3_m2_g2,mpl_kh_s11_w2_d3_m2,mpl_kh,Season 11,2,eye,sys,"Atlas;Paquito;Valentina;Freya;Cici","Masha;Hirara;Carmilla;Bruno;Obsidia","Uranus;Aulus;Rafaela;Gatotkaca;Harith","Barats;Nolan;Selena;Gloo;Brody",0,eye,2.2.16,Default Map,20:11,ktank socute
+
+mpl_kh_w2_d3_m3_g1,mpl_kh_s11_w2_d3_m3,mpl_kh,Season 11,1,gxl,gxp,"Aulus;Carmilla;Marcel;Brody;Obsidia","Masha;Hirara;Atlas;Nolan;Suyou","Uranus;Yi Sun-shin;Valentina;Minotaur;Freya","Esmeralda;Guinevere;Selena;Belerick;Clint",0,gxl,2.2.16,Default Map,12:37,Linnn
+mpl_kh_w2_d3_m3_g2,mpl_kh_s11_w2_d3_m3,mpl_kh,Season 11,2,gxl,gxp,"Aulus;Marcel;Carmilla;Brody;Karrie","Masha;Hirara;Atlas;Gatotkaca;Lylia","Uranus;Yi Sun-shin;Kimmy;Rafaela;Freya","Esmeralda;Guinevere;Yve;Belerick;Obsidia",0,gxl,2.2.16,Default Map,15:18,Linnn
+
+mpl_kh_w3_d1_m1_g1,mpl_kh_s11_w3_d1_m1,mpl_kh,Season 11,1,rvz,tnr,"Atlas;Gloo;Marcel;Kalea;Minotaur","Masha;Hirara;Carmilla;Nolan;Aulus","Freya;Yi Sun-shin;Selena;Gatotkaca;Obsidia","Esmeralda;Paquito;Zhuxin;Badang;Moskov",0,tnr,2.2.16,Flying Cloud,14:07,SiveTzy
+mpl_kh_w3_d1_m1_g2,mpl_kh_s11_w3_d1_m1,mpl_kh,Season 11,2,rvz,tnr,"Atlas;Freya;Gloo;Marcel;Kalea","Masha;Hirara;Carmilla;Selena;Rafaela","Sora;Paquito;Valentina;Belerick;Obsidia","Esmeralda;Nolan;Kimmy;Badang;Moskov",0,rvz,2.2.16,Revealing Wisps,21:10,Virgil
+mpl_kh_w3_d1_m1_g3,mpl_kh_s11_w3_d1_m1,mpl_kh,Season 11,3,rvz,tnr,"Atlas;Gloo;Nolan;Badang;Kalea","Masha;Hirara;Paquito;Obsidia;Bruno","Alice;Leomord;Cecilion;Carmilla;Clint","Sora;Aulus;Kimmy;Marcel;Freya",0,rvz,2.2.16,Flying Cloud,17:33,Kwayne
+
+mpl_kh_w3_d1_m2_g1,mpl_kh_s11_w3_d1_m2,mpl_kh,Season 11,1,val,flkh,"Zhuxin;Nolan;Atlas;Marcel;Obsidia","Masha;Fanny;Carmilla;Belerick;Gloo","Uranus;Hirara;Rafaela;Kalea;Bruno","Alice;Paquito;Kimmy;Minotaur;Freya",0,flkh,2.2.16,Flying Cloud,21:08,Oppi
+mpl_kh_w3_d1_m2_g2,mpl_kh_s11_w3_d1_m2,mpl_kh,Season 11,2,flkh,val,"Uranus;Carmilla;Bruno;Moskov;Obsidia","Masha;Hirara;Zhuxin;Atlas;Barats","Alice;Fanny;Kimmy;Marcel;Freya","Cici;Aulus;Valentina;Kalea;Esmeralda",0,val,2.2.16,Flying Cloud,17:35,Wadu
+mpl_kh_w3_d1_m2_g3,mpl_kh_s11_w3_d1_m2,mpl_kh,Season 11,3,val,flkh,"Atlas;Zhuxin;Nolan;Alice;Minotaur","Fanny;Masha;Carmilla;Gloo;Zetian","Cici;Hirara;Esmeralda;Freya;Angela","Dyrroth;Paquito;Valentina;Kalea;Bruno",0,val,2.2.16,Healing Turtle,10:26,Xingg
+
+mpl_kh_w3_d1_m3_g1,mpl_kh_s11_w3_d1_m3,mpl_kh,Season 11,1,pro,sys,"Zhuxin;Atlas;Fanny;Kalea;Minotaur","Masha;Hirara;Marcel;Esmeralda;Obsidia","Phoveus;Suyou;Cecilion;Carmilla;Cici","Uranus;Paquito;Valentina;Gloo;Freya",0,pro,2.2.16,Revealing Wisps,12:36,PPPPP
+mpl_kh_w3_d1_m3_g2,mpl_kh_s11_w3_d1_m3,mpl_kh,Season 11,2,pro,sys,"Fanny;Atlas;Zhuxin;Kalea;Marcel","Masha;Carmilla;Hirara;Dyrroth;Eudora","Freya;Aulus;Zetian;Minotaur;Cici","Esmeralda;Suyou;Kimmy;Gatotkaca;Paquito",0,pro,2.2.16,Healing Turtle,11:06,SrylmFelix
+
+mpl_kh_w3_d2_m1_g1,mpl_kh_s11_w3_d2_m1,mpl_kh,Season 11,1,vgr,gxl,"Atlas;Valentina;Carmilla;Kalea;Minotaur","Masha;Aulus;Lukas;Paquito;Yi Sun-shin","Alice;Hirara;Eudora;Marcel;Freya","Sora;Nolan;Zhuxin;Belerick;Esmeralda",0,vgr,2.2.16,Flying Cloud,22:33,Shadoww
+mpl_kh_w3_d2_m1_g2,mpl_kh_s11_w3_d2_m1,mpl_kh,Season 11,2,vgr,gxl,"Atlas;Valentina;Carmilla;Kalea;Minotaur","Masha;Aulus;Lukas;Paquito;Yi Sun-shin","Alice;Hirara;Kimmy;Marcel;Freya","Belerick;Nolan;Zhuxin;Rafaela;Esmeralda",0,vgr,2.2.16,Healing Turtle,18:59,Detective
+
+mpl_kh_w3_d2_m2_g1,mpl_kh_s11_w3_d2_m2,mpl_kh,Season 11,1,eye,pro,"Paquito;Aulus;Eudora;Phoveus;Esmeralda","Masha;Hirara;Atlas;Fanny;Nolan","Arlott;Fredrinn;Zhuxin;Marcel;Freya","Uranus;Suyou;Cecilion;Carmilla;Cici",0,pro,2.2.16,Revealing Wisps,13:15,SrylmFelix
+mpl_kh_w3_d2_m2_g2,mpl_kh_s11_w3_d2_m2,mpl_kh,Season 11,2,pro,eye,"Fanny;Zhuxin;Atlas;Baxia;Alice","Freya;Carmilla;Hirara;Lukas;Gloo","Uranus;Aulus;Eudora;Masha;Harith","Esmeralda;Nolan;Kimmy;Gatotkaca;Cici",0,pro,2.2.16,Healing Turtle,12:32,PPPPP
+
+mpl_kh_w3_d2_m3_g1,mpl_kh_s11_w3_d2_m3,mpl_kh,Season 11,1,val,gxp,"Atlas;Guinevere;Zhuxin;Alice;Barats","Masha;Freya;Hirara;Uranus;Esmeralda","Gloo;Nolan;Valentina;Kalea;Wanwan","Minotaur;Aulus;Selena;Marcel;Obsidia",0,val,2.2.16,Revealing Wisps,11:32,SECRET
+mpl_kh_w3_d2_m3_g2,mpl_kh_s11_w3_d2_m3,mpl_kh,Season 11,2,gxp,val,"Freya;Kalea;Valentina;Kimmy;Angela","Masha;Atlas;Carmilla;Obsidia;Bruno","Alice;Aulus;Zhuxin;Minotaur;Clint","Cici;Hirara;Esmeralda;Rafaela;Paquito",0,val,2.2.16,Healing Turtle,11:29,Zee x3
+
+mpl_kh_w3_d3_m1_g1,mpl_kh_s11_w3_d3_m1,mpl_kh,Season 11,1,gxl,flkh,"Fanny;Minotaur;Nolan;Selena;Kimmy","Masha;Carmilla;Atlas;Cici;Brody","Barats;Aulus;Zhuxin;Belerick;Obsidia","Esmeralda;Hirara;Lylia;Marcel;Freya",0,flkh,2.2.16,Healing Turtle,13:35,Layy
+mpl_kh_w3_d3_m1_g2,mpl_kh_s11_w3_d3_m1,mpl_kh,Season 11,2,gxl,flkh,"Fanny;Nolan;Esmeralda;Gloo;Barats","Masha;Carmilla;Atlas;Harley;Paquito","Freya;Yi Sun-shin;Eudora;Belerick;Brody","Phoveus;Hirara;Zhuxin;Minotaur;Cici",0,flkh,2.2.16,Revealing Wisps,23:30,Layy
+
+mpl_kh_w3_d3_m2_g1,mpl_kh_s11_w3_d3_m2,mpl_kh,Season 11,1,vgr,tnr,"Atlas;Valentina;Carmilla;Moskov;Brody","Masha;Hirara;Freya;Uranus;Alice","Arlott;Guinevere;Zhuxin;Marcel;Cici","Sora;Nolan;Eudora;Minotaur;Obsidia",0,tnr,2.2.16,Revealing Wisps,18:14,Tyyy
+mpl_kh_w3_d3_m2_g2,mpl_kh_s11_w3_d3_m2,mpl_kh,Season 11,2,vgr,tnr,"Atlas;Minotaur;Valentina;Alice;Paquito","Masha;Freya;Hirara;Gatotkaca;Uranus","Lukas;Aulus;Cecilion;Carmilla;Cici","Sora;Nolan;Kimmy;Kalea;Moskov",0,vgr,2.2.16,Revealing Wisps,20:38,Raa
+mpl_kh_w3_d3_m2_g3,mpl_kh_s11_w3_d3_m2,mpl_kh,Season 11,3,tnr,vgr,"Atlas;Hirara;Marcel;Cici;Uranus","Masha;Freya;Carmilla;Obsidia;Moskov","Esmeralda;Alice;Zhuxin;Gloo;Bruno","Barats;Nolan;Kimmy;Minotaur;Claude",0,vgr,2.2.16,Revealing Wisps,10:54,Shadoww
+
+mpl_kh_w3_d3_m3_g1,mpl_kh_s11_w3_d3_m3,mpl_kh,Season 11,1,sys,gxp,"Guinevere;Selena;Carmilla;Kalea;Minotaur","Masha;Atlas;Freya;Gloo;Belerick","Cici;Nolan;Zhuxin;Gatotkaca;Obsidia","Esmeralda;Aulus;Kimmy;Estes;Paquito",0,sys,2.2.16,Healing Turtle,14:04,Sugar
+mpl_kh_w3_d3_m3_g2,mpl_kh_s11_w3_d3_m3,mpl_kh,Season 11,2,sys,gxp,"Guinevere;Selena;Carmilla;Kalea;Minotaur","Masha;Atlas;Fanny;Gloo;Aulus","Yu Zhong;Yi Sun-shin;Zhuxin;Belerick;Freya","Cici;Paquito;Kimmy;Gatotkaca;Esmeralda",0,sys,2.2.16,Revealing Wisps,11:32,Sugar
+
+
+
+
