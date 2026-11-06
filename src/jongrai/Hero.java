@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * "roles" and "lanes" hold 1 or 2 entries; the first one is the primary one.
  * "tier" is S/A/B/C/D, "winRate" is the overall win rate in % (50.0 if unknown),
  * "spike" is when the hero is strongest.
- * "banRate" is the ban rate in % (0 means under 15% or unknown).
+ * "banRate" and "pickRate" are the official ban and pick rates in %; a ban rate of {@link #META_BAN}% or more is a meta ban.
  * "counters" = heroes this hero is good against.
  * "synergies" = heroes this hero works well with.
  * Names inside the counter/synergy sets are stored in lowercase.
@@ -19,7 +19,10 @@ public record Hero(String name, List<Role> roles, List<Lane> lanes,
                    String tier, double winRate, double banRate,
                    Set<String> counters, Set<String> synergies,
                    int durability, int offense, int control, Set<String> tags,
-                   Spike spike, String tip) {
+                   Spike spike, String tip, double pickRate) {
+
+    /** A ban rate at or above this (in %) counts as a meta ban: red ring, "Most banned", ban suggestions. */
+    public static final double META_BAN = 15.0;
 
     public Hero {
         roles = List.copyOf(roles);
@@ -27,6 +30,10 @@ public record Hero(String name, List<Role> roles, List<Lane> lanes,
         counters = Set.copyOf(counters);
         synergies = Set.copyOf(synergies);
         tags = Set.copyOf(tags);
+    }
+
+    public boolean metaBan() {
+        return banRate >= META_BAN;
     }
 
     public String key() {

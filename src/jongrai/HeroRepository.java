@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Loads heroes from a CSV:
- * name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip
+ * name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip,pickrate
  * (roles/lanes split by '/', lists by ';'; quote any field that contains a comma).
  */
 public class HeroRepository {
@@ -43,7 +43,8 @@ public class HeroRepository {
                         r.integer(10, 0),
                         toSet(r.text(11)),
                         r.text(12).isEmpty() ? Spike.MID : Spike.parse(r.text(12)),
-                        r.text(13).isEmpty() ? null : r.text(13));
+                        r.text(13).isEmpty() ? null : r.text(13),
+                        r.decimal(14, 0.0));
             } catch (IllegalArgumentException e) {
                 throw r.fail(e.getMessage());   // unknown role, lane or spike
             }

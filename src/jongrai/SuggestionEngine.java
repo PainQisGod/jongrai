@@ -94,10 +94,8 @@ public class SuggestionEngine {
             double score = 0;
             List<String> reasons = new ArrayList<>();
 
-            if (candidate.banRate() > 0) {
-                score += candidate.banRate() * BAN_RATE_WEIGHT;
-                reasons.add(String.format(Locale.ROOT, "ban rate %.1f%%", candidate.banRate()));
-            }
+            score += candidate.banRate() * BAN_RATE_WEIGHT;
+            if (candidate.metaBan()) reasons.add(String.format(Locale.ROOT, "ban rate %.1f%%", candidate.banRate()));
             double winRateBonus = (candidate.winRate() - 50.0) * WINRATE_WEIGHT;
             score += winRateBonus;
             if (winRateBonus >= 1) {

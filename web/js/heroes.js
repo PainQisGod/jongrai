@@ -20,8 +20,8 @@ function drawRiver(){
   }
   const half=Math.max(...placed.map(p=>Math.abs(p.y)))+D*.6;
   html+=`<div class="band" style="height:${Math.max(60,half*2)}px"><div class="band-l"><span class="tier ${t}">${t}</span><small>${TIER_LABEL[t]} · ${placed.length}</small></div>
-   ${placed.map((p,i)=>`<button class="dot in${p.h.banRate>0?' banned':''}" style="left:${p.x}px;top:calc(50% + ${p.y}px);animation-delay:${(p.x/W*.5+i*.006).toFixed(3)}s" data-h="${esc(p.h.slug)}"
-    aria-label="${esc(p.h.name)}, tier ${t}, ${p.h.winRate.toFixed(2)}% win${p.h.banRate?', '+p.h.banRate.toFixed(1)+'% ban':''}"><img src="${icon(p.h.icon)}" alt=""><span class="lbl">${esc(p.h.name)}<b>${p.h.winRate.toFixed(1)}%</b></span></button>`).join('')}</div>`;
+   ${placed.map((p,i)=>`<button class="dot in${p.h.metaBan?' banned':''}" style="left:${p.x}px;top:calc(50% + ${p.y}px);animation-delay:${(p.x/W*.5+i*.006).toFixed(3)}s" data-h="${esc(p.h.slug)}"
+    aria-label="${esc(p.h.name)}, tier ${t}, ${p.h.winRate.toFixed(2)}% win${', '+p.h.banRate.toFixed(1)+'% ban'}"><img src="${icon(p.h.icon)}" alt=""><span class="lbl">${esc(p.h.name)}<b>${p.h.winRate.toFixed(1)}%</b></span></button>`).join('')}</div>`;
  }
  const ticks=[];for(let w=lo;w<=hi;w++)ticks.push(`<i class="${w===50?'half':''}" style="left:${x(w)}px"></i><span class="${w===50?'half':''}" style="left:${x(w)}px">${w}${w===50?'%':''}</span>`);
  el.innerHTML=html+`<div class="axis" aria-hidden="true">${ticks.join('')}<span class="flip" style="left:${x(50)}px">COIN FLIP</span><span class="cap">WIN RATE →</span></div>`;
@@ -54,7 +54,8 @@ async function open(slug,push=true){
   <div class="body">
    <div class="sect"><div class="stats">
     <div class="stat"><b class="num">${h.winRate.toFixed(2)}%</b><small>win rate · <span class="${d>=0?'up':'down'}">${d>=0?'+':''}${d.toFixed(1)} vs coin flip</span></small></div>
-    <div class="stat"><b class="num" style="color:${h.banRate?'var(--red-hi)':'var(--ink-3)'}">${h.banRate?h.banRate.toFixed(1)+'%':'—'}</b><small>${h.banRate?'ban rate':'rarely banned'}</small></div>
+    <div class="stat"><b class="num">${h.pickRate.toFixed(2)}%</b><small>pick rate</small></div>
+    <div class="stat"><b class="num" style="color:${h.metaBan?'var(--red-hi)':'var(--ink)'}">${h.banRate.toFixed(1)}%</b><small>${h.metaBan?'ban rate · meta ban':'ban rate'}</small></div>
     <div class="stat"><b class="num">#${rank}</b><small>of ${tier.length} in tier ${esc(h.tier)}</small></div></div></div>
    <div class="sect"><h3>In-game ratings</h3>${rating('Durability',h.durability)}${rating('Offense',h.offense)}${rating('Control',h.control)}</div>
    <div class="sect"><h3>Power spike</h3><div class="spike">${SPIKES.map(s=>`<div class="${h.spike===s||h.spike==='ALL'?'on':''}">${s}</div>`).join('')}</div></div>

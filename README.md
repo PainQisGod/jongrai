@@ -96,10 +96,10 @@ Shared styling lives in `web/kit.css` (the "Dusk at the Temple" design) plus `we
 
 All plain CSV, so you can edit them freely.
 
-- `data/heroes.csv`: `name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip`
+- `data/heroes.csv`: `name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip,pickrate`
   - Dual roles and lanes use `/` (first one is the main). Lists use `;`.
   - `counters` means the heroes this hero is good against.
-  - A blank `banrate` means under 15% or unknown.
+  - `winrate`, `banrate` and `pickrate` are percentages. A ban rate of 15% or more counts as a meta ban.
   - `spike` is `EARLY`, `MID`, `LATE` or `ALL`. `tip` is an optional hand-written hero tip; quote it if it contains a comma.
 - `data/items.csv`: `name,slug,tier,cost,stats,passives,availability,categories,icon`
 - `data/hero-builds.csv`: `hero,order,build,lane,items,emblem,battleSpell,blessing,flex`
@@ -141,7 +141,8 @@ The bonus and penalty numbers for suggestions are at the top of `src/jongrai/Sug
 
 - Official hero relations (counters, synergies) and hero ratings: Moonton's in-game data, via [p3hndrx/MLBB-API](https://github.com/p3hndrx/MLBB-API) (MIT license).
 - Early / mid / late power spikes: [Amirul-Hakimi/MLBB-DRAFT-ANALYSIS](https://github.com/Amirul-Hakimi/MLBB-DRAFT-ANALYSIS) (ISC license). This is one author's judgement, not official data.
-- Tiers and win rates: tier-list screenshots, patch 2.2.16.
+- Tiers: November 2026 lane tier lists, mapped to S-D (each hero keeps its best lane).
+- Win, pick and ban rates: official [mobilelegends.com/rank](https://www.mobilelegends.com/rank), Past 30 days, all ranks (2026-11-06).
 - Item data and hero builds: [mlbbhub.com](https://mlbbhub.com), reviewed against patch 2.2.16 on 2026-10-01.
 - Hero and item artwork belongs to Moonton.
 - Full third-party license notices are in [NOTICE](NOTICE).

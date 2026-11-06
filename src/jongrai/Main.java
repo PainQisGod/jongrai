@@ -96,7 +96,7 @@ public class Main {
     private static void heroInfo(Draft draft, String name) {
         Hero hero = draft.find(name);
         System.out.println(hero + " | tier " + hero.tier() + " | win rate " + String.format(Locale.ROOT, "%.1f", hero.winRate()) + "%"
-                + (hero.banRate() > 0 ? " | ban rate " + String.format(Locale.ROOT, "%.1f", hero.banRate()) + "%" : ""));
+                + " | ban rate " + String.format(Locale.ROOT, "%.1f", hero.banRate()) + "% | pick rate " + String.format(Locale.ROOT, "%.2f", hero.pickRate()) + "%");
 
         List<String> strongAgainst = draft.allHeroes().stream()
                 .filter(hero::counters).map(Hero::name).sorted().toList();

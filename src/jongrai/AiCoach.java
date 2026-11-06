@@ -128,7 +128,7 @@ public class AiCoach {
                     .append(h.hasLane(t.laneOf(h)) && t.laneOf(h) != h.lane() ? " (flex, main " + h.lane().name() + ")" : "")
                     .append(" | tier ").append(h.tier())
                     .append(" | win ").append(String.format(Locale.ROOT, "%.1f%%", h.winRate()))
-                    .append(String.format(Locale.ROOT, " | ban %.1f%%", h.banRate()))
+                    .append(String.format(Locale.ROOT, " | ban %.1f%% | pick %.2f%%", h.banRate(), h.pickRate()))
                     .append(" | power spike ").append(h.spike())
                     .append(" | ratings dur/off/ctl ").append(h.durability()).append('/').append(h.offense()).append('/').append(h.control())
                     .append(" | tags ").append(h.tags().isEmpty() ? "-" : String.join(",", h.tags().stream().sorted().toList()));

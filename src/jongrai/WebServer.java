@@ -364,11 +364,11 @@ public class WebServer {
 
     private static String heroesJson() {
         return pool.values().stream().map(h -> String.format(Locale.ROOT,
-                "{\"name\":%s,\"slug\":%s,\"roles\":%s,\"lanes\":%s,\"tier\":%s,\"winRate\":%.2f,\"banRate\":%.2f,\"icon\":%s,\"video\":%s"
+                "{\"name\":%s,\"slug\":%s,\"roles\":%s,\"lanes\":%s,\"tier\":%s,\"winRate\":%.2f,\"banRate\":%.2f,\"pickRate\":%.2f,\"metaBan\":%b,\"icon\":%s,\"video\":%s"
                         + ",\"durability\":%d,\"offense\":%d,\"control\":%d,\"tags\":%s,\"spike\":%s,\"tip\":%s"
                         + ",\"counters\":%s,\"synergies\":%s}",
                 Json.str(h.name()), Json.str(h.slug()), Json.list(h.roles().stream().map(Enum::name).toList()),
-                Json.list(h.lanes().stream().map(Enum::name).toList()), Json.str(h.tier()), h.winRate(), h.banRate(),
+                Json.list(h.lanes().stream().map(Enum::name).toList()), Json.str(h.tier()), h.winRate(), h.banRate(), h.pickRate(), h.metaBan(),
                 Json.str(icons.getOrDefault(h.name(), "")), Json.str(videos.getOrDefault(h.name(), "")), h.durability(), h.offense(), h.control(),
                 Json.list(h.tags().stream().sorted().toList()), Json.str(h.spike().name()), Json.str(h.tip()),
                 Json.list(h.counters().stream().sorted().toList()), Json.list(h.synergies().stream().sorted().toList())))

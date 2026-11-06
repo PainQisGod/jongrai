@@ -20,7 +20,7 @@ function drawPulse(){
  $('#tops').innerHTML=tops.map((h,i)=>`<a class="top" href="/heroes/${esc(h.slug)}"><img class="aura" src="${icon(h.icon)}" alt=""><span class="rk num">0${i+1}</span>
   <img class="face" src="${icon(h.icon)}" alt=""><b>${esc(h.name)}</b><small>${esc(h.roles.map(cap).join(' / '))} · tier ${esc(h.tier)}</small>
   <small style="margin-top:10px;color:var(--ink-3)">${esc(h.lanes.map(cap).join(' / '))} · ${esc(cap(h.spike))} spike</small><div class="wrn">${h.winRate.toFixed(2)}%<span>WIN</span></div></a>`).join('');
- const banned=heroes.filter(h=>h.banRate>0).sort((x,y)=>y.banRate-x.banRate).slice(0,7),max=banned[0]?banned[0].banRate:1;
+ const banned=heroes.filter(h=>h.metaBan).sort((x,y)=>y.banRate-x.banRate).slice(0,7),max=banned[0]?banned[0].banRate:1;
  $('#bans').innerHTML='<h3>Most banned</h3>'+banned.map((h,i)=>`<div class="brow"><img src="${icon(h.icon)}" alt=""><div class="bar"><i style="width:${h.banRate/max*100}%;animation-delay:${i*.07}s"></i><span>${esc(h.name)}</span></div><span class="num">${h.banRate.toFixed(1)}%</span></div>`).join('');
 }
 /** One hero tip at a time, rotating every 7 s; hover pauses it. */
@@ -37,7 +37,7 @@ function tips(){
  const m=await shell(location.pathname);
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
  heroes=hs;heroes.forEach(h=>byName[h.name]=h);
- const vals={hero:m.heroes||heroes.length,item:m.items||0,banned:heroes.filter(h=>h.banRate>0).length};
+ const vals={hero:m.heroes||heroes.length,item:m.items||0,banned:heroes.filter(h=>h.metaBan).length};
  const strip=document.querySelector('.strip');
  new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();
   strip.querySelectorAll('[data-to]').forEach(b=>countTo(b,vals[b.dataset.to]??+b.dataset.to,1100))}).observe(strip);

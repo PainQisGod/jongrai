@@ -17,7 +17,9 @@
 
  <section><h3>Where the data comes from</h3>
   <ul>
-   <li><b>Roster, tiers, win and ban rates</b> - the shipped <code>data/heroes.csv</code>, patch <span data-patch></span>.</li>
+   <li><b>Roster</b> - the shipped <code>data/heroes.csv</code>, patch <span data-patch></span>.</li>
+   <li><b>Tiers</b> - November 2026 lane tier lists, mapped to S-D; each hero keeps the tier of its best lane.</li>
+   <li><b>Win, pick and ban rates</b> - the official mobilelegends.com rank page, past 30 days, all ranks (updated 6 November 2026).</li>
    <li><b>Counters and synergies</b> - Moonton's official in-game relations, via
        github.com/p3hndrx/MLBB-API (MIT).</li>
    <li><b>Durability, offense, control and speciality tags</b> - Moonton's in-game hero ratings.</li>
@@ -28,7 +30,7 @@
    <li><b>Core builds per hero</b> - the shipped <code>data/hero-builds.csv</code>: hand-curated loadouts
        from mlbbhub.com, five per hero, reviewed against patch <span data-patch></span>. Editorial, not official.</li>
   </ul>
-  <p>Ban rates under 15% are shown as blank, meaning under 15% or unknown.</p></section>
+  <p>Win, pick and ban rates come from the official mobilelegends.com rank page (past 30 days, all ranks). A ban rate of 15% or more counts as a meta ban.</p></section>
 
  <section><h3>The AI coach</h3>
   <p>The final verdict comes from an AI model you configure yourself. It is told the draft is patch <span data-patch></span>
