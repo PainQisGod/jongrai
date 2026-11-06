@@ -43,6 +43,12 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
   background:transparent;cursor:pointer;color:var(--ink-2);font:500 12px/1 var(--display);letter-spacing:.05em;position:relative;overflow:hidden}
 .ghost:hover{color:var(--ink);border-color:rgba(241,222,186,.3)}
 .ghost:disabled{opacity:.4;cursor:default}
+.music{display:inline-flex;gap:6px;align-items:center}
+select.ghost{appearance:none;-webkit-appearance:none;padding-right:26px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23bab1a5' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 10px center}
+select.ghost option{background:var(--stone-2);color:var(--ink)}
+.ghost[aria-pressed=true]{color:var(--gold-hi);border-color:var(--gold-lo);background:var(--gold-wash)}
+.draft-music{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-1px;bottom:-1px}
 .ghost .fill{position:absolute;inset:0;background:var(--red-wash);transform:scaleX(0);transform-origin:left}
 .ghost.holding .fill{transform:scaleX(1);transition:transform .7s linear}
 .ghost span{position:relative}
@@ -300,7 +306,9 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
 <main class="page">
  <section class="rail" aria-label="Draft order">
   <div class="tools"><button class="ghost" id="undo" disabled title="Undo your last pick or ban (Ctrl+Z)"><span>↶ Undo</span></button>
-   <button class="ghost" id="reset" title="Hold to clear the board"><span class="fill"></span><span id="resetLbl">Hold to reset</span></button></div>
+   <button class="ghost" id="reset" title="Hold to clear the board"><span class="fill"></span><span id="resetLbl">Hold to reset</span></button>
+   <span class="music"><select class="ghost" id="musicChoice" aria-label="Background music"><option value="off">♪ Music: Off</option><option value="music1">♪ Music 1</option><option value="music2">♪ Music 2</option><option value="music3">♪ Music 3</option><option value="music4">♪ Music 4</option></select>
+   <button class="ghost" id="musicToggle" type="button" aria-pressed="false" disabled title="Play or mute the background music">Muted</button></span></div>
   <div class="turn" aria-live="polite"><span class="eyebrow" id="phase">Ban phase 1</span><h1 id="turnLine">…</h1><span class="step num" id="stepNo"></span></div>
   <div class="acting">
    <button class="switch" id="bansOn" role="switch" aria-checked="true" title="Off: picks only, in the 10-step snake order"><i></i>Bans</button>
@@ -669,4 +677,23 @@ $('#ticks').innerHTML=Array.from({length:40},(_,i)=>{const g=i*9*Math.PI/180,r1=
  const s=await call('/api/state');if(s.error){toast(s.error,'var(--ember)');return}
  state=s;refresh(false);
 })();
+</script>
+<iframe id="draftMusic" class="draft-music" title="Draft board background music" allow="autoplay" tabindex="-1"></iframe>
+<script>
+// Background music: nothing is loaded from YouTube until the user picks a track or presses the music button.
+const musicTracks={music1:'KheFsJvAvsU',music2:'TxTprtLZurY',music3:'kgpqMfTZDTw',music4:'GJl_fn_skOM'};
+const MUSIC_ORIGIN='https://www.youtube-nocookie.com';
+let musicMuted=true;
+function musicCommand(func){const frame=$('#draftMusic');if(frame.hasAttribute('src'))frame.contentWindow.postMessage(JSON.stringify({event:'command',func,args:[]}),MUSIC_ORIGIN)}
+function loadMusic(muted){const id=musicTracks[$('#musicChoice').value],frame=$('#draftMusic');if(!id||frame.hasAttribute('src'))return;
+ frame.src=`${MUSIC_ORIGIN}/embed/${id}?autoplay=1&mute=${muted?1:0}&loop=1&playlist=${id}&controls=0&enablejsapi=1&playsinline=1&rel=0`}
+function musicLabel(){const b=$('#musicToggle');b.textContent=musicMuted?'Muted':'Playing';b.setAttribute('aria-pressed',String(!musicMuted))}
+function setMusic(choice){const id=musicTracks[choice],frame=$('#draftMusic');musicMuted=true;musicLabel();$('#musicToggle').disabled=!id;
+ musicCommand('stopVideo');frame.removeAttribute('src');store.set('jongrai-draft-music',choice);loadMusic(true)}
+$('#musicChoice').onchange=e=>setMusic(e.target.value);
+$('#musicToggle').onclick=()=>{
+ if(!$('#draftMusic').hasAttribute('src')){musicMuted=false;loadMusic(false);musicLabel();return}
+ musicMuted=!musicMuted;musicCommand(musicMuted?'mute':'unMute');if(!musicMuted)musicCommand('playVideo');musicLabel()};
+// Restore the saved track in the menu only; the player itself waits for a click.
+{const saved=store.get('jongrai-draft-music');if(saved&&musicTracks[saved]){$('#musicChoice').value=saved;$('#musicToggle').disabled=false}}
 </script></body></html>
