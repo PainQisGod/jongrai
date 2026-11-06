@@ -10,7 +10,7 @@ async function shell(current) {
   document.body.insertAdjacentHTML('afterbegin', `<div class="grain"></div><canvas id="embers" aria-hidden="true"></canvas>
   <header class="bar page"><a class="mark" href="/" aria-label="Jongrai home"><span class="kh" lang="km">ចង្រៃ</span><span class="lat">JONGRAI</span></a>
   <nav class="nav">${PAGES.map(([href, label]) => `<a href="${href}"${href === navKey(current) ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav>
-  <span class="sp"></span><span class="live" id="live"><i></i><span>ENGINE</span></span><span class="ticket">PATCH <span data-patch>-</span></span></header>`);
+  <span class="sp"></span><span class="live" id="live"><i></i><span>ENGINE</span></span><span class="ticket" title="Hero stats from the official rank page">PATCH <span data-patch>-</span><span class="asof">as of <span data-updated>-</span></span></span></header>`);
   embers();
   const m = await meta();
   const live = document.getElementById('live');

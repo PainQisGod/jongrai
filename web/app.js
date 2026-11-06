@@ -43,10 +43,18 @@ const store = {
 };
 
 let META = null;
+/** "2026-11-06" -> "November 6, 2026" (fixed English format, independent of the visitor's locale). */
+function fmtDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+  if (!m) return iso || '';
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return `${months[+m[2] - 1]} ${+m[3]}, ${m[1]}`;
+}
 /** Fills every [data-patch], [data-hero-count] and [data-item-count] element from the loaded meta. */
 function fillMeta() {
   if (!META) return;
   document.querySelectorAll('[data-patch]').forEach(e => e.textContent = META.patch);
+  document.querySelectorAll('[data-updated]').forEach(e => e.textContent = fmtDate(META.updated));
   document.querySelectorAll('[data-hero-count]').forEach(e => e.textContent = META.heroes);
   document.querySelectorAll('[data-item-count]').forEach(e => e.textContent = META.items);
 }
