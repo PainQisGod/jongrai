@@ -35,6 +35,21 @@ function applyFilter(){
 }
 function drawRoles(){$('#roles').innerHTML=Object.entries(ROLE_ICON).map(([r,f])=>`<button class="chip" data-role="${r}" aria-pressed="${role===r}"><img src="${icon(f)}" alt="">${cap(r)}</button>`).join('')}
 
+/* ---------- build footer: lane, emblem with its three talents, battle spell, all as icons ---------- */
+const file=s=>String(s).trim().replace(/ /g,'_')+'.png';
+/** "Tank with Vitality, Bargain Hunter, Concussive Blast" -> {main:'Tank', talents:[...]} */
+function parseEmblem(e){const m=/^\s*(.+?)\s+with\s+(.+)$/.exec(e||'');return m?{main:m[1],talents:m[2].split(',').map(t=>t.trim()).filter(Boolean)}:{main:e||'',talents:[]}}
+const emblemIcon=main=>main.toLowerCase()==='basic common'?'Basic_Common_Emblem.png':'Emblem_'+file(main);
+function buildFoot(b){
+ const out=[];
+ const li=laneIcon(b.lane);
+ if(b.lane)out.push(`<span class="bf-chip" title="Lane: ${esc(cap(b.lane))}">${li?`<img src="/icons/${li}" alt="">`:''}<b>${esc(cap(b.lane))}</b></span>`);
+ if(b.emblem){const e=parseEmblem(b.emblem);
+  out.push(`<span class="bf-chip" title="Emblem: ${esc(b.emblem)}"><img src="${icon(emblemIcon(e.main))}" alt="" onerror="this.remove()"><b>${esc(e.main)}</b>${e.talents.map(t=>`<img class="bf-talent" src="${icon('Talent_'+file(t))}" alt="${esc(t)}" title="${esc(t)}" onerror="this.replaceWith(Object.assign(document.createElement('small'),{textContent:this.alt}))">`).join('')}</span>`)}
+ if(b.battleSpell)out.push(`<span class="bf-chip" title="Battle spell: ${esc(b.battleSpell)}"><img src="${icon(file(b.battleSpell))}" alt="" onerror="this.remove()"><b>${esc(b.battleSpell)}</b></span>`);
+ return out.join('');
+}
+
 /* ---------- profile drawer ---------- */
 const faceBtn=h=>`<button data-h="${esc(h.slug)}"><img src="${icon(h.icon)}" alt="">${esc(h.name)}</button>`;
 function rating(label,v){const on=Math.round(v/10);return`<div class="rating"><span>${label}</span><span class="segs">${Array.from({length:10},(_,i)=>`<i class="${i<on?'on':''}" style="animation-delay:${i*.03}s"></i>`).join('')}</span><span class="num">${v}</span></div>`}
@@ -71,8 +86,8 @@ async function open(slug,push=true){
  if(byKey[slug]!==h||!$('#builds'))return;
  $('#builds').innerHTML=bs.error?`<p class="none">${esc(bs.error)}</p>`:!bs.length?'<p class="none">No curated builds for this hero yet.</p>'
   :bs.map(b=>`<div class="build"><div class="build-h"><b>${esc(b.name)}</b><span class="num">${b.totalCost.toLocaleString()}g</span></div>
-   <div class="items">${b.items.map(it=>`<figure class="${it.core?'core':''}">${it.slug?`<a href="/items/${esc(it.slug)}" style="display:contents">`:''}<img src="${icon(it.icon)}" alt="${esc(it.name)}${it.core?' (core)':''}" loading="lazy"><figcaption>${esc(it.name)}</figcaption>${it.slug?'</a>':''}</figure>`).join('')}</div>
-   <div class="build-f">${b.lane?`<span><b>${esc(cap(b.lane))}</b></span>`:''}${b.emblem?`<span>Emblem <b>${esc(b.emblem)}</b></span>`:''}${b.battleSpell?`<span>Spell <b>${esc(b.battleSpell)}</b></span>`:''}</div></div>`).join('');
+   <div class="items">${b.items.map(it=>`<figure>${it.slug?`<a href="/items/${esc(it.slug)}" style="display:contents">`:''}<img src="${icon(it.icon)}" alt="${esc(it.name)}" loading="lazy"><figcaption>${esc(it.name)}</figcaption>${it.slug?'</a>':''}</figure>`).join('')}</div>
+   <div class="build-f">${buildFoot(b)}</div></div>`).join('');
 }
 function close(){
  $('#drawer').classList.remove('open');$('#scrim').classList.remove('open');history.replaceState(null,'','/heroes');
