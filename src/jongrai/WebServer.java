@@ -275,7 +275,7 @@ public class WebServer {
         switch (path) {
             case "/" -> servePage(ex, "home.html");
             case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" -> servePage(ex, PAGES.get(path));
-            case "/style.css", "/app.js" -> serveFile(ex, "web", path.substring(1), false);
+            case "/style.css", "/app.js", "/kit.css", "/kit.js" -> serveFile(ex, "web", path.substring(1), false);
             case "/mockups" -> { ex.getResponseHeaders().set("Location", "/mockups/"); send(ex, 301, "text/plain", ""); }
             case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH)
                     + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
