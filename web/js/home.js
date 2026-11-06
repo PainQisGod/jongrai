@@ -25,10 +25,10 @@ function drawPulse(){
 }
 /** One hero tip at a time, rotating every 7 s; hover pauses it. */
 function tips(){
- const pool=heroes.filter(h=>h.tip).sort(()=>Math.random()-.5).slice(0,6);let i=0,paused=false,t0=Date.now();
+ const pool=heroes.filter(h=>h.tip).map(h=>{const s=tipSections(h.tip);return{...h,tipPart:s[Math.floor(Math.random()*s.length)]}}).sort(()=>Math.random()-.5).slice(0,6);let i=0,paused=false,t0=Date.now();
  const el=$('#tip');el.onmouseenter=()=>paused=true;el.onmouseleave=()=>{paused=false;t0=Date.now()};
  const show=()=>{const h=pool[i];el.classList.add('out');setTimeout(()=>{
-  el.innerHTML=`<img class="face swap" src="${icon(h.icon)}" alt=""><div class="swap"><q>${esc(h.tip)}</q><cite>${esc(h.name)} · Jongrai tip</cite><div class="dots">${pool.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div></div>`;
+  el.innerHTML=`<img class="face swap" src="${icon(h.icon)}" alt=""><div class="swap"><q>${esc(h.tipPart.text)}</q><cite>${esc(h.name)} · Jongrai tip${h.tipPart.label?' · '+esc(h.tipPart.label):''}</cite><div class="dots">${pool.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</div></div>`;
   el.classList.remove('out')},el.innerHTML?300:0)};
  show();
  setInterval(()=>{if(paused||document.hidden||Date.now()-t0<7000)return;t0=Date.now();i=(i+1)%pool.length;show()},250);

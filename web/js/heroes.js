@@ -74,7 +74,7 @@ async function open(slug,push=true){
     <div class="stat"><b class="num">#${rank}</b><small>of ${tier.length} in tier ${esc(h.tier)}</small></div></div></div>
    <div class="sect"><h3>In-game ratings</h3>${rating('Durability',h.durability)}${rating('Offense',h.offense)}${rating('Control',h.control)}</div>
    <div class="sect"><h3>Power spike</h3><div class="spike">${SPIKES.map(s=>`<div class="${h.spike===s||h.spike==='ALL'?'on':''}">${s}</div>`).join('')}</div></div>
-   <div class="sect"><h3>Jongrai tip</h3><p class="tip">${esc(h.tip||'No tip recorded for this hero yet.')}</p><div class="tags">${h.tags.map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div></div>
+   <div class="sect"><h3>Jongrai tip</h3>${h.tip?`<div class="tip">${tipSections(h.tip).map(s=>`<p>${s.label?`<b>${esc(s.label)}</b>`:''}${esc(s.text)}</p>`).join('')}</div>`:'<p class="tip">No tip recorded for this hero yet.</p>'}<div class="tags">${h.tags.map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div></div>
    <div class="sect"><h3>Matchups</h3>${rel('Strong vs','var(--jade)',strong,'No hard counters recorded.')}${rel('Weak vs','var(--ember)',weak,'Nobody counters this hero on record.')}${rel('Works with','var(--gold)',combo,'No recorded combos.')}</div>
    <div class="sect"><h3>Builds</h3><div id="builds"><div class="skel"></div></div></div>
   </div>`;

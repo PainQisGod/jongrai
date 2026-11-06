@@ -94,3 +94,14 @@ async function initAuth() {
   header.appendChild(box);
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAuth); else initAuth();
+
+/**
+ * A Jongrai tip as a list of sections. In heroes.csv a tip can hold several sections separated by " | ",
+ * each optionally starting with a short label: "Laning Phase: ... | Items: ...".
+ */
+function tipSections(tip) {
+  return String(tip || '').split('|').map(s => s.trim()).filter(Boolean).map(s => {
+    const m = /^([^:]{2,24}):\s+(.+)$/s.exec(s);
+    return m ? {label: m[1].trim(), text: m[2].trim()} : {label: '', text: s};
+  });
+}
