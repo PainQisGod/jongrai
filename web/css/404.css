@@ -1,0 +1,3 @@
+/* Jongrai - styles for /404.html only. Shared styles live in /kit.css and /pages.css. */
+.wrap{max-width:700px;margin:0 auto;padding:60px 16px;text-align:center}
+h2.t{font-size:30px;margin:0 0 10px}p{color:var(--mut);margin:0 0 20px}

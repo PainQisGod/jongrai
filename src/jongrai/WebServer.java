@@ -270,6 +270,8 @@ public class WebServer {
 
         if (path.startsWith("/icons/")) { serveFile(ex, "web/icons", path.substring(7), true); return; }
         if (path.startsWith("/teams/")) { serveFile(ex, "web/teams", path.substring(7), true); return; }
+        if (path.startsWith("/css/")) { serveFile(ex, "web/css", path.substring(5), false); return; }
+        if (path.startsWith("/js/")) { serveFile(ex, "web/js", path.substring(4), false); return; }
         if (path.startsWith("/video/")) { serveFile(ex, "web/video", path.substring(7), true); return; }
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {

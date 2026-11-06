@@ -1,0 +1,124 @@
+/* Jongrai - styles for /pro-league.html only. Shared styles live in /kit.css and /pages.css. */
+.wrap{max-width:1180px;margin:0 auto;padding:22px 16px 40px}
+.eyebrow{color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600;margin:0 0 6px}
+h2.t{font-size:26px;margin:0 0 6px}
+p.l{color:var(--mut);max-width:70ch;margin:0 0 18px}
+input,select{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit}
+#q{min-width:210px}
+.count{color:var(--mut);font-size:12px;margin-left:auto}
+
+/* league subbar */
+.league-bar{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.league-btn{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--tx);cursor:pointer;transition:all 0.15s}
+.league-btn:hover{border-color:var(--gold-lo);color:var(--ink)}
+.league-btn.active{background:var(--gold-wash);border-color:var(--gold);color:var(--gold-hi);font-weight:600}
+@media(max-width:640px){.league-btn{font-size:11px;padding:4px 8px}}
+
+/* tabs */
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.tab{background:transparent;border:none;color:var(--mut);padding:10px 16px;font:inherit;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-size:13px;font-weight:500}
+.tab:hover{color:var(--tx)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* standings table */
+.stand-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow-x:auto;max-width:940px}
+table.stand{width:100%;min-width:600px;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+table.stand th{color:var(--mut);font-weight:600;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--line);text-align:center;background:var(--stone-1)}
+table.stand td{padding:10px 8px;border-bottom:1px solid var(--hair);vertical-align:middle;text-align:center}
+table.stand th.c-pos,table.stand td.c-pos{width:56px;padding-left:14px}
+table.stand th.c-team,table.stand td.c-team{text-align:left}
+table.stand tbody tr:hover td{background:var(--stone-3)}
+table.stand tbody tr:last-child td{border-bottom:0}
+.team-cell{display:flex;align-items:center;gap:12px}
+.team-logo{width:36px;height:36px;border-radius:6px;object-fit:contain;flex:none}
+.team-name{font-weight:600;font-size:14px}
+.team-short{color:var(--mut);font-size:11px;letter-spacing:.5px}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;font-weight:700;font-size:12px;color:var(--mut)}
+.rank.r1{background:rgba(245,197,24,.16);color:#f5c518}
+.rank.r2{background:rgba(203,213,225,.12);color:#cbd5e1}
+.rank.r3{background:rgba(205,127,50,.16);color:#e0a060}
+.pts{display:inline-block;min-width:34px;padding:3px 9px;border-radius:6px;background:rgba(245,197,24,.12);color:var(--gold2);font-weight:700}
+.dim{opacity:.35}
+.pos{font-weight:700;font-variant-numeric:tabular-nums;color:var(--gold2)}
+.win{color:#22c55e}.loss{color:#ef4444}.draw{color:#f5c518}
+
+/* matches */
+#matchesList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:14px}
+.match-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px 16px;display:flex;flex-direction:column;gap:12px}
+.match-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.match-meta{font-size:11px;color:var(--mut)}
+.match-when{text-align:center}
+.match-when span{display:inline-block;background:var(--stone-1);border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
+.match-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.match-team{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.match-team.is-lose{opacity:.65}
+.match-logo{width:54px;height:54px;display:flex;align-items:center;justify-content:center}
+.match-logo img{max-width:100%;max-height:100%;object-fit:contain}
+.match-logo.nologo::after{content:attr(data-s);width:54px;height:54px;border-radius:8px;background:var(--stone-1);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--mut)}
+.match-team-name{font-weight:600;font-size:13px;line-height:1.25;overflow-wrap:anywhere}
+.match-score{text-align:center;font-weight:700;font-size:26px;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.match-score small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--mut)}
+.match-score .w{color:var(--gold2)}
+.match-score.vs{font-size:16px;font-weight:600;color:var(--mut);letter-spacing:0}
+.match-status{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
+.match-status.completed{background:#1a2e1a;color:#22c55e}
+.match-status.scheduled{background:#2e2a1a;color:#f5c518}
+.match-status.live{background:#2e1a1a;color:#ef4444;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+/* drafts: one card per match, one block per game */
+#draftsList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:14px;align-items:start}
+.mc{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mc[open]{grid-column:1/-1}
+.mc>summary{list-style:none;cursor:pointer;padding:12px 14px 10px}
+.mc>summary::-webkit-details-marker{display:none}
+.mc>summary:hover{background:rgba(255,255,255,.03)}
+.mc>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.mc-body{padding:0 14px 8px;max-width:760px;margin:0 auto}
+.mc:not([open]) .nm-full{display:none}
+.mc[open] .nm-short{display:none}
+.nm-short{letter-spacing:.5px}
+.mc-more{text-align:center;font-size:11px;color:var(--mut);margin-top:8px}
+.mc-more::before{content:"Show draft \25BE"}
+.mc[open] .mc-more::before{content:"Hide draft \25B4"}
+.mc-when{text-align:center;margin-bottom:10px}
+.mc-when span{display:inline-block;background:var(--stone-1);border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
+.mc-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.mc-team{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;min-width:0;justify-content:flex-end}
+.mc-team.right{justify-content:flex-start}
+.mc-team img{width:36px;height:36px;border-radius:6px;object-fit:cover;flex:none}
+.mc-team .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.mc-score{text-align:center;font-weight:700;font-size:22px;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.mc-score small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--mut)}
+.mc-score .w{color:var(--gold2)}
+.mc-game{border-top:1px solid var(--line);padding:12px 0}
+.mc-game:first-child{border-top:0}
+.mc-row{display:grid;grid-template-columns:26px 1fr 78px 1fr 26px;align-items:center;gap:8px}
+.mc-picks{display:flex;gap:4px;min-width:0}
+.mc-picks.right{justify-content:flex-end}
+.mc-center{text-align:center;line-height:1.25}
+.mc-center b{display:block;font-size:14px;font-variant-numeric:tabular-nums}
+.mc-center small{color:var(--mut);font-size:11px}
+.mc-res{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.mc-res.W{background:#16a34a}.mc-res.L{background:#dc2626}
+.mc-bans{margin-top:8px}
+.mc-bans .mc-picks{opacity:.9}
+.mc-bans .mc-center{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.mc-map{margin-top:10px;text-align:center}
+.mc-map span{display:inline-block;background:var(--stone-1);border:1px solid var(--line);border-radius:999px;padding:3px 14px;font-size:12px}
+.mc-map i{font-style:normal;color:var(--mut);margin-right:4px;text-transform:uppercase;letter-spacing:1px;font-size:10px}
+.mc-mvp{margin-top:8px;text-align:center;background:var(--gold-wash);border:1px solid var(--gold-lo);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--gold2)}
+.mc-mvp b{color:var(--tx)}
+.mc-mvp.none{background:var(--stone-1);border-color:var(--line);color:var(--mut)}
+.hero-ic{width:42px;height:42px;border-radius:6px;object-fit:cover;background:var(--stone-1);border:2px solid var(--line);flex:none}
+.hero-ic.blue{border-color:#3b82f6}.hero-ic.red{border-color:#ef4444}
+.hero-link{display:inline-flex;flex:none;border-radius:6px;text-decoration:none;color:inherit}
+a.hero-link:hover .hero-ic,a.hero-link:focus-visible .hero-ic{border-color:var(--gold);transform:translateY(-2px)}
+.hero-ic{transition:transform .12s,border-color .12s}
+.hero-ic-miss{display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--mut)}
+.mc-bans .hero-ic{width:28px;height:28px;border-width:1px;filter:grayscale(.65)}
+@media(max-width:640px){.hero-ic{width:30px;height:30px}.mc-bans .hero-ic{width:22px;height:22px}.mc-row{grid-template-columns:22px 1fr 56px 1fr 22px;gap:4px}.mc-team img{width:30px;height:30px}.mc-team{font-size:13px}}
+
+/* empty state */
+.empty{color:var(--mut);font-size:13px;padding:40px;text-align:center}
+.sample{background:var(--gold-wash);border:1px solid var(--gold-lo);border-left:3px solid var(--gold);border-radius:8px;padding:10px 14px;color:var(--gold2);max-width:80ch;margin:0 0 14px}
