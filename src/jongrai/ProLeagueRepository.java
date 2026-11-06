@@ -128,6 +128,7 @@ public final class ProLeagueRepository {
         for (List<ProMatch> list : matches.values()) {
             for (ProMatch m : list) {
                 for (String id : List.of(m.team1Id(), m.team2Id())) {
+                    if (id.equalsIgnoreCase("TBD")) continue;          // a playoff slot not decided yet
                     if (teams.get(m.leagueId() + "|" + m.season() + "|" + id) == null) {
                         warnings.add("match " + m.id() + " names unknown team '" + id + "'");
                     }

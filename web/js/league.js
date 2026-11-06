@@ -1,3 +1,4 @@
+const cap=t=>String(t||'').replace(/\b\w/g,c=>c.toUpperCase());
 // Jongrai - script for /pro-league.html. Runs after /app.js and /kit.js.
 const $$=s=>document.querySelectorAll(s);
 const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
@@ -96,7 +97,7 @@ function renderMatches(data){
    ?`<div class="match-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>`
    :`<div class="match-score vs">vs${bo?`<small>(${bo})</small>`:''}</div>`;
   return `<div class="match-card">
-   <div class="match-top"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><span class="match-meta">Week ${m.week} · Day ${m.day} · ${esc(m.matchType)}</span></div>
+   <div class="match-top"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><span class="match-meta">${m.matchType==='regular'?`Week ${m.week} · Day ${m.day}`:esc(cap(m.matchType))}</span></div>
    ${m.scheduledTime?`<div class="match-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
    <div class="match-body">${matchTeam(m.team1Id,s1)}${score}${matchTeam(m.team2Id,s2)}</div>
   </div>`;
