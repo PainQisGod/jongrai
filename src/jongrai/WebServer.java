@@ -102,7 +102,6 @@ public class WebServer {
         server.setExecutor(Executors.newFixedThreadPool(8));
         server.start();
         System.out.println("Jongrai draft board running at http://localhost:" + port + "  (Ctrl+C to stop)");
-        System.out.println("UI mockups at http://localhost:" + port + "/mockups/");
         System.out.println("AI coach " + (AiCoach.configured() ? "ON - model " + AiCoach.model() + " via " + AiCoach.baseUrl()
                 : "OFF - no key found (" + AiCoach.keySource() + ")"));
         if (!AiCoach.configured()) {
@@ -232,7 +231,7 @@ public class WebServer {
         } catch (Auth.AuthException e) {
             String m = e.getMessage().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
             send(ex, 400, "text/html; charset=utf-8", "<!doctype html><meta charset=utf-8><title>Sign-in failed</title>"
-                    + "<link rel=stylesheet href=/style.css><main style='max-width:520px;margin:15vh auto;padding:0 16px;text-align:center'>"
+                    + "<link rel=stylesheet href=/kit.css><main style='max-width:520px;margin:15vh auto;padding:0 16px;text-align:center'>"
                     + "<h2>Sign-in did not finish</h2><p>" + m + "</p><p><a href='/'>Back to Jongrai</a></p></main>");
         }
     }
@@ -270,13 +269,11 @@ public class WebServer {
         if (path.startsWith("/icons/")) { serveFile(ex, "web/icons", path.substring(7), true); return; }
         if (path.startsWith("/teams/")) { serveFile(ex, "web/teams", path.substring(7), true); return; }
         if (path.startsWith("/video/")) { serveFile(ex, "web/video", path.substring(7), true); return; }
-        if (path.startsWith("/mockups/")) { serveFile(ex, "mockups", path.length() == 9 ? "index.html" : path.substring(9), false); return; }
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
             case "/" -> servePage(ex, "home.html");
             case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" -> servePage(ex, PAGES.get(path));
-            case "/style.css", "/app.js", "/kit.css", "/kit.js" -> serveFile(ex, "web", path.substring(1), false);
-            case "/mockups" -> { ex.getResponseHeaders().set("Location", "/mockups/"); send(ex, 301, "text/plain", ""); }
+            case "/app.js", "/kit.css", "/kit.js", "/pages.css" -> serveFile(ex, "web", path.substring(1), false);
             case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH)
                     + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
             case "/api/heroes" -> sendJson(ex, 200, heroesJson());

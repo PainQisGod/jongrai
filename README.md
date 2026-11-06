@@ -89,9 +89,8 @@ Results are cached per draft, so reloading the page does not call the API again.
 | `/draft` | `web/draft.html` | The draft board |
 | `/league` | `web/pro-league.html` | Pro league standings, matches and drafts (sample data) |
 | `/about` | `web/about.html` | Data sources and credits |
-| `/mockups/` | `mockups/` | "Dusk at the Temple" UI mockups, on the same live draft |
 
-Shared styling lives in `web/style.css` and shared script helpers in `web/app.js`. Hero and item icons go in `web/icons/`.
+Shared styling lives in `web/kit.css` (the "Dusk at the Temple" design) plus `web/pages.css` for Items, Pro League, About and 404; shared scripts are `web/app.js` and `web/kit.js` (top bar). Hero and item icons go in `web/icons/`.
 
 ## Data files
 
@@ -129,7 +128,7 @@ help, quit
 
 ```
 src/jongrai/   Java source (engine, analyzer, web server, AI coach, SelfCheck)
-web/           HTML pages, style.css, app.js, icons/
+web/           HTML pages, kit.css, pages.css, app.js, kit.js, icons/
 data/          heroes.csv, items.csv, hero-builds.csv, hero-icons.csv, pro-*.csv
 docs/          readable overview of every hero's counters and synergies
 ```

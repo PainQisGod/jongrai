@@ -1,0 +1,29 @@
+/* Jongrai - shared styles for Items, Pro League, About and 404, loaded after /kit.css.
+   The old palette names these pages were written with now point at the "Dusk at the Temple" tokens. */
+:root{
+  --bg:var(--night); --card:var(--stone-2); --card2:var(--stone-1); --line:var(--hair-2);
+  --tx:var(--ink); --mut:var(--ink-3); --gold2:var(--gold-hi);
+}
+main,footer{position:relative;z-index:1}
+.wrap h2.t{font:700 clamp(28px,4vw,40px)/1.1 var(--display);letter-spacing:.01em;margin:6px 0 10px;color:var(--ink)}
+.wrap p.l{color:var(--ink-2)}
+.wrap h3,.wrap h4{font-family:var(--display);letter-spacing:.04em}
+main input,main select{background:var(--stone-1);color:var(--ink);border:1px solid var(--hair-2);border-radius:var(--r-sm);padding:8px 11px}
+main input:focus,main select:focus{border-color:var(--gold-lo);outline:none}
+
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;
+  font:600 12px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;padding:13px 20px;border-radius:999px;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#1a1206;border:1px solid var(--gold);
+  box-shadow:0 8px 24px -12px rgba(228,181,83,.6);transition:transform .2s var(--ease-out),box-shadow .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px -12px rgba(228,181,83,.8)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--hair-2);box-shadow:none}
+.btn.ghost:hover{border-color:var(--gold-lo)}
+
+.card{background:linear-gradient(180deg,var(--stone-2),var(--stone-1));border:1px solid var(--hair);border-radius:var(--r-md);padding:16px}
+.badge{display:inline-block;font:600 10px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--night);
+  border-radius:999px;padding:4px 10px}
+
+footer{border-top:1px solid var(--hair);margin-top:48px;padding:20px 24px;color:var(--ink-3);font-size:12px;
+  display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .sp{margin-left:auto}
+.build{position:fixed;right:8px;bottom:6px;z-index:2;color:var(--stone-4);font:10px ui-monospace,Consolas,monospace}
