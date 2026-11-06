@@ -122,3 +122,5 @@ a.hero-link:hover .hero-ic,a.hero-link:focus-visible .hero-ic{border-color:var(-
 /* empty state */
 .empty{color:var(--mut);font-size:13px;padding:40px;text-align:center}
 .sample{background:var(--gold-wash);border:1px solid var(--gold-lo);border-left:3px solid var(--gold);border-radius:8px;padding:10px 14px;color:var(--gold2);max-width:80ch;margin:0 0 14px}
+.source{max-width:80ch;margin:0 0 14px;padding:10px 14px;border-left:2px solid var(--gold-lo);background:var(--stone-1);border-radius:var(--r-sm);color:var(--ink-2);font-size:13px}
+.source a{color:var(--gold-hi)}

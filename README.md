@@ -87,7 +87,7 @@ Results are cached per draft, so reloading the page does not call the API again.
 | `/heroes` | `web/hero-statistics.html` | All heroes, or one hero at `/heroes/<slug>` |
 | `/items` | `web/items.html` | All items, or one item at `/items/<slug>` |
 | `/draft` | `web/draft.html` | The draft board |
-| `/league` | `web/pro-league.html` | Pro league standings, matches and drafts (sample data) |
+| `/league` | `web/pro-league.html` | Pro league standings, matches and drafts (results from mplcambodia.com) |
 | `/about` | `web/about.html` | Data sources and credits |
 
 Shared styling lives in `web/kit.css` (the "Dusk at the Temple" design) plus `web/pages.css` for Items, Pro League, About and 404; shared scripts are `web/app.js` and `web/kit.js` (top bar). Each page keeps its own styles in `web/css/<page>.css` and its script in `web/js/<page>.js`, so the HTML files hold only the page structure. Hero and item icons go in `web/icons/`.
@@ -106,7 +106,7 @@ All plain CSV, so you can edit them freely.
   - Fields containing a comma or a quote are wrapped in double quotes. A build's total cost is the sum of its item prices, worked out at startup.
 - `data/hero-icons.csv` maps each hero to its icon file.
 
-Every data file is required, and a malformed row stops the server with `file:line: reason`. On startup the server also validates all of the data and prints a warning for each problem, such as a build naming an item that doesn't exist or an icon file that is missing. The pro-league sample data currently prints a few warnings because its standings do not match its match list; that is expected.
+Every data file is required, and a malformed row stops the server with `file:line: reason`. On startup the server also validates all of the data and prints a warning for each problem, such as a build naming an item that doesn't exist or an icon file that is missing. Pro-league standings are not stored: they are calculated from the finished regular-season rows in `data/pro-matches.csv` (1 point per series win), so a result only needs entering once.
 
 ## Console commands
 

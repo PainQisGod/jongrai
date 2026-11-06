@@ -33,6 +33,7 @@ public final class SelfCheck {
         analysis(pool);
         sessions(pool);
         auth();
+        pro(home);
         System.out.println("SelfCheck: " + checks + " checks passed");
     }
 
@@ -255,5 +256,24 @@ public final class SelfCheck {
             Files.deleteIfExists(dir);
             Auth.init(Path.of(System.getProperty("java.io.tmpdir")), 8080); // leave the shared settings off
         }
+    }
+
+    private static void pro(Path home) throws Exception {
+        ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
+        List<ProLeagueRepository.ProStanding> table = pro.standings("mpl_kh", "Season 11");
+        check(table.size() == 10, "the MPL KH S11 table lists all 10 teams");
+        StringBuilder got = new StringBuilder();
+        for (ProLeagueRepository.ProStanding s : table) {
+            got.append(s.teamId()).append(' ').append(s.won()).append('-').append(s.lost()).append(' ')
+                    .append(s.gf()).append('-').append(s.ga()).append(' ').append(s.points()).append(';');
+        }
+        // the official final regular-season table on mplcambodia.com, 2026-11-07
+        String official = "vgr 9-0 18-4 9;rvz 8-1 17-8 8;pro 6-3 14-8 6;flkh 5-4 13-8 5;val 5-4 12-10 5;"
+                + "tnr 5-4 13-12 5;gxl 4-5 11-11 4;eye 2-7 7-14 2;sys 1-8 4-16 1;gxp 0-9 0-18 0;";
+        check(got.toString().equals(official), "calculated standings match the official MPL KH S11 table: " + got);
+        check(ProLeagueRepository.streak("WWLWW").equals("W2") && ProLeagueRepository.streak("").equals("")
+                && ProLeagueRepository.streak("LLL").equals("L3"), "the current streak is the last unbroken run");
+        check(pro.validate(java.util.Set.of(), home.resolve("web/teams")).stream().noneMatch(w -> w.contains("unknown team")),
+                "every match names a listed team");
     }
 }

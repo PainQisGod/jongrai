@@ -4,11 +4,9 @@
 # best_of: optional - the series format as a number (2 for a Bo2, 3 for a Bo3, 5 for a Bo5). Leave blank when unknown.
 #   Blank is fine for a 2-1 / 3-2 style result (the page works the Bo out), but a 2-0 sweep could be Bo2 or Bo3, so fill it in.
 # Times are ICT (UTC+7), as published by mplcambodia.com. Series scores (Bo3/Bo5/Bo7), not games.
-# S11 Weeks 1-2 results are left out: the official site only exposes them behind JavaScript, and
-# GGCombat's partial Week 2 list includes a Galaxy Phoenix win over Galaxy Legends that the
-# official table does not reflect (it shows Galaxy Phoenix 0-4). Do not guess - fill these
-# from VODs or the official site once they are static.
-# S10 regular-season match list not collected; playoffs below are from Liquipedia.
+# S11 regular season (Weeks 1-5, all 45 series) checked against mplcambodia.com/schedule on 2026-11-07.
+# Standings are calculated from the finished regular-season rows here (1 point per series win), so a
+# result only needs entering once.
 match_id,league_id,season,week,day,team1_id,team2_id,team1_score,team2_score,status,scheduled_time,completed_time,match_type,best_of
 mpl_kh_s11_w1_d1_m1,mpl_kh,Season 11,1,1,pro,gxl,2,1,finished,2026-09-18 - 13:00 ICT,,regular,3
 mpl_kh_s11_w1_d1_m2,mpl_kh,Season 11,1,1,tnr,gxp,2,0,finished,2026-09-18 - 15:30 ICT,,regular,3
@@ -46,26 +44,26 @@ mpl_kh_s11_w3_d3_m1,mpl_kh,Season 11,3,3,flkh,gxl,2,0,finished,2026-10-18 - 13:0
 mpl_kh_s11_w3_d3_m2,mpl_kh,Season 11,3,3,vgr,tnr,2,1,finished,2026-10-18 - 15:30 ICT,,regular,3
 mpl_kh_s11_w3_d3_m3,mpl_kh,Season 11,3,3,sys,gxp,2,0,finished,2026-10-18 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w4_d1_m1,mpl_kh,Season 11,4,1,sys,val,,,scheduled,2026-10-23 - 13:00 ICT,,regular,3
-mpl_kh_s11_w4_d1_m2,mpl_kh,Season 11,4,1,flkh,gxp,,,scheduled,2026-10-23 - 15:30 ICT,,regular,3
-mpl_kh_s11_w4_d1_m3,mpl_kh,Season 11,4,1,tnr,eye,,,scheduled,2026-10-23 - 18:00 ICT,,regular,3
+mpl_kh_s11_w4_d1_m1,mpl_kh,Season 11,4,1,sys,val,0,2,finished,2026-10-23 - 13:00 ICT,,regular,3
+mpl_kh_s11_w4_d1_m2,mpl_kh,Season 11,4,1,flkh,gxp,2,0,finished,2026-10-23 - 15:30 ICT,,regular,3
+mpl_kh_s11_w4_d1_m3,mpl_kh,Season 11,4,1,tnr,eye,2,1,finished,2026-10-23 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w4_d2_m1,mpl_kh,Season 11,4,2,pro,gxp,,,scheduled,2026-10-24 - 13:00 ICT,,regular,3
-mpl_kh_s11_w4_d2_m2,mpl_kh,Season 11,4,2,vgr,flkh,,,scheduled,2026-10-24 - 15:30 ICT,,regular,3
-mpl_kh_s11_w4_d2_m3,mpl_kh,Season 11,4,2,gxl,eye,,,scheduled,2026-10-24 - 18:00 ICT,,regular,3
+mpl_kh_s11_w4_d2_m1,mpl_kh,Season 11,4,2,pro,gxp,2,0,finished,2026-10-24 - 13:00 ICT,,regular,3
+mpl_kh_s11_w4_d2_m2,mpl_kh,Season 11,4,2,vgr,flkh,2,0,finished,2026-10-24 - 15:30 ICT,,regular,3
+mpl_kh_s11_w4_d2_m3,mpl_kh,Season 11,4,2,gxl,eye,2,1,finished,2026-10-24 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w4_d3_m1,mpl_kh,Season 11,4,3,sys,tnr,,,scheduled,2026-10-25 - 13:00 ICT,,regular,3
-mpl_kh_s11_w4_d3_m2,mpl_kh,Season 11,4,3,vgr,pro,,,scheduled,2026-10-25 - 15:30 ICT,,regular,3
-mpl_kh_s11_w4_d3_m3,mpl_kh,Season 11,4,3,rvz,flkh,,,scheduled,2026-10-25 - 18:00 ICT,,regular,3
+mpl_kh_s11_w4_d3_m1,mpl_kh,Season 11,4,3,sys,tnr,1,2,finished,2026-10-25 - 13:00 ICT,,regular,3
+mpl_kh_s11_w4_d3_m2,mpl_kh,Season 11,4,3,vgr,pro,2,1,finished,2026-10-25 - 15:30 ICT,,regular,3
+mpl_kh_s11_w4_d3_m3,mpl_kh,Season 11,4,3,rvz,flkh,2,1,finished,2026-10-25 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w5_d1_m1,mpl_kh,Season 11,5,1,vgr,eye,,,scheduled,2026-10-30 - 13:00 ICT,,regular,3
-mpl_kh_s11_w5_d1_m2,mpl_kh,Season 11,5,1,rvz,gxl,,,scheduled,2026-10-30 - 15:30 ICT,,regular,3
-mpl_kh_s11_w5_d1_m3,mpl_kh,Season 11,5,1,tnr,val,,,scheduled,2026-10-30 - 18:00 ICT,,regular,3
+mpl_kh_s11_w5_d1_m1,mpl_kh,Season 11,5,1,vgr,eye,2,0,finished,2026-10-30 - 13:00 ICT,,regular,3
+mpl_kh_s11_w5_d1_m2,mpl_kh,Season 11,5,1,rvz,gxl,2,1,finished,2026-10-30 - 15:30 ICT,,regular,3
+mpl_kh_s11_w5_d1_m3,mpl_kh,Season 11,5,1,tnr,val,1,2,finished,2026-10-30 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w5_d2_m1,mpl_kh,Season 11,5,2,rvz,eye,,,scheduled,2026-10-31 - 13:00 ICT,,regular,3
-mpl_kh_s11_w5_d2_m2,mpl_kh,Season 11,5,2,gxl,val,,,scheduled,2026-10-31 - 15:30 ICT,,regular,3
-mpl_kh_s11_w5_d2_m3,mpl_kh,Season 11,5,2,sys,vgr,,,scheduled,2026-10-31 - 18:00 ICT,,regular,3
+mpl_kh_s11_w5_d2_m1,mpl_kh,Season 11,5,2,rvz,eye,2,1,finished,2026-10-31 - 13:00 ICT,,regular,3
+mpl_kh_s11_w5_d2_m2,mpl_kh,Season 11,5,2,gxl,val,2,0,finished,2026-10-31 - 15:30 ICT,,regular,3
+mpl_kh_s11_w5_d2_m3,mpl_kh,Season 11,5,2,sys,vgr,0,2,finished,2026-10-31 - 18:00 ICT,,regular,3
 
-mpl_kh_s11_w5_d3_m1,mpl_kh,Season 11,5,3,tnr,flkh,,,scheduled,2026-11-01 - 13:00 ICT,,regular,3
-mpl_kh_s11_w5_d3_m2,mpl_kh,Season 11,5,3,gxp,eye,,,scheduled,2026-11-01 - 15:30 ICT,,regular,3
-mpl_kh_s11_w5_d3_m3,mpl_kh,Season 11,5,3,pro,rvz,,,scheduled,2026-11-01 - 18:00 ICT,,regular,3
+mpl_kh_s11_w5_d3_m1,mpl_kh,Season 11,5,3,tnr,flkh,2,1,finished,2026-11-01 - 13:00 ICT,,regular,3
+mpl_kh_s11_w5_d3_m2,mpl_kh,Season 11,5,3,gxp,eye,0,2,finished,2026-11-01 - 15:30 ICT,,regular,3
+mpl_kh_s11_w5_d3_m3,mpl_kh,Season 11,5,3,pro,rvz,1,2,finished,2026-11-01 - 18:00 ICT,,regular,3

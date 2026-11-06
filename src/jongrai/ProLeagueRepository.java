@@ -11,22 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/** Loads professional league data. Every file is required and read through {@link Csv}. */
+/** Loads professional league data. Every file is required and read through {@link Csv}; standings are calculated, not stored. */
 public final class ProLeagueRepository {
 
     private final Map<String, ProLeague> leagues;          // keyed by id|season
     private final Map<String, ProTeam> teams;
-    private final Map<String, List<ProStanding>> standings;
     private final Map<String, List<ProMatch>> matches;
     private final Map<String, List<ProDraft>> drafts;
 
     private ProLeagueRepository(Map<String, ProLeague> leagues, Map<String, ProTeam> teams,
-                                Map<String, List<ProStanding>> standings,
                                 Map<String, List<ProMatch>> matches,
                                 Map<String, List<ProDraft>> drafts) {
         this.leagues = leagues;
         this.teams = teams;
-        this.standings = standings;
         this.matches = matches;
         this.drafts = drafts;
     }
@@ -35,7 +32,6 @@ public final class ProLeagueRepository {
         return new ProLeagueRepository(
                 loadLeagues(base.resolve("pro-leagues.csv")),
                 loadTeams(base.resolve("pro-teams.csv")),
-                loadStandings(base.resolve("pro-standings.csv")),
                 loadMatches(base.resolve("pro-matches.csv")),
                 loadDrafts(base.resolve("pro-drafts.csv")));
     }
@@ -63,19 +59,6 @@ public final class ProLeagueRepository {
             }
         }
         return teams;
-    }
-
-    private static Map<String, List<ProStanding>> loadStandings(Path file) throws IOException {
-        Map<String, List<ProStanding>> standings = new LinkedHashMap<>();
-        for (Csv.Row r : Csv.read(file, 15)) {
-            ProStanding s = new ProStanding(r.text(0), r.text(1), r.text(2),
-                    r.integer(3, 0), r.integer(4, 0), r.integer(5, 0), r.integer(6, 0), r.integer(7, 0),
-                    r.integer(8, 0), r.integer(9, 0), r.integer(10, 0), r.integer(11, 0),
-                    r.text(12), r.text(13), r.text(14));
-            standings.computeIfAbsent(s.leagueId(), k -> new ArrayList<>()).add(s);
-        }
-        standings.values().forEach(list -> list.sort(Comparator.comparingInt(ProStanding::position)));
-        return standings;
     }
 
     private static Map<String, List<ProMatch>> loadMatches(Path file) throws IOException {
@@ -142,18 +125,12 @@ public final class ProLeagueRepository {
                 warnings.add("team logo '" + t.logo() + "' for " + t.id() + " is missing");
             }
         }
-        for (List<ProStanding> list : standings.values()) {
-            for (ProStanding s : list) {
-                if (teams.get(s.leagueId() + "|" + s.season() + "|" + s.teamId()) == null) {
-                    warnings.add("standings for " + s.leagueId() + " " + s.season() + " list unknown team '" + s.teamId() + "'");
-                    continue;
-                }
-                long played = matches(s.leagueId(), s.season()).stream()
-                        .filter(m -> m.status().equals("completed") || m.status().equals("finished"))
-                        .filter(m -> m.team1Id().equals(s.teamId()) || m.team2Id().equals(s.teamId())).count();
-                if (played != s.played()) {
-                    warnings.add("standings say " + s.teamId() + " played " + s.played() + " in " + s.leagueId()
-                            + " " + s.season() + " but " + played + " completed matches are listed");
+        for (List<ProMatch> list : matches.values()) {
+            for (ProMatch m : list) {
+                for (String id : List.of(m.team1Id(), m.team2Id())) {
+                    if (teams.get(m.leagueId() + "|" + m.season() + "|" + id) == null) {
+                        warnings.add("match " + m.id() + " names unknown team '" + id + "'");
+                    }
                 }
             }
         }
@@ -169,9 +146,58 @@ public final class ProLeagueRepository {
                 .filter(t -> t.leagueId().equals(leagueId) && t.season().equals(season)).toList();
     }
 
+    /**
+     * The table for one season, calculated from its finished regular-season series: 1 point per series win
+     * (the MPL KH rule), gf/ga are games won and lost. Ties are broken by game difference, then games won,
+     * then team name. Every listed team appears, so a team that has not played yet shows 0-0.
+     */
     public List<ProStanding> standings(String leagueId, String season) {
-        return standings.getOrDefault(leagueId, List.of()).stream()
-                .filter(s -> s.season().equals(season)).toList();
+        Map<String, int[]> row = new LinkedHashMap<>();           // won, lost, gf, ga
+        Map<String, StringBuilder> results = new LinkedHashMap<>(); // W/L in date order
+        for (ProTeam t : teamsInLeague(leagueId, season)) {
+            row.put(t.id(), new int[4]);
+            results.put(t.id(), new StringBuilder());
+        }
+        String last = "";
+        for (ProMatch m : matches(leagueId, season)) {          // already sorted by scheduled time
+            boolean done = m.status().equals("finished") || m.status().equals("completed");
+            if (!done || !m.matchType().equals("regular") || m.team1Score() < 0 || m.team2Score() < 0) continue;
+            int[] a = row.computeIfAbsent(m.team1Id(), k -> new int[4]);
+            int[] b = row.computeIfAbsent(m.team2Id(), k -> new int[4]);
+            boolean aWon = m.team1Score() > m.team2Score();
+            a[aWon ? 0 : 1]++;
+            b[aWon ? 1 : 0]++;
+            a[2] += m.team1Score(); a[3] += m.team2Score();
+            b[2] += m.team2Score(); b[3] += m.team1Score();
+            results.computeIfAbsent(m.team1Id(), k -> new StringBuilder()).append(aWon ? 'W' : 'L');
+            results.computeIfAbsent(m.team2Id(), k -> new StringBuilder()).append(aWon ? 'L' : 'W');
+            last = m.scheduledTime().length() >= 10 ? m.scheduledTime().substring(0, 10) : m.scheduledTime();
+        }
+        Map<String, String> names = new LinkedHashMap<>();
+        teamsInLeague(leagueId, season).forEach(t -> names.put(t.id(), t.name()));
+        List<String> order = new ArrayList<>(row.keySet());
+        order.sort(Comparator.<String>comparingInt(id -> -row.get(id)[0])
+                .thenComparingInt(id -> -(row.get(id)[2] - row.get(id)[3]))
+                .thenComparingInt(id -> -row.get(id)[2])
+                .thenComparing(id -> names.getOrDefault(id, id)));
+        List<ProStanding> table = new ArrayList<>();
+        for (int i = 0; i < order.size(); i++) {
+            String id = order.get(i);
+            int[] r = row.get(id);
+            String res = results.getOrDefault(id, new StringBuilder()).toString();
+            table.add(new ProStanding(leagueId, id, season, i + 1, r[0] + r[1], r[0], r[1], 0,
+                    r[2], r[3], r[2] - r[3], r[0], streak(res), res.length() > 5 ? res.substring(res.length() - 5) : res, last));
+        }
+        return table;
+    }
+
+    /** "WWLWW" -> "W2" (the current run), "" -> "". */
+    static String streak(String results) {
+        if (results.isEmpty()) return "";
+        char c = results.charAt(results.length() - 1);
+        int n = 0;
+        for (int i = results.length() - 1; i >= 0 && results.charAt(i) == c; i--) n++;
+        return c + Integer.toString(n);
     }
 
     public List<ProMatch> matches(String leagueId, String season) {
