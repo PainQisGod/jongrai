@@ -365,7 +365,6 @@ const order=()=>bansOn?TOURNAMENT:PICKS_ONLY;
 const PHASES=['Ban phase 1','Pick phase 1','Ban phase 2','Pick phase 2'];
 const SIDE={B:'blue',R:'red'},LANES=['EXP','JUNGLE','MID','GOLD','ROAM'];
 const ROLE_ICON={TANK:'Emblem_Tank.png',FIGHTER:'Emblem_Fighter.png',ASSASSIN:'Emblem_Assassin.png',MAGE:'Emblem_Mage.png',MARKSMAN:'Emblem_Marksman.png',SUPPORT:'Emblem_Support.png'};
-const VIDEOS={aamon:'Aamon.mp4',akai:'Akai.mp4',granger:'Granger.mp4',claude:'Claude.mp4',marcel:'Marcel.mp4'};
 const TIER_ORDER='SABCD';
 const SORT='<select class="sortsel" id="sort" aria-label="Sort heroes"><option value="tier">Sort: tier</option><option value="win">Sort: win rate</option><option value="ban">Sort: ban rate</option><option value="name">Sort: A–Z</option></select>';
 let heroes=[],byName={},state={version:0,blue:{picks:[],bans:[]},red:{picks:[],bans:[]}};
@@ -407,9 +406,9 @@ const face=n=>{const h=byName[n];return h&&h.icon?icon(h.icon):''};
 function door(t,p,i,next){
  const code=(t==='blue'?'B':'R')+(i+1);
  if(!p)return[`${code}|${next}`,`<div class="door empty${next?' next':''}" data-slot="${code}"><span class="code">${code}</span>${next?'<span class="cue">Picking</span>':''}</div>`];
- const h=byName[p.name]||{lanes:[]},v=VIDEOS[key(p.name)],li=laneIcon(p.lane);
+ const h=byName[p.name]||{lanes:[]},v=h.video,li=laneIcon(p.lane); // pick animation from web/video, listed by the server
  const opts=[...h.lanes,...LANES.filter(l=>!h.lanes.includes(l))].map(l=>`<option value="${l}"${l===p.lane?' selected':''}>${l}${h.lanes.includes(l)?'':' · flex'}</option>`).join('');
- const art=v?`<video src="/video/${v}" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>`
+ const art=v?`<video src="/video/${encodeURIComponent(v)}" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>`
   :`<img class="aura" src="${face(p.name)}" alt=""><img class="face" src="${face(p.name)}" alt="">`;
  return[`${p.name}|${p.lane}`,`<div class="door filled" data-hero="${esc(p.name)}">${art}
   <span class="code small">${code}</span>${h.tier?`<span class="tier ${esc(h.tier)}">${esc(h.tier)}</span>`:''}<span class="flag"></span>

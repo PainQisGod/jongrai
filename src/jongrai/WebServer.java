@@ -42,6 +42,7 @@ public class WebServer {
     private static ItemRepository gear;
     private static ProLeagueRepository pro;
     private static final Map<String, String> icons = new HashMap<>(); // hero name -> icon file name
+    private static final Map<String, String> videos = new HashMap<>(); // hero name -> pick animation in web/video
     private static final SuggestionEngine engine = new SuggestionEngine();
 
     /** The calling visitor's board for this request. Set in route() for the draft endpoints, cleared in handle(). */
@@ -86,6 +87,7 @@ public class WebServer {
         gear = ItemRepository.load(home.resolve("data/items.csv"), home.resolve("data/hero-builds.csv"));
         pro = ProLeagueRepository.load(home.resolve("data"));
         loadIcons(home.resolve("data/hero-icons.csv"));
+        findVideos(home.resolve("web/video"));
         pool.values().forEach(h -> heroBySlug.put(h.slug(), h));
         gear.items().forEach(i -> itemBySlug.put(i.slug(), i));
 
@@ -336,14 +338,36 @@ public class WebServer {
         sendJson(ex, 200, body);
     }
 
+    /**
+     * A hero's pick animation is web/video/<Hero name>.mp4, found when the server starts (spaces may also be
+     * written as underscores, and case does not matter). Drop a new file in and restart: no code change needed.
+     */
+    private static void findVideos(Path dir) throws IOException {
+        if (!Files.isDirectory(dir)) return;
+        Map<String, String> byKey = new HashMap<>();
+        try (var files = Files.list(dir)) {
+            files.map(p -> p.getFileName().toString()).filter(n -> n.toLowerCase(Locale.ROOT).endsWith(".mp4"))
+                    .forEach(n -> byKey.put(videoKey(n.substring(0, n.length() - 4)), n));
+        }
+        for (Hero h : pool.values()) {
+            String file = byKey.remove(videoKey(h.name()));
+            if (file != null) videos.put(h.name(), file);
+        }
+        byKey.values().forEach(f -> System.out.println("warning: video web/video/" + f + " does not match any hero name"));
+    }
+
+    private static String videoKey(String name) {
+        return name.toLowerCase(Locale.ROOT).replace('_', ' ').trim();
+    }
+
     private static String heroesJson() {
         return pool.values().stream().map(h -> String.format(Locale.ROOT,
-                "{\"name\":%s,\"slug\":%s,\"roles\":%s,\"lanes\":%s,\"tier\":%s,\"winRate\":%.2f,\"banRate\":%.2f,\"icon\":%s"
+                "{\"name\":%s,\"slug\":%s,\"roles\":%s,\"lanes\":%s,\"tier\":%s,\"winRate\":%.2f,\"banRate\":%.2f,\"icon\":%s,\"video\":%s"
                         + ",\"durability\":%d,\"offense\":%d,\"control\":%d,\"tags\":%s,\"spike\":%s,\"tip\":%s"
                         + ",\"counters\":%s,\"synergies\":%s}",
                 Json.str(h.name()), Json.str(h.slug()), Json.list(h.roles().stream().map(Enum::name).toList()),
                 Json.list(h.lanes().stream().map(Enum::name).toList()), Json.str(h.tier()), h.winRate(), h.banRate(),
-                Json.str(icons.getOrDefault(h.name(), "")), h.durability(), h.offense(), h.control(),
+                Json.str(icons.getOrDefault(h.name(), "")), Json.str(videos.getOrDefault(h.name(), "")), h.durability(), h.offense(), h.control(),
                 Json.list(h.tags().stream().sorted().toList()), Json.str(h.spike().name()), Json.str(h.tip()),
                 Json.list(h.counters().stream().sorted().toList()), Json.list(h.synergies().stream().sorted().toList())))
                 .collect(Collectors.joining(",", "[", "]"));
