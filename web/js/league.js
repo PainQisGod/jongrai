@@ -15,7 +15,7 @@ async function loadLeagues(){
 }
 function renderLeagueBar(){
  const bar=$('#leagueBar');
- bar.innerHTML=leagues.map(l=>`<button type="button" class="league-btn${keyOf(l)===selected?' active':''}" data-key="${esc(keyOf(l))}" title="${esc(l.region)} - ${esc(l.season)}">${esc(l.name)} · ${esc(l.season)}</button>`).join('');
+ bar.innerHTML=leagues.map(l=>`<button type="button" class="league-btn${keyOf(l)===selected?' active':''}" data-key="${esc(keyOf(l))}" title="${esc(l.region)} - ${esc(l.season)}">${l.logo?`<img src="/leagues/${esc(l.logo)}" alt="" onerror="this.remove()">`:''}${esc(l.name)} · ${esc(l.season)}</button>`).join('');
  bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.key));
 }
 let selected='';

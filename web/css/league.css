@@ -10,6 +10,8 @@ input,select{background:var(--card);color:var(--tx);border:1px solid var(--line)
 /* league subbar */
 .league-bar{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .league-btn{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--tx);cursor:pointer;transition:all 0.15s}
+.league-btn{display:inline-flex;align-items:center;gap:7px}
+.league-btn img{width:24px;height:24px;object-fit:contain;flex:none}
 .league-btn:hover{border-color:var(--gold-lo);color:var(--ink)}
 .league-btn.active{background:var(--gold-wash);border-color:var(--gold);color:var(--gold-hi);font-weight:600}
 @media(max-width:640px){.league-btn{font-size:11px;padding:4px 8px}}
