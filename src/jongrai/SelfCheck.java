@@ -280,6 +280,15 @@ public final class SelfCheck {
         String phOfficial = "tlph 12-2 25-6;flcn 12-2 26-10;onic 9-5 21-14;rora 9-5 20-13;omg 7-7 15-18;"
                 + "tnc 4-10 14-22;apbr 3-11 10-23;twis 0-14 3-28;";
         check(ph.toString().equals(phOfficial), "calculated standings match the MPL PH S18 table: " + ph);
+        StringBuilder my = new StringBuilder();
+        for (ProLeagueRepository.ProStanding s : pro.standings("mpl_my", "Season 18")) {
+            my.append(s.teamId()).append(' ').append(s.won()).append('-').append(s.lost()).append(' ')
+                    .append(s.gf()).append('-').append(s.ga()).append(';');
+        }
+        // the final MPL MY S18 regular-season table on mlbbhub.com, 2026-11-07
+        String myOfficial = "srg 11-3 24-8;tr 10-4 22-11;vms 10-4 22-14;ig 7-7 17-17;btrm 6-8 17-19;"
+                + "flmy 5-9 13-19;ac 4-10 10-24;rrq 3-11 11-24;";
+        check(my.toString().equals(myOfficial), "calculated standings match the MPL MY S18 table: " + my);
         check(ProLeagueRepository.streak("WWLWW").equals("W2") && ProLeagueRepository.streak("").equals("")
                 && ProLeagueRepository.streak("LLL").equals("L3"), "the current streak is the last unbroken run");
         check(pro.validate(java.util.Set.of(), home.resolve("web/teams")).stream().noneMatch(w -> w.contains("unknown team")),
