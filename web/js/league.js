@@ -108,10 +108,10 @@ function renderTeams(data){
  if(!data.length){grid.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
  grid.innerHTML=data.map(t=>`<div class="card" style="text-align:center">
-  <img src="/teams/${esc(t.logo||'')}" alt="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:8px" onerror="this.remove()">
+  <img src="/teams/${esc(t.logo||'')}" alt="" style="display:block;width:64px;height:64px;margin:0 auto 8px;border-radius:8px;object-fit:contain" onerror="this.remove()">
   <div style="font-weight:600">${esc(t.name)}</div>
-  <div style="color:var(--mut);font-size:12px">${esc(t.shortName)} · ${esc(t.city)}</div>
-  <div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${esc(t.coach||'Unknown')}</div>
+  <div style="color:var(--mut);font-size:12px">${[t.shortName,t.city].filter(Boolean).map(esc).join(' · ')}</div>
+  ${t.coach?`<div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${esc(t.coach)}</div>`:''}
   <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${esc(t.status)}</span></div>
  </div>`).join('');
 }
