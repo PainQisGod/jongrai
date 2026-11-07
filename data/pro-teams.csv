@@ -3,7 +3,7 @@
 # source was found (the official site and Liquipedia do not list them) - do not invent them.
 # Logos: web/teams/ (from the official MPL KH site).
 team_id,league_id,season,name,short_name,logo,founded,city,coach,status
-flkh,mpl_kh,Season 11,Team Flash KH,FLKH,Team_Flash_KH.png,2019,Phnom Penh,SeoBaby,active
+flkh,mpl_kh,Season 11,Team Flash KH,FLKH,Team_Flash.png,2019,Phnom Penh,SeoBaby,active
 rvz,mpl_kh,Season 11,Team Rvz,RVZ,Team_RVZ.png,2026,Phnom Penh,K S,active
 vgr,mpl_kh,Season 11,Vigor Apex,VGR,Vigor_Apex.png,2025,Phnom Penh,Naga,active
 pro,mpl_kh,Season 11,PRO Esports,PRO,PRO_Esports.png,2022,Phnom Penh,CatGod,active
@@ -21,11 +21,11 @@ omg,mpl_ph,Season 18,Smart Omega,OMG,Smart_Omega.png,,,,active
 tnc,mpl_ph,Season 18,TNC Pro Team,TNC,TNC_Pro_Team.png,,,,active
 apbr,mpl_ph,Season 18,AP Bren,APBR,AP_Bren.png,,,,active
 twis,mpl_ph,Season 18,Twisted Minds PH,TWIS,Twisted_Minds.png,,,,active
-srg,mpl_my,Season 18,Selangor Red Giants,SRG,,,,,active
-tr,mpl_my,Season 18,Team Rey,TR,,,,,active
-vms,mpl_my,Season 18,Team Vamos,VMS,,,,,active
-ig,mpl_my,Season 18,Invictus Gaming,iG,,,,,active
-btrm,mpl_my,Season 18,Bigetron MY by VIT,BTRM,,,,,active
-flmy,mpl_my,Season 18,Team Flash MY,FL,,,,,active
-ac,mpl_my,Season 18,AC Esports,AC,,,,,active
-rrq,mpl_my,Season 18,RRQ Tora,RRQ,,,,,active
+srg,mpl_my,Season 18,Selangor Red Giants,SRG,Selangor_Red_Giants.png,,,,active
+tr,mpl_my,Season 18,Team Rey,TR,Team_Rey.png,,,,active
+vms,mpl_my,Season 18,Team Vamos,VMS,Team_Vamos.png,,,,active
+ig,mpl_my,Season 18,Invictus Gaming,iG,Invictus_Gaming.png,,,,active
+btrm,mpl_my,Season 18,Bigetron MY by VIT,BTRM,Bigetron.png,,,,active
+flmy,mpl_my,Season 18,Team Flash MY,FL,Team_Flash.png,,,,active
+ac,mpl_my,Season 18,AC Esports,AC,AC_Esports.png,,,,active
+rrq,mpl_my,Season 18,RRQ Tora,RRQ,RRQ.png,,,,active
