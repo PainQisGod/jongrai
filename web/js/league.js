@@ -3,28 +3,42 @@ const cap=t=>String(t||'').replace(/\b\w/g,c=>c.toUpperCase());
 const $$=s=>document.querySelectorAll(s);
 const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
 let leagues=[], currentLeague=null, currentSeason=null, teamsById={}, heroIcons={};
-const keyOf=l=>l.id+'|'+l.season;   // one league can run several seasons
 
+// League bar: one button per league_id. Season bar below it: the seasons of the chosen
+// league, in file order (newest first). The last season picked in each league is remembered.
+const STATUS_TAG={active:'Live',completed:'Completed',upcoming:'Upcoming'};
+let leagueOrder=[], lastSeason={};
 async function loadLeagues(){
  try{
   leagues=await call('/api/leagues');
   if(leagues.error)throw new Error(leagues.error);
-  renderLeagueBar();
-  if(leagues.length) selectLeague(keyOf(leagues[0]));
+  leagueOrder=[...new Set(leagues.map(l=>l.id))];
+  if(leagues.length) selectLeague(leagues[0].id);
  }catch(e){$('#leagueBar').innerHTML='<span style="color:var(--mut)">Failed to load leagues</span>';}
 }
 function renderLeagueBar(){
  const bar=$('#leagueBar');
- bar.innerHTML=leagues.map(l=>`<button type="button" class="league-btn${keyOf(l)===selected?' active':''}" data-key="${esc(keyOf(l))}" title="${esc(l.region)} - ${esc(l.season)}">${l.logo?`<img src="/leagues/${esc(l.logo)}" alt="" onerror="this.remove()">`:''}${esc(l.name)} · ${esc(l.season)}</button>`).join('');
- bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.key));
+ bar.innerHTML=leagueOrder.map(id=>{const l=leagues.find(x=>x.id===id);
+  return `<button type="button" class="league-btn${id===currentLeague?' active':''}" data-id="${esc(id)}" title="${esc(l.region)} - ${esc(l.country)}">${l.logo?`<img src="/leagues/${esc(l.logo)}" alt="" onerror="this.remove()">`:''}${esc(l.name)}</button>`;}).join('');
+ bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.id));
 }
-let selected='';
-async function selectLeague(key){
- selected=key;
- const league=leagues.find(l=>keyOf(l)===key);
- currentLeague=league?.id||'';
- currentSeason=league?.season||'';
- renderLeagueBar();
+function renderSeasonBar(){
+ const bar=$('#seasonBar');
+ const seasons=leagues.filter(l=>l.id===currentLeague);
+ bar.innerHTML='<span class="season-lbl">Season</span>'+seasons.map(l=>`<button type="button" class="season-btn${l.season===currentSeason?' active':''}" data-season="${esc(l.season)}">${esc(l.season)}${STATUS_TAG[l.status]?`<span class="season-st st-${esc(l.status)}">${STATUS_TAG[l.status]}</span>`:''}</button>`).join('');
+ bar.querySelectorAll('.season-btn').forEach(btn=>btn.onclick=()=>selectSeason(btn.dataset.season));
+}
+async function selectLeague(id){
+ currentLeague=id;
+ const seasons=leagues.filter(l=>l.id===id);
+ currentSeason=(seasons.find(l=>l.season===lastSeason[id])||seasons[0])?.season||'';
+ renderLeagueBar(); renderSeasonBar();
+ await loadData();
+}
+async function selectSeason(season){
+ if(season===currentSeason) return;
+ currentSeason=season; lastSeason[currentLeague]=season;
+ renderSeasonBar();
  await loadData();
 }
 function setTab(tab){
