@@ -19,18 +19,12 @@ function renderLeagueBar(){
  bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.key));
 }
 let selected='';
-const SOURCES={
- mpl_kh:'Results from the official <a href="https://mplcambodia.com/schedule" target="_blank" rel="noopener">mplcambodia.com</a> schedule, checked 7 November 2026. The standings are calculated from those results. Drafts, MVPs and game times are entered by hand.',
- mpl_ph:'Results from <a href="https://mlbbhub.com/mpl/ph/schedule" target="_blank" rel="noopener">mlbbhub.com</a>, checked 7 November 2026, and the standings calculated from them match <a href="https://en.wikipedia.org/wiki/2026_MPL_Philippines_season" target="_blank" rel="noopener">Wikipedia</a>. Drafts from mlbbhub.com scoreboards, with maps, game times and MVPs from Liquipedia.'
-};
 async function selectLeague(key){
  selected=key;
  const league=leagues.find(l=>keyOf(l)===key);
  currentLeague=league?.id||'';
  currentSeason=league?.season||'';
  renderLeagueBar();
- const note=document.getElementById('sourceNote');
- if(note){note.innerHTML=SOURCES[currentLeague]||'';note.hidden=!SOURCES[currentLeague];}
  await loadData();
 }
 function setTab(tab){
