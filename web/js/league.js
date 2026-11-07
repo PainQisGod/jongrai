@@ -19,12 +19,18 @@ function renderLeagueBar(){
  bar.querySelectorAll('.league-btn').forEach(btn=>btn.onclick=()=>selectLeague(btn.dataset.key));
 }
 let selected='';
+const SOURCES={
+ mpl_kh:'Results from the official <a href="https://mplcambodia.com/schedule" target="_blank" rel="noopener">mplcambodia.com</a> schedule, checked 7 November 2026. The standings are calculated from those results. Drafts, MVPs and game times are entered by hand.',
+ mpl_ph:'Results from <a href="https://mlbbhub.com/mpl/ph/schedule" target="_blank" rel="noopener">mlbbhub.com</a>, checked 7 November 2026, and the standings calculated from them match <a href="https://en.wikipedia.org/wiki/2026_MPL_Philippines_season" target="_blank" rel="noopener">Wikipedia</a>. Drafts from mlbbhub.com scoreboards, with maps, game times and MVPs from Liquipedia.'
+};
 async function selectLeague(key){
  selected=key;
  const league=leagues.find(l=>keyOf(l)===key);
  currentLeague=league?.id||'';
  currentSeason=league?.season||'';
  renderLeagueBar();
+ const note=document.getElementById('sourceNote');
+ if(note){note.innerHTML=SOURCES[currentLeague]||'';note.hidden=!SOURCES[currentLeague];}
  await loadData();
 }
 function setTab(tab){
@@ -137,7 +143,7 @@ function teamBox(id,right){
  const name=`<span class="nm nm-short" title="${esc(full)}">${esc(short)}</span><span class="nm nm-full">${esc(full)}</span>`;
  return `<div class="mc-team${right?' right':''}">${right?logo+name:name+logo}</div>`;
 }
-function gameBlock(d,leftId){
+function gameBlock(d,leftId,matchMvp){
  const leftBlue=d.blueTeamId===leftId;
  const lSide=leftBlue?'blue':'red', rSide=leftBlue?'red':'blue';
  const lPicks=leftBlue?d.bluePicks:d.redPicks, rPicks=leftBlue?d.redPicks:d.bluePicks;
@@ -156,7 +162,7 @@ function gameBlock(d,leftId){
    <div class="mc-center">Bans</div>
    <div class="mc-picks right">${rBans.map(h=>heroHtml(h,rSide)).join('')}</div><span></span></div>
   ${d.map?`<div class="mc-map"><span><i>Map</i> ${esc(d.map)}</span></div>`:''}
-  ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:'<div class="mc-mvp none">MVP: not recorded</div>'}
+  ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:matchMvp?'':'<div class="mc-mvp none">MVP: not recorded</div>'}
  </div>`;
 }
 function boOf(m,ls,rs,done){
@@ -182,7 +188,8 @@ function matchCard(m,games){
     ${teamBox(rightId,true)}</div>
    <div class="mc-more"></div>
   </summary>
-  <div class="mc-body">${games.map(g=>gameBlock(g,leftId)).join('')}</div>
+  <div class="mc-body">${games.map(g=>gameBlock(g,leftId,m&&m.mvp)).join('')}
+   ${m&&m.mvp?`<div class="mc-mvp match">Match MVP: <b>${esc(m.mvp)}</b></div>`:''}</div>
  </details>`;
 }
 function renderDrafts(data,matches){
