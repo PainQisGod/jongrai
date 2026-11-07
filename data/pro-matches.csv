@@ -6,7 +6,7 @@
 # best_of: optional - the series format as a number (2 for a Bo2, 3 for a Bo3, 5 for a Bo5). Leave blank when unknown.
 #   Blank is fine for a 2-1 / 3-2 style result (the page works the Bo out), but a 2-0 sweep could be Bo2 or Bo3, so fill it in.
 # mvp: optional - a match MVP for leagues that name one per series (MPL PH). Leagues with a per-game MVP use pro-drafts.csv instead.
-# Times are local: ICT (UTC+7) for MPL KH as published by mplcambodia.com, PHT (UTC+8) for MPL PH, MYT (UTC+8) for MPL MY. Series scores (Bo3/Bo5/Bo7), not games.
+# Times are local: ICT (UTC+7) for MPL KH as published by mplcambodia.com, PHT (UTC+8) for MPL PH, MYT (UTC+8) for MPL MY, WIB (UTC+7) for MPL ID. Series scores (Bo3/Bo5/Bo7), not games.
 # S11 regular season (Weeks 1-5, all 45 series) checked against mplcambodia.com/schedule on 2026-11-07.
 # Standings are calculated from the finished regular-season rows here (1 point per series win), so a
 # result only needs entering once.
@@ -209,3 +209,84 @@ mpl_my_s18_po_5,mpl_my,Season 18,9,3,vms,btrm,3,1,finished,2026-10-30 - 15:00 MY
 mpl_my_s18_po_6,mpl_my,Season 18,9,3,tr,srg,0,3,finished,2026-10-30 - 19:00 MYT,,upper final,5,Yums
 mpl_my_s18_po_7,mpl_my,Season 18,9,4,vms,tr,2,4,finished,2026-10-31 - 17:30 MYT,,lower final,7,Cliveee
 mpl_my_s18_po_8,mpl_my,Season 18,9,5,srg,tr,4,3,finished,2026-11-01 - 17:30 MYT,,grand final,7,Kramm
+# MPL ID Season 18: schedule, results and times from the official id-mpl.com (checked 2026-11-07).
+mpl_id_s18_w1_d1_m1,mpl_id,Season 18,1,1,evos,rrqid,2,0,finished,2026-08-14 15:00 WIB,,regular,3,Alberttt
+mpl_id_s18_w1_d1_m2,mpl_id,Season 18,1,1,navi,ae,0,2,finished,2026-08-14 18:00 WIB,,regular,3,Affan
+mpl_id_s18_w1_d2_m1,mpl_id,Season 18,1,2,tlid,geek,2,1,finished,2026-08-15 14:00 WIB,,regular,3,Kevin
+mpl_id_s18_w1_d2_m2,mpl_id,Season 18,1,2,dewa,rrqid,1,2,finished,2026-08-15 17:00 WIB,,regular,3,Arthur
+mpl_id_s18_w1_d2_m3,mpl_id,Season 18,1,2,evos,navi,1,2,finished,2026-08-15 20:00 WIB,,regular,3,Karss
+mpl_id_s18_w1_d3_m1,mpl_id,Season 18,1,3,tlid,dewa,2,0,finished,2026-08-16 14:00 WIB,,regular,3,Kevin
+mpl_id_s18_w1_d3_m2,mpl_id,Season 18,1,3,btr,geek,2,1,finished,2026-08-16 17:00 WIB,,regular,3,Morenoo
+mpl_id_s18_w1_d3_m3,mpl_id,Season 18,1,3,ae,onicid,0,2,finished,2026-08-16 20:00 WIB,,regular,3,Kelra
+mpl_id_s18_w2_d1_m1,mpl_id,Season 18,2,1,tlid,navi,0,2,finished,2026-08-21 15:00 WIB,,regular,3,
+mpl_id_s18_w2_d1_m2,mpl_id,Season 18,2,1,btr,dewa,2,0,finished,2026-08-21 18:00 WIB,,regular,3,
+mpl_id_s18_w2_d2_m1,mpl_id,Season 18,2,2,tlid,evos,2,0,finished,2026-08-22 14:00 WIB,,regular,3,
+mpl_id_s18_w2_d2_m2,mpl_id,Season 18,2,2,navi,geek,2,1,finished,2026-08-22 17:00 WIB,,regular,3,
+mpl_id_s18_w2_d2_m3,mpl_id,Season 18,2,2,onicid,rrqid,2,0,finished,2026-08-22 20:00 WIB,,regular,3,
+mpl_id_s18_w2_d3_m1,mpl_id,Season 18,2,3,dewa,ae,0,2,finished,2026-08-23 14:00 WIB,,regular,3,
+mpl_id_s18_w2_d3_m2,mpl_id,Season 18,2,3,onicid,btr,1,2,finished,2026-08-23 17:00 WIB,,regular,3,
+mpl_id_s18_w2_d3_m3,mpl_id,Season 18,2,3,geek,evos,0,2,finished,2026-08-23 20:00 WIB,,regular,3,
+mpl_id_s18_w3_d1_m1,mpl_id,Season 18,3,1,btr,navi,2,0,finished,2026-08-28 15:00 WIB,,regular,3,
+mpl_id_s18_w3_d1_m2,mpl_id,Season 18,3,1,dewa,geek,2,0,finished,2026-08-28 18:00 WIB,,regular,3,
+mpl_id_s18_w3_d2_m1,mpl_id,Season 18,3,2,tlid,onicid,2,1,finished,2026-08-29 14:00 WIB,,regular,3,
+mpl_id_s18_w3_d2_m2,mpl_id,Season 18,3,2,ae,evos,2,0,finished,2026-08-29 17:00 WIB,,regular,3,
+mpl_id_s18_w3_d2_m3,mpl_id,Season 18,3,2,rrqid,btr,1,2,finished,2026-08-29 20:00 WIB,,regular,3,
+mpl_id_s18_w3_d3_m1,mpl_id,Season 18,3,3,navi,onicid,2,0,finished,2026-08-30 14:00 WIB,,regular,3,
+mpl_id_s18_w3_d3_m2,mpl_id,Season 18,3,3,geek,rrqid,0,2,finished,2026-08-30 17:00 WIB,,regular,3,
+mpl_id_s18_w3_d3_m3,mpl_id,Season 18,3,3,tlid,ae,2,1,finished,2026-08-30 20:00 WIB,,regular,3,
+mpl_id_s18_w4_d1_m1,mpl_id,Season 18,4,1,navi,dewa,2,0,finished,2026-09-04 15:00 WIB,,regular,3,
+mpl_id_s18_w4_d1_m2,mpl_id,Season 18,4,1,tlid,rrqid,2,0,finished,2026-09-04 18:00 WIB,,regular,3,
+mpl_id_s18_w4_d2_m1,mpl_id,Season 18,4,2,dewa,onicid,2,1,finished,2026-09-05 14:00 WIB,,regular,3,
+mpl_id_s18_w4_d2_m2,mpl_id,Season 18,4,2,evos,btr,2,1,finished,2026-09-05 17:00 WIB,,regular,3,
+mpl_id_s18_w4_d2_m3,mpl_id,Season 18,4,2,ae,geek,2,0,finished,2026-09-05 20:00 WIB,,regular,3,
+mpl_id_s18_w4_d3_m1,mpl_id,Season 18,4,3,rrqid,navi,0,2,finished,2026-09-06 14:00 WIB,,regular,3,
+mpl_id_s18_w4_d3_m2,mpl_id,Season 18,4,3,onicid,evos,2,0,finished,2026-09-06 17:00 WIB,,regular,3,
+mpl_id_s18_w4_d3_m3,mpl_id,Season 18,4,3,btr,ae,0,2,finished,2026-09-06 20:00 WIB,,regular,3,
+mpl_id_s18_w5_d1_m1,mpl_id,Season 18,5,1,geek,onicid,2,1,finished,2026-09-11 18:00 WIB,,regular,3,
+mpl_id_s18_w5_d2_m1,mpl_id,Season 18,5,2,tlid,btr,2,0,finished,2026-09-12 14:00 WIB,,regular,3,
+mpl_id_s18_w5_d2_m2,mpl_id,Season 18,5,2,ae,rrqid,2,0,finished,2026-09-12 17:00 WIB,,regular,3,
+mpl_id_s18_w5_d2_m3,mpl_id,Season 18,5,2,navi,evos,2,0,finished,2026-09-12 20:00 WIB,,regular,3,
+mpl_id_s18_w5_d3_m1,mpl_id,Season 18,5,3,geek,tlid,0,2,finished,2026-09-13 14:00 WIB,,regular,3,
+mpl_id_s18_w5_d3_m2,mpl_id,Season 18,5,3,onicid,ae,0,2,finished,2026-09-13 17:00 WIB,,regular,3,
+mpl_id_s18_w6_d1_m1,mpl_id,Season 18,6,1,onicid,geek,0,2,finished,2026-09-18 14:00 WIB,,regular,3,
+mpl_id_s18_w6_d1_m2,mpl_id,Season 18,6,1,dewa,evos,0,2,finished,2026-09-18 17:00 WIB,,regular,3,
+mpl_id_s18_w6_d1_m3,mpl_id,Season 18,6,1,rrqid,dewa,1,2,finished,2026-09-18 20:00 WIB,,regular,3,
+mpl_id_s18_w6_d2_m1,mpl_id,Season 18,6,2,geek,navi,0,2,finished,2026-09-19 14:00 WIB,,regular,3,
+mpl_id_s18_w6_d2_m2,mpl_id,Season 18,6,2,rrqid,ae,1,2,finished,2026-09-19 17:00 WIB,,regular,3,
+mpl_id_s18_w6_d2_m3,mpl_id,Season 18,6,2,btr,tlid,0,2,finished,2026-09-19 20:00 WIB,,regular,3,
+mpl_id_s18_w6_d3_m1,mpl_id,Season 18,6,3,ae,dewa,0,2,finished,2026-09-20 14:00 WIB,,regular,3,
+mpl_id_s18_w6_d3_m2,mpl_id,Season 18,6,3,btr,onicid,0,2,finished,2026-09-20 17:00 WIB,,regular,3,
+mpl_id_s18_w6_d3_m3,mpl_id,Season 18,6,3,evos,tlid,2,1,finished,2026-09-20 20:00 WIB,,regular,3,
+mpl_id_s18_w7_d1_m1,mpl_id,Season 18,7,1,geek,btr,1,2,finished,2026-10-02 15:00 WIB,,regular,3,
+mpl_id_s18_w7_d1_m2,mpl_id,Season 18,7,1,dewa,tlid,2,1,finished,2026-10-02 18:00 WIB,,regular,3,
+mpl_id_s18_w7_d2_m1,mpl_id,Season 18,7,2,ae,navi,1,2,finished,2026-10-03 14:00 WIB,,regular,3,
+mpl_id_s18_w7_d2_m2,mpl_id,Season 18,7,2,btr,rrqid,2,1,finished,2026-10-03 17:00 WIB,,regular,3,
+mpl_id_s18_w7_d2_m3,mpl_id,Season 18,7,2,geek,dewa,2,1,finished,2026-10-03 20:00 WIB,,regular,3,
+mpl_id_s18_w7_d3_m1,mpl_id,Season 18,7,3,ae,tlid,0,2,finished,2026-10-04 14:00 WIB,,regular,3,
+mpl_id_s18_w7_d3_m2,mpl_id,Season 18,7,3,rrqid,evos,2,1,finished,2026-10-04 17:00 WIB,,regular,3,
+mpl_id_s18_w7_d3_m3,mpl_id,Season 18,7,3,onicid,navi,2,1,finished,2026-10-04 20:00 WIB,,regular,3,
+mpl_id_s18_w8_d1_m1,mpl_id,Season 18,8,1,evos,dewa,2,1,finished,2026-10-08 14:00 WIB,,regular,3,
+mpl_id_s18_w8_d1_m2,mpl_id,Season 18,8,1,ae,btr,2,0,finished,2026-10-08 17:00 WIB,,regular,3,
+mpl_id_s18_w8_d1_m3,mpl_id,Season 18,8,1,navi,tlid,2,0,finished,2026-10-08 20:00 WIB,,regular,3,
+mpl_id_s18_w8_d2_m1,mpl_id,Season 18,8,2,evos,onicid,2,1,finished,2026-10-09 14:00 WIB,,regular,3,
+mpl_id_s18_w8_d2_m2,mpl_id,Season 18,8,2,rrqid,tlid,0,2,finished,2026-10-09 17:00 WIB,,regular,3,
+mpl_id_s18_w8_d2_m3,mpl_id,Season 18,8,2,dewa,navi,0,2,finished,2026-10-09 20:00 WIB,,regular,3,
+mpl_id_s18_w8_d3_m1,mpl_id,Season 18,8,3,evos,geek,0,2,finished,2026-10-11 14:00 WIB,,regular,3,
+mpl_id_s18_w8_d3_m2,mpl_id,Season 18,8,3,rrqid,onicid,1,2,finished,2026-10-11 17:00 WIB,,regular,3,
+mpl_id_s18_w8_d3_m3,mpl_id,Season 18,8,3,dewa,btr,0,2,finished,2026-10-11 20:00 WIB,,regular,3,
+mpl_id_s18_w9_d1_m1,mpl_id,Season 18,9,1,navi,rrqid,2,1,finished,2026-10-16 15:00 WIB,,regular,3,
+mpl_id_s18_w9_d1_m2,mpl_id,Season 18,9,1,geek,ae,0,2,finished,2026-10-16 18:00 WIB,,regular,3,
+mpl_id_s18_w9_d2_m1,mpl_id,Season 18,9,2,onicid,dewa,2,1,finished,2026-10-17 14:00 WIB,,regular,3,
+mpl_id_s18_w9_d2_m2,mpl_id,Season 18,9,2,btr,evos,2,1,finished,2026-10-17 17:00 WIB,,regular,3,
+mpl_id_s18_w9_d2_m3,mpl_id,Season 18,9,2,rrqid,geek,2,1,finished,2026-10-17 20:00 WIB,,regular,3,
+mpl_id_s18_w9_d3_m1,mpl_id,Season 18,9,3,evos,ae,2,1,finished,2026-10-18 14:00 WIB,,regular,3,
+mpl_id_s18_w9_d3_m2,mpl_id,Season 18,9,3,navi,btr,0,2,finished,2026-10-18 17:00 WIB,,regular,3,
+mpl_id_s18_w9_d3_m3,mpl_id,Season 18,9,3,onicid,tlid,0,2,finished,2026-10-18 20:00 WIB,,regular,3,
+mpl_id_s18_po_1,mpl_id,Season 18,10,1,ae,onicid,3,1,finished,2026-11-04 14:30 WIB,,play-in,5,
+mpl_id_s18_po_2,mpl_id,Season 18,10,1,btr,evos,3,2,finished,2026-11-04 19:15 WIB,,play-in,5,
+mpl_id_s18_po_3,mpl_id,Season 18,10,2,navi,ae,3,1,finished,2026-11-05 14:30 WIB,,upper semifinal,5,
+mpl_id_s18_po_4,mpl_id,Season 18,10,2,tlid,btr,3,1,finished,2026-11-05 19:15 WIB,,upper semifinal,5,
+mpl_id_s18_po_5,mpl_id,Season 18,10,3,ae,btr,2,3,finished,2026-11-06 14:30 WIB,,lower semifinal,5,
+mpl_id_s18_po_6,mpl_id,Season 18,10,3,navi,tlid,3,2,finished,2026-11-06 19:15 WIB,,upper final,5,
+mpl_id_s18_po_7,mpl_id,Season 18,10,4,tlid,btr,3,4,finished,2026-11-07 17:30 WIB,,lower final,7,
+mpl_id_s18_po_8,mpl_id,Season 18,10,5,navi,btr,,,scheduled,2026-11-08 17:30 WIB,,grand final,7,
