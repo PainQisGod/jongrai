@@ -94,10 +94,6 @@ public class AiCoach {
 
     public static String baseUrl() { return cfg.base(); }
 
-    /**
-     * Builds the judge prompt for the current draft. Returns the exact prompt text,
-     * which doubles as the cache signature for a finished draft.
-     */
     /** Extra lines for the prompt when the board has a map chosen: how each picked hero has done on it in pro play. */
     public static String mapNote(Draft draft, MapStats maps, String map) {
         if (maps == null || map == null || maps.games(map) == 0) return "";
@@ -114,6 +110,10 @@ public class AiCoach {
         return sb.toString();
     }
 
+    /**
+     * Builds the judge prompt for the current draft. Returns the exact prompt text,
+     * which doubles as the cache signature for a finished draft.
+     */
     public static String prompt(Draft draft, DraftAnalyzer.Analysis a) {
         StringBuilder sb = new StringBuilder();
         sb.append("Draft state (Mobile Legends: Bang Bang patch ").append(HeroRepository.PATCH)

@@ -294,6 +294,7 @@ $('#mapChoice').onchange=e=>{mapName=e.target.value;store.set('jongrai-map',mapN
 
 /* ---------- timer ---------- */
 // Off, or 50 seconds per pick/ban step like the in-game draft. It restarts whenever the board moves to a new step.
+// When it runs out, the engine's top choice is locked for that step (like the game's auto-lock) and the turn passes on.
 let timerLen=+(store.get('jongrai-timer')||0),clockEnd=0,clockStep=-1,clockT=null,clockWarned=false;
 function restartClock(force){
  const i=currentStep(),done=i>=order().length;
@@ -308,7 +309,16 @@ function tickClock(){
  $('#clockN').textContent=n;el.style.setProperty('--left',(left/timerLen).toFixed(3));
  el.classList.toggle('low',n<=10&&n>0);el.classList.toggle('out',n===0);
  el.setAttribute('aria-label',n?`${n} seconds left`:'Time is up');
- if(n===0&&!clockWarned){clockWarned=true;clearInterval(clockT);clockT=null;const a=acting();toast(`Time's up for ${cap(a.side)} ${a.kind}.`,'var(--ember)')}
+ if(n===0&&!clockWarned){clockWarned=true;clearInterval(clockT);clockT=null;autoLock()}
+}
+async function autoLock(){
+ if(currentStep()>=order().length)return;
+ if(busy){setTimeout(autoLock,150);return}
+ const a=acting(),used=usedMap();
+ const name=recs.find(n=>!used[n])||(heroes.filter(h=>!used[h.name]).sort((x,y)=>y.winRate-x.winRate)[0]||{}).name;
+ if(!name)return;
+ toast(`Time's up: ${name} locked as ${cap(a.side)}'s ${a.kind}.`,'var(--ember)');
+ const el=document.querySelector(`.tile[data-h="${CSS.escape(name)}"]`);choose(name,el);
 }
 $('#timerChoice').value=String(timerLen);
 $('#timerChoice').onchange=e=>{timerLen=+e.target.value;store.set('jongrai-timer',String(timerLen));restartClock(true)};
@@ -349,6 +359,7 @@ $('#ticks').innerHTML=Array.from({length:40},(_,i)=>{const g=i*9*Math.PI/180,r1=
  heroes=hs;heroes.forEach(h=>byName[h.name]=h);
  drawFilters();
  const ms=await call('/api/maps');if(Array.isArray(ms)){mapList=ms;if(mapName&&!ms.some(m=>m.name===mapName))mapName='';drawMapChoice()}
+ else{mapName='';$('#mapChoice').innerHTML='<option value="">Map list unavailable: rebuild and restart the server</option>';$('#mapChoice').disabled=true}
  const s=await call('/api/state');if(s.error){toast(s.error,'var(--ember)');return}
  state=s;refresh(false);
 })();
