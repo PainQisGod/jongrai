@@ -63,6 +63,9 @@ function i18nReady() {
   if (LANG !== 'km') return Promise.resolve();
   return i18nLoad ??= (async () => {
     try { const r = await fetch('/lang/km.json'); if (r.ok) KM = await r.json(); } catch (e) { /* stay in English */ }
+    // An older server build has no /lang route: say so instead of silently staying in English.
+    if (!Object.keys(KM).length) setTimeout(() => typeof toast === 'function'
+      && toast('Khmer text could not load. Rebuild and restart the server (.\\build.ps1).', 'var(--ember)'), 600);
     document.documentElement.lang = 'km';
     applyI18n(document);
     document.documentElement.classList.remove('i18n-wait');

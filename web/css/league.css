@@ -90,8 +90,8 @@ table.stand tbody tr:last-child td{border-bottom:0}
 .mc[open] .nm-short{display:none}
 .nm-short{letter-spacing:.5px}
 .mc-more{text-align:center;font-size:11px;color:var(--mut);margin-top:8px}
-.mc-more::before{content:"Show draft \25BE"}
-.mc[open] .mc-more::before{content:"Hide draft \25B4"}
+.mc-more::before{content:attr(data-show) " \25BE"}
+.mc[open] .mc-more::before{content:attr(data-hide) " \25B4"}
 .mc-when{text-align:center;margin-bottom:10px}
 .mc-when span{display:inline-block;background:var(--stone-1);border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:12px;color:var(--mut)}
 .mc-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}

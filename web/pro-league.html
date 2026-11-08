@@ -7,44 +7,44 @@
 
 
 <main class="wrap">
- <p class="eyebrow">PROFESSIONAL LEAGUE</p>
- <h2 class="t">Pro drafts & standings</h2>
+ <p class="eyebrow" data-i18n="pl.eyebrow">PROFESSIONAL LEAGUE</p>
+ <h2 class="t" data-i18n="pl.title">Pro drafts & standings</h2>
 
  <div class="league-bar" id="leagueBar"></div>
  <div class="season-bar" id="seasonBar"></div>
 
  <div class="tabs" id="tabs">
-  <button class="tab active" data-tab="standings">Standings</button>
-  <button class="tab" data-tab="matches">Matches</button>
-  <button class="tab" data-tab="teams">Teams</button>
-  <button class="tab" data-tab="drafts">Drafts</button>
+  <button class="tab active" data-tab="standings" data-i18n="pl.tab.standings">Standings</button>
+  <button class="tab" data-tab="matches" data-i18n="pl.tab.matches">Matches</button>
+  <button class="tab" data-tab="teams" data-i18n="pl.tab.teams">Teams</button>
+  <button class="tab" data-tab="drafts" data-i18n="pl.tab.drafts">Drafts</button>
  </div>
 
  <div id="standingsPanel">
-  <div class="stand-wrap"><table class="stand"><thead><tr><th class="c-pos">#</th><th class="c-team">Team</th><th title="Matches played">P</th><th title="Wins">W</th><th title="Losses">L</th><th title="Draws">D</th><th title="Games won">GF</th><th title="Games lost">GA</th><th title="Game difference">GD</th><th title="Points">Pts</th></tr></thead>
+  <div class="stand-wrap"><table class="stand"><thead><tr><th class="c-pos">#</th><th class="c-team" data-i18n="pl.col.team">Team</th><th title="Matches played" data-i18n="pl.col.p" data-i18n-title="pl.col.pT">P</th><th title="Wins" data-i18n="pl.col.w" data-i18n-title="pl.col.wT">W</th><th title="Losses" data-i18n="pl.col.l" data-i18n-title="pl.col.lT">L</th><th title="Draws" data-i18n="pl.col.d" data-i18n-title="pl.col.dT">D</th><th title="Games won" data-i18n-title="pl.col.gfT">GF</th><th title="Games lost" data-i18n-title="pl.col.gaT">GA</th><th title="Game difference" data-i18n-title="pl.col.gdT">GD</th><th title="Points" data-i18n="pl.col.pts" data-i18n-title="pl.col.ptsT">Pts</th></tr></thead>
   <tbody id="standingsBody"></tbody>
   </table></div>
-  <div id="standingsEmpty" class="empty" hidden>Select a league</div>
+  <div id="standingsEmpty" class="empty" hidden data-i18n="pl.empty.league">Select a league</div>
  </div>
 
  <div id="matchesPanel" hidden>
   <div id="matchesList"></div>
-  <div id="matchesEmpty" class="empty" hidden>No matches</div>
+  <div id="matchesEmpty" class="empty" hidden data-i18n="pl.empty.matches">No matches</div>
  </div>
 
  <div id="teamsPanel" hidden>
   <div class="grid" id="teamsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px"></div>
-  <div id="teamsEmpty" class="empty" hidden>No teams</div>
+  <div id="teamsEmpty" class="empty" hidden data-i18n="pl.empty.teams">No teams</div>
  </div>
 
  <div id="draftsPanel" hidden>
   <div id="draftsList"></div>
-  <div id="draftsEmpty" class="empty" hidden>No drafts</div>
+  <div id="draftsEmpty" class="empty" hidden data-i18n="pl.empty.drafts">No drafts</div>
  </div>
 </main>
 
-<footer><span>Project Jongrai</span><span>Pro data as of patch <span data-patch></span></span>
-<span class="sp">Standings, matches and drafts from pro league data files</span></footer>
+<footer><span data-i18n="pl.foot.project">Project Jongrai</span><span data-i18n-html="pl.foot.patch">Pro data as of patch <span data-patch></span></span>
+<span class="sp" data-i18n="pl.foot.source">Standings, matches and drafts from pro league data files</span></footer>
 
 <script src="/app.js"></script>
 <script src="/kit.js"></script>

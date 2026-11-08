@@ -1,4 +1,7 @@
-const cap=t=>String(t||'').replace(/\b\w/g,c=>c.toUpperCase());
+const cap=s=>String(s||'').replace(/\b\w/g,c=>c.toUpperCase());
+const tr=(...a)=>t(...a);   // t() under another name, for functions where a team is called t
+// "Season 18" -> "រដូវកាលទី 18" in Khmer
+const seasonName=s=>{const m=/^Season\s+(\d+)$/i.exec(s||'');return m?t('pl.seasonN','Season {n}',{n:m[1]}):s};
 // Jongrai - script for /pro-league.html. Runs after /app.js and /kit.js.
 const $$=s=>document.querySelectorAll(s);
 const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
@@ -9,6 +12,14 @@ let leagues=[], currentLeague=null, currentSeason=null, teamsById={}, heroIcons=
 // League bar: one button per league_id. Season bar below it: the seasons of the chosen
 // league, in file order (newest first). The last season picked in each league is remembered.
 const STATUS_TAG={active:'Live',completed:'Completed',upcoming:'Upcoming'};
+const seasonTag=s=>STATUS_TAG[s]?t('pl.season.'+s,STATUS_TAG[s]):'';
+// match status and round names shown in Khmer when the site is in Khmer; the CSV keeps the English values
+const statusTxt=s=>t('pl.status.'+s,s);
+// full round names: "upper semifinal" in the CSV shows as "Upper Bracket Semifinals"
+const ROUND_EN={'upper quarterfinal':'Upper Bracket Quarterfinals','upper semifinal':'Upper Bracket Semifinals','upper final':'Upper Bracket Final',
+ 'lower quarterfinal':'Lower Bracket Quarterfinals','lower semifinal':'Lower Bracket Semifinals','lower final':'Lower Bracket Final',
+ 'play-in semifinal':'Play-in Semifinals','play-in final':'Play-in Final','play-in':'Play-in','last chance':'Last Chance','grand final':'Grand Final'};
+const roundTxt=r=>t('pl.round.'+String(r).replace(/\s+/g,'-'),ROUND_EN[String(r).toLowerCase()]||cap(r));
 let leagueOrder=[], lastSeason={};
 async function loadLeagues(){
  try{
@@ -16,7 +27,7 @@ async function loadLeagues(){
   if(leagues.error)throw new Error(leagues.error);
   leagueOrder=[...new Set(leagues.map(l=>l.id))];
   if(leagues.length) selectLeague(leagues[0].id);
- }catch(e){$('#leagueBar').innerHTML='<span style="color:var(--mut)">Failed to load leagues</span>';}
+ }catch(e){$('#leagueBar').innerHTML=`<span style="color:var(--mut)">${t('pl.failLeagues','Failed to load leagues')}</span>`;}
 }
 function renderLeagueBar(){
  const bar=$('#leagueBar');
@@ -27,7 +38,7 @@ function renderLeagueBar(){
 function renderSeasonBar(){
  const bar=$('#seasonBar');
  const seasons=leagues.filter(l=>l.id===currentLeague);
- bar.innerHTML='<span class="season-lbl">Season</span>'+seasons.map(l=>`<button type="button" class="season-btn${l.season===currentSeason?' active':''}" data-season="${esc(l.season)}">${esc(l.season)}${STATUS_TAG[l.status]?`<span class="season-st st-${esc(l.status)}">${STATUS_TAG[l.status]}</span>`:''}</button>`).join('');
+ bar.innerHTML=`<span class="season-lbl">${t('pl.season','Season')}</span>`+seasons.map(l=>`<button type="button" class="season-btn${l.season===currentSeason?' active':''}" data-season="${esc(l.season)}">${esc(seasonName(l.season))}${STATUS_TAG[l.status]?`<span class="season-st st-${esc(l.status)}">${seasonTag(l.status)}</span>`:''}</button>`).join('');
  bar.querySelectorAll('.season-btn').forEach(btn=>btn.onclick=()=>selectSeason(btn.dataset.season));
 }
 async function selectLeague(id){
@@ -111,9 +122,9 @@ function renderMatches(data){
   const s1=done&&ls<rs?'is-lose':'', s2=done&&rs<ls?'is-lose':'';
   const score=done
    ?`<div class="match-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>`
-   :`<div class="match-score vs">vs${bo?`<small>(${bo})</small>`:''}</div>`;
+   :`<div class="match-score vs">${t('pl.vs','vs')}${bo?`<small>(${bo})</small>`:''}</div>`;
   return `<div class="match-card">
-   <div class="match-top"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(m.status)}</span><span class="match-meta">${m.matchType==='regular'?`Week ${m.week} · Day ${m.day}`:esc(cap(m.matchType))}</span></div>
+   <div class="match-top"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(statusTxt(m.status))}</span><span class="match-meta">${m.matchType==='regular'?t('pl.weekDay','Week {w} · Day {d}',{w:m.week,d:m.day}):esc(roundTxt(m.matchType))}</span></div>
    ${m.scheduledTime?`<div class="match-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
    <div class="match-body">${matchTeam(m.team1Id,s1)}${score}${matchTeam(m.team2Id,s2)}</div>
   </div>`;
@@ -127,13 +138,12 @@ function renderTeams(data){
   <img src="/teams/${esc(t.logo||'')}" alt="" style="display:block;width:64px;height:64px;margin:0 auto 8px;border-radius:8px;object-fit:contain" onerror="this.remove()">
   <div style="font-weight:600">${esc(t.name)}</div>
   <div style="color:var(--mut);font-size:12px">${[t.shortName,t.city].filter(Boolean).map(esc).join(' · ')}</div>
-  ${t.coach?`<div style="color:var(--mut);font-size:11px;margin-top:4px">Coach: ${esc(t.coach)}</div>`:''}
-  <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${esc(t.status)}</span></div>
+  ${t.coach?`<div style="color:var(--mut);font-size:11px;margin-top:4px">${tr('pl.coach','Coach: {c}',{c:esc(t.coach)})}</div>`:''}
+  <div style="margin-top:8px"><span class="badge" style="background:${t.status==='active'?'var(--blue)':'var(--mut)'}">${esc(tr('pl.team.'+t.status,t.status))}</span></div>
  </div>`).join('');
 }
-const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-function fmtWhen(t){const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(t||'');
- return m?`${MONTHS[+m[2]-1]} ${+m[3]}, ${m[1]} - ${m[4]}${m[5]?' '+m[5]:''}`:(t||'')}
+function fmtWhen(s){const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(s||'');
+ return m?`${fmtDate(`${m[1]}-${m[2]}-${m[3]}`)} - ${m[4]}${m[5]?' '+m[5]:''}`:(s||'')}
 const fmtDur=s=>s>0?`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`:'';
 function heroFallback(img){const s=document.createElement('span');s.className=img.className+' hero-ic-miss';s.textContent=img.alt.slice(0,2);img.replaceWith(s)}
 function heroHtml(name,side){
@@ -164,15 +174,15 @@ function gameBlock(d,leftId,matchMvp){
  return `<div class="mc-game">
   <div class="mc-row">${res(lWon)}
    <div class="mc-picks">${lPicks.map(h=>heroHtml(h,lSide)).join('')}</div>
-   <div class="mc-center"><b>${dur||'-'}</b><small>Game ${d.gameNumber}</small></div>
+   <div class="mc-center"><b>${dur||'-'}</b><small>${t('pl.game','Game {n}',{n:d.gameNumber})}</small></div>
    <div class="mc-picks right">${rPicks.map(h=>heroHtml(h,rSide)).join('')}</div>
    ${res(!lWon)}</div>
   <div class="mc-row mc-bans"><span></span>
    <div class="mc-picks">${lBans.map(h=>heroHtml(h,lSide)).join('')}</div>
-   <div class="mc-center">Bans</div>
+   <div class="mc-center">${t('pl.bans','Bans')}</div>
    <div class="mc-picks right">${rBans.map(h=>heroHtml(h,rSide)).join('')}</div><span></span></div>
-  ${d.map?`<div class="mc-map"><span><i>Map</i> ${mapIcon(d.map)}${esc(d.map)}</span></div>`:''}
-  ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:matchMvp?'':'<div class="mc-mvp none">MVP: not recorded</div>'}
+  ${d.map?`<div class="mc-map"><span><i>${t('pl.map','Map')}</i> ${mapIcon(d.map)}${esc(d.map)}</span></div>`:''}
+  ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:matchMvp?'':`<div class="mc-mvp none">${t('pl.mvpNone','MVP: not recorded')}</div>`}
  </div>`;
 }
 function boOf(m,ls,rs,done){
@@ -196,10 +206,10 @@ function matchCard(m,games){
    <div class="mc-head">${teamBox(leftId,false)}
     <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>
     ${teamBox(rightId,true)}</div>
-   <div class="mc-more"></div>
+   <div class="mc-more" data-show="${esc(t('pl.showDraft','Show draft'))}" data-hide="${esc(t('pl.hideDraft','Hide draft'))}"></div>
   </summary>
   <div class="mc-body">${games.map(g=>gameBlock(g,leftId,m&&m.mvp)).join('')}
-   ${m&&m.mvp?`<div class="mc-mvp match">Match MVP: <b>${esc(m.mvp)}</b></div>`:''}</div>
+   ${m&&m.mvp?`<div class="mc-mvp match">${t('pl.matchMvp','Match MVP')}: <b>${esc(m.mvp)}</b></div>`:''}</div>
  </details>`;
 }
 function renderDrafts(data,matches){
@@ -211,4 +221,5 @@ function renderDrafts(data,matches){
  data.forEach(d=>{if(!groups.has(d.matchId))groups.set(d.matchId,[]);groups.get(d.matchId).push(d)});
  list.innerHTML=[...groups].map(([id,g])=>matchCard(byId[id],g.sort((a,b)=>a.gameNumber-b.gameNumber))).join('');
 }
-shell('/league');loadLeagues();
+// load the Khmer strings first so the league and season bars are drawn in the chosen language
+i18nReady().then(()=>{shell('/league');loadLeagues()});
