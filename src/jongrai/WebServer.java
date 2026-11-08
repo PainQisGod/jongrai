@@ -41,6 +41,7 @@ public class WebServer {
     private static Sessions sessions;
     private static ItemRepository gear;
     private static ProLeagueRepository pro;
+    private static MapStats mapStats;
     private static final Map<String, String> icons = new HashMap<>(); // hero name -> icon file name
     private static final Map<String, String> videos = new HashMap<>(); // hero name -> pick animation in web/video
     private static final SuggestionEngine engine = new SuggestionEngine();
@@ -86,6 +87,7 @@ public class WebServer {
         sessions = new Sessions(pool);
         gear = ItemRepository.load(home.resolve("data/items.csv"), home.resolve("data/hero-builds.csv"));
         pro = ProLeagueRepository.load(home.resolve("data"));
+        mapStats = new MapStats(pro.allDrafts());
         loadIcons(home.resolve("data/hero-icons.csv"));
         findVideos(home.resolve("web/video"));
         pool.values().forEach(h -> heroBySlug.put(h.slug(), h));
@@ -293,12 +295,15 @@ public class WebServer {
             case "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset" -> mutate(ex, path, q);
             case "/api/analysis" -> sendJson(ex, 200, locked(WebServer::analysisJson));
             case "/api/wisdom" -> sendJson(ex, 200, wisdomJson(q.getOrDefault("force", "0").equals("1"),
-                    q.getOrDefault("refresh", "0").equals("1")));
+                    q.getOrDefault("refresh", "0").equals("1"), q.getOrDefault("map", "")));
             case "/api/auto-suggest" -> sendJson(ex, 200, locked(WebServer::autoSuggestJson));
-            case "/api/suggest" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue"));
-                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft(), s, 5)))); }
-            case "/api/bans" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue"));
-                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft(), s, 5)))); }
+            case "/api/suggest" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
+                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft(), s, 5, mapStats, m)))); }
+            case "/api/bans" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
+                sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft(), s, 5, mapStats, m)))); }
+            case "/api/maps" -> sendJson(ex, 200, mapStats.maps().stream().map(m -> String.format(Locale.ROOT,
+                    "{\"name\":%s,\"icon\":%s,\"games\":%d}", Json.str(m.name()), Json.str(m.icon()), m.games()))
+                    .collect(Collectors.joining(",", "[", "]")));
             case "/api/me" -> sendJson(ex, 200, meJson(ex));
             case "/auth/login" -> login(ex, q);
             case "/auth/callback" -> callback(ex, q);
@@ -530,7 +535,7 @@ public class WebServer {
      * spent judging a half-built board. Cached per prompt, so re-rendering the page never re-bills the
      * API; refresh=1 drops the cached read and asks again. The upstream call runs outside the draft's lock.
      */
-    private static String wisdomJson(boolean force, boolean refresh) {
+    private static String wisdomJson(boolean force, boolean refresh, String map) {
         String prompt;
         Draft draft = draft();
         synchronized (draft) {
@@ -541,7 +546,7 @@ public class WebServer {
                 return "{\"configured\":true,\"ready\":false,\"progress\":" + Json.str(draft.team(Draft.Side.BLUE).picks().size()
                         + " vs " + draft.team(Draft.Side.RED).picks().size() + " picks") + ",\"complete\":false}";
             }
-            prompt = AiCoach.prompt(draft, new DraftAnalyzer().analyze(draft));
+            prompt = AiCoach.prompt(draft, new DraftAnalyzer().analyze(draft)) + AiCoach.mapNote(draft, mapStats, map);
         }
         if (refresh) wisdomCache.remove(prompt);
         if (wisdomCache.size() > 32) wisdomCache.clear(); // ponytail: crude cap; an LRU only if drafts get replayed a lot

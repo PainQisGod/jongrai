@@ -2,6 +2,8 @@ const cap=t=>String(t||'').replace(/\b\w/g,c=>c.toUpperCase());
 // Jongrai - script for /pro-league.html. Runs after /app.js and /kit.js.
 const $$=s=>document.querySelectorAll(s);
 const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
+// Arena icons live in web/icons as the map name with underscores (Flying Cloud -> Flying_Cloud.png); "Default Map" has none.
+const mapIcon=m=>m&&!/^default/i.test(m)?`<img class="map-ic" src="/icons/${encodeURIComponent(m.trim().replace(/ /g,'_'))}.png" alt="" onerror="this.remove()">`:'';
 let leagues=[], currentLeague=null, currentSeason=null, teamsById={}, heroIcons={};
 
 // League bar: one button per league_id. Season bar below it: the seasons of the chosen
@@ -169,7 +171,7 @@ function gameBlock(d,leftId,matchMvp){
    <div class="mc-picks">${lBans.map(h=>heroHtml(h,lSide)).join('')}</div>
    <div class="mc-center">Bans</div>
    <div class="mc-picks right">${rBans.map(h=>heroHtml(h,rSide)).join('')}</div><span></span></div>
-  ${d.map?`<div class="mc-map"><span><i>Map</i> ${esc(d.map)}</span></div>`:''}
+  ${d.map?`<div class="mc-map"><span><i>Map</i> ${mapIcon(d.map)}${esc(d.map)}</span></div>`:''}
   ${d.mvp?`<div class="mc-mvp">MVP: <b>${esc(d.mvp)}</b></div>`:matchMvp?'':'<div class="mc-mvp none">MVP: not recorded</div>'}
  </div>`;
 }

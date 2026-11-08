@@ -206,6 +206,11 @@ public final class ProLeagueRepository {
                 .filter(m -> m.season().equals(season)).toList();
     }
 
+    /** Every recorded pro game, all leagues and seasons. */
+    public List<ProDraft> allDrafts() {
+        return drafts.values().stream().flatMap(List::stream).toList();
+    }
+
     public List<ProDraft> drafts(String leagueId, String season) {
         return drafts.getOrDefault(leagueId, List.of()).stream()
                 .filter(d -> d.season().equals(season)).toList();

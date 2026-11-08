@@ -141,10 +141,10 @@ function lens(h){
 async function drawNext(){
  const a=acting(),done=currentStep()>=order().length&&follow;
  if(done){recs=[];$('#next').innerHTML=`<h2>Next move <small>draft complete</small></h2><p style="margin:0;color:var(--ink-2)">All twenty steps are in. Ask Jongrai for the read below, or tap a slot to change it.</p>`;return}
- const list=await call(`/api/${a.kind==='pick'?'suggest':'bans'}?side=${a.side}`);
+ const list=await call(`/api/${a.kind==='pick'?'suggest':'bans'}?side=${a.side}${mapQ()}`);
  if(list.error||!Array.isArray(list)){$('#next').innerHTML=`<h2>Next move</h2><p style="margin:0;color:var(--ember)">${esc(list.error||'No suggestions')}</p>`;return}
  recs=list.map(s=>s.hero);
- const [top,...rest]=list,tag=`<small>${cap(a.side)} ${a.kind} · engine ranked</small>`;
+ const [top,...rest]=list,tag=`<small>${cap(a.side)} ${a.kind} · engine ranked${mapName?' · '+esc(mapName):''}</small>`;
  $('#next').innerHTML=top?`<h2>${a.kind==='pick'?'Best pick':'Best ban'} ${tag}</h2>
   <button class="feature" data-sg="${esc(top.hero)}"><img src="${face(top.hero)}" alt=""><span><b>${esc(top.hero)}</b><span class="reasons">${top.reasons.map(r=>`<span>${esc(r)}</span>`).join('')}</span></span><span class="score-pill num">${esc(top.score)}</span></button>
   <ul class="alts">${rest.map(s=>`<li><button data-sg="${esc(s.hero)}"><img src="${face(s.hero)}" alt=""><span><b>${esc(s.hero)}</b><small>${esc(s.reasons.join(' · ')||'—')}</small></span><span class="num">${esc(s.score)}</span></button></li>`).join('')}</ul>`
@@ -186,7 +186,7 @@ async function drawAnalysis(){
 }
 let coachKey='',lastA=null;
 function drawCoach(){
- const b=state.blue.picks.length,r=state.red.picks.length,sig=JSON.stringify([state.blue,state.red]);
+ const b=state.blue.picks.length,r=state.red.picks.length,sig=JSON.stringify([state.blue,state.red,mapName]);
  if(coachKey&&coachKey!==sig)coachKey='';
  if(coachKey)return;
  const ready=b===5&&r===5;
@@ -196,10 +196,10 @@ function drawCoach(){
  fillMeta();
 }
 async function askCoach(refresh){
- const sig=JSON.stringify([state.blue,state.red]);coachKey=sig;
+ const sig=JSON.stringify([state.blue,state.red,mapName]);coachKey=sig;
  $('#coach').innerHTML=`<div class="coach-h"><h2>Jongrai's wisdom</h2><p>Reading the draft<span class="ink"><i></i><i></i><i></i></span></p></div>`;
  const done=state.blue.picks.length===5&&state.red.picks.length===5;
- const w=await call('/api/wisdom?'+(done?'':'force=1&')+(refresh?'refresh=1':''),{post:true});
+ const w=await call('/api/wisdom?'+(done?'':'force=1&')+(refresh?'refresh=1':'')+mapQ(),{post:true});
  if(coachKey!==sig)return;
  if(w.error){$('#coach').innerHTML=`<div class="coach-h"><h2>Jongrai's wisdom</h2><small>coach off</small><p style="color:var(--ember)">${esc(w.error)}</p></div>`;return}
  if(!w.ready){coachKey='';drawCoach();return}
@@ -220,7 +220,7 @@ const firstSentence=t=>{const m=String(t||'').match(/^(.+?[.!?])\s+(\S[\s\S]*)$/
 const teamName=t=>(document.querySelector(`.tname[data-team=${t}]`)||{}).value||cap(t);
 
 /* ---------- actions ---------- */
-function refresh(fresh){drawRail();drawSides(fresh);drawGrid();drawNext();drawAnalysis();drawCoach();
+function refresh(fresh){drawRail();drawSides(fresh);drawGrid();drawNext();drawAnalysis();drawCoach();restartClock();
  for(const t of['blue','red']){state[t].picks.forEach(p=>seen.add(p.name));state[t].bans.forEach(n=>seen.add(n))}
  if(fly)flyIn();}
 function adopt(j){
@@ -279,6 +279,39 @@ $('#bansOn').onclick=()=>{bansOn=!bansOn;store.set('jongrai-bans',bansOn?'on':'o
  if(!bansOn)manual.kind='pick';refresh(false);
  toast(bansOn?'Bans on: tournament order, 20 steps.':'Bans off: picks only, 10 steps in snake order.')};
 $('#follow').onclick=()=>{const now=acting();follow=!follow;$('#follow').setAttribute('aria-checked',follow);if(!follow)manual=now;refresh(false)};
+
+/* ---------- map ---------- */
+// The chosen arena nudges the engine toward heroes that win or get contested on it in recorded pro games.
+let mapName=store.get('jongrai-map')||'',mapList=[];
+const mapQ=()=>mapName?'&map='+encodeURIComponent(mapName):'';
+function drawMapChoice(){
+ const m=mapList.find(x=>x.name===mapName);
+ $('#mapChoice').innerHTML='<option value="">Map: any</option>'+mapList.map(x=>`<option value="${esc(x.name)}"${x.name===mapName?' selected':''}>${esc(x.name)} · ${x.games} pro games</option>`).join('');
+ $('#mapIc').hidden=!m;if(m)$('#mapIc').src='/icons/'+encodeURIComponent(m.icon);
+}
+$('#mapChoice').onchange=e=>{mapName=e.target.value;store.set('jongrai-map',mapName);drawMapChoice();coachKey='';drawNext();drawCoach();
+ toast(mapName?`Map: ${mapName}. Suggestions now weigh how heroes do on it in pro games.`:'Map: any. Suggestions ignore the map.')};
+
+/* ---------- timer ---------- */
+// Off, or 50 seconds per pick/ban step like the in-game draft. It restarts whenever the board moves to a new step.
+let timerLen=+(store.get('jongrai-timer')||0),clockEnd=0,clockStep=-1,clockT=null,clockWarned=false;
+function restartClock(force){
+ const i=currentStep(),done=i>=order().length;
+ $('#clock').hidden=!timerLen||done;
+ if(!timerLen||done){clearInterval(clockT);clockT=null;clockStep=-1;return}
+ if(!force&&i===clockStep&&clockT)return;
+ clockStep=i;clockEnd=Date.now()+timerLen*1000;clockWarned=false;
+ clearInterval(clockT);clockT=setInterval(tickClock,200);tickClock();
+}
+function tickClock(){
+ const left=Math.max(0,(clockEnd-Date.now())/1000),n=Math.ceil(left),el=$('#clock');
+ $('#clockN').textContent=n;el.style.setProperty('--left',(left/timerLen).toFixed(3));
+ el.classList.toggle('low',n<=10&&n>0);el.classList.toggle('out',n===0);
+ el.setAttribute('aria-label',n?`${n} seconds left`:'Time is up');
+ if(n===0&&!clockWarned){clockWarned=true;clearInterval(clockT);clockT=null;const a=acting();toast(`Time's up for ${cap(a.side)} ${a.kind}.`,'var(--ember)')}
+}
+$('#timerChoice').value=String(timerLen);
+$('#timerChoice').onchange=e=>{timerLen=+e.target.value;store.set('jongrai-timer',String(timerLen));restartClock(true)};
 function freeMode(patch){if(follow){manual=acting();follow=false;$('#follow').setAttribute('aria-checked',false);toast('Free mode: you choose the side and action. Turn “Follow draft order” back on any time.')}
  Object.assign(manual,patch);drawRail();drawSides(false);drawGrid();drawNext()}
 $('#sideSeg').onclick=e=>{const b=e.target.closest('button');if(b)freeMode({side:b.dataset.s})};
@@ -315,6 +348,7 @@ $('#ticks').innerHTML=Array.from({length:40},(_,i)=>{const g=i*9*Math.PI/180,r1=
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
  heroes=hs;heroes.forEach(h=>byName[h.name]=h);
  drawFilters();
+ const ms=await call('/api/maps');if(Array.isArray(ms)){mapList=ms;if(mapName&&!ms.some(m=>m.name===mapName))mapName='';drawMapChoice()}
  const s=await call('/api/state');if(s.error){toast(s.error,'var(--ember)');return}
  state=s;refresh(false);
 })();

@@ -26,6 +26,11 @@ public class SuggestionEngine {
     public record Suggestion(Hero hero, double score, List<String> reasons) {}
 
     public List<Suggestion> suggest(Draft draft, Draft.Side side, int limit) {
+        return suggest(draft, side, limit, null, "");
+    }
+
+    /** Like suggest(), and when a map is chosen, heroes that win or get contested on it in pro games score higher. */
+    public List<Suggestion> suggest(Draft draft, Draft.Side side, int limit, MapStats maps, String map) {
         Team mine = draft.team(side);
         if (mine.picksFull()) return List.of();
         Team theirs = draft.opponent(side);
@@ -77,6 +82,7 @@ public class SuggestionEngine {
             if (Math.abs(winRateBonus) >= 1) {
                 reasons.add(String.format(Locale.ROOT, "%s win rate %.1f%%", winRateBonus > 0 ? "high" : "low", candidate.winRate()));
             }
+            score += onMap(maps, map, candidate, reasons, false);
 
             results.add(new Suggestion(candidate, score, reasons));
         }
@@ -85,6 +91,10 @@ public class SuggestionEngine {
 
     /** Who should "side" ban? Popular, strong heroes, plus ones that hurt its picks or help the enemy. */
     public List<Suggestion> suggestBans(Draft draft, Draft.Side side, int limit) {
+        return suggestBans(draft, side, limit, null, "");
+    }
+
+    public List<Suggestion> suggestBans(Draft draft, Draft.Side side, int limit, MapStats maps, String map) {
         Team mine = draft.team(side);
         if (mine.bansFull()) return List.of();
         Team theirs = draft.opponent(side);
@@ -113,9 +123,19 @@ public class SuggestionEngine {
                     reasons.add("synergy with their " + enemy.name());
                 }
             }
+            score += onMap(maps, map, candidate, reasons, true);
             results.add(new Suggestion(candidate, score, reasons));
         }
         return best(results, limit);
+    }
+
+    /** The map nudge; for bans only the upside counts (a hero that is weak on the map is not worth a ban anyway). */
+    private static double onMap(MapStats maps, String map, Hero hero, List<String> reasons, boolean ban) {
+        if (maps == null || map == null || map.isBlank()) return 0;
+        MapStats.Nudge n = maps.nudge(map, hero);
+        double s = ban ? Math.max(0, n.score()) : n.score();
+        if (n.reason() != null && (!ban || n.score() > 0)) reasons.add(n.reason());
+        return s;
     }
 
     private static List<Suggestion> best(List<Suggestion> results, int limit) {

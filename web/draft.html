@@ -9,12 +9,16 @@
    <button class="ghost" id="reset" title="Hold to clear the board"><span class="fill"></span><span id="resetLbl">Hold to reset</span></button>
    <span class="music"><select class="ghost" id="musicChoice" aria-label="Background music"><option value="off">♪ Music: Off</option><option value="music1">♪ Music 1</option><option value="music2">♪ Music 2</option><option value="music3">♪ Music 3</option><option value="music4">♪ Music 4</option></select>
    <button class="ghost" id="musicToggle" type="button" aria-pressed="false" disabled title="Play or mute the background music">Muted</button></span></div>
-  <div class="turn" aria-live="polite"><span class="eyebrow" id="phase">Ban phase 1</span><h1 id="turnLine">…</h1><span class="step num" id="stepNo"></span></div>
+  <div class="turn" aria-live="polite"><span class="eyebrow" id="phase">Ban phase 1</span><h1 id="turnLine">…</h1><span class="step num" id="stepNo"></span><span class="clock num" id="clock" hidden role="timer" aria-live="off"><i></i><b id="clockN">50</b></span></div>
   <div class="acting">
    <button class="switch" id="bansOn" role="switch" aria-checked="true" title="Off: picks only, in the 10-step snake order"><i></i>Bans</button>
    <button class="switch" id="follow" role="switch" aria-checked="true"><i></i>Follow draft order</button>
    <div class="seg" id="sideSeg" aria-label="Acting side"><button class="b" data-s="blue">BLUE</button><button class="r" data-s="red">RED</button></div>
    <div class="seg" id="kindSeg" aria-label="Action"><button data-k="pick">PICK</button><button data-k="ban">BAN</button></div>
+  </div>
+  <div class="setup" aria-label="Match settings">
+   <label class="mapsel"><img id="mapIc" alt="" hidden><select class="ghost" id="mapChoice" aria-label="Map"><option value="">Map: any</option></select></label>
+   <select class="ghost" id="timerChoice" aria-label="Pick and ban timer"><option value="0">Timer: off</option><option value="50">Timer: 50 seconds</option></select>
   </div>
   <ol class="notches" id="notches"></ol>
  </section>

@@ -98,6 +98,22 @@ public class AiCoach {
      * Builds the judge prompt for the current draft. Returns the exact prompt text,
      * which doubles as the cache signature for a finished draft.
      */
+    /** Extra lines for the prompt when the board has a map chosen: how each picked hero has done on it in pro play. */
+    public static String mapNote(Draft draft, MapStats maps, String map) {
+        if (maps == null || map == null || maps.games(map) == 0) return "";
+        StringBuilder sb = new StringBuilder("\nMAP: ").append(map).append(" (").append(maps.games(map))
+                .append(" recorded pro games). Weigh how well each draft suits this map.\n");
+        for (Draft.Side s : Draft.Side.values()) {
+            for (Hero h : draft.team(s).picks()) {
+                MapStats.HeroOnMap m = maps.hero(map, h.name());
+                sb.append("- ").append(s).append(' ').append(h.name()).append(": ")
+                        .append(m.picks() == 0 ? "no pro picks on this map" : m.picks() + " pro picks, " + m.wins() + " wins")
+                        .append(m.bans() > 0 ? ", banned " + m.bans() + "x" : "").append('\n');
+            }
+        }
+        return sb.toString();
+    }
+
     public static String prompt(Draft draft, DraftAnalyzer.Analysis a) {
         StringBuilder sb = new StringBuilder();
         sb.append("Draft state (Mobile Legends: Bang Bang patch ").append(HeroRepository.PATCH)

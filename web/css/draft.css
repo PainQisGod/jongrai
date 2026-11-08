@@ -12,6 +12,16 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
 .turn h1{margin:0;font:700 26px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase}
 .turn h1 b{transition:color .3s}.turn h1 .blue{color:var(--blue)}.turn h1 .red{color:var(--red)}
 .turn .step{display:block;margin-top:4px;color:var(--ink-3);font-size:12px;letter-spacing:.18em}
+/* match settings: map and timer */
+.setup{grid-column:1/-1;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:-6px 0 2px}
+.mapsel{display:inline-flex;align-items:center;gap:6px}
+.mapsel img{width:26px;height:26px;object-fit:contain}
+.clock{display:inline-flex;align-items:center;gap:7px;margin-top:6px;padding:3px 12px 3px 6px;border-radius:999px;border:1px solid var(--hair-2);
+  font:700 15px/1 var(--display);letter-spacing:.06em;color:var(--ink)}
+.clock i{width:18px;height:18px;border-radius:50%;background:conic-gradient(var(--act,var(--gold)) calc(var(--left,1)*360deg),var(--stone-4) 0)}
+.clock.low{color:var(--ember);border-color:var(--ember)}
+.clock.out{animation:clockout .8s steps(2) infinite}
+@keyframes clockout{50%{opacity:.35}}
 .notches{grid-column:1/-1;display:flex;justify-content:center;align-items:flex-end;gap:5px;margin:0;padding:0;list-style:none}
 .notches li{position:relative;flex:none;background:var(--stone-4);transition:background .3s,transform .3s var(--ease-spring)}
 .notches .ban{width:10px;height:10px;transform:rotate(45deg) scale(.85);margin:0 2px 4px}
