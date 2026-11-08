@@ -298,6 +298,15 @@ public final class SelfCheck {
         String idOfficial = "tlid 12-4 26-11;navi 12-4 25-12;ae 10-6 23-13;btr 10-6 21-18;evos 8-8 19-21;"
                 + "onicid 7-9 19-21;dewa 5-11 14-25;rrqid 4-12 14-27;geek 4-12 13-26;";
         check(id.toString().equals(idOfficial), "calculated standings match the official MPL ID S18 table: " + id);
+        StringBuilder mm = new StringBuilder();
+        for (ProLeagueRepository.ProStanding s : pro.standings("msl_mm", "Season 4")) {
+            mm.append(s.teamId()).append(' ').append(s.won()).append('-').append(s.lost()).append(' ')
+                    .append(s.gf()).append('-').append(s.ga()).append(';');
+        }
+        // the final MSL MM S4 regular-season table on Liquipedia, 2026-11-08 (MYTH's forfeit to FCON counts as 0-2)
+        String mmOfficial = "yg 9-0 18-1;fcon 8-1 16-4;tecbg 7-2 14-6;secret 5-4 13-9;mseal 4-5 10-13;"
+                + "aies 4-5 9-12;wyv 3-6 8-13;t7 3-6 9-15;dfam 2-7 7-15;pld 0-9 2-18;";
+        check(mm.toString().equals(mmOfficial), "calculated standings match the MSL MM S4 table: " + mm);
         check(ProLeagueRepository.streak("WWLWW").equals("W2") && ProLeagueRepository.streak("").equals("")
                 && ProLeagueRepository.streak("LLL").equals("L3"), "the current streak is the last unbroken run");
         check(pro.validate(java.util.Set.of(), home.resolve("web/teams")).stream().noneMatch(w -> w.contains("unknown team")),

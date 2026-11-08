@@ -6,7 +6,7 @@
 # best_of: optional - the series format as a number (2 for a Bo2, 3 for a Bo3, 5 for a Bo5). Leave blank when unknown.
 #   Blank is fine for a 2-1 / 3-2 style result (the page works the Bo out), but a 2-0 sweep could be Bo2 or Bo3, so fill it in.
 # mvp: optional - a match MVP for leagues that name one per series (MPL PH). Leagues with a per-game MVP use pro-drafts.csv instead.
-# Times are local: ICT (UTC+7) for MPL KH as published by mplcambodia.com, PHT (UTC+8) for MPL PH, MYT (UTC+8) for MPL MY, WIB (UTC+7) for MPL ID. Series scores (Bo3/Bo5/Bo7), not games.
+# Times are local: ICT (UTC+7) for MPL KH as published by mplcambodia.com, PHT (UTC+8) for MPL PH, MYT (UTC+8) for MPL MY, WIB (UTC+7) for MPL ID, MMT (UTC+6:30) for MSL MM (converted from the ICT times Liquipedia shows). Series scores (Bo3/Bo5/Bo7), not games.
 # S11 regular season (Weeks 1-5, all 45 series) checked against mplcambodia.com/schedule on 2026-11-07.
 # Standings are calculated from the finished regular-season rows here (1 point per series win), so a
 # result only needs entering once.
@@ -290,3 +290,48 @@ mpl_id_s18_po_5,mpl_id,Season 18,10,3,ae,btr,2,3,finished,2026-11-06 14:30 WIB,,
 mpl_id_s18_po_6,mpl_id,Season 18,10,3,navi,tlid,3,2,finished,2026-11-06 19:15 WIB,,upper final,5,Karss
 mpl_id_s18_po_7,mpl_id,Season 18,10,4,tlid,btr,3,4,finished,2026-11-07 17:30 WIB,,lower final,7,Shogun
 mpl_id_s18_po_8,mpl_id,Season 18,10,5,navi,btr,,,scheduled,2026-11-08 17:30 WIB,,grand final,7,
+msl_mm_s4_w1_d1_m1,msl_mm,Season 4,1,1,aies,mseal,1,2,finished,2026-08-28 - 15:00 MMT,,regular,3,
+msl_mm_s4_w1_d1_m2,msl_mm,Season 4,1,1,t7,pld,2,1,finished,2026-08-28 - 17:00 MMT,,regular,3,
+msl_mm_s4_w1_d1_m3,msl_mm,Season 4,1,1,fcon,secret,2,1,finished,2026-08-28 - 19:00 MMT,,regular,3,
+msl_mm_s4_w1_d2_m1,msl_mm,Season 4,1,2,yg,dfam,2,0,finished,2026-08-29 - 15:00 MMT,,regular,3,
+msl_mm_s4_w1_d2_m2,msl_mm,Season 4,1,2,wyv,t7,1,2,finished,2026-08-29 - 17:00 MMT,,regular,3,
+msl_mm_s4_w1_d2_m3,msl_mm,Season 4,1,2,tecbg,pld,2,0,finished,2026-08-29 - 19:00 MMT,,regular,3,
+msl_mm_s4_w1_d3_m1,msl_mm,Season 4,1,3,dfam,wyv,2,1,finished,2026-08-30 - 15:00 MMT,,regular,3,
+msl_mm_s4_w1_d3_m2,msl_mm,Season 4,1,3,tecbg,secret,2,1,finished,2026-08-30 - 17:00 MMT,,regular,3,
+msl_mm_s4_w1_d3_m3,msl_mm,Season 4,1,3,yg,fcon,2,0,finished,2026-08-30 - 19:00 MMT,,regular,3,
+msl_mm_s4_w2_d1_m1,msl_mm,Season 4,2,1,dfam,t7,1,2,finished,2026-09-04 - 15:00 MMT,,regular,3,
+msl_mm_s4_w2_d1_m2,msl_mm,Season 4,2,1,aies,wyv,2,0,finished,2026-09-04 - 17:00 MMT,,regular,3,
+msl_mm_s4_w2_d1_m3,msl_mm,Season 4,2,1,mseal,secret,1,2,finished,2026-09-04 - 19:00 MMT,,regular,3,
+msl_mm_s4_w2_d2_m1,msl_mm,Season 4,2,2,fcon,dfam,2,0,finished,2026-09-05 - 15:00 MMT,,regular,3,
+msl_mm_s4_w2_d2_m2,msl_mm,Season 4,2,2,tecbg,aies,2,0,finished,2026-09-05 - 17:00 MMT,,regular,3,
+msl_mm_s4_w2_d2_m3,msl_mm,Season 4,2,2,yg,wyv,2,0,finished,2026-09-05 - 19:00 MMT,,regular,3,
+msl_mm_s4_w2_d3_m1,msl_mm,Season 4,2,3,fcon,pld,2,0,finished,2026-09-06 - 15:00 MMT,,regular,3,
+msl_mm_s4_w2_d3_m2,msl_mm,Season 4,2,3,yg,t7,2,0,finished,2026-09-06 - 17:00 MMT,,regular,3,
+msl_mm_s4_w2_d3_m3,msl_mm,Season 4,2,3,tecbg,mseal,2,0,finished,2026-09-06 - 19:00 MMT,,regular,3,
+msl_mm_s4_w3_d1_m1,msl_mm,Season 4,3,1,secret,pld,2,0,finished,2026-09-11 - 14:00 MMT,,regular,3,
+msl_mm_s4_w3_d1_m2,msl_mm,Season 4,3,1,tecbg,dfam,2,0,finished,2026-09-11 - 16:00 MMT,,regular,3,
+msl_mm_s4_w3_d1_m3,msl_mm,Season 4,3,1,mseal,t7,2,1,finished,2026-09-11 - 18:00 MMT,,regular,3,
+msl_mm_s4_w3_d2_m1,msl_mm,Season 4,3,2,yg,aies,2,0,finished,2026-09-12 - 14:00 MMT,,regular,3,
+msl_mm_s4_w3_d2_m2,msl_mm,Season 4,3,2,fcon,wyv,2,0,finished,2026-09-12 - 16:00 MMT,,regular,3,
+msl_mm_s4_w3_d2_m3,msl_mm,Season 4,3,2,secret,t7,2,0,finished,2026-09-12 - 18:00 MMT,,regular,3,
+msl_mm_s4_w3_d3_m1,msl_mm,Season 4,3,3,wyv,pld,2,0,finished,2026-09-13 - 14:00 MMT,,regular,3,
+msl_mm_s4_w3_d3_m2,msl_mm,Season 4,3,3,fcon,aies,2,0,finished,2026-09-13 - 16:00 MMT,,regular,3,
+msl_mm_s4_w3_d3_m3,msl_mm,Season 4,3,3,yg,mseal,2,0,finished,2026-09-13 - 18:00 MMT,,regular,3,
+msl_mm_s4_w4_d1_m1,msl_mm,Season 4,4,1,tecbg,t7,2,1,finished,2026-09-18 - 14:00 MMT,,regular,3,
+msl_mm_s4_w4_d1_m2,msl_mm,Season 4,4,1,secret,dfam,2,0,finished,2026-09-18 - 16:00 MMT,,regular,3,
+msl_mm_s4_w4_d1_m3,msl_mm,Season 4,4,1,aies,pld,2,1,finished,2026-09-18 - 18:00 MMT,,regular,3,
+msl_mm_s4_w4_d2_m1,msl_mm,Season 4,4,2,fcon,t7,2,1,finished,2026-09-19 - 14:00 MMT,,regular,3,
+msl_mm_s4_w4_d2_m2,msl_mm,Season 4,4,2,mseal,wyv,1,2,finished,2026-09-19 - 16:00 MMT,,regular,3,
+msl_mm_s4_w4_d2_m3,msl_mm,Season 4,4,2,aies,dfam,2,1,finished,2026-09-19 - 18:00 MMT,,regular,3,
+msl_mm_s4_w4_d3_m1,msl_mm,Season 4,4,3,mseal,pld,2,0,finished,2026-09-20 - 14:00 MMT,,regular,3,
+msl_mm_s4_w4_d3_m2,msl_mm,Season 4,4,3,aies,secret,0,2,finished,2026-09-20 - 16:00 MMT,,regular,3,
+msl_mm_s4_w4_d3_m3,msl_mm,Season 4,4,3,tecbg,fcon,0,2,finished,2026-09-20 - 18:00 MMT,,regular,3,
+msl_mm_s4_w5_d1_m1,msl_mm,Season 4,5,1,mseal,dfam,2,1,finished,2026-10-08 - 14:00 MMT,,regular,3,
+msl_mm_s4_w5_d1_m2,msl_mm,Season 4,5,1,yg,pld,2,0,finished,2026-10-08 - 16:00 MMT,,regular,3,
+msl_mm_s4_w5_d1_m3,msl_mm,Season 4,5,1,tecbg,wyv,2,0,finished,2026-10-08 - 18:00 MMT,,regular,3,
+msl_mm_s4_w5_d2_m1,msl_mm,Season 4,5,2,yg,secret,2,1,finished,2026-10-09 - 14:00 MMT,,regular,3,
+msl_mm_s4_w5_d2_m2,msl_mm,Season 4,5,2,dfam,pld,2,0,finished,2026-10-09 - 16:00 MMT,,regular,3,
+msl_mm_s4_w5_d2_m3,msl_mm,Season 4,5,2,mseal,fcon,0,2,finished,2026-10-09 - 18:00 MMT,,regular,3,
+msl_mm_s4_w5_d3_m1,msl_mm,Season 4,5,3,aies,t7,2,0,finished,2026-10-10 - 14:00 MMT,,regular,3,
+msl_mm_s4_w5_d3_m2,msl_mm,Season 4,5,3,secret,wyv,0,2,finished,2026-10-10 - 16:00 MMT,,regular,3,
+msl_mm_s4_w5_d3_m3,msl_mm,Season 4,5,3,yg,tecbg,2,0,finished,2026-10-10 - 18:00 MMT,,regular,3,
