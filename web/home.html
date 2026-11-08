@@ -7,27 +7,27 @@
  <section class="hero">
   <div class="art" aria-hidden="true"></div>
   <div>
-   <span class="eyebrow">MLBB draft room</span>
+   <span class="eyebrow" data-i18n="home.eyebrow">MLBB draft room</span>
    <p class="word" lang="km" aria-label="Jongrai">ចង្រៃ</p>
-   <h1 class="say">Read the draft like a caster: <em>blue</em> <em>vs red</em>, pick by pick.</h1>
-   <p class="sub">Jongrai ranks every pick and ban against counters, synergies, lane coverage and the meta, scores both drafts as they form, then lets an AI coach call the matchup.</p>
-   <div class="ctas"><a class="btn gold" href="/draft">Open the draft board <span class="arr">→</span></a><a class="btn line" href="/heroes">Browse the tier river</a></div>
+   <h1 class="say" data-i18n-html="home.say">Read the draft like a caster: <em>blue</em> <em>vs red</em>, pick by pick.</h1>
+   <p class="sub" data-i18n="home.sub">Jongrai ranks every pick and ban against counters, synergies, lane coverage and the meta, scores both drafts as they form, then lets an AI coach call the matchup.</p>
+   <div class="ctas"><a class="btn gold" href="/draft"><span data-i18n="home.cta.draft">Open the draft board</span> <span class="arr">→</span></a><a class="btn line" href="/heroes" data-i18n="home.cta.heroes">Browse the tier river</a></div>
   </div>
-  <aside class="board panel" id="board" aria-live="polite"><h2>Live board <small><span class="live" id="dot"><i></i></span><span id="stamp">checking…</span></small></h2><div class="skel" style="height:150px"></div></aside>
+  <aside class="board panel" id="board" aria-live="polite"><h2><span data-i18n="home.board.title">Live board</span> <small><span class="live" id="dot"><i></i></span><span id="stamp" data-i18n="home.board.checking">checking…</span></small></h2><div class="skel" style="height:150px"></div></aside>
  </section>
- <div class="strip panel" style="max-width:1272px" aria-label="What Jongrai tracks">
-  <div><b class="num" data-to="hero">0</b><span>heroes tracked</span></div>
-  <div><b class="num" data-to="item">0</b><span>shop items</span></div>
-  <div><b class="num" data-to="20">0</b><span>draft steps scored</span></div>
-  <div><b class="num" data-to="banned">0</b><span>heroes the meta bans</span></div>
+ <div class="strip panel" style="max-width:1272px" aria-label="What Jongrai tracks" data-i18n-label="home.strip.label">
+  <div><b class="num" data-to="hero">0</b><span data-i18n="home.strip.heroes">heroes tracked</span></div>
+  <div><b class="num" data-to="item">0</b><span data-i18n="home.strip.items">shop items</span></div>
+  <div><b class="num" data-to="20">0</b><span data-i18n="home.strip.steps">draft steps scored</span></div>
+  <div><b class="num" data-to="banned">0</b><span data-i18n="home.strip.bans">heroes the meta bans</span></div>
  </div>
  <section class="s">
-  <div class="s-h"><div><span class="eyebrow">Meta pulse · patch <span data-patch></span> · as of <span data-updated></span></span><h2>Who's winning, who's feared</h2></div><a href="/heroes">All <span data-hero-count></span> heroes →</a></div>
-  <div class="pulse"><div class="tops" id="tops"></div><div class="bans panel" id="bans"><h3>Most banned</h3></div></div>
+  <div class="s-h"><div><span class="eyebrow" data-i18n-html="home.pulse.eyebrow">Meta pulse · patch <span data-patch></span> · as of <span data-updated></span></span><h2 data-i18n="home.pulse.title">Who's winning, who's feared</h2></div><a href="/heroes" data-i18n-html="home.pulse.all">All <span data-hero-count></span> heroes →</a></div>
+  <div class="pulse"><div class="tops" id="tops"></div><div class="bans panel" id="bans"><h3 data-i18n="home.bans.title">Most banned</h3></div></div>
   <div class="tipcard panel" id="tip"></div>
  </section>
 </main>
-<footer class="page"><span>Fan-made, non-commercial. Not affiliated with or endorsed by Moonton.</span><span class="sp kh" lang="km">ចង្រៃ</span><span>UI mockup · data patch <span data-patch></span></span></footer>
+<footer class="page"><span data-i18n="footer.fan">Fan-made, non-commercial. Not affiliated with or endorsed by Moonton.</span><span class="sp kh" lang="km">ចង្រៃ</span><span data-i18n-html="footer.patch">UI mockup · data patch <span data-patch></span></span></footer>
 <script src="/app.js"></script>
 <script src="/kit.js"></script>
 <script src="/js/home.js"></script></body></html>

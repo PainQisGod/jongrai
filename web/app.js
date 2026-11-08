@@ -42,11 +42,49 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage blocked: the setting just won't persist */ } }
 };
 
+/* ---------- languages: English (built in) and Khmer (web/lang/km.json) ----------
+   English text stays in the HTML and the scripts. Khmer replaces it by key:
+   - static text: <span data-i18n="home.cta.draft">Open the draft board</span> (data-i18n-html when the text holds tags)
+   - script text: t('home.board.title', 'Live board') or t('key', '{n} of {total} steps in', {n, total})
+   A missing Khmer key just shows the English, so pages never break while translation is in progress. */
+const LANG = store.get('jongrai-lang') === 'km' ? 'km' : 'en';
+let KM = {};
+if (LANG === 'km') {
+  document.documentElement.classList.add('lang-km', 'i18n-wait');
+  setTimeout(() => document.documentElement.classList.remove('i18n-wait'), 2500);  // never leave the page hidden
+}
+const t = (key, en, vars) => {
+  let s = (LANG === 'km' && KM[key]) || en;
+  return vars ? s.replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m) : s;
+};
+let i18nLoad = null;
+/** Loads the Khmer strings (once) and swaps every marked element. Pages await it before drawing script text. */
+function i18nReady() {
+  if (LANG !== 'km') return Promise.resolve();
+  return i18nLoad ??= (async () => {
+    try { const r = await fetch('/lang/km.json'); if (r.ok) KM = await r.json(); } catch (e) { /* stay in English */ }
+    document.documentElement.lang = 'km';
+    applyI18n(document);
+    document.documentElement.classList.remove('i18n-wait');
+  })();
+}
+function applyI18n(root) {
+  root.querySelectorAll('[data-i18n]').forEach(el => { const v = KM[el.dataset.i18n]; if (v) el.textContent = v; });
+  root.querySelectorAll('[data-i18n-html]').forEach(el => { const v = KM[el.dataset.i18nHtml]; if (v) el.innerHTML = v; });
+  root.querySelectorAll('[data-i18n-title]').forEach(el => { const v = KM[el.dataset.i18nTitle]; if (v) el.title = v; });
+  root.querySelectorAll('[data-i18n-label]').forEach(el => { const v = KM[el.dataset.i18nLabel]; if (v) el.setAttribute('aria-label', v); });
+}
+function setLang(l) { store.set('jongrai-lang', l); location.reload(); }
+
 let META = null;
-/** "2026-11-06" -> "November 6, 2026" (fixed English format, independent of the visitor's locale). */
+/** "2026-11-06" -> "November 6, 2026", or "6 វិច្ឆិកា 2026" in Khmer (fixed format, independent of the visitor's locale). */
 function fmtDate(iso) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
   if (!m) return iso || '';
+  if (LANG === 'km') {
+    const km = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
+    return `${+m[3]} ${km[+m[2] - 1]} ${m[1]}`;
+  }
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   return `${months[+m[2] - 1]} ${+m[3]}, ${m[1]}`;
 }

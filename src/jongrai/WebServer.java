@@ -275,6 +275,7 @@ public class WebServer {
         if (path.startsWith("/leagues/")) { serveFile(ex, "web/league", path.substring(9), true); return; }
         if (path.startsWith("/css/")) { serveFile(ex, "web/css", path.substring(5), false); return; }
         if (path.startsWith("/js/")) { serveFile(ex, "web/js", path.substring(4), false); return; }
+        if (path.startsWith("/lang/")) { serveFile(ex, "web/lang", path.substring(6), false); return; }
         if (path.startsWith("/video/")) { serveFile(ex, "web/video", path.substring(7), true); return; }
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
@@ -708,6 +709,7 @@ public class WebServer {
         if (n.endsWith(".css")) return "text/css; charset=utf-8";
         if (n.endsWith(".html")) return "text/html; charset=utf-8";
         if (n.endsWith(".js")) return "application/javascript; charset=utf-8";
+        if (n.endsWith(".json")) return "application/json; charset=utf-8";
         return "application/octet-stream";
     }
 

@@ -314,6 +314,16 @@ public final class SelfCheck {
                 "every arena map has its icon in web/icons");
         check(pro.allDrafts().stream().allMatch(d -> d.id().equals(d.matchId() + "_g" + d.gameNumber())),
                 "every draft id is its match id plus _g<game>, so ids stay unique across seasons");
+        // every key a page marks for translation has a Khmer string (a missing one would silently show English)
+        String km = java.nio.file.Files.readString(home.resolve("web/lang/km.json"));
+        java.util.List<String> missingKm = new java.util.ArrayList<>();
+        try (var pages = java.nio.file.Files.list(home.resolve("web"))) {
+            for (Path page : pages.filter(f -> f.toString().endsWith(".html")).toList()) {
+                var m = java.util.regex.Pattern.compile("data-i18n(?:-html|-title|-label)?=\"([^\"]+)\"").matcher(java.nio.file.Files.readString(page));
+                while (m.find()) if (!km.contains("\"" + m.group(1) + "\":")) missingKm.add(page.getFileName() + ":" + m.group(1));
+            }
+        }
+        check(missingKm.isEmpty(), "every data-i18n key in the pages has a Khmer string in web/lang/km.json: missing " + missingKm);
         check(ProLeagueRepository.streak("WWLWW").equals("W2") && ProLeagueRepository.streak("").equals("")
                 && ProLeagueRepository.streak("LLL").equals("L3"), "the current streak is the last unbroken run");
         check(pro.validate(java.util.Set.of(), home.resolve("web/teams")).stream().noneMatch(w -> w.contains("unknown team")),
