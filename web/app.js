@@ -53,9 +53,13 @@ if (LANG === 'km') {
   document.documentElement.classList.add('lang-km', 'i18n-wait');
   setTimeout(() => document.documentElement.classList.remove('i18n-wait'), 2500);  // never leave the page hidden
 }
+/** 12 -> "១២" (Khmer digits), used for numbering like វគ្គទី១ when the site is in Khmer. */
+const kmDigits = v => String(v).replace(/\d/g, d => '០១២៣៤៥៦៧៨៩'[d]);
 const t = (key, en, vars) => {
-  let s = (LANG === 'km' && KM[key]) || en;
-  return vars ? s.replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m) : s;
+  const km = LANG === 'km' && KM[key];
+  let s = km || en;
+  // whole-number values inside a Khmer string are written in Khmer digits (scores and times stay as they are elsewhere)
+  return vars ? s.replace(/\{(\w+)\}/g, (m, k) => vars[k] == null ? m : km && /^\d+$/.test(String(vars[k])) ? kmDigits(vars[k]) : vars[k]) : s;
 };
 let i18nLoad = null;
 /** Loads the Khmer strings (once) and swaps every marked element. Pages await it before drawing script text. */
