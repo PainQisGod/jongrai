@@ -206,6 +206,13 @@ public final class ProLeagueRepository {
                 .filter(m -> m.season().equals(season)).toList();
     }
 
+    /** Pro games from each league's newest season only (the first row per league in pro-leagues.csv), so older metas don't mix in. */
+    public List<ProDraft> currentDrafts() {
+        Map<String, String> newest = new LinkedHashMap<>();
+        for (ProLeague l : leagues()) newest.putIfAbsent(l.id(), l.season());
+        return allDrafts().stream().filter(d -> d.season().equals(newest.get(d.leagueId()))).toList();
+    }
+
     /** Every recorded pro game, all leagues and seasons. */
     public List<ProDraft> allDrafts() {
         return drafts.values().stream().flatMap(List::stream).toList();

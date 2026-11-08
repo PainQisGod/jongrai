@@ -307,11 +307,13 @@ public final class SelfCheck {
         String mmOfficial = "yg 9-0 18-1;fcon 8-1 16-4;tecbg 7-2 14-6;secret 5-4 13-9;mseal 4-5 10-13;"
                 + "aies 4-5 9-12;wyv 3-6 8-13;t7 3-6 9-15;dfam 2-7 7-15;pld 0-9 2-18;";
         check(mm.toString().equals(mmOfficial), "calculated standings match the MSL MM S4 table: " + mm);
-        MapStats maps = new MapStats(pro.allDrafts());
+        MapStats maps = new MapStats(pro.currentDrafts());
         check(maps.maps().size() == 7 && maps.maps().stream().noneMatch(m -> m.name().startsWith("Default"))
                 && maps.games("Default Map") == 0, "map stats cover the 7 arena maps and skip Default Map: " + maps.maps());
         check(maps.maps().stream().allMatch(m -> java.nio.file.Files.exists(home.resolve("web/icons").resolve(m.icon()))),
                 "every arena map has its icon in web/icons");
+        check(pro.allDrafts().stream().allMatch(d -> d.id().equals(d.matchId() + "_g" + d.gameNumber())),
+                "every draft id is its match id plus _g<game>, so ids stay unique across seasons");
         check(ProLeagueRepository.streak("WWLWW").equals("W2") && ProLeagueRepository.streak("").equals("")
                 && ProLeagueRepository.streak("LLL").equals("L3"), "the current streak is the last unbroken run");
         check(pro.validate(java.util.Set.of(), home.resolve("web/teams")).stream().noneMatch(w -> w.contains("unknown team")),

@@ -87,7 +87,7 @@ public class WebServer {
         sessions = new Sessions(pool);
         gear = ItemRepository.load(home.resolve("data/items.csv"), home.resolve("data/hero-builds.csv"));
         pro = ProLeagueRepository.load(home.resolve("data"));
-        mapStats = new MapStats(pro.allDrafts());
+        mapStats = new MapStats(pro.currentDrafts());
         loadIcons(home.resolve("data/hero-icons.csv"));
         findVideos(home.resolve("web/video"));
         pool.values().forEach(h -> heroBySlug.put(h.slug(), h));

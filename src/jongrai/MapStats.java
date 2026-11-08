@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * How each hero does on each arena map in recorded pro games (pro-drafts.csv). The draft board uses it to
+ * How each hero does on each arena map in recorded pro games (pro-drafts.csv), current season of each league only. The draft board uses it to
  * nudge suggestions toward heroes that win or get contested on the chosen map. Games on "Default Map" or with
  * no map are left out, so a map only counts once it has real games behind it.
  */
