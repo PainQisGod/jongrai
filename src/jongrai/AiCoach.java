@@ -94,6 +94,21 @@ public class AiCoach {
 
     public static String baseUrl() { return cfg.base(); }
 
+    /**
+     * Asks for the verdict in Khmer, using the site's own glossary (the "_glossary" line of web/lang/km.json)
+     * so the coach says តួអង្គ, ការជ្រើសរើស and so on, exactly like the rest of the page.
+     */
+    public static String khmerNote(java.nio.file.Path kmJson) {
+        String glossary = "";
+        try {
+            var m = java.util.regex.Pattern.compile("\"_glossary\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
+                    .matcher(java.nio.file.Files.readString(kmJson));
+            if (m.find()) glossary = m.group(1);
+        } catch (java.io.IOException e) { /* no glossary file: still ask for Khmer */ }
+        return "\nLANGUAGE: Write every text field of your JSON answer in Khmer (ភាសាខ្មែរ). Keep hero, item, team and player names in English."
+                + (glossary.isEmpty() ? "" : " Use these exact Khmer terms: " + glossary) + "\n";
+    }
+
     /** Extra lines for the prompt when the board has a map chosen: how each picked hero has done on it in pro play. */
     public static String mapNote(Draft draft, MapStats maps, String map) {
         if (maps == null || map == null || maps.games(map) == 0) return "";

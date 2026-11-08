@@ -242,6 +242,7 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 .lotus svg{width:230px;height:auto}
 .lotus .petal{transition:d .9s var(--ease-spring)}
 .lotus text{font:500 11px var(--display);letter-spacing:.08em;fill:var(--ink-3);text-transform:uppercase}
+.lang-km .lotus text{font:500 9px var(--body);letter-spacing:0}
 .legend{display:grid;gap:6px;font-size:12px;color:var(--ink-2)}
 .legend .row{display:grid;grid-template-columns:1fr 26px 26px;gap:4px;align-items:center}
 .legend .row b{font:600 11px var(--display);text-align:right}

@@ -5,20 +5,20 @@
 <link rel="stylesheet" href="/css/draft.css"></head><body>
 <main class="page">
  <section class="rail" aria-label="Draft order">
-  <div class="tools"><button class="ghost" id="undo" disabled title="Undo your last pick or ban (Ctrl+Z)"><span>↶ Undo</span></button>
-   <button class="ghost" id="reset" title="Hold to clear the board"><span class="fill"></span><span id="resetLbl">Hold to reset</span></button>
-   <span class="music"><select class="ghost" id="musicChoice" aria-label="Background music"><option value="off">♪ Music: Off</option><option value="music1">♪ Music 1</option><option value="music2">♪ Music 2</option><option value="music3">♪ Music 3</option><option value="music4">♪ Music 4</option></select>
-   <button class="ghost" id="musicToggle" type="button" aria-pressed="false" disabled title="Play or mute the background music">Muted</button></span></div>
-  <div class="turn" aria-live="polite"><span class="eyebrow" id="phase">Ban phase 1</span><h1 id="turnLine">…</h1><span class="step num" id="stepNo"></span><span class="clock num" id="clock" hidden role="timer" aria-live="off"><i></i><b id="clockN">50</b></span></div>
+  <div class="tools"><button class="ghost" id="undo" disabled title="Undo your last pick or ban (Ctrl+Z)" data-i18n-title="dr.undoT"><span>↶ <span data-i18n="dr.undo">Undo</span></span></button>
+   <button class="ghost" id="reset" title="Hold to clear the board" data-i18n-title="dr.resetT"><span class="fill"></span><span id="resetLbl" data-i18n="dr.reset">Hold to reset</span></button>
+   <span class="music"><select class="ghost" id="musicChoice" aria-label="Background music"><option value="off" data-i18n="dr.music.off">♪ Music: Off</option><option value="music1" data-i18n="dr.music.1">♪ Music 1</option><option value="music2" data-i18n="dr.music.2">♪ Music 2</option><option value="music3" data-i18n="dr.music.3">♪ Music 3</option><option value="music4" data-i18n="dr.music.4">♪ Music 4</option></select>
+   <button class="ghost" id="musicToggle" type="button" aria-pressed="false" disabled title="Play or mute the background music" data-i18n-title="dr.music.T" data-i18n="dr.music.muted">Muted</button></span></div>
+  <div class="turn" aria-live="polite"><span class="eyebrow" id="phase" data-i18n="dr.phase.0">Ban phase 1</span><h1 id="turnLine">…</h1><span class="step num" id="stepNo"></span><span class="clock num" id="clock" hidden role="timer" aria-live="off"><i></i><b id="clockN">50</b></span></div>
   <div class="acting">
-   <button class="switch" id="bansOn" role="switch" aria-checked="true" title="Off: picks only, in the 10-step snake order"><i></i>Bans</button>
-   <button class="switch" id="follow" role="switch" aria-checked="true"><i></i>Follow draft order</button>
-   <div class="seg" id="sideSeg" aria-label="Acting side"><button class="b" data-s="blue">BLUE</button><button class="r" data-s="red">RED</button></div>
-   <div class="seg" id="kindSeg" aria-label="Action"><button data-k="pick">PICK</button><button data-k="ban">BAN</button></div>
+   <button class="switch" id="bansOn" role="switch" aria-checked="true" title="Off: picks only, in the 10-step snake order" data-i18n-title="dr.bansT"><i></i><span data-i18n="dr.bansSwitch">Bans</span></button>
+   <button class="switch" id="follow" role="switch" aria-checked="true"><i></i><span data-i18n="dr.follow">Follow draft order</span></button>
+   <div class="seg" id="sideSeg" aria-label="Acting side" data-i18n-label="dr.actingSide"><button class="b" data-s="blue" data-i18n="dr.btn.blue">BLUE</button><button class="r" data-s="red" data-i18n="dr.btn.red">RED</button></div>
+   <div class="seg" id="kindSeg" aria-label="Action" data-i18n-label="dr.action"><button data-k="pick" data-i18n="dr.hint.pick">PICK</button><button data-k="ban" data-i18n="dr.hint.ban">BAN</button></div>
   </div>
-  <div class="setup" aria-label="Match settings">
-   <label class="mapsel"><img id="mapIc" alt="" hidden><select class="ghost" id="mapChoice" aria-label="Map"><option value="">Map: any</option></select></label>
-   <select class="ghost" id="timerChoice" aria-label="Pick and ban timer"><option value="0">Timer: off</option><option value="50">Timer: 50 seconds</option></select>
+  <div class="setup" aria-label="Match settings" data-i18n-label="dr.settings">
+   <label class="mapsel"><img id="mapIc" alt="" hidden><select class="ghost" id="mapChoice" aria-label="Map" data-i18n-label="dr.mapLabel"><option value="" data-i18n="dr.map.any">Map: any</option></select></label>
+   <select class="ghost" id="timerChoice" aria-label="Pick and ban timer" data-i18n-label="dr.timerLabel"><option value="0" data-i18n="dr.timer.off">Timer: off</option><option value="50" data-i18n="dr.timer.50">Timer: 50 seconds</option></select>
   </div>
   <ol class="notches" id="notches"></ol>
  </section>
@@ -32,8 +32,8 @@
     <circle class="arc" id="arc" cx="100" cy="100" r="84" stroke-dasharray="263.9 527.8"/>
     <g class="needle" id="needle"><path d="M100 8 l6 8 -6 8 -6 -8z"/></g><g class="needle" id="needle2" style="transform:rotate(180deg)"><path d="M100 8 l6 8 -6 8 -6 -8z"/></g>
    </svg>
-   <div class="score"><span class="lead" id="lead">EVEN</span><div class="pair"><span class="b num" id="eb">50</span><i>:</i><span class="r num" id="er">50</span></div></div>
-   <p class="headline" id="headline">The draft is even</p>
+   <div class="score"><span class="lead" id="lead" data-i18n="dr.lead.even">EVEN</span><div class="pair"><span class="b num" id="eb">50</span><i>:</i><span class="r num" id="er">50</span></div></div>
+   <p class="headline" id="headline" data-i18n="dr.h.even">The draft is even</p>
   </div>
   <div class="side red panel" id="side-red"></div>
  </section>
@@ -41,8 +41,8 @@
  <section class="lower">
   <div class="pool panel">
    <div class="filters">
-    <label class="search"><span class="sr">Search heroes</span><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>
-     <input id="q" placeholder="Search 133 heroes" autocomplete="off"><kbd>/</kbd></label>
+    <label class="search"><span class="sr" data-i18n="dr.searchLabel">Search heroes</span><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>
+     <input id="q" placeholder="Search 133 heroes" data-i18n-ph="dr.search" autocomplete="off"><kbd>/</kbd></label>
     <div id="roles" style="display:contents"></div>
    </div>
    <div class="filters" id="lanes"></div>
@@ -60,5 +60,5 @@
 </main>
 <script src="/app.js"></script>
 <script src="/kit.js"></script>
-<iframe id="draftMusic" class="draft-music" title="Draft board background music" allow="autoplay" tabindex="-1"></iframe>
+<iframe id="draftMusic" class="draft-music" title="Draft board background music" data-i18n-title="dr.music.frame" allow="autoplay" tabindex="-1"></iframe>
 <script src="/js/draft.js"></script></body></html>

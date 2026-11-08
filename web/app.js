@@ -58,8 +58,10 @@ const kmDigits = v => String(v).replace(/\d/g, d => '០១២៣៤៥៦៧៨
 const t = (key, en, vars) => {
   const km = LANG === 'km' && KM[key];
   let s = km || en;
-  // whole-number values inside a Khmer string are written in Khmer digits (scores and times stay as they are elsewhere)
-  return vars ? s.replace(/\{(\w+)\}/g, (m, k) => vars[k] == null ? m : km && /^\d+$/.test(String(vars[k])) ? kmDigits(vars[k]) : vars[k]) : s;
+  if (!vars) return s;
+  // numbering (a number right after ទី, e.g. វគ្គទី១, សប្ដាហ៍ទី ៣) is written in Khmer digits; counts, scores and percentages keep 0-9
+  if (km) s = s.replace(/(ទី\s*)\{(\w+)\}/g, (m, pre, k) => /^\d+$/.test(String(vars[k] ?? '')) ? pre + kmDigits(vars[k]) : m);
+  return s.replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m);
 };
 let i18nLoad = null;
 /** Loads the Khmer strings (once) and swaps every marked element. Pages await it before drawing script text. */
@@ -80,6 +82,7 @@ function applyI18n(root) {
   root.querySelectorAll('[data-i18n-html]').forEach(el => { const v = KM[el.dataset.i18nHtml]; if (v) el.innerHTML = v; });
   root.querySelectorAll('[data-i18n-title]').forEach(el => { const v = KM[el.dataset.i18nTitle]; if (v) el.title = v; });
   root.querySelectorAll('[data-i18n-label]').forEach(el => { const v = KM[el.dataset.i18nLabel]; if (v) el.setAttribute('aria-label', v); });
+  root.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = KM[el.dataset.i18nPh]; if (v) el.placeholder = v; });
 }
 function setLang(l) { store.set('jongrai-lang', l); location.reload(); }
 

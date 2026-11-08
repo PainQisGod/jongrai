@@ -319,7 +319,7 @@ public final class SelfCheck {
         java.util.List<String> missingKm = new java.util.ArrayList<>();
         try (var pages = java.nio.file.Files.list(home.resolve("web"))) {
             for (Path page : pages.filter(f -> f.toString().endsWith(".html")).toList()) {
-                var m = java.util.regex.Pattern.compile("data-i18n(?:-html|-title|-label)?=\"([^\"]+)\"").matcher(java.nio.file.Files.readString(page));
+                var m = java.util.regex.Pattern.compile("data-i18n(?:-html|-title|-label|-ph)?=\"([^\"]+)\"").matcher(java.nio.file.Files.readString(page));
                 while (m.find()) if (!km.contains("\"" + m.group(1) + "\":")) missingKm.add(page.getFileName() + ":" + m.group(1));
             }
         }

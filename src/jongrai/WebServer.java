@@ -296,7 +296,7 @@ public class WebServer {
             case "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset" -> mutate(ex, path, q);
             case "/api/analysis" -> sendJson(ex, 200, locked(WebServer::analysisJson));
             case "/api/wisdom" -> sendJson(ex, 200, wisdomJson(q.getOrDefault("force", "0").equals("1"),
-                    q.getOrDefault("refresh", "0").equals("1"), q.getOrDefault("map", "")));
+                    q.getOrDefault("refresh", "0").equals("1"), q.getOrDefault("map", ""), q.getOrDefault("lang", "en")));
             case "/api/auto-suggest" -> sendJson(ex, 200, locked(WebServer::autoSuggestJson));
             case "/api/suggest" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
                 sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft(), s, 5, mapStats, m)))); }
@@ -536,7 +536,7 @@ public class WebServer {
      * spent judging a half-built board. Cached per prompt, so re-rendering the page never re-bills the
      * API; refresh=1 drops the cached read and asks again. The upstream call runs outside the draft's lock.
      */
-    private static String wisdomJson(boolean force, boolean refresh, String map) {
+    private static String wisdomJson(boolean force, boolean refresh, String map, String lang) {
         String prompt;
         Draft draft = draft();
         synchronized (draft) {
@@ -547,7 +547,8 @@ public class WebServer {
                 return "{\"configured\":true,\"ready\":false,\"progress\":" + Json.str(draft.team(Draft.Side.BLUE).picks().size()
                         + " vs " + draft.team(Draft.Side.RED).picks().size() + " picks") + ",\"complete\":false}";
             }
-            prompt = AiCoach.prompt(draft, new DraftAnalyzer().analyze(draft)) + AiCoach.mapNote(draft, mapStats, map);
+            prompt = AiCoach.prompt(draft, new DraftAnalyzer().analyze(draft)) + AiCoach.mapNote(draft, mapStats, map)
+                    + ("km".equals(lang) ? AiCoach.khmerNote(home.resolve("web/lang/km.json")) : "");
         }
         if (refresh) wisdomCache.remove(prompt);
         if (wisdomCache.size() > 32) wisdomCache.clear(); // ponytail: crude cap; an LRU only if drafts get replayed a lot
