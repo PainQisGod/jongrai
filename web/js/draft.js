@@ -17,9 +17,11 @@ const pickNames=s=>state[s].picks.map(p=>p.name);
 const key=n=>n.toLowerCase();
 
 /** The first step of the 20-step order a side has not filled yet. Works even when the board was filled out of order. */
+// Steps whose timer ran out with nothing chosen: they stay blank and the turn moves on.
+const skipped=new Set();
 function currentStep(){
  const need={blue:{pick:0,ban:0},red:{pick:0,ban:0}};
- for(let i=0;i<order().length;i++){const[k,s]=order()[i],side=SIDE[s];need[side][k]++;
+ for(let i=0;i<order().length;i++){if(skipped.has(i))continue;const[k,s]=order()[i],side=SIDE[s];need[side][k]++;
   if(state[side][k+'s'].length<need[side][k])return i}
  return order().length;
 }
@@ -29,10 +31,10 @@ function acting(){const i=currentStep();if(!follow||i>=order().length)return man
 function drawRail(){
  const i=currentStep(),a=acting(),done=i>=order().length;
  const need={blue:{pick:0,ban:0},red:{pick:0,ban:0}};
- $('#notches').innerHTML=order().map(([k,s,ph],n)=>{const side=SIDE[s],idx=need[side][k]++,list=state[side][k+'s'],hit=list[idx];
+ $('#notches').innerHTML=order().map(([k,s,ph],n)=>{const side=SIDE[s],skip=skipped.has(n),idx=skip?-1:need[side][k]++,list=state[side][k+'s'],hit=skip?null:list[idx];
   const name=hit?(hit.name||hit):'';
   return(n&&ph!==order()[n-1][2]?'<li class="gap" aria-hidden="true"></li>':'')
-   +`<li class="${k} ${s}${hit?' done':''}${n===i?' now':''}" title="${n+1}. ${cap(side)} ${k}${name?': '+esc(name):''}"></li>`}).join('');
+   +`<li class="${k} ${s}${hit?' done':''}${skip?' skipped':''}${n===i?' now':''}" title="${n+1}. ${cap(side)} ${k}${skip?': skipped (time ran out)':name?': '+esc(name):''}"></li>`}).join('');
  $('#phase').textContent=done?'Draft complete':PHASES[order()[i][2]];
  $('#turnLine').innerHTML=done?'Both sides <b>locked</b>':`<b class="${a.side}">${cap(a.side)}</b> ${a.kind}s${follow?'':' <small style="font-size:12px;color:var(--ink-3);letter-spacing:.1em">· FREE MODE</small>'}`;
  const total=order().length;$('#stepNo').textContent=done?`${total} / ${total}`:`STEP ${String(i+1).padStart(2,'0')} / ${total}`;
@@ -226,6 +228,7 @@ function refresh(fresh){drawRail();drawSides(fresh);drawGrid();drawNext();drawAn
 function adopt(j){
  const before=JSON.stringify([state.blue,state.red]);
  if(j.state)state=j.state;else if(!j.error)state=j;
+ if(!state.blue.picks.length&&!state.red.picks.length&&!state.blue.bans.length&&!state.red.bans.length)skipped.clear();
  if(j.error)toast(j.error,'var(--ember)');
  if(JSON.stringify([state.blue,state.red])!==before)refresh(true);else fly=null;
  const used=usedMap();[...seen].forEach(n=>{if(!used[n])seen.delete(n)});
@@ -275,7 +278,7 @@ document.addEventListener('pointerover',e=>{const t=e.target.closest('.tile:not(
 document.addEventListener('focusin',e=>{const t=e.target.closest('.tile:not(.used)');if(t)lens(byName[t.dataset.h])});
 $('#grid').addEventListener('pointerleave',()=>lens(null));
 $('#bansOn').setAttribute('aria-checked',bansOn);
-$('#bansOn').onclick=()=>{bansOn=!bansOn;store.set('jongrai-bans',bansOn?'on':'off');$('#bansOn').setAttribute('aria-checked',bansOn);
+$('#bansOn').onclick=()=>{bansOn=!bansOn;skipped.clear();store.set('jongrai-bans',bansOn?'on':'off');$('#bansOn').setAttribute('aria-checked',bansOn);
  if(!bansOn)manual.kind='pick';refresh(false);
  toast(bansOn?'Bans on: tournament order, 20 steps.':'Bans off: picks only, 10 steps in snake order.')};
 $('#follow').onclick=()=>{const now=acting();follow=!follow;$('#follow').setAttribute('aria-checked',follow);if(!follow)manual=now;refresh(false)};
@@ -294,7 +297,7 @@ $('#mapChoice').onchange=e=>{mapName=e.target.value;store.set('jongrai-map',mapN
 
 /* ---------- timer ---------- */
 // Off, or 50 seconds per pick/ban step like the in-game draft. It restarts whenever the board moves to a new step.
-// When it runs out, the engine's top choice is locked for that step (like the game's auto-lock) and the turn passes on.
+// When it runs out, the step is left blank and the turn passes on.
 let timerLen=+(store.get('jongrai-timer')||0),clockEnd=0,clockStep=-1,clockT=null,clockWarned=false;
 function restartClock(force){
  const i=currentStep(),done=i>=order().length;
@@ -309,16 +312,14 @@ function tickClock(){
  $('#clockN').textContent=n;el.style.setProperty('--left',(left/timerLen).toFixed(3));
  el.classList.toggle('low',n<=10&&n>0);el.classList.toggle('out',n===0);
  el.setAttribute('aria-label',n?`${n} seconds left`:'Time is up');
- if(n===0&&!clockWarned){clockWarned=true;clearInterval(clockT);clockT=null;autoLock()}
+ if(n===0&&!clockWarned){clockWarned=true;clearInterval(clockT);clockT=null;skipStep()}
 }
-async function autoLock(){
- if(currentStep()>=order().length)return;
- if(busy){setTimeout(autoLock,150);return}
- const a=acting(),used=usedMap();
- const name=recs.find(n=>!used[n])||(heroes.filter(h=>!used[h.name]).sort((x,y)=>y.winRate-x.winRate)[0]||{}).name;
- if(!name)return;
- toast(`Time's up: ${name} locked as ${cap(a.side)}'s ${a.kind}.`,'var(--ember)');
- const el=document.querySelector(`.tile[data-h="${CSS.escape(name)}"]`);choose(name,el);
+/** Time ran out: the step stays blank (no hero) and the turn passes to the next step, like a missed ban in game. */
+function skipStep(){
+ const i=currentStep();if(i>=order().length)return;
+ const a=acting();
+ if(!follow){toast(`Time's up for ${cap(a.side)} ${a.kind}.`,'var(--ember)');return}
+ skipped.add(i);toast(`Time's up: ${cap(a.side)}'s ${a.kind} left blank.`,'var(--ember)');refresh(false);
 }
 $('#timerChoice').value=String(timerLen);
 $('#timerChoice').onchange=e=>{timerLen=+e.target.value;store.set('jongrai-timer',String(timerLen));restartClock(true)};
@@ -330,7 +331,7 @@ $('#undo').onclick=()=>{if(busy)return;const u=undoStack.pop();$('#undo').disabl
 // Reset needs a 0.7 s hold (or two presses from the keyboard), so a stray click never wipes a finished draft.
 let holdT,armed=false;
 const doReset=async()=>{if(busy)return;busy=true;
- try{undoStack=[];$('#undo').disabled=true;adopt(await call('/api/reset?v='+state.version,{post:true}));toast('Board cleared')}finally{busy=false}};
+ try{undoStack=[];skipped.clear();$('#undo').disabled=true;adopt(await call('/api/reset?v='+state.version,{post:true}));toast('Board cleared')}finally{busy=false}};
 $('#reset').onpointerdown=()=>{$('#reset').classList.add('holding');holdT=setTimeout(()=>{$('#reset').classList.remove('holding');doReset()},700)};
 ['pointerup','pointerleave'].forEach(ev=>$('#reset').addEventListener(ev,()=>{clearTimeout(holdT);$('#reset').classList.remove('holding')}));
 $('#reset').onkeydown=e=>{if(e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();

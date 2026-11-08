@@ -16,6 +16,7 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
 .setup{grid-column:1/-1;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:-6px 0 2px}
 .mapsel{display:inline-flex;align-items:center;gap:6px}
 .mapsel img{width:26px;height:26px;object-fit:contain}
+.mapsel img[hidden],.clock[hidden]{display:none}
 .clock{display:inline-flex;align-items:center;gap:7px;margin-top:6px;padding:3px 12px 3px 6px;border-radius:999px;border:1px solid var(--hair-2);
   font:700 15px/1 var(--display);letter-spacing:.06em;color:var(--ink)}
 .clock i{width:18px;height:18px;border-radius:50%;background:conic-gradient(var(--act,var(--gold)) calc(var(--left,1)*360deg),var(--stone-4) 0)}
@@ -28,6 +29,7 @@ main{max-width:1520px;margin:0 auto;padding:18px 24px 60px}
 .notches .pick{width:9px;height:24px;border-radius:3px}
 .notches .B{box-shadow:inset 0 -2px 0 rgba(77,141,255,.35)}.notches .R{box-shadow:inset 0 -2px 0 rgba(255,80,98,.35)}
 .notches .done.B{background:var(--blue)}.notches .done.R{background:var(--red)}
+.notches .skipped{background:transparent;outline:1px dashed var(--ink-3)}
 .notches .now{background:transparent!important;outline:2px solid var(--gold-hi);animation:now 1.6s var(--ease-out) infinite}
 .notches .pick.now{transform:scaleY(1.15)}
 .notches .now::after{content:"";position:absolute;left:50%;bottom:-11px;border:4px solid transparent;border-bottom-color:var(--gold-hi);transform:translateX(-50%)}
