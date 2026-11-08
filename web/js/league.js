@@ -168,7 +168,7 @@ function gameBlock(d,leftId,matchMvp){
  const lSide=leftBlue?'blue':'red', rSide=leftBlue?'red':'blue';
  const lPicks=leftBlue?d.bluePicks:d.redPicks, rPicks=leftBlue?d.redPicks:d.bluePicks;
  const lBans=leftBlue?d.blueBans:d.redBans, rBans=leftBlue?d.redBans:d.blueBans;
- const res=(won)=>d.winnerTeamId?`<span class="mc-res ${won?'W':'L'}">${won?'W':'L'}</span>`:'<span></span>';
+ const res=(won)=>d.winnerTeamId?`<span class="mc-res ${won?'W':'L'}">${won?t('pl.w','W'):t('pl.l','L')}</span>`:'<span></span>';
  const lWon=d.winnerTeamId===leftId;
  const dur=fmtDur(d.duration);
  return `<div class="mc-game">
