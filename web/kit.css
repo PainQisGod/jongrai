@@ -127,6 +127,6 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
 .lang-km .nav a{white-space:nowrap}
 .lang-km .eyebrow{font-size:12px}
 /* letter-spacing pulls Khmer clusters apart, so none anywhere in Khmer mode (numbers keep theirs) */
-.lang-km :is(main,header,footer) :not(.num){letter-spacing:0!important;text-transform:none}
+.lang-km body :not(.num){letter-spacing:0!important;text-transform:none}
 .i18n-wait main,.i18n-wait footer{visibility:hidden}
 

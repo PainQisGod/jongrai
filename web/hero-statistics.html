@@ -4,17 +4,17 @@
 <link rel="stylesheet" href="/kit.css">
 <link rel="stylesheet" href="/css/heroes.css"></head><body>
 <main class="page">
- <div class="intro"><div><span class="eyebrow">Hero codex · patch <span data-patch></span> · as of <span data-updated></span></span>
-  <h1>The tier <em>river</em></h1>
-  <p class="lede">All <span data-hero-count></span> heroes, each one placed by win rate inside its tier band. The gold line is a coin flip, 50%. <b>Red rings</b> are the heroes the meta bans. Click any face for the full profile.</p></div>
+ <div class="intro"><div><span class="eyebrow" data-i18n-html="he.eyebrow">Hero codex · patch <span data-patch></span> · as of <span data-updated></span></span>
+  <h1 data-i18n-html="he.title">The tier <em>river</em></h1>
+  <p class="lede" data-i18n-html="he.lede">All <span data-hero-count></span> heroes, each one placed by win rate inside its tier band. The gold line is a coin flip, 50%. <b>Red rings</b> are the heroes the meta bans. Click any face for the full profile.</p></div>
  </div>
  <div class="filters">
-  <label class="search"><span class="sr">Find a hero</span><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input id="q" placeholder="Find a hero" autocomplete="off"></label>
+  <label class="search"><span class="sr" data-i18n="he.find">Find a hero</span><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input id="q" placeholder="Find a hero" data-i18n-ph="he.find" autocomplete="off"></label>
   <div id="roles" style="display:contents"></div>
   <span class="match num" id="match"></span>
  </div>
- <section class="river panel" id="river" aria-label="Heroes by tier and win rate"></section>
- <div class="key"><span><i></i> hero, placed by win rate</span><span><i class="ring"></i> banned in the current meta</span><span>Hover or focus a face for its name · <kbd>Esc</kbd> closes a profile</span></div>
+ <section class="river panel" id="river" aria-label="Heroes by tier and win rate" data-i18n-label="he.riverLabel"></section>
+ <div class="key"><span><i></i> <span data-i18n="he.key.dot">hero, placed by win rate</span></span><span><i class="ring"></i> <span data-i18n="he.key.ring">banned in the current meta</span></span><span data-i18n-html="he.key.hint">Hover or focus a face for its name · <kbd>Esc</kbd> closes a profile</span></div>
 </main>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dname" tabindex="-1"></aside>
