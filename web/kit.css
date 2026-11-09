@@ -118,9 +118,11 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
 
 /* language switch (EN | ខ្មែរ) */
 .langsw{flex:none;display:inline-flex;border:1px solid var(--hair-2);border-radius:999px;overflow:hidden;margin-left:10px}
-.langsw button{background:none;border:0;padding:6px 11px;font:600 11px/1 var(--display);letter-spacing:.08em;color:var(--ink-3);cursor:pointer}
+.langsw button{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:5px 11px 5px 7px;font:600 11px/1 var(--display);letter-spacing:.08em;color:var(--ink-3);cursor:pointer}
 .langsw button[lang=km]{font:500 12px/1 var(--body);letter-spacing:0}
 .langsw button[aria-pressed=true]{background:var(--gold-wash);color:var(--gold-hi)}
+.langsw .flag{width:16px;height:16px;flex:none;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.18);opacity:.7}
+.langsw button[aria-pressed=true] .flag,.langsw button:hover .flag{opacity:1}
 /* Khmer: the display face has no Khmer glyphs, so fall back to Kantumruy Pro; no tracking or caps on Khmer script, and a little more line height */
 .lang-km{--display:'Chakra Petch','Kantumruy Pro',ui-sans-serif,system-ui,sans-serif}
 .lang-km body{line-height:1.7}
