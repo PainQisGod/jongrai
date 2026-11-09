@@ -84,6 +84,15 @@ function applyI18n(root) {
   root.querySelectorAll('[data-i18n-label]').forEach(el => { const v = KM[el.dataset.i18nLabel]; if (v) el.setAttribute('aria-label', v); });
   root.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = KM[el.dataset.i18nPh]; if (v) el.placeholder = v; });
 }
+/** In Khmer, swaps each hero's tip for its Khmer version from web/lang/hero-tips-km.json (heroes without one keep English). */
+async function localizeTips(heroes) {
+  if (LANG !== 'km' || !Array.isArray(heroes)) return heroes;
+  try {
+    const r = await fetch('/lang/hero-tips-km.json');
+    if (r.ok) { const km = await r.json(); heroes.forEach(h => { if (km[h.name]) h.tip = km[h.name]; }); }
+  } catch (e) { /* keep the English tips */ }
+  return heroes;
+}
 function setLang(l) { store.set('jongrai-lang', l); location.reload(); }
 
 let META = null;

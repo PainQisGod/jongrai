@@ -109,7 +109,7 @@ let rw;addEventListener('resize',()=>{clearTimeout(rw);rw=setTimeout(drawRiver,1
 (async()=>{
  await shell('/heroes');
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
- heroes=hs;heroes.forEach(h=>byKey[h.slug]=h);
+ heroes=await localizeTips(hs);heroes.forEach(h=>byKey[h.slug]=h);
  drawRoles();drawRiver();
  const path=location.pathname.match(/^\/heroes\/([^/]+)$/);
  if(path)open(decodeURIComponent(path[1]),false);

@@ -392,7 +392,7 @@ $('#ticks').innerHTML=Array.from({length:40},(_,i)=>{const g=i*9*Math.PI/180,r1=
 (async()=>{
  await i18nReady();shell('/draft');
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
- heroes=hs;heroes.forEach(h=>byName[h.name]=h);
+ heroes=await localizeTips(hs);heroes.forEach(h=>byName[h.name]=h);
  drawFilters();
  const ms=await call('/api/maps');if(Array.isArray(ms)){mapList=ms;if(mapName&&!ms.some(m=>m.name===mapName))mapName='';drawMapChoice()}
  else{mapName='';$('#mapChoice').innerHTML=`<option value="">${tr('dr.map.unavailable','Map list unavailable: rebuild and restart the server')}</option>`;$('#mapChoice').disabled=true}

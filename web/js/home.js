@@ -36,7 +36,7 @@ function tips(){
 (async()=>{
  const m=await shell(location.pathname);
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
- heroes=hs;heroes.forEach(h=>byName[h.name]=h);
+ heroes=await localizeTips(hs);heroes.forEach(h=>byName[h.name]=h);
  const vals={hero:m.heroes||heroes.length,item:m.items||0,banned:heroes.filter(h=>h.metaBan).length};
  const strip=document.querySelector('.strip');
  new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();
