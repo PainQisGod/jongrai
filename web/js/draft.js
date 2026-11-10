@@ -182,10 +182,12 @@ async function drawNext(){
  const list=await call(`/api/${a.kind==='pick'?'suggest':'bans'}?side=${a.side}${mapQ()}`);
  if(list.error||!Array.isArray(list)){$('#next').innerHTML=`<h2>${tr('dr.next','Next move')}</h2><p style="margin:0;color:var(--ember)">${esc(list.error||tr('dr.next.none','No suggestions'))}</p>`;return}
  recs=list.map(s=>s.hero);
+ // the header already names the map, so drop the "<map>: " prefix on map-effect reasons here
+ const why=r=>{const t=trEn(r);return mapName&&t.startsWith(mapName+': ')?t.slice(mapName.length+2):t};
  const [top,...rest]=list,tag=`<small>${sideTxt(a.side)} ${kindTxt(a.kind)} · ${tr('dr.next.ranked','engine ranked')}${mapName?' · '+esc(mapName):''}</small>`;
  $('#next').innerHTML=top?`<h2>${a.kind==='pick'?tr('dr.next.bestPick','Best pick'):tr('dr.next.bestBan','Best ban')} ${tag}</h2>
-  <button class="feature" data-sg="${esc(top.hero)}"><img src="${face(top.hero)}" alt=""><span><b>${esc(top.hero)}</b><span class="reasons">${top.reasons.map(r=>`<span>${esc(trEn(r))}</span>`).join('')}</span></span><span class="score-pill num">${esc(top.score)}</span></button>
-  <ul class="alts">${rest.map(s=>`<li><button data-sg="${esc(s.hero)}"><img src="${face(s.hero)}" alt=""><span><b>${esc(s.hero)}</b><small>${esc(s.reasons.map(trEn).join(' · ')||'—')}</small></span><span class="num">${esc(s.score)}</span></button></li>`).join('')}</ul>`
+  <button class="feature" data-sg="${esc(top.hero)}"><img src="${face(top.hero)}" alt=""><span><b>${esc(top.hero)}</b><span class="reasons">${top.reasons.map(r=>`<span>${esc(why(r))}</span>`).join('')}</span></span><span class="score-pill num">${esc(top.score)}</span></button>
+  <ul class="alts">${rest.map(s=>`<li><button data-sg="${esc(s.hero)}"><img src="${face(s.hero)}" alt=""><span><b>${esc(s.hero)}</b><small title="${esc(s.reasons.map(why).join(' · '))}">${esc(s.reasons.map(why).join(' · ')||'—')}</small></span><span class="num">${esc(s.score)}</span></button></li>`).join('')}</ul>`
   :`<h2>${tr('dr.next','Next move')} ${tag}</h2><p style="margin:0;color:var(--ink-2)">${tr('dr.next.nothing','Nothing left to suggest for this step.')}</p>`;
  drawGrid();drawMapPlan();
 }

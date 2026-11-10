@@ -220,8 +220,9 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 .feature img{width:56px;height:56px;border-radius:50%;border:2px solid var(--gold)}
 .feature b{display:block;font:700 16px/1.1 var(--display);letter-spacing:.04em}
 .score-pill{font:700 13px/1 var(--display);color:var(--jade);padding:6px 8px;border-radius:6px;background:rgba(64,207,143,.12)}
+.feature>span,.alts button>span{min-width:0}
 .reasons{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.reasons span{font-size:11px;line-height:1;padding:4px 7px;border-radius:999px;background:var(--stone-3);color:var(--ink-2)}
+.reasons span{font-size:11px;line-height:1.35;padding:4px 8px;border-radius:9px;background:var(--stone-3);color:var(--ink-2)}
 .alts{margin:10px 0 0;padding:0;list-style:none}
 .alts button{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;width:100%;padding:7px 8px;border:0;border-radius:8px;background:transparent;cursor:pointer;text-align:left}
 .alts button:hover{background:var(--stone-3)}
