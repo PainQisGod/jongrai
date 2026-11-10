@@ -187,7 +187,7 @@ docs/          readable overview of every hero's counters and synergies
 
 ## Roadmap
 
-- MPL Cambodia Season 11 playoffs (from Nov 13)
+- MPL Cambodia Season 11 playoffs (from Nov 12)
 - Khmer for the Items and About pages
 - More hero tips in English and Khmer
 - Older seasons, with the hero icons of their time
@@ -196,4 +196,6 @@ docs/          readable overview of every hero's counters and synergies
 
 ## License
 
-[Add your license here]
+The code is released under the [MIT License](LICENSE).
+
+That covers this project's own code and writing only. Hero, item and map names and artwork belong to Moonton, and the third-party data keeps its own license (see [NOTICE](NOTICE)).
