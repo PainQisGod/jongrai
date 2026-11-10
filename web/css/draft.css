@@ -160,6 +160,9 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 
 /* ---------- lower: pool + council ---------- */
 .lower{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:22px;margin-top:22px;align-items:start}
+/* pool top-left, Best pick on the right, the map plan and read-outs fill the space under the pool */
+.lower>.pool{grid-column:1;grid-row:1}.lower>.council{grid-column:2;grid-row:1/span 2}
+.deck{grid-column:1;grid-row:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;align-items:start}
 .pool{padding:16px 18px 0;display:flex;flex-direction:column}
 .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
 .search{position:relative;flex:1 1 220px;max-width:300px}
@@ -171,7 +174,7 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 .filters .chip{height:32px}
 .sortsel{height:32px;border-radius:999px;border:1px solid var(--hair-2);background:var(--stone-1);padding:0 12px;font:500 12px var(--display);color:var(--ink-2)}
 .count{margin-left:auto;color:var(--ink-3);font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:4px 6px;max-height:520px;overflow:auto;padding:6px 4px 14px;margin:0 -4px;
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:4px 6px;max-height:430px;overflow:auto;padding:6px 4px 14px;margin:0 -4px;
   mask-image:linear-gradient(transparent,#000 10px,#000 calc(100% - 24px),transparent)}
 .tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px 9px;border:0;border-radius:var(--r-md);background:transparent;cursor:pointer;
   transition:background .2s,transform .25s var(--ease-spring)}
@@ -319,7 +322,7 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 
 @media (max-width:1180px){
   .stage{grid-template-columns:1fr}.scale{order:-1}
-  .lower{grid-template-columns:1fr}
+  .lower{grid-template-columns:1fr}.lower>.pool,.lower>.council,.deck{grid-column:1;grid-row:auto}
   .rail{grid-template-columns:1fr}.turn,.tools,.acting{grid-column:1;grid-row:auto;justify-self:center}
 }
 @media (max-width:640px){
