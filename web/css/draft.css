@@ -163,7 +163,14 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 /* pool top-left; Best pick, map plan and Coordination on the right; Edge breakdown and Lotus profile full width under the pool */
 .lower>.pool{grid-column:1;grid-row:1}.lower>.council{grid-column:2;grid-row:1/span 2}
 .deck{grid-column:1;grid-row:2;display:flex;flex-direction:column;gap:14px}
-.deck .lotus{grid-template-columns:230px minmax(0,520px);justify-content:center;gap:48px}
+.deck .lotus{grid-template-columns:400px minmax(0,460px);justify-content:center;gap:48px}
+/* wide card: bigger chart and table so the labels read easily */
+.deck .lotus svg{width:400px}
+.deck .lotus text{font-size:9px}.lang-km .deck .lotus text{font-size:11px}
+.deck .legend{gap:9px;font-size:14px}
+.deck .legend .row{grid-template-columns:1fr 44px 44px;gap:8px}
+.deck .legend .row b{font-size:14px}
+.deck .legend .row:first-child b{font-size:12px}
 .pool{padding:16px 18px 0;display:flex;flex-direction:column}
 .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
 .search{position:relative;flex:1 1 220px;max-width:300px}
@@ -323,6 +330,7 @@ select.ghost option{background:var(--stone-2);color:var(--ink)}
 
 @media (max-width:1180px){
   .stage{grid-template-columns:1fr}.scale{order:-1}
+  .deck .lotus{grid-template-columns:1fr;justify-items:center;gap:16px}.deck .lotus svg{width:min(400px,100%)}.deck .legend{width:100%;max-width:460px}
   .lower{grid-template-columns:1fr;grid-template-rows:none}.lower>.pool,.lower>.council,.deck{grid-column:1;grid-row:auto}
   .rail{grid-template-columns:1fr}.turn,.tools,.acting{grid-column:1;grid-row:auto;justify-self:center}
 }
