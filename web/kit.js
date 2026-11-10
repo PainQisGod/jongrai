@@ -7,13 +7,13 @@ const icon = f => '/icons/' + encodeURIComponent(f);
 
 /* Small round flags for the language switch, drawn inline (no image files).
    EN: split diagonally, United States top-left and United Kingdom bottom-right. ខ្មែរ: Cambodia. */
-const FLAG_EN = `<svg class="flag" viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="fl-c"><circle cx="10" cy="10" r="10"/></clipPath>
+const FLAG_EN = `<svg class="lang-flag" viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="fl-c"><circle cx="10" cy="10" r="10"/></clipPath>
 <clipPath id="fl-us"><path d="M0 0H20L0 20Z"/></clipPath><clipPath id="fl-uk"><path d="M20 0V20H0Z"/></clipPath></defs><g clip-path="url(#fl-c)">
 <g clip-path="url(#fl-us)"><rect width="20" height="20" fill="#fff"/>${[0,2,4,6,8,10,12].map(i => `<rect y="${i * 20 / 13}" width="20" height="${20 / 13}" fill="#b22234"/>`).join('')}<rect width="10" height="${7 * 20 / 13}" fill="#3c3b6e"/></g>
 <g clip-path="url(#fl-uk)"><rect width="20" height="20" fill="#012169"/><path d="M0 0L20 20M20 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0L20 20M20 0L0 20" stroke="#c8102e" stroke-width="1.4"/>
 <path d="M10 0V20M0 10H20" stroke="#fff" stroke-width="5"/><path d="M10 0V20M0 10H20" stroke="#c8102e" stroke-width="3"/></g>
 <path d="M0 20L20 0" stroke="rgba(0,0,0,.25)" stroke-width=".6"/></g></svg>`;
-const FLAG_KM = `<svg class="flag" viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="fl-k"><circle cx="10" cy="10" r="10"/></clipPath></defs><g clip-path="url(#fl-k)">
+const FLAG_KM = `<svg class="lang-flag" viewBox="0 0 20 20" aria-hidden="true"><defs><clipPath id="fl-k"><circle cx="10" cy="10" r="10"/></clipPath></defs><g clip-path="url(#fl-k)">
 <rect width="20" height="20" fill="#032ea1"/><rect y="5" width="20" height="10" fill="#e00025"/>
 <path fill="#fff" d="M4.6 13.6h10.8v-.9h-.7v-1.3h-.6V10h-.5V8.7h-.4l-.2-.9-.2.9h-.4V10h-.4V7.6h-.5l-.3-1.5-.3 1.5H9.9V10h-.4V8.7h-.4l-.2-.9-.2.9h-.4V10h-.5v1.4h-.6v1.3h-.7z"/></g></svg>`;
 
