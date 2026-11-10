@@ -1,0 +1,15 @@
+# Copy this file to auth-config.txt to turn on Google sign-in. auth-config.txt is gitignored: never commit it.
+# Leave the client id and secret empty and the site runs without sign-in.
+# Environment variables with the same names override this file. Restart the server after editing.
+
+# From Google Cloud Console > APIs & Services > Credentials > OAuth client ID (type: Web application).
+# Add <JONGRAI_PUBLIC_URL>/auth/callback as an authorised redirect URI there.
+JONGRAI_GOOGLE_CLIENT_ID=
+JONGRAI_GOOGLE_CLIENT_SECRET=
+
+# Comma-separated Google account emails that get admin rights. Signing in alone never makes anyone an admin.
+JONGRAI_ADMIN_EMAILS=
+
+# The address people use to reach the site, with no trailing slash. Leave it out to use http://localhost:<port>.
+# Anything other than localhost must be https. Example:
+# JONGRAI_PUBLIC_URL=https://jongrai.example.com
