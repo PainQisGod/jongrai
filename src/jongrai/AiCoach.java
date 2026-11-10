@@ -109,17 +109,22 @@ public class AiCoach {
                 + (glossary.isEmpty() ? "" : " Use these exact Khmer terms: " + glossary) + "\n";
     }
 
-    /** Extra lines for the prompt when the board has a map chosen: how each picked hero has done on it in pro play. */
+    /** Extra lines for the prompt when the board has a map chosen: what the map does, and how each pick fits it. */
     public static String mapNote(Draft draft, MapStats maps, String map) {
-        if (maps == null || map == null || maps.games(map) == 0) return "";
+        if (maps == null || map == null || map.isBlank() || maps.maps().stream().noneMatch(m -> m.name().equals(map))) return "";
+        String what = maps.effects().description(map);
         StringBuilder sb = new StringBuilder("\nMAP: ").append(map).append(" (").append(maps.games(map))
                 .append(" recorded pro games). Weigh how well each draft suits this map.\n");
+        if (!what.isEmpty()) sb.append("What this map changes: ").append(what).append('\n');
         for (Draft.Side s : Draft.Side.values()) {
             for (Hero h : draft.team(s).picks()) {
                 MapStats.HeroOnMap m = maps.hero(map, h.name());
+                List<String> fx = maps.effects().hits(map, h).stream()
+                        .map(e -> String.format(java.util.Locale.ROOT, "%s (%+.1f)", e.reason(), e.weight())).toList();
                 sb.append("- ").append(s).append(' ').append(h.name()).append(": ")
                         .append(m.picks() == 0 ? "no pro picks on this map" : m.picks() + " pro picks, " + m.wins() + " wins")
-                        .append(m.bans() > 0 ? ", banned " + m.bans() + "x" : "").append('\n');
+                        .append(m.bans() > 0 ? ", banned " + m.bans() + "x" : "")
+                        .append(fx.isEmpty() ? "" : "; map effect: " + String.join(", ", fx)).append('\n');
             }
         }
         return sb.toString();

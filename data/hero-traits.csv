@@ -1,0 +1,11 @@
+# Hero traits the map effects look for (map-effects.csv). Hand-picked from how each hero plays - edit freely.
+# heroes: semicolon-separated names exactly as in heroes.csv.
+trait,heroes,meaning
+STEALTH,Natalia;Aamon;Lesley,goes invisible or camouflaged
+AMBUSH,Franco;Saber;Selena;Helcurt;Natalia;Aamon;Eudora;Kaja;Atlas;Tigreal;Khufra;Chou;Jawhead;Gatotkaca;Karina;Hayabusa;Gusion;Badang;Minsitthar;Aurora;Kadita;Lolita,waits in a bush and jumps a target
+PUSH,Sun;Zilong;Masha;Bane;Popol and Kupa;Lylia;Uranus;Benedetta;Cici;Yu Zhong;Yi Sun-shin;Helcurt;Arlott,takes turrets fast or split-pushes
+OBJECTIVE,Fredrinn;Barats;Baxia;Akai;Balmond;Alpha;Roger;Yi Sun-shin;Martis;Aulus;Popol and Kupa;Freya,secures Turtle and Lord quickly
+MOBILE,Fanny;Ling;Lancelot;Gusion;Hayabusa;Benedetta;Wanwan;Kagura;Harith;Joy;Chou;Nolan;Paquito;Arlott,many dashes or blinks
+WALL,Fanny;Ling;Grock,needs walls for their kit
+IMMOBILE,Layla;Miya;Hanabi;Irithel;Ixia;Vexana;Aurora;Eudora;Zhask;Gord;Cyclops;Franco;Belerick;Estes;Nana;Chang'e;Yve;Cecilion,no dash or blink
+LONGRANGE,Pharsa;Yve;Novaria;Xavier;Cecilion;Lesley;Beatrix;Lylia,hits from very long range

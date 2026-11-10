@@ -51,7 +51,7 @@ public class WebServer {
     /** Only these paths touch a visitor's board (and so create or read their session cookie). */
     private static final Set<String> DRAFT_PATHS = Set.of(
             "/api/state", "/api/pick", "/api/ban", "/api/lane", "/api/remove", "/api/reset",
-            "/api/analysis", "/api/auto-suggest", "/api/suggest", "/api/bans", "/api/wisdom");
+            "/api/analysis", "/api/auto-suggest", "/api/suggest", "/api/bans", "/api/wisdom", "/api/mapplan");
     /** Behind HTTPS the session cookie gets the Secure flag: automatic when JONGRAI_PUBLIC_URL is https, or force it with -Djongrai.secureCookies=true. */
     private static boolean secureCookies() { return Boolean.getBoolean("jongrai.secureCookies") || Auth.secureCookies(); }
     /** Finished AI reads by prompt. A failed future is removed so the user can retry. */
@@ -87,7 +87,8 @@ public class WebServer {
         sessions = new Sessions(pool);
         gear = ItemRepository.load(home.resolve("data/items.csv"), home.resolve("data/hero-builds.csv"));
         pro = ProLeagueRepository.load(home.resolve("data"));
-        mapStats = new MapStats(pro.currentDrafts());
+        MapEffects mapEffects = MapEffects.load(home.resolve("data"));
+        mapStats = new MapStats(pro.currentDrafts(), mapEffects);
         loadIcons(home.resolve("data/hero-icons.csv"));
         findVideos(home.resolve("web/video"));
         pool.values().forEach(h -> heroBySlug.put(h.slug(), h));
@@ -96,6 +97,7 @@ public class WebServer {
         List<String> warnings = new ArrayList<>(HeroRepository.validate(pool));
         warnings.addAll(gear.validate(pool.keySet(), home.resolve("web/icons")));
         warnings.addAll(pro.validate(pool.keySet(), home.resolve("web/teams")));
+        mapEffects.unknownHeroes(pool.keySet()).forEach(b -> warnings.add("hero-traits.csv names an unknown hero " + b));
         icons.forEach((hero, file) -> {
             if (!Files.isRegularFile(home.resolve("web/icons").resolve(file))) warnings.add("hero icon '" + file + "' for " + hero + " is missing");
         });
@@ -302,9 +304,9 @@ public class WebServer {
                 sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggest(draft(), s, 5, mapStats, m)))); }
             case "/api/bans" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
                 sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft(), s, 5, mapStats, m)))); }
-            case "/api/maps" -> sendJson(ex, 200, mapStats.maps().stream().map(m -> String.format(Locale.ROOT,
-                    "{\"name\":%s,\"icon\":%s,\"games\":%d}", Json.str(m.name()), Json.str(m.icon()), m.games()))
-                    .collect(Collectors.joining(",", "[", "]")));
+            case "/api/maps" -> sendJson(ex, 200, mapsJson());
+            case "/api/mapplan" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
+                sendJson(ex, 200, locked(() -> mapPlanJson(draft(), s, m))); }
             case "/api/me" -> sendJson(ex, 200, meJson(ex));
             case "/auth/login" -> login(ex, q);
             case "/auth/callback" -> callback(ex, q);
@@ -495,6 +497,50 @@ public class WebServer {
                 .collect(Collectors.joining(",", "[", "]"));
         return "{\"picks\":" + picks
                 + ",\"bans\":" + Json.list(t.bans().stream().map(Hero::name).toList()) + "}";
+    }
+
+    /** Every arena map: icon, pro games, what its mechanic does, and how that moves hero value. */
+    private static String mapsJson() {
+        MapEffects fx = mapStats.effects();
+        return mapStats.maps().stream().map(m -> String.format(Locale.ROOT,
+                "{\"name\":%s,\"slug\":%s,\"icon\":%s,\"games\":%d,\"description\":%s,\"effects\":%s}",
+                Json.str(m.name()), Json.str(Hero.slugOf(m.name())), Json.str(m.icon()), m.games(), Json.str(fx.description(m.name())),
+                fx.effects(m.name()).stream().map(e -> String.format(Locale.ROOT, "{\"id\":%s,\"reason\":%s,\"weight\":%.1f}",
+                        Json.str(e.id()), Json.str(e.reason()), e.weight())).collect(Collectors.joining(",", "[", "]"))))
+                .collect(Collectors.joining(",", "[", "]"));
+    }
+
+    static final int PLAN_SIZE = 6;
+
+    /**
+     * Caller holds the draft's lock. Heroes the chosen map favours, for one side: what to pick (fits an open lane of
+     * yours, ranked by map fit then win rate), what to ban (map-favoured heroes the enemy still needs, weighted toward
+     * popular and strong ones) and what to avoid (heroes the map hurts, in lanes you still need).
+     */
+    static String mapPlanJson(Draft draft, Draft.Side side, String map) {
+        if (map == null || map.isBlank() || mapStats.maps().stream().noneMatch(m -> m.name().equals(map))) return "{\"map\":\"\"}";
+        Set<Lane> mineCovered = draft.team(side).coveredLanes(), theirsCovered = draft.opponent(side).coveredLanes();
+        // plan score: the map mechanic counts double, the pro record once - the mechanic is what makes a map different
+        record Fit(Hero hero, MapStats.Nudge nudge, double fx, double plan) {}
+        List<Fit> fits = draft.availableHeroes().stream().map(h -> {
+            MapStats.Nudge n = mapStats.nudge(map, h);
+            double fx = mapStats.effects().hits(map, h).stream().mapToDouble(MapEffects.Effect::weight).sum();
+            return new Fit(h, n, fx, n.score() + fx);
+        }).toList();
+        java.util.function.Predicate<Fit> forMe = f -> draft.team(side).picksFull() || f.hero().lanes().stream().anyMatch(l -> !mineCovered.contains(l));
+        java.util.function.Predicate<Fit> forThem = f -> draft.opponent(side).picksFull() || f.hero().lanes().stream().anyMatch(l -> !theirsCovered.contains(l));
+        List<Fit> pick = fits.stream().filter(f -> f.plan() > 0 && f.fx() >= 0 && forMe.test(f))
+                .sorted(java.util.Comparator.comparingDouble((Fit f) -> -(f.plan() + (f.hero().winRate() - 50) * 0.1))).limit(PLAN_SIZE).toList();
+        List<Fit> ban = fits.stream().filter(f -> f.plan() > 0 && f.fx() >= 0 && forThem.test(f))
+                .sorted(java.util.Comparator.comparingDouble((Fit f) -> -(f.plan() + f.hero().banRate() * 0.05 + (f.hero().winRate() - 50) * 0.1)))
+                .limit(PLAN_SIZE).toList();
+        List<Fit> avoid = fits.stream().filter(f -> f.plan() < 0 && forMe.test(f))
+                .sorted(java.util.Comparator.comparingDouble((Fit f) -> f.plan()).thenComparing(f -> -f.hero().pickRate())).limit(PLAN_SIZE).toList();
+        java.util.function.Function<List<Fit>, String> list = l -> l.stream().map(f -> String.format(Locale.ROOT,
+                "{\"hero\":%s,\"score\":\"%+.1f\",\"reasons\":%s}", Json.str(f.hero().name()), f.plan(),
+                Json.list(f.plan() < 0 ? (f.nudge().against().isEmpty() ? f.nudge().reasons() : f.nudge().against()) : f.nudge().reasons()))).collect(Collectors.joining(",", "[", "]"));
+        return "{\"map\":" + Json.str(map) + ",\"side\":" + Json.str(side.name().toLowerCase(Locale.ROOT))
+                + ",\"pick\":" + list.apply(pick) + ",\"ban\":" + list.apply(ban) + ",\"avoid\":" + list.apply(avoid) + "}";
     }
 
     private static String suggestionsJson(List<SuggestionEngine.Suggestion> list) {

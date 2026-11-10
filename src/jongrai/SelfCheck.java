@@ -312,6 +312,26 @@ public final class SelfCheck {
                 && maps.games("Default Map") == 0, "map stats cover the 7 arena maps and skip Default Map: " + maps.maps());
         check(maps.maps().stream().allMatch(m -> java.nio.file.Files.exists(home.resolve("web/icons").resolve(m.icon()))),
                 "every arena map has its icon in web/icons");
+        MapEffects fx = MapEffects.load(home.resolve("data"));
+        Map<String, Hero> heroes = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
+        check(fx.maps().size() == 7 && fx.maps().stream().allMatch(m -> maps.maps().stream().anyMatch(a -> a.name().equals(m))),
+                "maps.csv describes the same 7 arena maps the pro drafts use: " + fx.maps());
+        check(fx.maps().stream().allMatch(m -> !fx.effects(m).isEmpty()), "every arena map has at least one map effect");
+        check(fx.unknownHeroes(heroes.keySet()).isEmpty(), "every hero in hero-traits.csv is a real hero: " + fx.unknownHeroes(heroes.keySet()));
+        check(fx.all().stream().allMatch(e -> heroes.values().stream().anyMatch(h -> fx.matches(e, h))),
+                "every map effect matches at least one hero");
+        MapStats withFx = new MapStats(pro.currentDrafts(), fx);
+        MapStats.Nudge grass = withFx.nudge("Dangerous Grass", heroes.get("franco")), wisps = withFx.nudge("Revealing Wisps", heroes.get("natalia"));
+        check(grass.reasons().contains("Dangerous Grass: more bushes to ambush from") && wisps.against().contains("Revealing Wisps: wisps reveal hidden heroes")
+                && withFx.nudge("Revealing Wisps", heroes.get("natalia")).score() < maps.nudge("Revealing Wisps", heroes.get("natalia")).score(),
+                "map effects lift Franco on Dangerous Grass and drag Natalia down on Revealing Wisps");
+        {
+            String kmAll = java.nio.file.Files.readString(home.resolve("web/lang/km.json"));
+            List<String> noKm = new java.util.ArrayList<>();
+            fx.all().forEach(e -> { if (!kmAll.contains("\"dr.fx." + e.id() + "\":")) noKm.add("dr.fx." + e.id()); });
+            fx.maps().forEach(m -> { if (!kmAll.contains("\"dr.mapfx.desc." + Hero.slugOf(m) + "\":")) noKm.add("dr.mapfx.desc." + Hero.slugOf(m)); });
+            check(noKm.isEmpty(), "every map description and map effect has a Khmer string: missing " + noKm);
+        }
         check(pro.allDrafts().stream().allMatch(d -> d.id().equals(d.matchId() + "_g" + d.gameNumber())),
                 "every draft id is its match id plus _g<game>, so ids stay unique across seasons");
         // every key a page marks for translation has a Khmer string (a missing one would silently show English)

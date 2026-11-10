@@ -24,8 +24,15 @@ public class MapStats {
 
     private final Map<String, Integer> games = new TreeMap<>();
     private final Map<String, Map<String, int[]>> byMap = new LinkedHashMap<>(); // map -> hero key -> picks, wins, bans
+    private final MapEffects effects;
 
     public MapStats(List<ProLeagueRepository.ProDraft> drafts) {
+        this(drafts, MapEffects.empty());
+    }
+
+    /** With the map mechanics too (maps.csv / map-effects.csv), so a map counts even before it has pro games. */
+    public MapStats(List<ProLeagueRepository.ProDraft> drafts, MapEffects effects) {
+        this.effects = effects;
         for (ProLeagueRepository.ProDraft d : drafts) {
             String map = d.map() == null ? "" : d.map().trim();
             if (map.isEmpty() || map.toLowerCase(Locale.ROOT).startsWith("default")) continue;
@@ -48,12 +55,16 @@ public class MapStats {
 
     static String key(String hero) { return hero.trim().toLowerCase(Locale.ROOT); }
 
-    /** The maps with recorded games, A-Z, with the icon file in web/icons. */
+    /** The maps with recorded games or a mechanic description, A-Z, with the icon file in web/icons. */
     public List<ArenaMap> maps() {
+        TreeMap<String, Integer> all = new TreeMap<>(games);
+        effects.maps().forEach(m -> all.putIfAbsent(m, 0));
         List<ArenaMap> out = new ArrayList<>();
-        games.forEach((m, n) -> out.add(new ArenaMap(m, m.replace(' ', '_') + ".png", n)));
+        all.forEach((m, n) -> out.add(new ArenaMap(m, m.replace(' ', '_') + ".png", n)));
         return out;
     }
+
+    public MapEffects effects() { return effects; }
 
     /** Recorded games on a map; 0 for an unknown map or "any". */
     public int games(String map) { return games.getOrDefault(map, 0); }
@@ -63,25 +74,38 @@ public class MapStats {
         return c == null ? new HeroOnMap(0, 0, 0) : new HeroOnMap(c[0], c[1], c[2]);
     }
 
-    /** Score nudge for this hero on this map, with a short reason; reason is null when there is nothing to say. */
+    /** Score nudge for this hero on this map: its pro record there plus the map's mechanic. Reasons may be empty. */
     public Nudge nudge(String map, Hero hero) {
+        Nudge pro = proNudge(map, hero);
+        double score = pro.score();
+        List<String> reasons = new ArrayList<>(pro.reasons()), against = new ArrayList<>();
+        for (MapEffects.Effect e : effects.hits(map, hero)) {
+            score += e.weight();
+            (e.weight() >= 0 ? reasons : against).add(map + ": " + e.reason());
+        }
+        return new Nudge(score, reasons, against);
+    }
+
+    /** The pro-game part only. */
+    Nudge proNudge(String map, Hero hero) {
         int n = games(map);
-        if (n == 0) return new Nudge(0, null);
+        if (n == 0) return new Nudge(0, List.of(), List.of());
         HeroOnMap h = hero(map, hero.name());
         double presence = (double) (h.picks() + h.bans()) / n;
         double score = Math.min(presence, 1) * PRESENCE_WEIGHT;
-        if (h.picks() < MIN_PICKS) return new Nudge(score, score >= 1 ? contested(map, presence) : null);
+        if (h.picks() < MIN_PICKS) return new Nudge(score, score >= 1 ? List.of(contested(map, presence)) : List.of(), List.of());
         double wr = (h.wins() + PRIOR / 2) / (h.picks() + PRIOR);
         score += (wr - 0.5) * WIN_WEIGHT;
         String reason = Math.abs((wr - 0.5) * WIN_WEIGHT) >= 0.5
                 ? String.format(Locale.ROOT, "%d%% win on %s (%d pro picks)", Math.round(100.0 * h.wins() / h.picks()), map, h.picks())
                 : presence >= 0.25 ? contested(map, presence) : null;
-        return new Nudge(score, reason);
+        return new Nudge(score, reason == null ? List.of() : List.of(reason), List.of());
     }
 
     private static String contested(String map, double presence) {
         return String.format(Locale.ROOT, "contested on %s (%d%% of games)", map, Math.round(presence * 100));
     }
 
-    public record Nudge(double score, String reason) {}
+    /** reasons: what speaks for the hero on the map (and the pro record either way); against: map mechanics that hurt it. */
+    public record Nudge(double score, List<String> reasons, List<String> against) {}
 }

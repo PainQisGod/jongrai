@@ -26,7 +26,10 @@ const EN_PATTERNS=[
  [/^(high|low) win rate ([\d.]+)%$/,(m)=>tr('dr.r.wr.'+m[1],m[1]+' win rate {v}%',{v:m[2]})],
  [/^ban rate ([\d.]+)%$/,(m)=>tr('dr.r.banRate','ban rate {v}%',{v:m[1]})],
  [/^(\d+)% win on (.+) \((\d+) pro picks\)$/,(m)=>tr('dr.r.mapWin','{p}% win on {map} ({n} pro picks)',{p:m[1],map:m[2],n:m[3]})],
- [/^contested on (.+) \((\d+)% of games\)$/,(m)=>tr('dr.r.mapContested','contested on {map} ({p}% of games)',{map:m[1],p:m[2]})]];
+ [/^contested on (.+) \((\d+)% of games\)$/,(m)=>tr('dr.r.mapContested','contested on {map} ({p}% of games)',{map:m[1],p:m[2]})],
+ // map mechanic: "<map>: <reason>", Khmer under dr.fx.<id> (ids come with /api/maps)
+ [/^([A-Z][A-Za-z ]+): (.+)$/,(m)=>FX_ID[m[2]]?m[1]+': '+tr('dr.fx.'+FX_ID[m[2]],m[2]):m[0]]];
+let FX_ID={};
 const trEn=s=>{if(LANG!=='km')return s;for(const[re,f]of EN_PATTERNS){const m=re.exec(s);if(m)return f(m)}return s};
 const CAT_KEY={'COUNTERS':'counters','META POWER':'meta','SYNERGY':'synergy','LOCKDOWN':'lockdown','TEAM COORDINATION':'coord'};
 const catTxt=n=>CAT_KEY[n]?tr('dr.cat.'+CAT_KEY[n],n):n;
@@ -184,7 +187,25 @@ async function drawNext(){
   <button class="feature" data-sg="${esc(top.hero)}"><img src="${face(top.hero)}" alt=""><span><b>${esc(top.hero)}</b><span class="reasons">${top.reasons.map(r=>`<span>${esc(trEn(r))}</span>`).join('')}</span></span><span class="score-pill num">${esc(top.score)}</span></button>
   <ul class="alts">${rest.map(s=>`<li><button data-sg="${esc(s.hero)}"><img src="${face(s.hero)}" alt=""><span><b>${esc(s.hero)}</b><small>${esc(s.reasons.map(trEn).join(' · ')||'—')}</small></span><span class="num">${esc(s.score)}</span></button></li>`).join('')}</ul>`
   :`<h2>${tr('dr.next','Next move')} ${tag}</h2><p style="margin:0;color:var(--ink-2)">${tr('dr.next.nothing','Nothing left to suggest for this step.')}</p>`;
- drawGrid();
+ drawGrid();drawMapPlan();
+}
+/** With a map chosen: what the map does, and the heroes it favours (pick / ban) or hurts (avoid) for the acting side. */
+async function drawMapPlan(){
+ const box=$('#mapplan'),m=mapList.find(x=>x.name===mapName);
+ if(!m){box.hidden=true;box.innerHTML='';return}
+ const a=acting(),p=await call(`/api/mapplan?side=${a.side}${mapQ()}`);
+ if(!p||p.error||!p.map){box.hidden=true;return}
+ const strip=(list,cls,clickable)=>list.length?`<ul class="mp-heroes ${cls}">${list.map(s=>{const why=s.reasons.map(trEn).map(r=>r.replace(mapName+': ','')).join(' · ');
+   return`<li>${clickable?`<button data-sg="${esc(s.hero)}"`:'<span'} title="${esc(s.hero+(why?' — '+why:''))}"><img src="${face(s.hero)}" alt=""><b>${esc(s.hero)}</b>${clickable?'</button>':'</span>'}</li>`}).join('')}</ul>`
+   :`<p class="mp-none">${tr('dr.plan.none','No hero stands out.')}</p>`;
+ const fx=m.effects.map(e=>`<li class="${e.weight<0?'down':'up'}"><span class="num">${e.weight>0?'+':''}${e.weight.toFixed(1)}</span>${esc(tr('dr.fx.'+e.id,e.reason))}</li>`).join('');
+ box.hidden=false;
+ box.innerHTML=`<h2>${tr('dr.plan','Map plan')} <small>${esc(m.name)} · ${tr('dr.plan.forSide','for {side}',{side:sideTxt(a.side)})}</small></h2>
+  <div class="mp-head"><img src="/icons/${encodeURIComponent(m.icon)}" alt=""><p>${esc(tr('dr.mapfx.desc.'+m.slug,m.description))}</p></div>
+  ${fx?`<ul class="mp-fx">${fx}</ul>`:''}
+  <h3>${tr('dr.plan.pick','Pick for this map')}</h3>${strip(p.pick,'pick',a.kind==='pick')}
+  <h3>${tr('dr.plan.ban','Ban for this map')}</h3>${strip(p.ban,'ban',a.kind==='ban')}
+  <h3>${tr('dr.plan.avoid','Weak on this map')}</h3>${strip(p.avoid,'avoid',false)}`;
 }
 function petal(i,n,v,shift){
  const a=(-90+i*360/n+shift)*Math.PI/180,r=14+v/10*70,w=.2,c=100;
@@ -319,7 +340,7 @@ $('#bansOn').onclick=()=>{bansOn=!bansOn;skipped.clear();store.set('jongrai-bans
 $('#follow').onclick=()=>{const now=acting();follow=!follow;$('#follow').setAttribute('aria-checked',follow);if(!follow)manual=now;refresh(false)};
 
 /* ---------- map ---------- */
-// The chosen arena nudges the engine toward heroes that win or get contested on it in recorded pro games.
+// The chosen arena nudges the engine by its mechanic (data/map-effects.csv) and by how heroes do on it in recorded pro games.
 let mapName=store.get('jongrai-map')||'',mapList=[];
 const mapQ=()=>mapName?'&map='+encodeURIComponent(mapName):'';
 function drawMapChoice(){
@@ -328,7 +349,7 @@ function drawMapChoice(){
  $('#mapIc').hidden=!m;if(m)$('#mapIc').src='/icons/'+encodeURIComponent(m.icon);
 }
 $('#mapChoice').onchange=e=>{mapName=e.target.value;store.set('jongrai-map',mapName);drawMapChoice();coachKey='';drawNext();drawCoach();
- toast(mapName?tr('dr.toast.map','Map: {map}. Suggestions now weigh how heroes do on it in pro games.',{map:mapName}):tr('dr.toast.mapAny','Map: any. Suggestions ignore the map.'))};
+ toast(mapName?tr('dr.toast.map','Map: {map}. Suggestions now weigh its mechanic and how heroes do on it in pro games.',{map:mapName}):tr('dr.toast.mapAny','Map: any. Suggestions ignore the map.'))};
 
 /* ---------- timer ---------- */
 // Off, or 50 seconds per pick/ban step like the in-game draft. It restarts whenever the board moves to a new step.
@@ -394,7 +415,7 @@ $('#ticks').innerHTML=Array.from({length:40},(_,i)=>{const g=i*9*Math.PI/180,r1=
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
  heroes=await localizeTips(hs);heroes.forEach(h=>byName[h.name]=h);
  drawFilters();
- const ms=await call('/api/maps');if(Array.isArray(ms)){mapList=ms;if(mapName&&!ms.some(m=>m.name===mapName))mapName='';drawMapChoice()}
+ const ms=await call('/api/maps');if(Array.isArray(ms)){mapList=ms;FX_ID={};ms.forEach(x=>(x.effects||[]).forEach(e=>FX_ID[e.reason]=e.id));if(mapName&&!ms.some(m=>m.name===mapName))mapName='';drawMapChoice()}
  else{mapName='';$('#mapChoice').innerHTML=`<option value="">${tr('dr.map.unavailable','Map list unavailable: rebuild and restart the server')}</option>`;$('#mapChoice').disabled=true}
  const s=await call('/api/state');if(s.error){toast(s.error,'var(--ember)');return}
  state=s;refresh(false);

@@ -134,7 +134,8 @@ public class SuggestionEngine {
         if (maps == null || map == null || map.isBlank()) return 0;
         MapStats.Nudge n = maps.nudge(map, hero);
         double s = ban ? Math.max(0, n.score()) : n.score();
-        if (n.reason() != null && (!ban || n.score() > 0)) reasons.add(n.reason());
+        if (!ban) { reasons.addAll(n.reasons()); reasons.addAll(n.against()); }
+        else if (n.score() > 0) reasons.addAll(n.reasons());
         return s;
     }
 

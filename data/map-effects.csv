@@ -1,0 +1,26 @@
+# How each map's mechanic moves a hero's value in the draft. Judgement from the map descriptions in maps.csv - edit freely.
+# match: trait:<TRAIT> (from hero-traits.csv), tag:<Moonton tag> (heroes.csv tags), spike:EARLY|MID|LATE, or lane:<LANE> (any of the hero's lanes).
+# weight: score added to every matching hero on that map (negative = worse there). About 1.5 is a strong push, 0.5 a light one.
+#   For scale: a counter is worth 3, a synergy 2, and the pro-game map record adds roughly -1 to +3.
+# reason: shown as "<map>: <reason>". Its Khmer text is in web/lang/km.json under dr.fx.<reason slug>.
+map,match,weight,reason
+Revealing Wisps,trait:STEALTH,-1.5,wisps reveal hidden heroes
+Revealing Wisps,trait:AMBUSH,-0.8,bush ambushes get revealed
+Revealing Wisps,trait:LONGRANGE,0.8,revealed targets are easy to snipe
+Healing Turtle,trait:OBJECTIVE,1.5,secures the Turtle that pushes for you
+Healing Turtle,trait:PUSH,1.0,pushes hard next to the allied Turtle
+Healing Turtle,spike:EARLY,0.5,strong when the early Turtles spawn
+Golden Turret,trait:PUSH,1.5,every turret pays the whole team
+Golden Turret,spike:EARLY,0.8,early turret gold snowballs
+Flying Cloud,trait:PUSH,0.6,clouds bring split-pushers back fast
+Flying Cloud,tag:Initiator,0.6,clouds open flanks in base fights
+Flying Cloud,spike:LATE,0.5,the base is easier to hold until late
+Dangerous Grass,trait:AMBUSH,1.5,more bushes to ambush from
+Dangerous Grass,trait:STEALTH,0.8,more cover to hide in
+Dangerous Grass,trait:IMMOBILE,-0.5,no escape when caught in the grass
+Broken Walls,trait:IMMOBILE,0.8,walls no longer box them in
+Broken Walls,trait:WALL,-1.2,fewer walls to use
+Broken Walls,trait:MOBILE,-0.5,wall jumps matter less
+Expanding Rivers,trait:OBJECTIVE,1.2,river currents speed up objective fights
+Expanding Rivers,tag:Initiator,0.6,objective fights start sooner
+Expanding Rivers,lane:ROAM,0.4,rotates faster on the currents

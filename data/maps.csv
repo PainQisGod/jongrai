@@ -1,0 +1,10 @@
+# Arena maps: what each one changes, in PainQ's words (Nov 2026). The draft board shows this when the map is chosen.
+# The Khmer text lives in web/lang/km.json under dr.mapfx.desc.<map slug>.
+map,description
+Revealing Wisps,"Pickable Vision Wisps are available across the map. Upon picking one up, the wisp circles around the hero for several seconds. If there are hidden enemy heroes within a large range, the wisp will move to their location and reveal them for several seconds."
+Healing Turtle,"Defeating the Turtle no longer grants a shield. Instead, an allied Turtle will spawn on the enemy's strongest lane to help push it. Allied heroes near the allied Turtle will recover HP rapidly and gain Turtle companions to help push turrets."
+Golden Turret,"Greatly increased the Gold shared to the entire team when any Turret is destroyed. Inner Turret and Base Turret HP are also increased."
+Flying Cloud,"Two flying clouds have been added to the Base. Heroes can ride the clouds to return to lanes faster or flank enemies during Base attacks."
+Dangerous Grass,"Existing bushes on the map are extended and new ones are added, providing more opportunities for ambush."
+Broken Walls,"Multiple obstacles on the map become thinned or broken, making them easier to pass through. Heroes without movement skills can now move more freely."
+Expanding Rivers,"The accelerated River Current has a wider range and longer duration. The Lord's spawn and death also generate accelerated River Currents. Heroes can participate more conveniently in contests for neutral map objectives."
