@@ -350,15 +350,20 @@ public class WebServer {
     }
 
     /**
-     * A hero's pick animation is web/video/<Hero name>.mp4, found when the server starts (spaces may also be
+     * A hero's pick animation is web/video/<Hero name>.avif or .mp4, found when the server starts (spaces may also be
      * written as underscores, and case does not matter). Drop a new file in and restart: no code change needed.
+     * An animated .avif wins over an .mp4 of the same hero: it plays as an image, so download managers such as IDM
+     * don't put a "download this video" button on it, and it is much smaller.
      */
     private static void findVideos(Path dir) throws IOException {
         if (!Files.isDirectory(dir)) return;
         Map<String, String> byKey = new HashMap<>();
         try (var files = Files.list(dir)) {
-            files.map(p -> p.getFileName().toString()).filter(n -> n.toLowerCase(Locale.ROOT).endsWith(".mp4"))
-                    .forEach(n -> byKey.put(videoKey(n.substring(0, n.length() - 4)), n));
+            files.map(p -> p.getFileName().toString()).filter(n -> n.toLowerCase(Locale.ROOT).matches(".*\\.(mp4|avif)")).sorted()
+                    .forEach(n -> {
+                        String key = videoKey(n.substring(0, n.lastIndexOf('.')));
+                        if (n.toLowerCase(Locale.ROOT).endsWith(".avif") || !byKey.containsKey(key)) byKey.put(key, n);
+                    });
         }
         for (Hero h : pool.values()) {
             String file = byKey.remove(videoKey(h.name()));
@@ -749,6 +754,7 @@ public class WebServer {
         String n = name.toLowerCase(Locale.ROOT);
         if (n.endsWith(".png")) return "image/png";
         if (n.endsWith(".webp")) return "image/webp";
+        if (n.endsWith(".avif")) return "image/avif";
         if (n.endsWith(".svg")) return "image/svg+xml";
         if (n.endsWith(".gif")) return "image/gif";
         if (n.endsWith(".jpg") || n.endsWith(".jpeg")) return "image/jpeg";

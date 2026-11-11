@@ -88,7 +88,9 @@ function door(t,p,i,next){
  if(!p)return[`${code}|${next}`,`<div class="door empty${next?' next':''}" data-slot="${code}"><span class="code">${code}</span>${next?`<span class="cue">${tr('dr.picking','Picking')}</span>`:''}</div>`];
  const h=byName[p.name]||{lanes:[]},v=h.video,li=laneIcon(p.lane); // pick animation from web/video, listed by the server
  const opts=[...h.lanes,...LANES.filter(l=>!h.lanes.includes(l))].map(l=>`<option value="${l}"${l===p.lane?' selected':''}>${l}${h.lanes.includes(l)?'':' · '+tr('dr.flex','flex')}</option>`).join('');
- const art=v?`<video src="/video/${encodeURIComponent(v)}" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>`
+ // an animated .avif plays as a plain image (no download-manager button); an .mp4 plays as a video
+ const art=v?(/\.avif$/i.test(v)?`<img class="anim" src="/video/${encodeURIComponent(v)}" alt="" aria-hidden="true">`
+   :`<video src="/video/${encodeURIComponent(v)}" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>`)
   :`<img class="aura" src="${face(p.name)}" alt=""><img class="face" src="${face(p.name)}" alt="">`;
  return[`${p.name}|${p.lane}`,`<div class="door filled" data-hero="${esc(p.name)}">${art}
   <span class="code small">${code}</span>${h.tier?`<span class="tier ${esc(h.tier)}">${esc(h.tier)}</span>`:''}<span class="flag"></span>
@@ -310,7 +312,7 @@ function choose(name,el){
 /** The clicked portrait flies from the pool into its new slot. */
 function flyIn(){
  const f=fly;fly=null;
- const target=document.querySelector(`.door[data-hero="${CSS.escape(f.name)}"] .face, .door[data-hero="${CSS.escape(f.name)}"] video, .seal[data-hero="${CSS.escape(f.name)}"] img`);
+ const target=document.querySelector(`.door[data-hero="${CSS.escape(f.name)}"] .face, .door[data-hero="${CSS.escape(f.name)}"] video, .door[data-hero="${CSS.escape(f.name)}"] .anim, .seal[data-hero="${CSS.escape(f.name)}"] img`);
  if(!target)return;
  const to=target.getBoundingClientRect(),ghost=Object.assign(document.createElement('img'),{src:f.src,className:'fly'});
  Object.assign(ghost.style,{left:f.rect.left+'px',top:f.rect.top+'px',width:f.rect.width+'px',height:f.rect.height+'px'});
