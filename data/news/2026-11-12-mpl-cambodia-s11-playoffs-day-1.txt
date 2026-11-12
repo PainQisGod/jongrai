@@ -2,7 +2,7 @@ title: Welcome to MPL Cambodia Season 11 Playoffs, Day 1
 title_km: សូមស្វាគមន៍មកកាន់ការប្រកួត MPL Cambodia រដូវកាលទី១១ វគ្គ Playoffs ថ្ងៃទី១
 type: esports
 date: 2026-11-12
-image: news_1.jpg
+image: news_mpl_cambodia_s11_playoffs_d1.jpg
 summary: PRO Esports begin their title defense today against newcomers TNR Esports, while Team Flash KH take on Valhalla after finishing third at CAEC in Nanning last week.
 summary_km: ក្រុមការពារតំណែងជើងឯក PRO ចាប់ផ្ដើមការប្រកួតជាមួយក្រុមចំណូលថ្មី TNR ចំណែកឯ FLKH នឹងប៉ះគ្នាជាមួយ VAL បន្ទាប់ពីពួកគេយកបានចំណាត់ថ្នាក់លេខ៣ នៅឯការប្រកួត CAEC នៅទីក្រុង Nanning កាលពីសប្ដាហ៍មុន។
 author: PainQ
