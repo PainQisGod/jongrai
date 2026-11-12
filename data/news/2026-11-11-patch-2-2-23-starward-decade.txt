@@ -1,0 +1,210 @@
+title: Patch Starward Decade 1111 (Patch 2.2.23) is live! Is Fighter Gold Lane finally over?
+title_km: Patch Starward Decade 1111 (Patch 2.2.23) បានមកដល់ហើយ! តើ Fighter Gold Lane លែងមានវត្តមានទៀតឬទេ?
+type: patch
+date: 2026-11-11
+heroes: Popol and Kupa; Xavier; Lunox; Freya; Aldous; Kaja; Melissa; Gloo; Masha; Atlas; Lukas; Karrie; Kagura; Uranus
+image: news_popol_and_kupa_revamp.jpg
+summary: The new patch dropped just one day before the MPL Cambodia Season 11 playoffs, bringing a revamped Popol and Kupa.
+summary_km: Patch ថ្មីត្រូវបានទម្លាក់មុន MPL Cambodia រដូវកាលទី១១ វគ្គ Playoffs មួយថ្ងៃ ជាមួយនឹងការកែប្រែតួអង្គ Popol and Kupa។
+author: PainQ
+
+The long-awaited Popol and Kupa revamp is finally here! After being underwhelming in the recent MLBB scene, the hero has been reworked, but is the revamp worth it? Let's look at the patch notes below.
+
+## From the designers
+
+Moonton's designers say this patch tones down a few heroes that were too strong and improves some that were rarely picked. It also pushes back against a trend in high-rank games, where Fighters take the Gold Lane and roaming Tanks take the EXP Lane, so that traditional Gold Lane and EXP Lane heroes can win their lanes back. They will keep watching how the changes play out.
+
+## Revamped: Popol and Kupa
+
+[[Popol and Kupa]] are still a marksman who fights alongside Kupa and controls the map with traps. The revamp tackles two problems: they lacked mobility and combos, and Popol was left on his own for too long after Kupa died. Popol can now ride Kupa to chase or escape, and Kupa scales and regenerates better.
+
+- **Passive, We Are Friends:** Kupa's HP grows with Popol's level, and Kupa inherits Popol's other stats and item effects. Kupa regenerates HP out of combat, Popol can pray to bring a fallen Kupa back, and Kupa deals extra True Damage to creeps.
+- **Skill 1, Bite 'em, Kupa!:** Popol throws a spear at an enemy and Kupa lunges in to bite it, slowing it heavily. In Alpha Wolf Form, Kupa slams the area instead, knocking nearby enemies airborne for more damage.
+- **Skill 2, Kupa, Help!:** Popol calls Kupa back and gains a shield, then can ride Kupa to move fast while Kupa heals. In Alpha Wolf Form the shield is stronger and Kupa heals to full while ridden.
+- **Skill 3, Popol's Surprise:** a trap that briefly immobilizes the enemy who steps on it, then explodes into a frost zone that slows.
+- **Ultimate, We Are Angry!:** Popol and Kupa become Enraged for 9 seconds. Kupa heals to full and turns into Alpha Wolf Form, with extra Max HP and stronger skills.
+
+## Buffs
+
+**[[Xavier]]:** more team-fight area damage, moved from Skill 2 onto Mystic Field, and smoother skills.
+- Passive: Movement Speed Bonus 50% >> 60%, and it fades more slowly
+- Skill 1 and Skill 2: backswing time cut by 50%
+- Skill 2: Mystic Barrier no longer deals direct damage; Mystic Field Damage 220-345 (+65% Total Magic Power) >> 440-690 (+130% Total Magic Power)
+- Fixed: Mystic Field damage now triggers the passive's Movement Speed bonus
+
+**[[Lunox]]:** a passive that matters before the late game, more early damage on Skill 2, and a smoother ultimate.
+- Passive: Power of Order now gives 10% Spell Vamp right away; Power of Chaos gives 10% Magic Penetration right away
+- Skill 2 (Power of Chaos): Extra Percentage Damage 2.5%-5% >> 3.5%-5%; extra damage to creeps 1.5%-3% >> 2.1%-3%
+- Ultimate (Power of Chaos): dash foreswing cut by 50%; Damage 250-450 (+100% Total Magic Power) >> 150-300 (+135% Total Magic Power)
+
+**[[Freya]]:** stronger outside her ultimate, but she can use it less often.
+- Passive: consuming a Sacred Orb makes the next Basic Attack heal 20 (+3 × Hero Level) (+20% Total Physical Attack) HP
+- Ultimate: Cooldown 44-28s >> 60-44s; no more HP Regen from Basic Attacks during it; Enhanced Basic Attack damage 30-60 (+100% Total Physical Attack) >> 100-200 (+70% Total Physical Attack); new: +30 Movement Speed while active
+
+**[[Aldous]]:** less downtime between trades in lane and more late-game Damage Reduction.
+- Skill 2: Cooldown 12-9.5s >> 8s at all levels; Damage Reduction 30% at all levels >> 30%-55%
+
+**[[Kaja]]:** stays in the air longer and moves better there; enemies get more time to leave his ultimate but can no longer cleanse out of it.
+- Skill 2: faster turning while Soaring; new: enhanced Basic Attacks and hitting minions with Skill 2 both extend Soaring
+- Ultimate: slightly longer delay; new: Control Immunity no longer lets targets escape the area
+
+**[[Melissa]]:** last patch's nerf partly rolled back, keeping her early game in check.
+- Skill 2: Muddles's Damage Transfer 52% at all levels >> 50%-60%; Attack Effect Inheritance Ratio 52% at all levels >> 50%-60%
+
+## Nerfs
+
+**[[Gloo]]:** too hard to counter.
+- Skill 1: Immobilizing Time 0.8s >> 0.6s; Explosion Damage 250-400 (+12% Extra HP) >> 230-380 (+11% Extra HP)
+- Skill 3: Damage Transfer Ratio 80% >> 60%
+
+**[[Masha]]:** the slow moves to Skill 2 for better chasing and faster wave clear, with less damage overall.
+- Passive: new effect, skill hits replace one of the target's Wounds with a new one in the hit's direction; Extra Physical Damage (3 + 1% Extra Physical Attack + 0.3 × Hero Level)% Max HP >> (2 + 0.5% Extra Physical Attack + 0.2 × Hero Level)% Max HP; HP Regen 4-10% Max HP >> 3-6% Max HP
+- Skill 1: Damage Bonus 70% >> 55%; Damage to Minions 100%-150% >> 150%-200%; no longer slows heroes
+- Skill 2: new, the slash slows heroes by 50% for 1s; path 20% narrower; Damage 120-240 (+80% Extra Physical Attack) >> 60-240 (+40% Extra Physical Attack)
+
+**[[Atlas]]:** his passive froze enemies too often; he gets more defense in return.
+- Passive: Frigid Breath Duration 5s >> 4s; Freeze Cooldown 2.5s >> 4s; Physical & Magic Defense during Frigid Breath 20 (+0.5% Extra HP) >> 20 (+0.7% Extra HP)
+
+## Adjusted
+
+**[[Lukas]]:** pushed away from full-damage assassin builds toward a fighter playstyle with tankier builds.
+- Attributes: Base HP 2550 >> 2620; Base Physical Defense 21 >> 23
+- Skill 1: Pulverize Damage 280-580 (+120% Total Physical Attack) >> 400-800 (+60% Total Physical Attack); Spin Damage 80-180 (+45% Total Physical Attack) >> 95-235 (+25% Total Physical Attack); HP Regen 6% >> 8% of Max HP
+
+**[[Karrie]]:** stronger ultimate; Skill 1 is now more about slowing and forcing enemies to move.
+- Skill 1 (nerf): clearer visuals and hit detection; Physical Attack Bonus (Base Damage) 90% >> 20%; (Sustained Damage) 20% >> 10%
+- Skill 2 (buff): checks for enemy heroes along the whole dash, then creeps and minions at the end
+- Ultimate (buff): Base Damage per Lightwheel 40 >> 50; Movement Speed Boost 20% >> 30%
+
+**[[Kagura]]:** clearer indicator for how far the Seimei Umbrella can be from her.
+
+**[[Uranus]]:** his Basic Attack splash now deals Magic Damage.
+
+## Battlefield changes
+
+These are the changes behind the title: they push Fighters out of the Gold Lane and roaming Tanks out of the EXP Lane.
+
+**Gold Lane Siege Minion (buff):** Fighters had been taking over the Gold Lane in high-rank Ranked and pro games, so marksmen now farm faster there early on.
+- Extra Gold: 40% >> 60%
+
+**Concussive Blast talent (adjusted):** roaming Tanks in the EXP Lane had better control and durability than most Fighters while dealing nearly as much damage, so their wave clear is cut.
+- Damage: 100 (+7% Total HP) >> 100 (+8% Total HP), but now deals 50% less damage to minions
+
+**Chastise Pauldron (nerf):** it shut down Attack Speed heroes too hard.
+- Unique Passive, Chastise: lowers the attacker's Attack Speed and Attack Speed cap to 75% >> 80%
+
+**Antique Cuirass (buff):** it fell behind Chastise Pauldron.
+- Unique Passive, Deter: lowers the attacker's Physical Damage by 6% >> 8%
+
+**Sprint (buff):**
+- Cooldown: 100s >> 75s
+
+**Golden Turret map (adjusted):** teams that fell behind found it hard to come back.
+- Base Turret HP increase: 1,000 >> 2,000
+- Team Gold from the Outer Turret: 100 >> 90
+- Team Gold from the Inner Turret: 140 >> 120
+
+**Healing Turtle map (adjusted):** killing the enemy's pushing Turtle paid much less than a minion wave, which hurt the defending team.
+- Gold and EXP from killing an enemy Turtle greatly increased, shared among allied heroes nearby, now about the same as a minion wave
+
+---km
+ការទន្ទឹមរង់ចាំការផ្លាស់ប្ដូររបស់ Popol and Kupa បានមកដល់ហើយ។ បន្ទាប់ពីភាពខ្សោយរបស់តួអង្គមួយនេះនៅរយៈពេលចុងក្រោយ វាត្រូវបានផ្លាស់ប្ដូរហើយ ប៉ុន្តែសំណួរសួរថាតើវាបានផ្ដល់អីមកវិញអត់? តោះមកមើល Patch ថ្មីខាងក្រោម។
+
+**បញ្ជាក់:** មិនមានការបកប្រែទៅលើ Patch ខាងក្រោមទេ។
+
+## From the designers
+
+Moonton's designers say this patch tones down a few heroes that were too strong and improves some that were rarely picked. It also pushes back against a trend in high-rank games, where Fighters take the Gold Lane and roaming Tanks take the EXP Lane, so that traditional Gold Lane and EXP Lane heroes can win their lanes back. They will keep watching how the changes play out.
+
+## Revamped: Popol and Kupa
+
+[[Popol and Kupa]] are still a marksman who fights alongside Kupa and controls the map with traps. The revamp tackles two problems: they lacked mobility and combos, and Popol was left on his own for too long after Kupa died. Popol can now ride Kupa to chase or escape, and Kupa scales and regenerates better.
+
+- **Passive, We Are Friends:** Kupa's HP grows with Popol's level, and Kupa inherits Popol's other stats and item effects. Kupa regenerates HP out of combat, Popol can pray to bring a fallen Kupa back, and Kupa deals extra True Damage to creeps.
+- **Skill 1, Bite 'em, Kupa!:** Popol throws a spear at an enemy and Kupa lunges in to bite it, slowing it heavily. In Alpha Wolf Form, Kupa slams the area instead, knocking nearby enemies airborne for more damage.
+- **Skill 2, Kupa, Help!:** Popol calls Kupa back and gains a shield, then can ride Kupa to move fast while Kupa heals. In Alpha Wolf Form the shield is stronger and Kupa heals to full while ridden.
+- **Skill 3, Popol's Surprise:** a trap that briefly immobilizes the enemy who steps on it, then explodes into a frost zone that slows.
+- **Ultimate, We Are Angry!:** Popol and Kupa become Enraged for 9 seconds. Kupa heals to full and turns into Alpha Wolf Form, with extra Max HP and stronger skills.
+
+## Buffs
+
+**[[Xavier]]:** more team-fight area damage, moved from Skill 2 onto Mystic Field, and smoother skills.
+- Passive: Movement Speed Bonus 50% >> 60%, and it fades more slowly
+- Skill 1 and Skill 2: backswing time cut by 50%
+- Skill 2: Mystic Barrier no longer deals direct damage; Mystic Field Damage 220-345 (+65% Total Magic Power) >> 440-690 (+130% Total Magic Power)
+- Fixed: Mystic Field damage now triggers the passive's Movement Speed bonus
+
+**[[Lunox]]:** a passive that matters before the late game, more early damage on Skill 2, and a smoother ultimate.
+- Passive: Power of Order now gives 10% Spell Vamp right away; Power of Chaos gives 10% Magic Penetration right away
+- Skill 2 (Power of Chaos): Extra Percentage Damage 2.5%-5% >> 3.5%-5%; extra damage to creeps 1.5%-3% >> 2.1%-3%
+- Ultimate (Power of Chaos): dash foreswing cut by 50%; Damage 250-450 (+100% Total Magic Power) >> 150-300 (+135% Total Magic Power)
+
+**[[Freya]]:** stronger outside her ultimate, but she can use it less often.
+- Passive: consuming a Sacred Orb makes the next Basic Attack heal 20 (+3 × Hero Level) (+20% Total Physical Attack) HP
+- Ultimate: Cooldown 44-28s >> 60-44s; no more HP Regen from Basic Attacks during it; Enhanced Basic Attack damage 30-60 (+100% Total Physical Attack) >> 100-200 (+70% Total Physical Attack); new: +30 Movement Speed while active
+
+**[[Aldous]]:** less downtime between trades in lane and more late-game Damage Reduction.
+- Skill 2: Cooldown 12-9.5s >> 8s at all levels; Damage Reduction 30% at all levels >> 30%-55%
+
+**[[Kaja]]:** stays in the air longer and moves better there; enemies get more time to leave his ultimate but can no longer cleanse out of it.
+- Skill 2: faster turning while Soaring; new: enhanced Basic Attacks and hitting minions with Skill 2 both extend Soaring
+- Ultimate: slightly longer delay; new: Control Immunity no longer lets targets escape the area
+
+**[[Melissa]]:** last patch's nerf partly rolled back, keeping her early game in check.
+- Skill 2: Muddles's Damage Transfer 52% at all levels >> 50%-60%; Attack Effect Inheritance Ratio 52% at all levels >> 50%-60%
+
+## Nerfs
+
+**[[Gloo]]:** too hard to counter.
+- Skill 1: Immobilizing Time 0.8s >> 0.6s; Explosion Damage 250-400 (+12% Extra HP) >> 230-380 (+11% Extra HP)
+- Skill 3: Damage Transfer Ratio 80% >> 60%
+
+**[[Masha]]:** the slow moves to Skill 2 for better chasing and faster wave clear, with less damage overall.
+- Passive: new effect, skill hits replace one of the target's Wounds with a new one in the hit's direction; Extra Physical Damage (3 + 1% Extra Physical Attack + 0.3 × Hero Level)% Max HP >> (2 + 0.5% Extra Physical Attack + 0.2 × Hero Level)% Max HP; HP Regen 4-10% Max HP >> 3-6% Max HP
+- Skill 1: Damage Bonus 70% >> 55%; Damage to Minions 100%-150% >> 150%-200%; no longer slows heroes
+- Skill 2: new, the slash slows heroes by 50% for 1s; path 20% narrower; Damage 120-240 (+80% Extra Physical Attack) >> 60-240 (+40% Extra Physical Attack)
+
+**[[Atlas]]:** his passive froze enemies too often; he gets more defense in return.
+- Passive: Frigid Breath Duration 5s >> 4s; Freeze Cooldown 2.5s >> 4s; Physical & Magic Defense during Frigid Breath 20 (+0.5% Extra HP) >> 20 (+0.7% Extra HP)
+
+## Adjusted
+
+**[[Lukas]]:** pushed away from full-damage assassin builds toward a fighter playstyle with tankier builds.
+- Attributes: Base HP 2550 >> 2620; Base Physical Defense 21 >> 23
+- Skill 1: Pulverize Damage 280-580 (+120% Total Physical Attack) >> 400-800 (+60% Total Physical Attack); Spin Damage 80-180 (+45% Total Physical Attack) >> 95-235 (+25% Total Physical Attack); HP Regen 6% >> 8% of Max HP
+
+**[[Karrie]]:** stronger ultimate; Skill 1 is now more about slowing and forcing enemies to move.
+- Skill 1 (nerf): clearer visuals and hit detection; Physical Attack Bonus (Base Damage) 90% >> 20%; (Sustained Damage) 20% >> 10%
+- Skill 2 (buff): checks for enemy heroes along the whole dash, then creeps and minions at the end
+- Ultimate (buff): Base Damage per Lightwheel 40 >> 50; Movement Speed Boost 20% >> 30%
+
+**[[Kagura]]:** clearer indicator for how far the Seimei Umbrella can be from her.
+
+**[[Uranus]]:** his Basic Attack splash now deals Magic Damage.
+
+## Battlefield changes
+
+These are the changes behind the title: they push Fighters out of the Gold Lane and roaming Tanks out of the EXP Lane.
+
+**Gold Lane Siege Minion (buff):** Fighters had been taking over the Gold Lane in high-rank Ranked and pro games, so marksmen now farm faster there early on.
+- Extra Gold: 40% >> 60%
+
+**Concussive Blast talent (adjusted):** roaming Tanks in the EXP Lane had better control and durability than most Fighters while dealing nearly as much damage, so their wave clear is cut.
+- Damage: 100 (+7% Total HP) >> 100 (+8% Total HP), but now deals 50% less damage to minions
+
+**Chastise Pauldron (nerf):** it shut down Attack Speed heroes too hard.
+- Unique Passive, Chastise: lowers the attacker's Attack Speed and Attack Speed cap to 75% >> 80%
+
+**Antique Cuirass (buff):** it fell behind Chastise Pauldron.
+- Unique Passive, Deter: lowers the attacker's Physical Damage by 6% >> 8%
+
+**Sprint (buff):**
+- Cooldown: 100s >> 75s
+
+**Golden Turret map (adjusted):** teams that fell behind found it hard to come back.
+- Base Turret HP increase: 1,000 >> 2,000
+- Team Gold from the Outer Turret: 100 >> 90
+- Team Gold from the Inner Turret: 140 >> 120
+
+**Healing Turtle map (adjusted):** killing the enemy's pushing Turtle paid much less than a minion wave, which hurt the defending team.
+- Gold and EXP from killing an enemy Turtle greatly increased, shared among allied heroes nearby, now about the same as a minion wave
