@@ -4,7 +4,7 @@ An MLBB (Mobile Legends: Bang Bang) draft helper. Pick and ban for both sides an
 
 > Fan-made, non-commercial project. Not affiliated with or endorsed by Moonton. Game names and artwork belong to their owners.
 
-Hero data is from **patch 2.2.16**.
+Hero data is from **patch 2.2.23**.
 
 ## Features
 
@@ -178,7 +178,7 @@ docs/          readable overview of every hero's counters and synergies
 - Official hero relations (counters, synergies) and hero ratings: Moonton's in-game data, via [p3hndrx/MLBB-API](https://github.com/p3hndrx/MLBB-API) (MIT license).
 - Early / mid / late power spikes: [Amirul-Hakimi/MLBB-DRAFT-ANALYSIS](https://github.com/Amirul-Hakimi/MLBB-DRAFT-ANALYSIS) (ISC license). This is one author's judgement, not official data.
 - Tiers: November 2026 lane tier lists, mapped to S-D (each hero keeps its best lane).
-- Win, pick and ban rates: official [mobilelegends.com/rank](https://www.mobilelegends.com/rank), Past 30 days, all ranks (2026-11-06).
+- Win, pick and ban rates: official [mobilelegends.com/rank](https://www.mobilelegends.com/rank), Past 30 days, all ranks (2026-11-12).
 - Item data and hero builds: [mlbbhub.com](https://mlbbhub.com), reviewed against patch 2.2.16 on 2026-10-01.
 - Pro league results and drafts: official league broadcasts and sites (including mplcambodia.com) and [Liquipedia](https://liquipedia.net/mobilelegends), entered and checked by hand.
 - Map descriptions, map effects, hero traits, hero tips and the Khmer translation: written for this project.

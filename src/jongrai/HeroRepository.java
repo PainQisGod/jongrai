@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 public class HeroRepository {
 
     /** The game patch every shipped data file describes. Change it here only. */
-    public static final String PATCH = "2.2.16";
+    public static final String PATCH = "2.2.23";
 
     /** The day the hero stats (win, pick and ban rates) were taken, as yyyy-mm-dd. Update it with every data refresh. */
-    public static final String DATA_DATE = "2026-11-06";
+    public static final String DATA_DATE = "2026-11-11";
 
     private static final Set<String> TIERS = Set.of("S", "A", "B", "C", "D");
 

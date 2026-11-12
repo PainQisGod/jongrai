@@ -1,8 +1,8 @@
-# Roster + roles: MLBB patch 2.2.16, 133 heroes (names/roles from mlbbhub.com).
+# Roster + roles: MLBB patch 2.2.23, 133 heroes (names/roles from mlbbhub.com).
 # Lanes: typical lanes from mlbb.io (Oct 2026): EXP, JUNGLE, MID, GOLD, ROAM. First one = main lane.
 # tier: November 2026 lane tier lists (Jungle, Mid, Roam, EXP, Gold) PainQ provided. S+ -> S, S- and A+ -> A, A -> B, B -> C,
 #   C and below -> D; a hero in several lanes keeps its highest tier, and a hero in no list is D.
-# winrate / banrate / pickrate: official mobilelegends.com/rank, Past 30 days, all ranks, updated 2026-11-06 (in %).
+# winrate / banrate / pickrate: official mobilelegends.com/rank, Past 30 days, all ranks, updated 2026-11-12 (in %).
 #   A ban rate of 15% or more counts as a meta ban (red ring, 'Most banned').
 # Counters: Moonton's official in-game relations only (strong against / weak against), via github.com/p3hndrx/MLBB-API (MIT).
 #   'counters' column = heroes THIS hero is good against. No head-to-head win-rate numbers yet.
@@ -12,136 +12,136 @@
 #   It is that author's own judgement, not official data - edit any hero you disagree with.
 # Dual roles/lanes use '/'. Lists use ';'.
 name,role,lane,tier,winrate,banrate,counters,synergies,durability,offense,control,tags,spike,tip,pickrate
-Aamon,ASSASSIN,JUNGLE,D,50.15,2.36,Cecilion;Diggie;Ixia;Vexana;Xavier,Floryn;Rafaela,30,70,10,Chase;Magic Damage,MID,"Your job is to wait for the backline, then burst the squishies and slip away.",0.63
-Akai,TANK,ROAM/JUNGLE,B,50.39,1.20,Barats;Eudora;Karina;Leomord;Odette,Eudora;Saber,90,30,90,Guard;Crowd Control,MID,,0.34
-Aldous,FIGHTER,EXP,D,50.66,0.52,Leomord;Zilong,Balmond;Bruno,70,30,50,Burst;Support,LATE,,0.42
-Alice,TANK/MAGE,EXP/JUNGLE,A,50.94,9.74,Cecilion;Chang'e,Balmond;Dyrroth,50,50,70,Charge;Regen,LATE,,0.90
-Alpha,FIGHTER,JUNGLE/EXP,B,48.55,0.68,Ixia;Layla,Selena;Vexana,60,40,70,Charge;Damage,EARLY,,1.29
-Alucard,FIGHTER/ASSASSIN,JUNGLE/EXP,C,48.39,0.44,Aamon;Cyclops;Harley,Gatotkaca;Xavier,50,50,10,Chase;Damage,MID,,0.76
-Angela,SUPPORT,ROAM/MID,A,49.63,10.67,Belerick;Uranus,Aamon;Lancelot,30,20,50,Guard;Support,MID,,1.72
-Argus,FIGHTER,EXP,D,56.40,1.02,Aurora;Gord,Angela;Rafaela,70,50,50,Charge;Burst,LATE,,0.51
-Arlott,FIGHTER/ASSASSIN,EXP,A,47.71,0.40,Hanzo;Sora;Sun;Terizla;Zilong,Atlas;Gatotkaca,60,60,50,Charge;Burst,EARLY,,0.46
-Atlas,TANK,ROAM/EXP,S,52.26,10.14,Eudora;Vexana,Ixia;Vale,80,10,90,Crowd Control;Initiator,MID,,0.96
-Aulus,FIGHTER,JUNGLE/EXP,S,55.54,40.61,Gord;Hanabi;Minsitthar;Miya,Angela;Floryn,60,60,10,Damage;Charge,LATE,,0.92
-Aurora,MAGE,MID,A,48.91,0.38,Leomord;Phoveus;Terizla;Thamuz,Freya;Ixia;Karrie,40,70,100,Crowd Control;Poke,MID,,0.63
-Badang,FIGHTER,ROAM/EXP,A,50.24,4.17,Franco;Guinevere;Irithel;Layla;Odette;Suyou;Yin,Luo Yi;Tigreal,40,70,50,Charge;Burst,MID,,1.34
-Balmond,FIGHTER,JUNGLE/EXP,C,46.75,0.40,Aamon;Eudora;Layla,Angela;Rafaela,80,30,20,Damage;Regen,EARLY,,0.66
-Bane,FIGHTER/MAGE,JUNGLE/EXP,B,51.56,0.18,Belerick;Hylos,Luo Yi;Tigreal,50,60,40,Push;Burst,MID,,0.32
-Barats,TANK/FIGHTER,EXP/JUNGLE,S,51.78,3.93,Belerick;Chip;Lolita,Angela;Mathilda,100,30,90,Damage;Crowd Control,MID,,0.67
-Baxia,TANK,JUNGLE/ROAM,A,46.64,0.10,Alice;Chang'e;Silvanna,Alpha;Thamuz,100,30,60,Support;Damage,MID,,0.05
-Beatrix,MARKSMAN,GOLD,A,50.73,0.40,Belerick;Hylos;Kadita,Atlas;Khufra,30,80,10,Finisher;Damage,ALL,,0.65
-Belerick,TANK,ROAM/EXP,S,51.96,56.68,Dyrroth;Helcurt;Lancelot;Ling,Miya;Natan,90,40,100,Crowd Control;Regen,LATE,,1.72
-Benedetta,ASSASSIN/FIGHTER,EXP,A,52.40,0.33,Guinevere;Jawhead;Xavier,Gatotkaca;Johnson,60,50,20,Chase;Burst,MID,,0.39
-Brody,MARKSMAN,GOLD,A,50.32,1.89,Aamon;Yin,Hylos;Minsitthar,40,70,50,Burst;Finisher,EARLY,,0.88
-Bruno,MARKSMAN,GOLD,A,53.40,0.19,Hanabi;Miya;Obsidia,Franco;Khufra,20,60,20,Finisher;Burst,LATE,,0.39
-Carmilla,SUPPORT/TANK,ROAM/EXP,S,53.67,18.04,Dyrroth;Lapu-Lapu,Aurora;Cecilion,90,20,80,Crowd Control;Damage,MID,,1.21
-Cecilion,MAGE,MID,A,51.13,0.15,Balmond;Terizla;Zhask,Carmilla;Minotaur,40,100,50,Poke;Burst,LATE,,0.67
-Chang'e,MAGE,MID,C,48.09,0.34,Eudora;Odette;Tigreal,Gatotkaca;Tigreal,40,80,20,Poke;Burst,MID,,0.69
-Chip,SUPPORT/TANK,ROAM,B,47.53,0.22,Ixia;Layla;Vexana,Alpha;Hanabi;Kadita,80,20,60,Support;Crowd Control,EARLY,,0.04
-Chou,FIGHTER,ROAM/EXP,A,45.10,3.16,Alpha;Guinevere;Khaleed;Terizla,Angela;Rafaela,50,30,80,Chase;Control,ALL,,1.08
-Cici,FIGHTER,EXP/GOLD,A,49.49,1.02,Fredrinn;Minotaur,Angela;Floryn,50,60,30,Damage;Regen,MID,,0.59
-Claude,MARKSMAN,GOLD,A,48.98,0.22,Floryn;Masha;Vexana,Angela;Faramis,30,60,10,Burst;Chase,LATE,"Laning Phase: Claude is a short-range hero, so don't wander far from your tower when your second skill isn't ready to teleport you back. Use your first skill to build up 5 stacks, since they give you extra movement speed and attack speed. Claude is a late-game hero, so focus on farming minions rather than trying to hit your opponent. | Items: Build around the Swift Trinity: Demon Hunter Sword, Corrosion Scythe and Golden Staff. If the enemy has high movement speed, get Corrosion Scythe first. If the enemy has a lot of tanks, get Demon Hunter Sword first and Golden Staff second. After that, buy Malefic Gun for penetration and extra attack range. Winter Crown is a good last item, because it lets you dive the backline without worrying about getting hit. It's optional, so switch to Rose Gold Meteor, Wind of Nature or Immortality if you prefer. | Boots: Claude sometimes dives into the backline to use his ultimate, so Warrior Boots are a good choice for the extra physical defense. Personally, I prefer Rapid Boots so I can rotate faster. | Rotations: If you're winning the early game and have a lot of gold, move with your team to tear the enemy apart. If you're losing, farm as much as you can. You can farm alone, but keep an eye on the map and watch out for enemies. Don't join teamfights until you've finished the Swift Trinity, or at least two and a half of its items. | Positioning: Don't stay too far from your team. Use your ultimate, Blazing Duet, to get into the backline, or stay out of sight on the map and surprise the enemy backline. | Battle Spell: Claude works well with Purify and Vengeance, but I prefer Flicker so I can escape when the enemy is hunting me down. | Skins: This one is mostly psychological. Some skins make his ultimate feel underwhelming (as if it misses enemies or does low damage), while others make it feel overpowered (as if it deals a lot of DPS). They all play the same, so use whichever skin you like.",0.78
-Clint,MARKSMAN,GOLD,S,50.49,0.63,Kadita;Miya;Moskov,Angela;Rafaela,30,70,40,Finisher;Burst,MID,,0.66
-Cyclops,MAGE,MID,C,51.50,0.29,Alpha;Terizla,Belerick;Minsitthar,30,100,70,Damage;Control,MID,,0.66
-Diggie,SUPPORT,ROAM,B,53.79,3.34,Akai;Atlas;Gatotkaca;Kalea;Lolita,Layla;Miya,40,40,20,Guard;Poke,EARLY,,0.19
-Dyrroth,FIGHTER,EXP/JUNGLE,A,48.98,1.57,Aldous;Gord;Hanabi;X.Borg,Franco;Kaja,50,50,20,Charge;Burst,EARLY,,1.74
-Edith,TANK/MARKSMAN,EXP/ROAM,B,52.46,0.17,Aulus;Jawhead;Odette;Zilong,Atlas;Minotaur,70,30,100,Control;Burst,MID,,0.30
-Esmeralda,TANK/MAGE,EXP,S,47.03,2.23,Akai;Lolita,Atlas;Tigreal,90,30,60,Regen;Mixed Damage,MID,,0.87
-Estes,SUPPORT,ROAM,A,52.70,45.10,Alice;Saber;Valir,Hanabi;Lesley,70,10,20,Regen;Guard,MID,,0.69
-Eudora,MAGE,MID,S,50.73,55.03,Beatrix;Claude;Estes;Ling;Moskov;Natan;Sora,Diggie;Tigreal,10,80,80,Control;Burst,EARLY,,1.89
-Fanny,ASSASSIN,JUNGLE,A,42.22,1.97,Cecilion;Franco;Gord;Hanzo;Irithel;Karrie;Lukas;Masha;Sora;Valir;Zhuxin,Gatotkaca;Minotaur,60,70,10,Chase;Finisher,EARLY,,0.71
-Faramis,SUPPORT/MAGE,MID/ROAM,B,51.08,0.32,Eudora;Saber,Leomord;Martis,40,60,10,Guard;Charge,MID,,0.09
-Floryn,SUPPORT,ROAM,B,54.07,13.13,Lolita;Uranus,Terizla;Thamuz,60,10,70,Poke;Guard,MID,,0.94
-Franco,TANK,ROAM,B,41.49,3.25,Alucard;Aulus;Claude;Estes;Gusion;Hayabusa;Layla;Leomord;Mathilda;Paquito;Pharsa;Vale;Yi Sun-shin;Zilong,Brody;Karina;Vale,80,10,100,Initiator;Control,EARLY,,0.99
-Fredrinn,FIGHTER/TANK,JUNGLE,A,51.21,1.58,Aamon;Arlott;Bruno;Eudora;Helcurt;Khufra;Luo Yi;Martis;Nolan;Vale;Yin,Angela;Floryn,80,50,60,Damage;Chase,MID,,0.45
-Freya,FIGHTER,EXP/GOLD,S,48.18,2.03,Ixia;Lesley,Belerick;Gatotkaca,60,70,60,Chase;Damage,EARLY,,0.68
-Gatotkaca,TANK/FIGHTER,ROAM/EXP,S,45.19,0.30,Argus;Bruno;Helcurt;Layla;Popol and Kupa,Kagura;Vale,90,30,90,Crowd Control;Burst,MID,,0.57
-Gloo,TANK,ROAM/EXP,A,54.44,40.26,Cecilion;Chang'e;Khufra,Eudora;Saber,100,30,100,Regen;Control,MID,,0.77
-Gord,MAGE,MID,B,52.85,0.56,Barats;Fredrinn;Wanwan,Belerick;Hylos,10,70,80,Poke;Burst,MID,,0.60
-Granger,MARKSMAN,GOLD,A,43.08,1.62,Cecilion;Chang'e,Franco;Kaja,30,70,10,Burst;Finisher,EARLY,"Laning Phase: If your lane opponent is a late-game hero, poke them as much as you can to keep up the pressure, keep their HP low, and make them lose minions when they recall. If they're an early-game hero, play it safe and don't 1v1 them unless you're sure you can finish them off. | Items: If you're snowballing, prioritize Sky Piercer so you can start farming stacks early. If you're struggling, build Hunter Strike before Sky Piercer. My recommendation: Fury Hammer first, then Sky Piercer, then complete Hunter Strike. After that, get boots, Malefic Roar, Blade of Despair, and Sea Halberd, Rose Gold Meteor or Wind of Nature, depending on the enemy. | Boots: You don't need to get close to the enemy to deal damage, so I recommend Rapid Boots. They let you rotate fast to join your team and pick off enemies. | Rotations: After 4:30, during or after the second Turtle, join your team to pick off enemies. This is your window to farm Sky Piercer stacks, which makes the late game easier and helps you snowball. | Positioning: Don't stay too close to your teammates because your skills are long range, or you might get caught in the middle of a big teamfight. | Battle Spell: Granger now fits Flicker better than Purify. Purify still works, it just doesn't suit him as well. | Skins: Avoid heavy skins. A lighter skin makes your gameplay feel smoother.",1.37
-Grock,TANK/FIGHTER,ROAM,A,46.80,0.71,Gord;Layla,Odette;Pharsa,90,40,80,Crowd Control;Initiator,EARLY,,0.35
-Guinevere,FIGHTER,JUNGLE/ROAM,A,51.30,2.09,Aurora;Silvanna;Zilong,Franco;Hylos,40,50,70,Burst;Magic Damage,EARLY,,0.82
-Gusion,ASSASSIN,JUNGLE/MID,C,48.41,3.85,Alpha;Hanabi;Layla;Popol and Kupa,Pharsa;Vexana,30,90,10,Burst;Magic Damage,EARLY,,1.33
-Hanabi,MARKSMAN,GOLD,B,52.45,4.79,Belerick;Carmilla;Edith;Selena;Tigreal,Atlas;Carmilla,20,70,80,Finisher;Damage,LATE,,2.50
-Hanzo,ASSASSIN,JUNGLE,A,49.83,8.64,Chang'e;Ixia;Layla;Valentina;Zhuxin,Aurora;Belerick;Tigreal,70,80,20,Poke;Burst,MID,,0.38
-Harith,MAGE,GOLD,S,46.28,0.05,Belerick;Johnson;Julian,Minotaur;Minsitthar,40,50,10,Chase;Damage,MID,"Laning Phase: Harith peaks in the mid to late game, but he can still win 1v1s against most heroes in the laning phase, so don't be afraid to hit the enemy with your first skill. You don't need to land the center of it: even the tip hits enemies and minions, so you can clear waves easily. Be more careful with your second skill. It's a dash that gives you a shield, but it drains your mana, and if you don't manage your mana well you'll run out and be forced to recall. | Items: Starlium Scythe is Harith's most important item. It gives cooldown reduction and lifesteal, so you can dash around smoothly with your ultimate, Zaman Force. Feather of Heaven is just as important because it increases your attack speed. After that, build Divine Glaive, Concentrated Energy and Holy Crystal. | Boots: Use Magic Boots for the extra cooldown reduction, so you can dash with your ultimate more smoothly and more often. | Rotations: Your dash has a short cooldown, so clear two minion waves at once (a side lane and mid) to earn gold faster and reach your power spike sooner. Move with your team before or after the second Turtle, depending on the situation, to pick off enemies and earn more gold. | Positioning: Your kit depends heavily on your ultimate, so don't stay far from your teammates. Stay with your team and aim your ultimate's carpet at the enemy, so you can dash close to them and hit them with your skills. | Battle Spell: Purify is the best spell because Harith goes into the backline. If the enemy team doesn't have heavy control, Vengeance and Flicker also work. | Skins: Some skins make your dash feel heavy and abrupt, so I suggest a lighter skin to make the dash feel smoother.",0.15
-Harley,ASSASSIN/MAGE,JUNGLE/MID,A,47.81,3.29,Angela;Cecilion;Chang'e;Grock;Ixia,Akai;Khufra,30,90,10,Burst;Poke,EARLY,,0.81
-Hayabusa,ASSASSIN,JUNGLE,A,48.18,1.89,Cecilion;Chang'e;Eudora;Granger;Novaria;Rafaela;Vale;Valentina;Xavier,Alpha;Lapu-Lapu,40,50,10,Chase;Burst,MID,,0.86
-Helcurt,ASSASSIN,ROAM/JUNGLE,B,47.29,4.89,Chang'e;Layla;Vale,Esmeralda;Terizla;Tigreal,30,50,50,Push;Burst,EARLY,,0.59
-Hilda,FIGHTER/TANK,ROAM/EXP,A,50.93,10.77,Layla;Zilong,Franco;Rafaela,90,40,40,Damage;Regen,EARLY,,0.57
-Hirara,ASSASSIN,JUNGLE,S,50.93,68.25,Gusion;Ixia;Pharsa;Yin,Angela;Minotaur,40,70,40,Chase;Finisher,MID,,0.57
-Hylos,TANK,ROAM/EXP,A,48.76,0.27,Gord;Layla,Minsitthar;Terizla,100,20,80,Guard;Initiator,EARLY,,0.31
-Irithel,MARKSMAN,GOLD,B,52.46,0.26,Alpha;Balmond;Miya;Ruby;Thamuz,Hylos;Valir,10,80,10,Finisher;Burst,LATE,,0.41
-Ixia,MARKSMAN,GOLD,B,49.95,0.75,Bane;Fredrinn,Bane;Fredrinn,30,70,50,Finisher;Damage,LATE,,0.73
-Jawhead,FIGHTER,ROAM/EXP,B,47.86,0.30,Eudora;Ling;Saber,Belerick;Odette,60,30,60,Charge;Burst,EARLY,,0.34
-Johnson,TANK/SUPPORT,ROAM,C,48.70,2.06,Alucard;Zilong,Kadita;Odette,80,30,90,Support;Crowd Control,MID,,0.74
-Joy,ASSASSIN,JUNGLE,A,48.95,0.20,Julian;Kagura;Vexana;Xavier,Angela;Hylos,30,70,10,Chase;Damage,MID,,0.14
-Julian,ASSASSIN/FIGHTER,JUNGLE/EXP,A,50.05,0.80,Aldous;Cecilion;Lukas,Angela;Diggie,60,60,70,Chase;Magic Damage,EARLY,,0.67
-Kadita,MAGE/ASSASSIN,MID,B,51.51,3.30,Aurora;Eudora,Atlas;Tigreal,40,80,80,Burst;Charge,EARLY,,0.78
-Kagura,MAGE,MID,A,51.78,0.99,Cyclops;Eudora;Johnson;Kaja;Layla,Atlas;Tigreal,30,90,40,Poke;Finisher,MID,,0.67
-Kaja,SUPPORT,ROAM,A,49.90,14.93,Cici;Fanny;Gusion;Hayabusa;Ixia;Layla;Natalia;Paquito;Vexana;Yi Sun-shin,Ixia;Odette;Pharsa,80,20,70,Initiator;Charge,MID,,0.55
-Kalea,SUPPORT/FIGHTER,ROAM,S,49.54,2.64,Chang'e;Layla,Clint;Eudora;Harley,60,20,90,Control;Regen,MID,,0.44
-Karina,ASSASSIN,JUNGLE,B,47.97,3.47,Aulus;Floryn;Hanabi;Layla;Popol and Kupa;Vexana;Yve,Faramis;Tigreal,50,70,10,Finisher;Magic Damage,MID,,0.85
-Karrie,MARKSMAN,GOLD,A,48.75,0.87,Baxia;Clint;Esmeralda;Fredrinn;Gloo;Hylos;Thamuz;Tigreal;Yu Zhong,Aamon;Saber,30,80,10,Finisher;Damage,MID,,0.56
-Khaleed,FIGHTER,ROAM/EXP,A,50.70,0.08,Cyclops;Xavier,Karina;Roger,80,50,50,Damage;Regen,EARLY,,0.12
-Khufra,TANK,ROAM,A,54.65,1.96,Fanny;Joy;Karina;Lancelot;Roger,Eudora;Pharsa,90,20,100,Initiator;Crowd Control,MID,,0.33
-Kimmy,MARKSMAN/MAGE,MID/GOLD,A,48.93,0.56,Cecilion;Granger;Grock,Badang;Ruby,30,80,50,Damage;Magic Damage,MID,,0.83
-Lancelot,ASSASSIN,JUNGLE,A,43.13,0.46,Cecilion;Cyclops;Gord;Hanabi;Hanzo;Kimmy;Lesley;Moskov;Pharsa;Valir;Wanwan,Atlas;Tigreal,40,50,10,Chase;Burst,EARLY,,0.55
-Lapu-Lapu,FIGHTER,EXP,A,48.41,0.28,Eudora;Layla,Atlas;Tigreal,80,40,40,Chase;Burst,MID,,0.34
-Layla,MARKSMAN,GOLD,C,49.41,1.51,Belerick;Karrie;Minotaur;Obsidia;Tigreal;Uranus,Belerick;Minsitthar,10,80,10,Finisher;Damage,LATE,,1.81
-Leomord,FIGHTER,JUNGLE,A,50.53,0.55,Cecilion;Odette;Pharsa;Yve,Pharsa;Vexana,70,50,30,Chase;Burst,MID,,0.30
-Lesley,MARKSMAN/ASSASSIN,GOLD,A,48.23,8.13,Balmond;Baxia;Chou;Esmeralda;Fredrinn;Gatotkaca;Gloo;Hylos;Lapu-Lapu;Minotaur;Terizla;Uranus;Yu Zhong,Baxia;Minotaur,10,70,20,Finisher;Burst,LATE,,1.78
-Ling,ASSASSIN,JUNGLE,A,52.62,0.67,Angela;Aurora;Badang;Beatrix;Cecilion;Diggie;Hanabi;Layla;Lesley;Lolita;Lunox;Lylia;Marcel;Rafaela;Vale,Angela;Khufra,50,60,30,Chase;Burst,LATE,,0.70
-Lolita,SUPPORT/TANK,ROAM,B,53.66,0.20,Cyclops;Harley;Kimmy,Hanabi;Layla,100,10,90,Guard;Crowd Control,MID,,0.08
-Lukas,FIGHTER,EXP/JUNGLE,S,52.66,37.13,Hanabi;Ixia,Atlas;Gatotkaca;Tigreal,70,50,60,Regen;Damage,MID,,0.89
-Lunox,MAGE,MID,A,48.58,0.21,Lylia;Yve,Franco;Minotaur,30,90,20,Burst;Damage,LATE,,0.27
-Luo Yi,MAGE,MID,B,47.89,0.08,Eudora;Gord,Aamon;Karina,20,100,40,Support;Crowd Control,EARLY,,0.17
-Lylia,MAGE,MID,S,49.60,0.38,Carmilla;Hylos,Franco;Minotaur,50,100,20,Push;Damage,EARLY,,0.48
-Marcel,SUPPORT,ROAM,S,57.86,36.45,Layla;Vexana,Hanabi;Ixia,70,30,100,Crowd Control;Support,MID,,0.29
-Martis,FIGHTER,JUNGLE/EXP,A,47.28,0.43,Aldous;Alice;Brody;Kagura;Layla;Odette;Silvanna;X.Borg,Alpha;Khaleed,60,30,50,Finisher;Charge,EARLY,,0.61
-Masha,FIGHTER/TANK,EXP/ROAM,S,60.83,36.41,Eudora;Kadita,Atlas;Minotaur,50,70,30,Push;Damage,LATE,,0.55
-Mathilda,SUPPORT/ASSASSIN,ROAM,A,44.70,0.19,Gord;Vale,Eudora;Saber,80,20,40,Initiator;Guard,EARLY,,0.14
-Melissa,MARKSMAN,GOLD,A,48.63,0.95,Aulus;Clint;Sun;Suyou;Zilong,Minotaur;Tigreal,20,90,40,Finisher;Damage,LATE,,0.34
-Minotaur,TANK/SUPPORT,ROAM/EXP,S,54.29,8.31,Julian;Kalea;Odette;Paquito,Granger;Melissa,100,10,80,Crowd Control,MID,,1.02
-Minsitthar,FIGHTER,EXP/ROAM,B,51.67,4.72,Arlott;Benedetta;Joy;Lancelot;Mathilda;Natalia;Pharsa;Roger,Hanabi;Melissa,60,40,80,Initiator;Crowd Control,MID,,0.63
-Miya,MARKSMAN,GOLD,S,49.58,5.80,Eudora;Saber;Sun,Belerick;Tigreal,10,70,40,Finisher;Damage,LATE,,2.44
-Moskov,MARKSMAN,GOLD,A,50.21,0.31,Atlas;Balmond;Barats;Lapu-Lapu;Thamuz,Fredrinn;Gatotkaca,20,60,60,Finisher;Chase,LATE,,1.00
-Nana,MAGE,MID,B,47.44,4.00,Akai;Eudora;Kadita;Karrie;Leomord;Melissa;Zilong,Franco;Rafaela,50,60,100,Poke;Burst,MID,,1.94
-Natalia,ASSASSIN,ROAM/JUNGLE,B,51.00,1.73,Hirara;Irithel;Moskov;Nana;Novaria;Valentina;Xavier,Vexana;Yi Sun-shin,10,60,60,Chase;Finisher,EARLY,,0.28
-Natan,MARKSMAN,GOLD,B,51.12,0.14,Gatotkaca;Tigreal,Alpha;Johnson,20,60,20,Burst;Magic Damage,LATE,,0.28
-Nolan,ASSASSIN,JUNGLE,S,49.41,8.16,Eudora;Hanabi;Lunox;Lylia,Gatotkaca;Tigreal,30,60,20,Chase;Burst,EARLY,,1.47
-Novaria,MAGE,MID,A,49.76,3.98,Eudora;Faramis;Harith;Odette,Beatrix;Layla,30,90,30,Burst;Poke,LATE,,1.27
-Obsidia,MARKSMAN,GOLD,S,53.42,33.55,Freya;Hayabusa;Lancelot,Angela;Estes,30,80,10,Finisher;Damage,MID,,2.31
-Odette,MAGE,MID,A,49.49,0.30,Irithel;Layla,Jawhead;Johnson,30,100,70,Burst;Poke,MID,,0.58
-Paquito,FIGHTER/ASSASSIN,JUNGLE/EXP,S,50.23,27.84,Gord;Layla;Lolita,Angela;Rafaela,60,50,40,Chase;Damage,MID,,1.43
-Pharsa,MAGE,MID,A,47.47,0.19,Chou;Faramis;Hanabi;Harith;Layla;Miya;Xavier;Zhask,Atlas;Franco,20,90,50,Burst;Poke,MID,,0.36
-Phoveus,FIGHTER,EXP,A,48.28,0.65,Arlott;Benedetta;Chou;Freya;Lancelot;Leomord;Wanwan,Gatotkaca;Minotaur;Tigreal,60,80,50,Regen;Damage,MID,,0.27
-Popol and Kupa,MARKSMAN,JUNGLE/GOLD,C,54.60,0.32,Brody;Lesley,Alpha;Khaleed,30,70,70,Push;Burst,EARLY,,0.43
-Rafaela,SUPPORT,ROAM/MID,A,56.15,16.75,Barats;Masha,Freya;Lapu-Lapu,60,20,70,Regen;Guard,EARLY,,1.06
-Roger,FIGHTER/MARKSMAN,JUNGLE/GOLD,C,48.61,0.10,Hanabi;Odette,Pharsa;Vexana,60,40,10,Finisher;Burst,MID,,0.28
-Ruby,FIGHTER,EXP/ROAM,A,49.38,0.29,Aldous;Guinevere;Sun,Kadita;Pharsa,90,20,90,Crowd Control;Regen,MID,,0.32
-Saber,ASSASSIN,JUNGLE/ROAM,A,50.65,23.94,Cici;Estes;Eudora;Floryn;Granger;Hirara;Ixia;Kimmy;Layla;Natan;Novaria;Vexana;Yve;Zhuxin,Cyclops;Kadita,20,60,60,Charge;Finisher,EARLY,,1.03
-Selena,ASSASSIN/MAGE,MID/ROAM,A,48.45,6.10,Gord;Layla,Beatrix;Xavier,30,70,100,Initiator;Finisher,EARLY,,1.75
-Silvanna,FIGHTER,EXP/JUNGLE,C,51.27,1.84,Irithel;Layla;Valir,Atlas;Tigreal,50,40,70,Initiator;Magic Damage,EARLY,,1.00
-Sora,FIGHTER/ASSASSIN,EXP,S,49.49,3.66,Hanabi;Layla;Miya,Gatotkaca;Minotaur;Tigreal,60,60,50,Charge;Burst,MID,,0.61
-Sun,FIGHTER,EXP/JUNGLE,B,52.98,24.24,Franco;Gatotkaca,Belerick;Tigreal,50,50,10,Push;Damage,LATE,,1.70
-Suyou,ASSASSIN/FIGHTER,JUNGLE,A,49.71,1.10,Ixia;Kaja;Xavier,Rafaela;Tigreal,60,60,50,Chase;Burst,MID,,0.84
-Terizla,FIGHTER/TANK,EXP,A,50.73,0.17,Sun;Zilong,Atlas;Gatotkaca,90,30,40,Burst;Crowd Control,EARLY,,0.34
-Thamuz,FIGHTER,EXP/JUNGLE,B,48.85,1.62,Arlott;Hilda;Jawhead;Martis;Nolan;Sun;Zilong,Angela;Rafaela,70,40,20,Chase;Damage,EARLY,,0.82
-Tigreal,TANK,ROAM,B,44.93,6.70,Argus;Chip;Freya;Zilong,Odette;Vexana,80,10,100,Crowd Control,MID,,2.01
-Uranus,TANK,EXP,S,49.28,0.34,Franco;Harley;Hilda;Luo Yi;Tigreal,Beatrix;Hanabi,100,20,20,Regen,MID,,0.33
-Vale,MAGE,MID,C,50.14,0.20,Bane;Hilda;Terizla,Belerick;Lolita,20,100,70,Burst;Crowd Control,MID,,0.53
-Valentina,MAGE,MID,S,45.22,0.18,Faramis;Hanabi;Zetian,Atlas;Carmilla,50,40,40,Burst;Finisher,MID,,0.19
-Valir,MAGE,MID,B,54.18,2.79,Atlas;Balmond;Belerick;Fredrinn;Lukas;Phoveus;Sora,Khaleed;Yu Zhong,20,70,70,Damage;Guard,EARLY,,1.12
-Vexana,MAGE,MID,A,49.50,1.14,Dyrroth;Irithel;Layla;Phoveus;Xavier,Atlas;Beatrix,20,90,50,Poke;Control,MID,,1.50
-Wanwan,MARKSMAN,GOLD,B,47.97,0.13,Badang;Brody;Carmilla;Edith;Franco;Fredrinn;Gatotkaca;Luo Yi;Ruby;Selena,Belerick;Franco,20,60,30,Finisher;Burst,LATE,,0.14
-X.Borg,FIGHTER,EXP/JUNGLE,A,49.96,1.89,Aulus;Khaleed;Marcel;Terizla,Karina;Martis,80,30,10,Regen;Burst,MID,,0.60
+Aamon,ASSASSIN,JUNGLE,D,50.21,2.40,Cecilion;Diggie;Ixia;Vexana;Xavier,Floryn;Rafaela,30,70,10,Chase;Magic Damage,MID,"Your job is to wait for the backline, then burst the squishies and slip away.",0.63
+Akai,TANK,ROAM/JUNGLE,B,50.30,1.17,Barats;Eudora;Karina;Leomord;Odette,Eudora;Saber,90,30,90,Guard;Crowd Control,MID,,0.34
+Aldous,FIGHTER,EXP,D,50.74,0.51,Leomord;Zilong,Balmond;Bruno,70,30,50,Burst;Support,LATE,,0.41
+Alice,TANK/MAGE,EXP/JUNGLE,A,50.93,10.95,Cecilion;Chang'e,Balmond;Dyrroth,50,50,70,Charge;Regen,LATE,,0.92
+Alpha,FIGHTER,JUNGLE/EXP,B,48.69,0.68,Ixia;Layla,Selena;Vexana,60,40,70,Charge;Damage,EARLY,,1.30
+Alucard,FIGHTER/ASSASSIN,JUNGLE/EXP,C,48.59,0.43,Aamon;Cyclops;Harley,Gatotkaca;Xavier,50,50,10,Chase;Damage,MID,,0.69
+Angela,SUPPORT,ROAM/MID,A,49.81,11.11,Belerick;Uranus,Aamon;Lancelot,30,20,50,Guard;Support,MID,,1.72
+Argus,FIGHTER,EXP,D,56.54,0.99,Aurora;Gord,Angela;Rafaela,70,50,50,Charge;Burst,LATE,,0.52
+Arlott,FIGHTER/ASSASSIN,EXP,A,47.60,0.44,Hanzo;Sora;Sun;Terizla;Zilong,Atlas;Gatotkaca,60,60,50,Charge;Burst,EARLY,,0.48
+Atlas,TANK,ROAM/EXP,S,52.25,10.00,Eudora;Vexana,Ixia;Vale,80,10,90,Crowd Control;Initiator,MID,,0.97
+Aulus,FIGHTER,JUNGLE/EXP,S,54.18,39.13,Gord;Hanabi;Minsitthar;Miya,Angela;Floryn,60,60,10,Damage;Charge,LATE,,0.87
+Aurora,MAGE,MID,A,48.98,0.38,Leomord;Phoveus;Terizla;Thamuz,Freya;Ixia;Karrie,40,70,100,Crowd Control;Poke,MID,,0.64
+Badang,FIGHTER,ROAM/EXP,A,50.23,3.91,Franco;Guinevere;Irithel;Layla;Odette;Suyou;Yin,Luo Yi;Tigreal,40,70,50,Charge;Burst,MID,,1.32
+Balmond,FIGHTER,JUNGLE/EXP,C,46.82,0.40,Aamon;Eudora;Layla,Angela;Rafaela,80,30,20,Damage;Regen,EARLY,,0.66
+Bane,FIGHTER/MAGE,JUNGLE/EXP,B,51.66,0.18,Belerick;Hylos,Luo Yi;Tigreal,50,60,40,Push;Burst,MID,,0.31
+Barats,TANK/FIGHTER,EXP/JUNGLE,S,51.68,3.78,Belerick;Chip;Lolita,Angela;Mathilda,100,30,90,Damage;Crowd Control,MID,,0.67
+Baxia,TANK,JUNGLE/ROAM,A,46.33,0.10,Alice;Chang'e;Silvanna,Alpha;Thamuz,100,30,60,Support;Damage,MID,,0.05
+Beatrix,MARKSMAN,GOLD,A,50.58,0.40,Belerick;Hylos;Kadita,Atlas;Khufra,30,80,10,Finisher;Damage,ALL,,0.65
+Belerick,TANK,ROAM/EXP,S,51.92,56.87,Dyrroth;Helcurt;Lancelot;Ling,Miya;Natan,90,40,100,Crowd Control;Regen,LATE,,1.72
+Benedetta,ASSASSIN/FIGHTER,EXP,A,52.31,0.35,Guinevere;Jawhead;Xavier,Gatotkaca;Johnson,60,50,20,Chase;Burst,MID,,0.40
+Brody,MARKSMAN,GOLD,A,50.15,1.73,Aamon;Yin,Hylos;Minsitthar,40,70,50,Burst;Finisher,EARLY,,0.86
+Bruno,MARKSMAN,GOLD,A,53.50,0.21,Hanabi;Miya;Obsidia,Franco;Khufra,20,60,20,Finisher;Burst,LATE,,0.44
+Carmilla,SUPPORT/TANK,ROAM/EXP,S,53.58,19.31,Dyrroth;Lapu-Lapu,Aurora;Cecilion,90,20,80,Crowd Control;Damage,MID,,1.23
+Cecilion,MAGE,MID,A,51.15,0.16,Balmond;Terizla;Zhask,Carmilla;Minotaur,40,100,50,Poke;Burst,LATE,,0.68
+Chang'e,MAGE,MID,C,48.14,0.34,Eudora;Odette;Tigreal,Gatotkaca;Tigreal,40,80,20,Poke;Burst,MID,,0.67
+Chip,SUPPORT/TANK,ROAM,B,47.52,0.22,Ixia;Layla;Vexana,Alpha;Hanabi;Kadita,80,20,60,Support;Crowd Control,EARLY,,0.04
+Chou,FIGHTER,ROAM/EXP,A,45.11,3.17,Alpha;Guinevere;Khaleed;Terizla,Angela;Rafaela,50,30,80,Chase;Control,ALL,,1.06
+Cici,FIGHTER,EXP/GOLD,A,49.50,1.06,Fredrinn;Minotaur,Angela;Floryn,50,60,30,Damage;Regen,MID,,0.62
+Claude,MARKSMAN,GOLD,A,48.91,0.22,Floryn;Masha;Vexana,Angela;Faramis,30,60,10,Burst;Chase,LATE,"Laning Phase: Claude is a short-range hero, so don't wander far from your tower when your second skill isn't ready to teleport you back. Use your first skill to build up 5 stacks, since they give you extra movement speed and attack speed. Claude is a late-game hero, so focus on farming minions rather than trying to hit your opponent. | Items: Build around the Swift Trinity: Demon Hunter Sword, Corrosion Scythe and Golden Staff. If the enemy has high movement speed, get Corrosion Scythe first. If the enemy has a lot of tanks, get Demon Hunter Sword first and Golden Staff second. After that, buy Malefic Gun for penetration and extra attack range. Winter Crown is a good last item, because it lets you dive the backline without worrying about getting hit. It's optional, so switch to Rose Gold Meteor, Wind of Nature or Immortality if you prefer. | Boots: Claude sometimes dives into the backline to use his ultimate, so Warrior Boots are a good choice for the extra physical defense. Personally, I prefer Rapid Boots so I can rotate faster. | Rotations: If you're winning the early game and have a lot of gold, move with your team to tear the enemy apart. If you're losing, farm as much as you can. You can farm alone, but keep an eye on the map and watch out for enemies. Don't join teamfights until you've finished the Swift Trinity, or at least two and a half of its items. | Positioning: Don't stay too far from your team. Use your ultimate, Blazing Duet, to get into the backline, or stay out of sight on the map and surprise the enemy backline. | Battle Spell: Claude works well with Purify and Vengeance, but I prefer Flicker so I can escape when the enemy is hunting me down. | Skins: This one is mostly psychological. Some skins make his ultimate feel underwhelming (as if it misses enemies or does low damage), while others make it feel overpowered (as if it deals a lot of DPS). They all play the same, so use whichever skin you like.",0.77
+Clint,MARKSMAN,GOLD,S,50.44,0.61,Kadita;Miya;Moskov,Angela;Rafaela,30,70,40,Finisher;Burst,MID,,0.68
+Cyclops,MAGE,MID,C,51.53,0.31,Alpha;Terizla,Belerick;Minsitthar,30,100,70,Damage;Control,MID,,0.67
+Diggie,SUPPORT,ROAM,B,53.88,3.45,Akai;Atlas;Gatotkaca;Kalea;Lolita,Layla;Miya,40,40,20,Guard;Poke,EARLY,,0.19
+Dyrroth,FIGHTER,EXP/JUNGLE,A,49.15,1.62,Aldous;Gord;Hanabi;X.Borg,Franco;Kaja,50,50,20,Charge;Burst,EARLY,,1.74
+Edith,TANK/MARKSMAN,EXP/ROAM,B,52.38,0.16,Aulus;Jawhead;Odette;Zilong,Atlas;Minotaur,70,30,100,Control;Burst,MID,,0.30
+Esmeralda,TANK/MAGE,EXP,S,46.99,2.24,Akai;Lolita,Atlas;Tigreal,90,30,60,Regen;Mixed Damage,MID,,0.86
+Estes,SUPPORT,ROAM,A,52.69,46.13,Alice;Saber;Valir,Hanabi;Lesley,70,10,20,Regen;Guard,MID,,0.67
+Eudora,MAGE,MID,S,50.54,53.01,Beatrix;Claude;Estes;Ling;Moskov;Natan;Sora,Diggie;Tigreal,10,80,80,Control;Burst,EARLY,,1.87
+Fanny,ASSASSIN,JUNGLE,A,42.44,1.97,Cecilion;Franco;Gord;Hanzo;Irithel;Karrie;Lukas;Masha;Sora;Valir;Zhuxin,Gatotkaca;Minotaur,60,70,10,Chase;Finisher,EARLY,,0.67
+Faramis,SUPPORT/MAGE,MID/ROAM,B,50.96,0.34,Eudora;Saber,Leomord;Martis,40,60,10,Guard;Charge,MID,,0.10
+Floryn,SUPPORT,ROAM,B,54.05,13.22,Lolita;Uranus,Terizla;Thamuz,60,10,70,Poke;Guard,MID,,0.93
+Franco,TANK,ROAM,B,41.51,3.24,Alucard;Aulus;Claude;Estes;Gusion;Hayabusa;Layla;Leomord;Mathilda;Paquito;Pharsa;Vale;Yi Sun-shin;Zilong,Brody;Karina;Vale,80,10,100,Initiator;Control,EARLY,,0.97
+Fredrinn,FIGHTER/TANK,JUNGLE,A,51.17,1.59,Aamon;Arlott;Bruno;Eudora;Helcurt;Khufra;Luo Yi;Martis;Nolan;Vale;Yin,Angela;Floryn,80,50,60,Damage;Chase,MID,,0.45
+Freya,FIGHTER,EXP/GOLD,S,48.28,2.18,Ixia;Lesley,Belerick;Gatotkaca,60,70,60,Chase;Damage,EARLY,,0.70
+Gatotkaca,TANK/FIGHTER,ROAM/EXP,S,45.25,0.30,Argus;Bruno;Helcurt;Layla;Popol and Kupa,Kagura;Vale,90,30,90,Crowd Control;Burst,MID,,0.57
+Gloo,TANK,ROAM/EXP,A,54.47,41.21,Cecilion;Chang'e;Khufra,Eudora;Saber,100,30,100,Regen;Control,MID,,0.78
+Gord,MAGE,MID,B,52.82,0.56,Barats;Fredrinn;Wanwan,Belerick;Hylos,10,70,80,Poke;Burst,MID,,0.60
+Granger,MARKSMAN,GOLD,A,43.10,1.64,Cecilion;Chang'e,Franco;Kaja,30,70,10,Burst;Finisher,EARLY,"Laning Phase: If your lane opponent is a late-game hero, poke them as much as you can to keep up the pressure, keep their HP low, and make them lose minions when they recall. If they're an early-game hero, play it safe and don't 1v1 them unless you're sure you can finish them off. | Items: If you're snowballing, prioritize Sky Piercer so you can start farming stacks early. If you're struggling, build Hunter Strike before Sky Piercer. My recommendation: Fury Hammer first, then Sky Piercer, then complete Hunter Strike. After that, get boots, Malefic Roar, Blade of Despair, and Sea Halberd, Rose Gold Meteor or Wind of Nature, depending on the enemy. | Boots: You don't need to get close to the enemy to deal damage, so I recommend Rapid Boots. They let you rotate fast to join your team and pick off enemies. | Rotations: After 4:30, during or after the second Turtle, join your team to pick off enemies. This is your window to farm Sky Piercer stacks, which makes the late game easier and helps you snowball. | Positioning: Don't stay too close to your teammates because your skills are long range, or you might get caught in the middle of a big teamfight. | Battle Spell: Granger now fits Flicker better than Purify. Purify still works, it just doesn't suit him as well. | Skins: Avoid heavy skins. A lighter skin makes your gameplay feel smoother.",1.36
+Grock,TANK/FIGHTER,ROAM,A,46.72,0.71,Gord;Layla,Odette;Pharsa,90,40,80,Crowd Control;Initiator,EARLY,,0.35
+Guinevere,FIGHTER,JUNGLE/ROAM,A,51.27,2.00,Aurora;Silvanna;Zilong,Franco;Hylos,40,50,70,Burst;Magic Damage,EARLY,,0.82
+Gusion,ASSASSIN,JUNGLE/MID,C,48.54,3.69,Alpha;Hanabi;Layla;Popol and Kupa,Pharsa;Vexana,30,90,10,Burst;Magic Damage,EARLY,,1.31
+Hanabi,MARKSMAN,GOLD,B,52.54,4.60,Belerick;Carmilla;Edith;Selena;Tigreal,Atlas;Carmilla,20,70,80,Finisher;Damage,LATE,,2.48
+Hanzo,ASSASSIN,JUNGLE,A,49.87,7.45,Chang'e;Ixia;Layla;Valentina;Zhuxin,Aurora;Belerick;Tigreal,70,80,20,Poke;Burst,MID,,0.38
+Harith,MAGE,GOLD,S,46.33,0.05,Belerick;Johnson;Julian,Minotaur;Minsitthar,40,50,10,Chase;Damage,MID,"Laning Phase: Harith peaks in the mid to late game, but he can still win 1v1s against most heroes in the laning phase, so don't be afraid to hit the enemy with your first skill. You don't need to land the center of it: even the tip hits enemies and minions, so you can clear waves easily. Be more careful with your second skill. It's a dash that gives you a shield, but it drains your mana, and if you don't manage your mana well you'll run out and be forced to recall. | Items: Starlium Scythe is Harith's most important item. It gives cooldown reduction and lifesteal, so you can dash around smoothly with your ultimate, Zaman Force. Feather of Heaven is just as important because it increases your attack speed. After that, build Divine Glaive, Concentrated Energy and Holy Crystal. | Boots: Use Magic Boots for the extra cooldown reduction, so you can dash with your ultimate more smoothly and more often. | Rotations: Your dash has a short cooldown, so clear two minion waves at once (a side lane and mid) to earn gold faster and reach your power spike sooner. Move with your team before or after the second Turtle, depending on the situation, to pick off enemies and earn more gold. | Positioning: Your kit depends heavily on your ultimate, so don't stay far from your teammates. Stay with your team and aim your ultimate's carpet at the enemy, so you can dash close to them and hit them with your skills. | Battle Spell: Purify is the best spell because Harith goes into the backline. If the enemy team doesn't have heavy control, Vengeance and Flicker also work. | Skins: Some skins make your dash feel heavy and abrupt, so I suggest a lighter skin to make the dash feel smoother.",0.15
+Harley,ASSASSIN/MAGE,JUNGLE/MID,A,47.90,3.23,Angela;Cecilion;Chang'e;Grock;Ixia,Akai;Khufra,30,90,10,Burst;Poke,EARLY,,0.83
+Hayabusa,ASSASSIN,JUNGLE,A,48.18,1.82,Cecilion;Chang'e;Eudora;Granger;Novaria;Rafaela;Vale;Valentina;Xavier,Alpha;Lapu-Lapu,40,50,10,Chase;Burst,MID,,0.81
+Helcurt,ASSASSIN,ROAM/JUNGLE,B,47.39,4.82,Chang'e;Layla;Vale,Esmeralda;Terizla;Tigreal,30,50,50,Push;Burst,EARLY,,0.61
+Hilda,FIGHTER/TANK,ROAM/EXP,A,51.01,11.60,Layla;Zilong,Franco;Rafaela,90,40,40,Damage;Regen,EARLY,,0.57
+Hirara,ASSASSIN,JUNGLE,S,50.32,68.13,Gusion;Ixia;Pharsa;Yin,Angela;Minotaur,40,70,40,Chase;Finisher,MID,,0.58
+Hylos,TANK,ROAM/EXP,A,48.68,0.27,Gord;Layla,Minsitthar;Terizla,100,20,80,Guard;Initiator,EARLY,,0.30
+Irithel,MARKSMAN,GOLD,B,52.44,0.26,Alpha;Balmond;Miya;Ruby;Thamuz,Hylos;Valir,10,80,10,Finisher;Burst,LATE,,0.41
+Ixia,MARKSMAN,GOLD,B,49.93,0.76,Bane;Fredrinn,Bane;Fredrinn,30,70,50,Finisher;Damage,LATE,,0.74
+Jawhead,FIGHTER,ROAM/EXP,B,47.89,0.31,Eudora;Ling;Saber,Belerick;Odette,60,30,60,Charge;Burst,EARLY,,0.34
+Johnson,TANK/SUPPORT,ROAM,C,48.84,2.04,Alucard;Zilong,Kadita;Odette,80,30,90,Support;Crowd Control,MID,,0.72
+Joy,ASSASSIN,JUNGLE,A,48.84,0.20,Julian;Kagura;Vexana;Xavier,Angela;Hylos,30,70,10,Chase;Damage,MID,,0.14
+Julian,ASSASSIN/FIGHTER,JUNGLE/EXP,A,50.04,0.80,Aldous;Cecilion;Lukas,Angela;Diggie,60,60,70,Chase;Magic Damage,EARLY,,0.68
+Kadita,MAGE/ASSASSIN,MID,B,51.54,3.14,Aurora;Eudora,Atlas;Tigreal,40,80,80,Burst;Charge,EARLY,,0.78
+Kagura,MAGE,MID,A,51.61,1.03,Cyclops;Eudora;Johnson;Kaja;Layla,Atlas;Tigreal,30,90,40,Poke;Finisher,MID,,0.68
+Kaja,SUPPORT,ROAM,A,49.88,14.30,Cici;Fanny;Gusion;Hayabusa;Ixia;Layla;Natalia;Paquito;Vexana;Yi Sun-shin,Ixia;Odette;Pharsa,80,20,70,Initiator;Charge,MID,,0.56
+Kalea,SUPPORT/FIGHTER,ROAM,S,49.97,3.86,Chang'e;Layla,Clint;Eudora;Harley,60,20,90,Control;Regen,MID,,0.54
+Karina,ASSASSIN,JUNGLE,B,48.10,3.73,Aulus;Floryn;Hanabi;Layla;Popol and Kupa;Vexana;Yve,Faramis;Tigreal,50,70,10,Finisher;Magic Damage,MID,,0.87
+Karrie,MARKSMAN,GOLD,A,48.76,0.87,Baxia;Clint;Esmeralda;Fredrinn;Gloo;Hylos;Thamuz;Tigreal;Yu Zhong,Aamon;Saber,30,80,10,Finisher;Damage,MID,,0.56
+Khaleed,FIGHTER,ROAM/EXP,A,50.62,0.08,Cyclops;Xavier,Karina;Roger,80,50,50,Damage;Regen,EARLY,,0.12
+Khufra,TANK,ROAM,A,54.67,2.00,Fanny;Joy;Karina;Lancelot;Roger,Eudora;Pharsa,90,20,100,Initiator;Crowd Control,MID,,0.34
+Kimmy,MARKSMAN/MAGE,MID/GOLD,A,48.95,0.61,Cecilion;Granger;Grock,Badang;Ruby,30,80,50,Damage;Magic Damage,MID,,0.86
+Lancelot,ASSASSIN,JUNGLE,A,43.19,0.47,Cecilion;Cyclops;Gord;Hanabi;Hanzo;Kimmy;Lesley;Moskov;Pharsa;Valir;Wanwan,Atlas;Tigreal,40,50,10,Chase;Burst,EARLY,,0.54
+Lapu-Lapu,FIGHTER,EXP,A,48.31,0.27,Eudora;Layla,Atlas;Tigreal,80,40,40,Chase;Burst,MID,,0.35
+Layla,MARKSMAN,GOLD,C,49.45,1.64,Belerick;Karrie;Minotaur;Obsidia;Tigreal;Uranus,Belerick;Minsitthar,10,80,10,Finisher;Damage,LATE,,1.87
+Leomord,FIGHTER,JUNGLE,A,50.36,0.57,Cecilion;Odette;Pharsa;Yve,Pharsa;Vexana,70,50,30,Chase;Burst,MID,,0.30
+Lesley,MARKSMAN/ASSASSIN,GOLD,A,48.23,8.21,Balmond;Baxia;Chou;Esmeralda;Fredrinn;Gatotkaca;Gloo;Hylos;Lapu-Lapu;Minotaur;Terizla;Uranus;Yu Zhong,Baxia;Minotaur,10,70,20,Finisher;Burst,LATE,,1.79
+Ling,ASSASSIN,JUNGLE,A,52.66,0.65,Angela;Aurora;Badang;Beatrix;Cecilion;Diggie;Hanabi;Layla;Lesley;Lolita;Lunox;Lylia;Marcel;Rafaela;Vale,Angela;Khufra,50,60,30,Chase;Burst,LATE,,0.69
+Lolita,SUPPORT/TANK,ROAM,B,53.46,0.20,Cyclops;Harley;Kimmy,Hanabi;Layla,100,10,90,Guard;Crowd Control,MID,,0.08
+Lukas,FIGHTER,EXP/JUNGLE,S,52.57,36.39,Hanabi;Ixia,Atlas;Gatotkaca;Tigreal,70,50,60,Regen;Damage,MID,,0.87
+Lunox,MAGE,MID,A,48.69,0.22,Lylia;Yve,Franco;Minotaur,30,90,20,Burst;Damage,LATE,,0.26
+Luo Yi,MAGE,MID,B,47.84,0.07,Eudora;Gord,Aamon;Karina,20,100,40,Support;Crowd Control,EARLY,,0.17
+Lylia,MAGE,MID,S,49.56,0.39,Carmilla;Hylos,Franco;Minotaur,50,100,20,Push;Damage,EARLY,,0.49
+Marcel,SUPPORT,ROAM,S,57.73,38.01,Layla;Vexana,Hanabi;Ixia,70,30,100,Crowd Control;Support,MID,,0.29
+Martis,FIGHTER,JUNGLE/EXP,A,47.24,0.44,Aldous;Alice;Brody;Kagura;Layla;Odette;Silvanna;X.Borg,Alpha;Khaleed,60,30,50,Finisher;Charge,EARLY,,0.61
+Masha,FIGHTER/TANK,EXP/ROAM,S,61.11,38.30,Eudora;Kadita,Atlas;Minotaur,50,70,30,Push;Damage,LATE,,0.54
+Mathilda,SUPPORT/ASSASSIN,ROAM,A,44.60,0.18,Gord;Vale,Eudora;Saber,80,20,40,Initiator;Guard,EARLY,,0.14
+Melissa,MARKSMAN,GOLD,A,48.67,0.85,Aulus;Clint;Sun;Suyou;Zilong,Minotaur;Tigreal,20,90,40,Finisher;Damage,LATE,,0.34
+Minotaur,TANK/SUPPORT,ROAM/EXP,S,54.00,8.39,Julian;Kalea;Odette;Paquito,Granger;Melissa,100,10,80,Crowd Control,MID,,1.00
+Minsitthar,FIGHTER,EXP/ROAM,B,51.72,4.67,Arlott;Benedetta;Joy;Lancelot;Mathilda;Natalia;Pharsa;Roger,Hanabi;Melissa,60,40,80,Initiator;Crowd Control,MID,,0.64
+Miya,MARKSMAN,GOLD,S,49.63,5.36,Eudora;Saber;Sun,Belerick;Tigreal,10,70,40,Finisher;Damage,LATE,,2.35
+Moskov,MARKSMAN,GOLD,A,50.30,0.30,Atlas;Balmond;Barats;Lapu-Lapu;Thamuz,Fredrinn;Gatotkaca,20,60,60,Finisher;Chase,LATE,,0.94
+Nana,MAGE,MID,B,47.43,3.97,Akai;Eudora;Kadita;Karrie;Leomord;Melissa;Zilong,Franco;Rafaela,50,60,100,Poke;Burst,MID,,1.88
+Natalia,ASSASSIN,ROAM/JUNGLE,B,50.99,1.84,Hirara;Irithel;Moskov;Nana;Novaria;Valentina;Xavier,Vexana;Yi Sun-shin,10,60,60,Chase;Finisher,EARLY,,0.28
+Natan,MARKSMAN,GOLD,B,51.14,0.14,Gatotkaca;Tigreal,Alpha;Johnson,20,60,20,Burst;Magic Damage,LATE,,0.29
+Nolan,ASSASSIN,JUNGLE,S,49.52,9.73,Eudora;Hanabi;Lunox;Lylia,Gatotkaca;Tigreal,30,60,20,Chase;Burst,EARLY,,1.58
+Novaria,MAGE,MID,A,49.76,3.97,Eudora;Faramis;Harith;Odette,Beatrix;Layla,30,90,30,Burst;Poke,LATE,,1.26
+Obsidia,MARKSMAN,GOLD,S,53.32,39.26,Freya;Hayabusa;Lancelot,Angela;Estes,30,80,10,Finisher;Damage,MID,,2.31
+Odette,MAGE,MID,A,49.52,0.29,Irithel;Layla,Jawhead;Johnson,30,100,70,Burst;Poke,MID,,0.57
+Paquito,FIGHTER/ASSASSIN,JUNGLE/EXP,S,50.14,24.32,Gord;Layla;Lolita,Angela;Rafaela,60,50,40,Chase;Damage,MID,,1.38
+Pharsa,MAGE,MID,A,47.47,0.19,Chou;Faramis;Hanabi;Harith;Layla;Miya;Xavier;Zhask,Atlas;Franco,20,90,50,Burst;Poke,MID,,0.35
+Phoveus,FIGHTER,EXP,A,48.20,0.69,Arlott;Benedetta;Chou;Freya;Lancelot;Leomord;Wanwan,Gatotkaca;Minotaur;Tigreal,60,80,50,Regen;Damage,MID,,0.27
+Popol and Kupa,MARKSMAN,JUNGLE/GOLD,C,54.49,0.35,Brody;Lesley,Alpha;Khaleed,30,70,70,Push;Burst,EARLY,,0.44
+Rafaela,SUPPORT,ROAM/MID,A,55.23,15.62,Barats;Masha,Freya;Lapu-Lapu,60,20,70,Regen;Guard,EARLY,,0.98
+Roger,FIGHTER/MARKSMAN,JUNGLE/GOLD,C,48.53,0.10,Hanabi;Odette,Pharsa;Vexana,60,40,10,Finisher;Burst,MID,,0.27
+Ruby,FIGHTER,EXP/ROAM,A,49.26,0.30,Aldous;Guinevere;Sun,Kadita;Pharsa,90,20,90,Crowd Control;Regen,MID,,0.32
+Saber,ASSASSIN,JUNGLE/ROAM,A,50.90,24.40,Cici;Estes;Eudora;Floryn;Granger;Hirara;Ixia;Kimmy;Layla;Natan;Novaria;Vexana;Yve;Zhuxin,Cyclops;Kadita,20,60,60,Charge;Finisher,EARLY,,1.03
+Selena,ASSASSIN/MAGE,MID/ROAM,A,48.30,6.59,Gord;Layla,Beatrix;Xavier,30,70,100,Initiator;Finisher,EARLY,,1.72
+Silvanna,FIGHTER,EXP/JUNGLE,C,51.33,1.91,Irithel;Layla;Valir,Atlas;Tigreal,50,40,70,Initiator;Magic Damage,EARLY,,1.01
+Sora,FIGHTER/ASSASSIN,EXP,S,49.49,3.90,Hanabi;Layla;Miya,Gatotkaca;Minotaur;Tigreal,60,60,50,Charge;Burst,MID,,0.63
+Sun,FIGHTER,EXP/JUNGLE,B,53.29,27.00,Franco;Gatotkaca,Belerick;Tigreal,50,50,10,Push;Damage,LATE,,1.73
+Suyou,ASSASSIN/FIGHTER,JUNGLE,A,49.70,1.21,Ixia;Kaja;Xavier,Rafaela;Tigreal,60,60,50,Chase;Burst,MID,,0.91
+Terizla,FIGHTER/TANK,EXP,A,50.67,0.18,Sun;Zilong,Atlas;Gatotkaca,90,30,40,Burst;Crowd Control,EARLY,,0.34
+Thamuz,FIGHTER,EXP/JUNGLE,B,48.91,1.61,Arlott;Hilda;Jawhead;Martis;Nolan;Sun;Zilong,Angela;Rafaela,70,40,20,Chase;Damage,EARLY,,0.82
+Tigreal,TANK,ROAM,B,44.99,7.01,Argus;Chip;Freya;Zilong,Odette;Vexana,80,10,100,Crowd Control,MID,,2.01
+Uranus,TANK,EXP,S,49.33,0.34,Franco;Harley;Hilda;Luo Yi;Tigreal,Beatrix;Hanabi,100,20,20,Regen,MID,,0.32
+Vale,MAGE,MID,C,50.16,0.20,Bane;Hilda;Terizla,Belerick;Lolita,20,100,70,Burst;Crowd Control,MID,,0.52
+Valentina,MAGE,MID,S,45.02,0.18,Faramis;Hanabi;Zetian,Atlas;Carmilla,50,40,40,Burst;Finisher,MID,,0.19
+Valir,MAGE,MID,B,54.31,3.13,Atlas;Balmond;Belerick;Fredrinn;Lukas;Phoveus;Sora,Khaleed;Yu Zhong,20,70,70,Damage;Guard,EARLY,,1.17
+Vexana,MAGE,MID,A,49.45,1.15,Dyrroth;Irithel;Layla;Phoveus;Xavier,Atlas;Beatrix,20,90,50,Poke;Control,MID,,1.51
+Wanwan,MARKSMAN,GOLD,B,47.88,0.13,Badang;Brody;Carmilla;Edith;Franco;Fredrinn;Gatotkaca;Luo Yi;Ruby;Selena,Belerick;Franco,20,60,30,Finisher;Burst,LATE,,0.14
+X.Borg,FIGHTER,EXP/JUNGLE,A,49.99,1.93,Aulus;Khaleed;Marcel;Terizla,Karina;Martis,80,30,10,Regen;Burst,MID,,0.61
 Xavier,MAGE,MID,C,49.65,0.11,Bane;Belerick;Faramis;Hanabi;Karrie;Melissa,Atlas;Carmilla,20,100,80,Damage;Burst,LATE,,0.49
-Yi Sun-shin,ASSASSIN/MARKSMAN,JUNGLE/GOLD,A,49.48,3.92,Kaja;Terizla;Uranus,Alpha;Khaleed,40,90,40,Finisher;Chase,LATE,,1.09
-Yin,FIGHTER/ASSASSIN,JUNGLE/EXP,D,49.25,1.66,Cecilion;Layla;Yve,Mathilda;Rafaela,50,60,80,Burst;Control,MID,,0.50
-Yu Zhong,FIGHTER,EXP,A,49.00,0.74,Aulus;Zilong,Vexana;Xavier,70,40,70,Regen;Damage,EARLY,,0.59
-Yve,MAGE,MID,A,52.38,0.04,Aulus;Barats;Fredrinn;Miya,Atlas;Gatotkaca;Minotaur,40,80,40,Poke;Burst,MID,,0.05
-Zetian,MAGE,MID,A,50.99,4.28,Balmond;Zilong,Floryn;Rafaela,40,70,50,Damage;Crowd Control,MID,,1.62
-Zhask,MAGE,MID,B,52.52,0.40,Aldous;Paquito;Tigreal,Belerick;Lolita,10,100,40,Chase;Damage,MID,,0.35
-Zhuxin,MAGE,MID,S,50.32,0.35,Cyclops;Popol and Kupa,Belerick;Cici;Kimmy,40,80,80,Damage;Crowd Control,MID,,0.19
-Zilong,FIGHTER/ASSASSIN,EXP,D,46.10,0.49,Hanabi;Layla;Lylia;Minsitthar;Nana;Pharsa,Hanabi;Pharsa,20,50,60,Chase;Damage,LATE,,0.72
+Yi Sun-shin,ASSASSIN/MARKSMAN,JUNGLE/GOLD,A,49.39,3.37,Kaja;Terizla;Uranus,Alpha;Khaleed,40,90,40,Finisher;Chase,LATE,,1.03
+Yin,FIGHTER/ASSASSIN,JUNGLE/EXP,D,49.39,1.68,Cecilion;Layla;Yve,Mathilda;Rafaela,50,60,80,Burst;Control,MID,,0.51
+Yu Zhong,FIGHTER,EXP,A,48.99,0.75,Aulus;Zilong,Vexana;Xavier,70,40,70,Regen;Damage,EARLY,,0.62
+Yve,MAGE,MID,A,52.48,0.04,Aulus;Barats;Fredrinn;Miya,Atlas;Gatotkaca;Minotaur,40,80,40,Poke;Burst,MID,,0.06
+Zetian,MAGE,MID,A,51.01,4.42,Balmond;Zilong,Floryn;Rafaela,40,70,50,Damage;Crowd Control,MID,,1.65
+Zhask,MAGE,MID,B,52.59,0.41,Aldous;Paquito;Tigreal,Belerick;Lolita,10,100,40,Chase;Damage,MID,,0.35
+Zhuxin,MAGE,MID,S,50.15,0.37,Cyclops;Popol and Kupa,Belerick;Cici;Kimmy,40,80,80,Damage;Crowd Control,MID,,0.20
+Zilong,FIGHTER/ASSASSIN,EXP,D,46.21,0.49,Hanabi;Layla;Lylia;Minsitthar;Nana;Pharsa,Hanabi;Pharsa,20,50,60,Chase;Damage,LATE,,0.72
