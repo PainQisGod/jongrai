@@ -3,7 +3,7 @@ title_km: ក្រុមជម្រើសជាតិកម្ពុជា វ
 type: esports
 date: 2026-11-08
 image: news_cambodia_val_win_gold.jpg
-credit: Kaka42 livestream
+credit: E-Sports Federation Cambodia
 summary: A little off the MLBB topic: Cambodia's Valorant team won the country's first-ever gold in the game, in Nanning, China.
 summary_km: ក្រៅប្រធានបទ MLBB បន្តិច។ ក្រុមជម្រើសជាតិកម្ពុជា វិញ្ញាសា Valorant បានឈ្នះមេដាយមាសជាលើកដំបូងក្នុងប្រវត្តិសាស្ដ្រនៅទីក្រុង Nanning ប្រទេសចិន។
 author: PainQ
