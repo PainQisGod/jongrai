@@ -9,7 +9,13 @@ summary: The MPL Indonesia Season 18 Grand Final went the full seven games, and 
 summary_km: ការប្រកួត ៧វគ្គពេញបឹបបានកើតឡើងនៅក្នុងវគ្គផ្ដាច់ព្រ័ត្រនៃការប្រកួត MPL Indonesia រដូវកាលទី១៨ ដោយបទពិសោធន៍របស់ Bigetron បានយកឈ្នះ Natus Vincere។
 author: PainQ
 
-What a series! The young guns of Natus Vincere took the veterans of Bigetron by Vitality all the way to Game 7 of the Grand Final, but BTR, who fought their way up from the lower bracket, lifted the trophy once again.
+What a series! The young guns of Natus Vincere took the veterans of Bigetron by Vitality all the way to Game 7 of the Grand Final, but BTR, who fought their way up from the lower bracket, lifted the trophy once again. BTR become the third team in MPL Indonesia history to win back-to-back titles, after RRQ Hoshi and ONIC.
+
+## The road to the Grand Final
+
+BTR swept NAVI in both of their regular-season meetings, yet NAVI finished 2nd while BTR settled for 4th. NAVI kicked off their playoffs with a 3-1 win over Alter Ego, then beat Team Liquid ID in a full best-of-five to secure their place in the Grand Final and the first ticket to Istanbul.
+
+BTR took the long way. They beat EVOS 3-2, lost 1-3 to TLID and dropped to the Lower Bracket Semifinal, where they beat AE 3-2, before getting revenge on TLID with a 4-3 win to reach the Grand Final. That made 21 games out of a possible 22 before the Grand Final even started.
 
 ## Game 1 to Game 6
 
@@ -24,7 +30,13 @@ BTR started Game 7 strong, with key heroes like EMANN's [[Chou]] and Nnael's [[H
 Shogun was named the Grand Final MVP.
 
 ---km
-ការប្រកួតមួយនេះពិតជាល្អមើលមែន! ក្រុមក្មេងៗរបស់ Natus Vincere បាននាំក្រុមជើងចាស់របស់ Bigetron by Vitality ទៅលេងដល់វគ្គទី៧ នៃវគ្គផ្ដាច់ព្រ័ត្រ ដោយ BTR បានយកជ័យជម្នះជាថ្មីម្ដងទៀត បន្ទាប់ពីឡើងពីវគ្គ Lower Bracket។
+ការប្រកួតមួយនេះពិតជាល្អមើលមែន! ក្រុមក្មេងៗរបស់ Natus Vincere បាននាំក្រុមជើងចាស់របស់ Bigetron by Vitality ទៅលេងដល់វគ្គទី៧ នៃវគ្គផ្ដាច់ព្រ័ត្រ ដោយ BTR បានយកជ័យជម្នះជាថ្មីម្ដងទៀត បន្ទាប់ពីឡើងពីវគ្គ Lower Bracket។ BTR ជាក្រុមទី៣ដែលគ្រងជើងឯកពីររដូវកាលជាប់ៗគ្នា បន្ទាប់ពីក្រុម RRQ Hoshi និង ONIC។
+
+## ផ្លូវឆ្ពោះទៅវគ្គផ្ដាច់ព្រ័ត្រ
+
+BTR បានស៊ី NAVI ដាច់ពីរដងនៅវគ្គ Regular Season ប៉ុន្តែ NAVI ឈរនៅលេខ២ រីឯ BTR ត្រូវបញ្ចប់នៅចំណាត់ថ្នាក់លេខ៤។ NAVI ចាប់ផ្ដើមដំណើរវគ្គ Playoffs ដោយយកឈ្នះ Alter Ego ៣-១ និងយកឈ្នះ Team Liquid ID ក្នុងការប្រកួតពេញ៥វគ្គ ដើម្បីកក់កៅអីទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រ និងសំបុត្រដំបូងទៅកាន់អ៊ីស្តង់ប៊ុល។
+
+ចំណែកឯ BTR យកឈ្នះ EVOS ៣-២ ហើយចាញ់ TLID ៣-១ រួចធ្លាក់ទៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket ដែលពួកគេយកឈ្នះ AE ៣-២ មុននឹងសងសឹក TLID បានសម្រេចក្នុងលទ្ធផល ៤-៣ ដើម្បីដណ្ដើមកៅអីទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រ ធ្វើឲ្យពួកគេលេងចំនួន ២១ វគ្គ ក្នុងចំណោម ២២ វគ្គ មុននឹងវគ្គផ្ដាច់ព្រ័ត្រនេះ។
 
 ## វគ្គទី១ ដល់វគ្គទី៦
 
