@@ -1,7 +1,7 @@
-title: Cambodia's Valorant National Team Wins Gold at the China-ASEAN Competition
-title_km: ក្រុមជម្រើសជាតិកម្ពុជា វិញ្ញាសា Valorant បានឈ្នះមេដាយមាសនៅការប្រកួត China-ASEAN
+title: Cambodia can do it! Cambodia's Valorant National Team Wins Gold at the China-ASEAN Competition
+title_km: កូនខ្មែរធ្វើបាន! ក្រុមជម្រើសជាតិកម្ពុជា វិញ្ញាសា Valorant បានឈ្នះមេដាយមាសនៅការប្រកួត China-ASEAN
 type: esports
-date: 2026-11-08
+date: 2026-11-08 17:00
 image: news_cambodia_val_win_gold.jpg
 credit: E-Sports Federation Cambodia
 summary: A little off the MLBB topic: Cambodia's Valorant team won the country's first-ever gold in the game, in Nanning, China.

@@ -1,7 +1,7 @@
 title: The Angkor Warriors Claim Bronze at the China-ASEAN Competition 2026
 title_km: ក្រុមអ្នកចម្បាំងអង្គរយកបានមេដាយសំរិទ្ធនៅការប្រកួត China-ASEAN ឆ្នាំ២០២៦
 type: esports
-date: 2026-11-08
+date: 2026-11-08 11:50
 heroes: Brody; Aulus; Hirara
 image: news_cambodia_mlbb_win_bronze.jpg
 credit: E-Sports Federation Cambodia
