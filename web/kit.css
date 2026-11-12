@@ -130,5 +130,6 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
 .lang-km .eyebrow{font-size:12px}
 /* letter-spacing pulls Khmer clusters apart, so none anywhere in Khmer mode (numbers keep theirs) */
 .lang-km body :not(.num){letter-spacing:0!important;text-transform:none}
+.lang-km .mark .lat{letter-spacing:.34em!important} /* the Latin wordmark keeps its spacing in Khmer mode too */
 .i18n-wait main,.i18n-wait footer{visibility:hidden}
 
