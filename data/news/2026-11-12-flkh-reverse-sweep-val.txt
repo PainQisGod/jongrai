@@ -1,0 +1,46 @@
+title: REVERSE SWEEP, AGAIN! Team Flash KH Deny Valhalla's Hopes of the Upper Bracket Semifinals
+title_km: វាយបកទៀតហើយ! Team Flash KH បានបញ្ចប់ក្ដីស្រម៉ៃរបស់ Valhalla ក្នុងការឡើងទៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket
+type: esports
+date: 2026-11-12 20:40
+heroes: Esmeralda; Lesley; Valir; Saber
+image: news_flkhval_playoff.jpg
+summary: Team Flash KH steamrolled into the Upper Bracket Semifinals after reverse sweeping Valhalla in a full best-of-five series.
+summary_km: Team Flash KH បានដើរទៅមុខមួយជំហានឈានចូលទៅកាន់វគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket បន្ទាប់ពីបានវាយបក Valhalla ក្នុងការប្រកួតពេញ៥វគ្គ។
+author: PainQ
+
+It's only the first day of the playoffs, and both matches have already gone the full five games.
+
+## Games 1 to 3
+
+Valhalla shocked everyone with a slap in Team Flash KH's face, needing just nine minutes to end the first game. Wadu's [[Esmeralda]] was a nightmare for every member of FLKH and was a deserved MVP.
+
+Game 2 brought surprise pocket picks: FLKH went for [[Lesley]], but VAL got their hands on [[Valir]], and Valhalla came out on top once again. FLKH cut the run short in Game 3 behind Sakzuuu's flashy play.
+
+## Game 4
+
+Game 4 was full of team fights, with both teams running triple-Fighter drafts. That goes against the extra Gold Lane minion gold the developers added this patch to bring traditional marksmen back. FLKH's macro won them Game 4 and paved the road to the reverse sweep.
+
+## Game 5
+
+VAL surprised everyone with a last-pick [[Saber]] for a wombo-combo draft in the final game and completely dominated the early game. But their blunder at the second Lord contest gave FLKH the time they needed to hit their late-game power spike. After a back-and-forth fight, FLKH wiped out VAL to complete the reverse sweep, with Sakzuuu taking his second MVP of the series.
+
+FLKH now face RVZ in the Upper Bracket Semifinal.
+
+---km
+ថ្ងៃនេះជាថ្ងៃទី១នៃវគ្គ Playoffs ប៉ុណ្ណោះ ហើយយើងបានឃើញការប្រកួតពេញ៥វគ្គទាំងពីរប្រកួតតែម្ដង។
+
+## វគ្គទី១ ដល់វគ្គទី៣
+
+Valhalla បានបង្កភាពភ្ញាក់ផ្អើលដូចបានទះមុខ Team Flash KH ដោយត្រូវការតែ៩នាទីប៉ុណ្ណោះដើម្បីបញ្ចប់វគ្គទី១។ តួអង្គ [[Esmeralda]] របស់ Wadu ពិតជារញ៉េរញ៉ៃខ្លាំងមែនទែនសម្រាប់ FLKH និងសាកសមទទួលបាន MVP។
+
+វគ្គទី២ ជាការយកតួអង្គភ្ញាក់ផ្អើលជាច្រើនដូចជា FLKH យក [[Lesley]] និង VAL យក [[Valir]] តែយ៉ាងណា VAL ក៏ទទួលបានជ័យជម្នះ តែ FLKH យកវគ្គទី៣បានដោយភាពអស្ចារ្យរបស់ Sakzuuu។
+
+## វគ្គទី៤
+
+វគ្គទី៤ ពោរពេញទៅដោយការវាយគ្នា ដោយក្រុមទាំងពីរបានយក Draft Fighter បីរៀងៗខ្លួន ផ្ទុយនឹងការបន្ថែមលុយឲ្យ Minion នៅ Gold Lane ដើម្បីយក Marksman មកវិញដែលអ្នកអភិវឌ្ឍន៍បានរំពឹងទុក។ ដោយការលេងសង់តង់គ្នាល្អ FLKH យកវគ្គទី៤ បើកផ្លូវទៅកាន់ការវាយបក។
+
+## វគ្គទី៥
+
+VAL យក [[Saber]] មកធ្វើឲ្យភ្ញាក់ផ្អើល ព្រមទាំងបង្កើត Draft ដែល combo គ្នាល្អខ្លាំង នៅក្នុងវគ្គចុងក្រោយ ហើយក៏បានគ្របដណ្ដប់នៅដើមវគ្គ ប៉ុន្តែកំហុសរបស់ពួកគេនៅពេលដណ្ដើម Lord ទី២ បានហុចដងឲ្យ FLKH ទាំងដែល FLKH ត្រូវការលុយសម្រាប់លេងនៅចុងវគ្គ។ បន្ទាប់ពីការវាយទៅវិញទៅមក FLKH បានបោសសម្អាត VAL ទាំងអស់ ហើយបញ្ចប់ការប្រកួតដោយការវាយបក។ Sakzuuu ទទួលបាន MVP ជាលើកទី២ក្នុងការប្រកួតនេះ។
+
+FLKH នឹងបន្តទៅប្រកួតជាមួយ RVZ នៅវគ្គ Upper Bracket Semifinals។
