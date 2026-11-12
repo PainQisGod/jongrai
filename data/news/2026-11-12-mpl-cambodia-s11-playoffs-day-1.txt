@@ -4,7 +4,7 @@ type: esports
 date: 2026-11-12
 image: news_1.jpg
 summary: PRO Esports begin their title defense today against newcomers TNR Esports, while Team Flash KH take on Valhalla after finishing third at CAEC in Nanning last week.
-summary_km: ក្រុមការពារតំណែងជើងឯក PRO ចាប់ផ្ដើមការប្រកួតជាមួយក្រុមចំណូលថ្មី ចំណែកឯ FLKH នឹងប៉ះគ្នាជាមួយ VAL បន្ទាប់ពីពួកគេយកបានចំណាត់ថ្នាក់លេខ៣ នៅឯការប្រកួត CAEC នៅទីក្រុង Nanning កាលពីសប្ដាហ៍មុន។
+summary_km: ក្រុមការពារតំណែងជើងឯក PRO ចាប់ផ្ដើមការប្រកួតជាមួយក្រុមចំណូលថ្មី TNR ចំណែកឯ FLKH នឹងប៉ះគ្នាជាមួយ VAL បន្ទាប់ពីពួកគេយកបានចំណាត់ថ្នាក់លេខ៣ នៅឯការប្រកួត CAEC នៅទីក្រុង Nanning កាលពីសប្ដាហ៍មុន។
 author: PainQ
 
 ## PRO Esports vs TNR Esports
