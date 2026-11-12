@@ -9,7 +9,7 @@
 # Keep the header lines at the top, then ONE BLANK LINE, then the story.
 #
 # type:    patch, skin, event, esports or news
-# date:    the day you publish, written YYYY-MM-DD
+# date:    the day you publish, written YYYY-MM-DD. Add a time (2026-11-12 18:30) to order two articles of the same day
 # ends:    optional. When an event or a skin sale ends; the page counts down to it
 # heroes:  optional. Heroes this is about, separated by ; and spelled as on the site
 # image:   optional. The cover picture, from web/news/ (jpg, png, webp or avif; wide 16:9 looks best)

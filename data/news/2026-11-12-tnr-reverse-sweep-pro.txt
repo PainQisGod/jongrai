@@ -1,0 +1,34 @@
+title: UPSET ALERT! TNR Esports Stun PRO Esports with a 3-2 Reverse Sweep
+title_km: លទ្ធផលមិនគួរឲ្យជឿ! TNR Esports វាយបកយកឈ្នះ PRO Esports ក្នុងលទ្ធផល ៣-២ យ៉ាងគួរឲ្យភ្ញាក់ផ្អើល
+type: esports
+date: 2026-11-12 18:55
+heroes: Hirara; Obsidia; Claude; Yu Zhong; Nolan
+image: news_playoff_1.jpg
+summary: TNR Esports surprised everyone once again, coming back from 0-2 down to beat the defending champions 3-2.
+summary_km: TNR Esports បានបង្កភាពភ្ញាក់ផ្អើលជាថ្មីម្ដងទៀត ដោយវាយបកពី ០-២ មកឈ្នះម្ចាស់ជើងឯក ៣-២ វិញ។
+author: PainQ
+
+The first match of the playoffs has begun, and it was already pure cinema. PRO Esports took a 2-0 lead with smooth drafts built around [[Hirara]], and SryImFelix and SAA earned the MVPs for their brilliant performances.
+
+## SiveTzy turns it around
+
+In Game 3, SiveTzy's [[Obsidia]] absolutely cooked, racking up a Maniac on the way to 13 kills to win one back for TNR. In Game 4 he locked in his signature [[Claude]] and dominated again, taking the key kills and his second MVP in a row.
+
+## Game 5
+
+PRO secured SryImFelix's signature [[Yu Zhong]], but let TNR take SiveTzy's Claude once again, along with Alfonso's [[Nolan]]. Neither team had the edge before the first Lord, but after a PRO blunder, TNR took control. At 16:56, TNR destroyed the base to complete the reverse sweep, with Haruki taking the Game 5 MVP.
+
+TNR now move on to the Upper Bracket Semifinal against Vigor Apex.
+
+---km
+ការប្រកួតទី១នៃវគ្គ Playoffs បានចាប់ផ្ដើមដោយភាពអស្ចារ្យបាត់ទៅហើយ។ PRO Esports បាននាំមុខ ២-០ ជាមួយនឹង Draft ដែលមាន [[Hirara]] ជាស្នូលយ៉ាងរលូន។ កីឡាករ SryImFelix និង SAA ទទួលបាន MVP បន្ទាប់ពីទម្រង់លេងដ៏អស្ចារ្យដើម្បីនាំមុខ ២-០ ទៅលើ TNR Esports។
+
+## SiveTzy វាយបក
+
+វគ្គទី៣ មកដល់ ហើយកីឡាករ SiveTzy បានចម្អិនដោយគាត់បានយក Maniac និង ១៣ kills ជាមួយតួអង្គ [[Obsidia]] យកបានមួយវគ្គវិញ។ បន្ទាប់មកគាត់បានតួអង្គដែលគាត់ស្និទ្ធជាមួយគឺ [[Claude]] ហើយបានបង្ហាញពីភាពខ្លាំងក្លារបស់គាត់ និងយក kills សំខាន់ៗ រួមនឹងទទួលបាន MVP ពីរវគ្គជាប់ៗគ្នា។
+
+## វគ្គទី៥
+
+នៅក្នុងវគ្គទី៥ PRO បានយកតួអង្គដែល SryImFelix ស្និទ្ធគឺ [[Yu Zhong]] តែប្រលែងឲ្យ SiveTzy យកតួអង្គគាត់ស្និទ្ធម្ដងទៀត ព្រមទាំងឲ្យ Alfonso យក [[Nolan]]។ ក្រុមទាំងពីរប្រកៀកប្រកិតគ្នាខ្លាំងមែនទែនមុន Lord ទី១ តែបន្ទាប់ពីកំហុសរបស់ PRO ធ្វើឲ្យ TNR នាំមុខការប្រកួតវគ្គមួយនេះ និងបន្ទាប់ពី ១៦នាទី TNR បានវាយបែកបន្ទាយ បញ្ចប់វគ្គ និងវាយបក PRO។ Haruki ទទួលបាន MVP នៃវគ្គទី៥។
+
+TNR នឹងបន្តទៅប្រកួតជាមួយ Vigor Apex នៅវគ្គ Upper Bracket Semifinals។

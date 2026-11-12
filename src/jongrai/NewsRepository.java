@@ -23,8 +23,11 @@ public class NewsRepository {
 
     public static final Set<String> TYPES = Set.of("patch", "skin", "event", "esports", "news");
 
-    /** One article. bodyKm and the *Km fields may be empty: the page falls back to English. */
-    public record Article(String slug, String title, String titleKm, String type, LocalDate date, LocalDate ends,
+    /**
+     * One article. bodyKm and the *Km fields may be empty: the page falls back to English.
+     * time is the optional "HH:MM" after the date ("date: 2026-11-12 18:55"); it only orders articles of the same day.
+     */
+    public record Article(String slug, String title, String titleKm, String type, LocalDate date, String time, LocalDate ends,
                           List<String> heroes, String image, String credit, String summary, String summaryKm, String author,
                           String body, String bodyKm) {}
 
@@ -79,7 +82,8 @@ public class NewsRepository {
                 }
             }
         }
-        out.sort(Comparator.comparing(Article::date).reversed().thenComparing(Article::slug));
+        // newest first; on the same day, the later time first (no time counts as 00:00)
+        out.sort(Comparator.comparing(Article::date).thenComparing(Article::time).reversed().thenComparing(Article::slug));
         articles = List.copyOf(out);
         problems = List.copyOf(bad);
         bad.forEach(b -> System.out.println("warning: " + b));
@@ -111,18 +115,25 @@ public class NewsRepository {
         if (title.isEmpty()) throw new IllegalArgumentException("missing 'title:'");
         String type = head.getOrDefault("type", "news").toLowerCase(Locale.ROOT);
         if (!TYPES.contains(type)) throw new IllegalArgumentException("type must be one of " + new java.util.TreeSet<>(TYPES) + ", found '" + type + "'");
-        LocalDate date = date(head.get("date"), "date", true);
+        String rawDate = head.getOrDefault("date", "").strip(), time = "00:00";
+        java.util.regex.Matcher dt = java.util.regex.Pattern.compile("(\\S+)\\s+(\\d{1,2}):(\\d{2})").matcher(rawDate);
+        if (dt.matches()) {
+            int hh = Integer.parseInt(dt.group(2)), mm = Integer.parseInt(dt.group(3));
+            if (hh > 23 || mm > 59) throw new IllegalArgumentException("'date: " + rawDate + "' has an impossible time");
+            rawDate = dt.group(1); time = String.format(Locale.ROOT, "%02d:%02d", hh, mm);
+        }
+        LocalDate date = date(rawDate, "date", true);
         LocalDate ends = date(head.get("ends"), "ends", false);
         List<String> heroes = new ArrayList<>();
         for (String h : head.getOrDefault("heroes", "").split(";")) if (!h.isBlank()) heroes.add(h.strip());
-        return new Article(slug, title, head.getOrDefault("title_km", ""), type, date, ends, List.copyOf(heroes),
+        return new Article(slug, title, head.getOrDefault("title_km", ""), type, date, time, ends, List.copyOf(heroes),
                 head.getOrDefault("image", ""), head.getOrDefault("credit", ""), head.getOrDefault("summary", ""), head.getOrDefault("summary_km", ""),
                 head.getOrDefault("author", "PainQ"), body.strip(), bodyKm.strip());
     }
 
     private static LocalDate date(String v, String field, boolean required) {
         if (v == null || v.isBlank()) {
-            if (required) throw new IllegalArgumentException("missing '" + field + ":' (write it as 2026-11-12)");
+            if (required) throw new IllegalArgumentException("missing '" + field + ":' (write it as 2026-11-12, or 2026-11-12 18:30)");
             return null;
         }
         try { return LocalDate.parse(v.strip()); }

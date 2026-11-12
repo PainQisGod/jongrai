@@ -152,6 +152,11 @@ mpl_kh_s11_po_1_g2,mpl_kh_s11_po_1,mpl_kh,Season 11,2,pro,tnr,Marcel;Zhuxin;Frey
 mpl_kh_s11_po_1_g3,mpl_kh_s11_po_1,mpl_kh,Season 11,3,pro,tnr,Zhuxin;Marcel;Freya;Minotaur;Alice,Hirara;Atlas;Nolan;Barats;Esmeralda,Uranus;Suyou;Lylia;Kalea;Kimmy,Sora;Paquito;Zetian;Masha;Obsidia,0,tnr,2.2.23,Golden Turret,14:00,SiveTzy
 mpl_kh_s11_po_1_g4,mpl_kh_s11_po_1,mpl_kh,Season 11,4,tnr,pro,Hirara;Nolan;Atlas;Esmeralda;Yu Zhong,Masha;Kalea;Freya;Barats;Alice,Sora;Paquito;Zetian;Marcel;Claude,Phoveus;Suyou;Zhuxin;Gloo;Obsidia,0,tnr,2.2.23,Golden Turret,14:30,SiveTzy
 mpl_kh_s11_po_1_g5,mpl_kh_s11_po_1,mpl_kh,Season 11,5,pro,tnr,Marcel;Freya;Kalea;Minotaur;Gloo,Hirara;Atlas;Masha;Cecilion;Selena,Yu Zhong;Suyou;Eudora;Carmilla;Bruno,Alice;Nolan;Zhuxin;Grock;Claude,0,tnr,2.2.23,Flying Cloud,16:56,Haruki
+mpl_kh_s11_po_2_g1,mpl_kh_s11_po_2,mpl_kh,Season 11,1,val,flkh,Nolan;Zhuxin;Kimmy;Barats;Alice,Fanny;Masha;Freya;Cici;Lylia,Esmeralda;Suyou;Eudora;Kalea;Paquito,Yu Zhong;Hirara;Belerick;Angela;Chou,0,val,2.2.23,Healing Turtle,09:04,Wadu
+mpl_kh_s11_po_2_g2,mpl_kh_s11_po_2,mpl_kh,Season 11,2,val,flkh,Nolan;Zhuxin;Kimmy;Eudora;Lunox,Masha;Kalea;Fanny;Freya;Cici,Esmeralda;Suyou;Valir;Marcel;Claude,Alice;Hirara;Selena;Atlas;Lesley,0,val,2.2.23,Revealing Wisps,12:52,Zee x3
+mpl_kh_s11_po_2_g3,mpl_kh_s11_po_2,mpl_kh,Season 11,3,flkh,val,Fanny;Esmeralda;Masha;Phoveus;Valir,Zhuxin;Kimmy;Barats;Eudora;Alice,Freya;Aulus;Valentina;Kalea;Brody,Gatotkaca;Nolan;Xavier;Marcel;Bruno,0,flkh,2.2.23,Healing Turtle,13:28,Sakzuuu
+mpl_kh_s11_po_2_g4,mpl_kh_s11_po_2,mpl_kh,Season 11,4,val,flkh,Zhuxin;Nolan;Kimmy;Barats;Obsidia,Kalea;Masha;Esmeralda;Valir;Phoveus,Yu Zhong;Paquito;Xavier;Marcel;Chou,Freya;Aulus;Yve;Gatotkaca;Cici,0,flkh,2.2.23,Flying Cloud,16:12,Layy
+mpl_kh_s11_po_2_g5,mpl_kh_s11_po_2,mpl_kh,Season 11,5,flkh,val,Esmeralda;Fanny;Masha;Estes;Cici,Freya;Nolan;Kalea;Barats;Atlas,Uranus;Suyou;Zhuxin;Marcel;Clint,Carmilla;Saber;Kimmy;Gatotkaca;Paquito,0,flkh,2.2.23,Revealing Wisps,17:58,Sakzuuu
 # MPL PH Season 18: bans, sides, winners and picks from mlbbhub.com match scoreboards (Liquipedia data, CC BY-SA 3.0), checked 2026-11-07.
 # Picks are put in lane order from each player's season role. Maps, game times and the three Week 8 matches mlbbhub lacked come from
 #   Liquipedia screenshots. MVPs are per match, in pro-matches.csv.
