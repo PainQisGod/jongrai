@@ -39,7 +39,9 @@
 #story h1{font:700 clamp(28px,4.4vw,42px)/1.15 var(--display);margin:14px 0 12px;color:var(--ink)}
 .lang-km #story h1{font-family:var(--body);line-height:1.45}
 #story .dek{font-size:18px;color:var(--ink-2);margin:0 0 22px}
-#story .hero-img{width:100%;border-radius:var(--r-lg);border:1px solid var(--hair);margin:0 0 22px}
+#story .cover-fig{margin:0 0 22px}
+#story .hero-img{width:100%;border-radius:var(--r-lg);border:1px solid var(--hair);margin:0}
+#story .cover-fig figcaption{margin-top:8px;font-size:12px;color:var(--ink-3);text-align:right}
 #story .heroes{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 24px;font-size:12px;color:var(--ink-3)}
 #story .heroes>span{margin-right:4px}
 .hchip{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:13px;color:var(--ink);background:var(--stone-1);border:1px solid var(--hair-2);border-radius:20px;padding:3px 11px 3px 3px}

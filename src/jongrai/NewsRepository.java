@@ -25,7 +25,7 @@ public class NewsRepository {
 
     /** One article. bodyKm and the *Km fields may be empty: the page falls back to English. */
     public record Article(String slug, String title, String titleKm, String type, LocalDate date, LocalDate ends,
-                          List<String> heroes, String image, String summary, String summaryKm, String author,
+                          List<String> heroes, String image, String credit, String summary, String summaryKm, String author,
                           String body, String bodyKm) {}
 
     private final Path dir;
@@ -116,7 +116,7 @@ public class NewsRepository {
         List<String> heroes = new ArrayList<>();
         for (String h : head.getOrDefault("heroes", "").split(";")) if (!h.isBlank()) heroes.add(h.strip());
         return new Article(slug, title, head.getOrDefault("title_km", ""), type, date, ends, List.copyOf(heroes),
-                head.getOrDefault("image", ""), head.getOrDefault("summary", ""), head.getOrDefault("summary_km", ""),
+                head.getOrDefault("image", ""), head.getOrDefault("credit", ""), head.getOrDefault("summary", ""), head.getOrDefault("summary_km", ""),
                 head.getOrDefault("author", "PainQ"), body.strip(), bodyKm.strip());
     }
 

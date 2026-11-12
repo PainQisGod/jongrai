@@ -59,7 +59,7 @@ async function showArticle(slug,push){
    ${a.author?`<span>${t('news.by','by {a}',{a:esc(a.author)})}</span>`:''}${countdown(a)}</div>
   <h1>${esc(pick(a,'title','titleKm'))}</h1>
   ${a.summary?`<p class="dek">${esc(pick(a,'summary','summaryKm'))}</p>`:''}
-  ${a.image?`<img class="hero-img" src="${media(a.image)}" alt="">`:''}
+  ${a.image?`<figure class="cover-fig"><img class="hero-img" src="${media(a.image)}" alt="">${a.credit?`<figcaption>${t('news.credit','Photo: {c}',{c:esc(a.credit)})}</figcaption>`:''}</figure>`:''}
   ${a.heroes.length?`<div class="heroes"><span>${t('news.heroes','Heroes in this story')}</span>${a.heroes.map(heroChip).join('')}</div>`:''}
   <div class="body">${story(body)}</div>`;
  $('#list').hidden=true;$('#article').hidden=false;window.scrollTo(0,0);

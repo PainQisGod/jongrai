@@ -1,0 +1,39 @@
+title: BACK-TO-BACK! Bigetron by Vitality Are Your MPL Indonesia Season 18 Champions
+title_km: BACK-TO-BACK! Bigetron by Vitality គឺជាជើងឯកការប្រកួត MPL Indonesia រដូវកាលទី១៨
+type: esports
+date: 2026-11-08
+heroes: Yu Zhong; Fanny; Chou; Hirara
+image: news_mpl_id_s18_btr_win_final.jpg
+credit: MPL Indonesia
+summary: The MPL Indonesia Season 18 Grand Final went the full seven games, and Bigetron's experience won out over Natus Vincere.
+summary_km: ការប្រកួត ៧វគ្គពេញបឹបបានកើតឡើងនៅក្នុងវគ្គផ្ដាច់ព្រ័ត្រនៃការប្រកួត MPL Indonesia រដូវកាលទី១៨ ដោយបទពិសោធន៍របស់ Bigetron បានយកឈ្នះ Natus Vincere។
+author: PainQ
+
+What a series! The young guns of Natus Vincere took the veterans of Bigetron by Vitality all the way to Game 7 of the Grand Final, but BTR, who fought their way up from the lower bracket, lifted the trophy once again.
+
+## Game 1 to Game 6
+
+BTR took the first game before NAVI answered to make it 1-1. In Game 3, Shogun's [[Yu Zhong]] tore through the entire NAVI roster, and NAVI banned the hero in every game after that. NAVI then evened the series at 2-2 in Game 4.
+
+NAVI took the lead for the first time in the Grand Final by winning Game 5, led by a stellar performance from rookie Joshuaa. BTR shut that down right away in Game 6 with Nnael's [[Fanny]], making it 3-3.
+
+## Game 7
+
+BTR started Game 7 strong, with key heroes like EMANN's [[Chou]] and Nnael's [[Hirara]] picking up kills. That snowball smothered NAVI's late-game composition, and BTR held a lead of more than 10,000 gold for over ten minutes. Even when the game reached NAVI's power spike, they couldn't turn it around, and BTR sealed the series to defend their crown.
+
+Shogun was named the Grand Final MVP.
+
+---km
+ការប្រកួតមួយនេះពិតជាល្អមើលមែន! ក្រុមក្មេងៗរបស់ Natus Vincere បាននាំក្រុមជើងចាស់របស់ Bigetron by Vitality ទៅលេងដល់វគ្គទី៧ នៃវគ្គផ្ដាច់ព្រ័ត្រ ដោយ BTR បានយកជ័យជម្នះជាថ្មីម្ដងទៀត បន្ទាប់ពីឡើងពីវគ្គ Lower Bracket។
+
+## វគ្គទី១ ដល់វគ្គទី៦
+
+BTR បានឈ្នះវគ្គទី១ មុននឹង NAVI យកបានមួយវគ្គវិញ នាំឲ្យលទ្ធផល ១-១។ ក្នុងវគ្គទី៣ តួអង្គ [[Yu Zhong]] របស់សមាជិក BTR គឺ Shogun ធ្វើឲ្យ NAVI ឈឺក្បាលខ្លាំងមែនទែន បង្ខំចិត្តបិទតួអង្គមួយនេះរហូតដល់វគ្គចុងក្រោយ មុននឹង NAVI យកបានមួយវគ្គទៀត នាំឲ្យលទ្ធផល ២-២។
+
+NAVI បាននាំមុខជាលើកដំបូងបន្ទាប់ពីបានយកវគ្គទី៥ ជាមួយនឹងទម្រង់លេងដ៏ល្អរបស់កីឡាករវ័យក្មេង Joshuaa ប៉ុន្តែត្រូវបានបង្អាក់ដោយ BTR នៅវគ្គទី៦ ជាមួយនឹង [[Fanny]] របស់ Nnael នាំឲ្យលទ្ធផល ៣-៣។
+
+## វគ្គទី៧
+
+នៅក្នុងវគ្គទី៧ BTR ចាប់ផ្ដើមខ្លាំងដោយតួអង្គសំខាន់ៗដូច [[Chou]] របស់ EMANN និង [[Hirara]] របស់ Nnael បាន kills ជាច្រើន នាំឲ្យមានការបិទខ្ទប់ទៅលើការរៀបចំ Draft ចុងវគ្គរបស់ NAVI ហើយតែងតែនាំមុខលើសមួយម៉ឺនលុយ អស់រយៈពេលជាង ១០នាទី។ ទោះបីជាដល់ចុងវគ្គក៏ដោយ NAVI មិនអាចធ្វើអ្វីចេញបាននោះទេ នោះ BTR ក៏ក្លាយជាម្ចាស់តំណែងជើងឯក។
+
+Shogun ទទួលបានពានរង្វាន់ MVP នៃវគ្គផ្ដាច់ព្រ័ត្រ។

@@ -13,6 +13,7 @@
 # ends:    optional. When an event or a skin sale ends; the page counts down to it
 # heroes:  optional. Heroes this is about, separated by ; and spelled as on the site
 # image:   optional. The cover picture, from web/news/ (jpg, png, webp or avif; wide 16:9 looks best)
+# credit:  optional. Who the cover picture belongs to; shown under it as "Photo: ..."
 #
 title: Write the English headline here
 title_km: ចំណងជើងជាភាសាខ្មែរ
@@ -21,6 +22,7 @@ date: 2026-11-12
 ends:
 heroes: Granger; Claude
 image: cover.jpg
+credit:
 summary: One or two sentences shown on the news list.
 summary_km: សេចក្ដីសង្ខេបខ្លីជាភាសាខ្មែរ។
 author: PainQ
