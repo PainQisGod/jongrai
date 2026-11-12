@@ -48,6 +48,43 @@ Check that the data and the core rules still hold with `java -cp out jongrai.Sel
 
 For OBS, add the page as a **Browser Source**.
 
+## Share it online (Cloudflare Tunnel)
+
+Cloudflare Tunnel gives the server running on your PC a public `https://` address, for free and without opening any ports on your router. The site is online only while your PC, the server and the tunnel are all running.
+
+**One-time install** (PowerShell, then close and reopen the terminal):
+
+```powershell
+winget install --id Cloudflare.cloudflared
+```
+
+**Each time you want to share:**
+
+1. Start Jongrai as usual in one terminal:
+   ```powershell
+   cd D:\Project\jongrai
+   java -cp out jongrai.WebServer
+   ```
+2. In a **second** terminal, start the tunnel:
+   ```powershell
+   cloudflared tunnel --url http://localhost:8080 --http-host-header localhost:8080
+   ```
+3. After a few seconds it prints a box with an address like `https://some-random-words.trycloudflare.com`. That is the public link. Open it on your phone with mobile data to check it works from outside your Wi-Fi.
+
+Keep both windows open. Closing either one takes the site offline.
+
+**Good to know:**
+
+- **Keep `--http-host-header localhost:8080`.** The server only answers requests addressed to `localhost` (so other websites cannot reach it through your browser). Without that option every visitor gets "Misdirected request".
+- **The address changes every time** you start the tunnel. A fixed address (like `jongrai.yourname.com`) needs a free Cloudflare account and your own domain: see Cloudflare's guide to named tunnels.
+- **Updating while it is live:** restart only the server window; the tunnel and its link stay the same, and the site is back in a few seconds. Anyone halfway through a draft loses their board.
+  - News articles and their pictures, and everything in `web/`: no restart, visitors just refresh.
+  - Data CSVs and new pick animations: restart the server.
+  - Java code: `.\build.ps1`, then restart the server.
+- **AI coach:** it has no limit per visitor, so a stranger could spend your API credit. Share without a key in `ai-config.txt`, or set a spending limit with your AI provider first.
+- **Google sign-in** does not work on a `trycloudflare.com` address, because Google only accepts the addresses registered in your OAuth client. Everything else works normally.
+- Account-less tunnels have no uptime guarantee. They are meant for trying things out and sharing with friends.
+
 ## Secrets: never commit them
 
 Two files hold private keys and are listed in `.gitignore`:

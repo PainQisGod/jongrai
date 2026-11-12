@@ -3,7 +3,7 @@ title_km: BACK-TO-BACK! Bigetron by Vitality គឺជាជើងឯកកា�
 type: esports
 date: 2026-11-08 23:00
 heroes: Yu Zhong; Fanny; Chou; Hirara
-image: news_mpl_id_s18_btr_win_final.jpg
+image: news_btr_champion_s18.jpg
 credit: MPL Indonesia
 summary: The MPL Indonesia Season 18 Grand Final went the full seven games, and Bigetron's experience won out over Natus Vincere.
 summary_km: ការប្រកួត ៧វគ្គពេញបឹបបានកើតឡើងនៅក្នុងវគ្គផ្ដាច់ព្រ័ត្រនៃការប្រកួត MPL Indonesia រដូវកាលទី១៨ ដោយបទពិសោធន៍របស់ Bigetron បានយកឈ្នះ Natus Vincere។
