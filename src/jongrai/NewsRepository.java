@@ -29,7 +29,16 @@ public class NewsRepository {
      */
     public record Article(String slug, String title, String titleKm, String type, LocalDate date, String time, LocalDate ends,
                           List<String> heroes, String image, String credit, String summary, String summaryKm, String author,
-                          String body, String bodyKm) {}
+                          String body, String bodyKm) {
+        /** When the article goes live: its date and time in Cambodia time (no time = midnight). */
+        public java.time.ZonedDateTime publishAt() {
+            return date.atTime(java.time.LocalTime.parse(time)).atZone(ZONE);
+        }
+    }
+
+    /** Article dates and times are Cambodia time, wherever the server runs. */
+    public static final java.time.ZoneId ZONE = java.time.ZoneId.of("Asia/Phnom_Penh");
+    private java.time.Clock clock = java.time.Clock.system(ZONE);
 
     private final Path dir;
     private String stamp = "";
@@ -38,8 +47,17 @@ public class NewsRepository {
 
     public NewsRepository(Path dir) { this.dir = dir; }
 
-    /** Newest first. Re-reads the folder if anything in it changed since the last call. */
+    /**
+     * The published articles, newest first: an article dated in the future stays hidden until that date and time,
+     * so a story can be written ahead. Re-reads the folder if anything in it changed since the last call.
+     */
     public synchronized List<Article> all() {
+        java.time.ZonedDateTime now = java.time.ZonedDateTime.now(clock);
+        return loaded().stream().filter(a -> !a.publishAt().isAfter(now)).toList();
+    }
+
+    /** Every article that reads cleanly, scheduled ones included. */
+    public synchronized List<Article> loaded() {
         try {
             String now = stampOf();
             if (!now.equals(stamp)) { load(); stamp = now; }
@@ -49,12 +67,15 @@ public class NewsRepository {
         return articles;
     }
 
+    /** For tests: pretend it is this moment. */
+    void setClock(java.time.Clock c) { clock = c; }
+
     public Article find(String slug) {
         return all().stream().filter(a -> a.slug().equals(slug)).findFirst().orElse(null);
     }
 
     /** Problems found in the files on the last read (bad date, unknown type, ...); each such file is skipped. */
-    public synchronized List<String> problems() { all(); return problems; }
+    public synchronized List<String> problems() { loaded(); return problems; }
 
     private String stampOf() throws IOException {
         if (!Files.isDirectory(dir)) return "none";
@@ -144,7 +165,7 @@ public class NewsRepository {
     public List<String> validate(Set<String> heroKeys, Path imageDir) {
         List<String> out = new ArrayList<>(problems());
         java.util.regex.Pattern img = java.util.regex.Pattern.compile("(?m)^\\[image:\\s*([^|\\]]+)");
-        for (Article a : all()) {
+        for (Article a : loaded()) {
             List<String> files = new ArrayList<>();
             if (!a.image().isEmpty()) files.add(a.image());
             for (String b : List.of(a.body(), a.bodyKm())) { var m = img.matcher(b); while (m.find()) files.add(m.group(1).strip()); }

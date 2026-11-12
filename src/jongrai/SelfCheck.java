@@ -321,6 +321,11 @@ public final class SelfCheck {
             check(tpl.heroes().equals(List.of("Granger", "Claude")) && tpl.body().startsWith("Write the story here") && !tpl.bodyKm().isEmpty()
                     && news.all().stream().noneMatch(a -> a.slug().startsWith("_")),
                     "the news template reads as a valid article but never shows on the site");
+            NewsRepository.Article first = news.loaded().get(news.loaded().size() - 1);
+            news.setClock(java.time.Clock.fixed(first.publishAt().minusMinutes(1).toInstant(), NewsRepository.ZONE));
+            boolean hiddenBefore = news.find(first.slug()) == null;
+            news.setClock(java.time.Clock.fixed(first.publishAt().toInstant(), NewsRepository.ZONE));
+            check(hiddenBefore && news.find(first.slug()) != null, "a news article stays hidden until its date and time, then appears");
         }
         MapEffects fx = MapEffects.load(home.resolve("data"));
         Map<String, Hero> heroes = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
