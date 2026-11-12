@@ -312,6 +312,16 @@ public final class SelfCheck {
                 && maps.games("Default Map") == 0, "map stats cover the 7 arena maps and skip Default Map: " + maps.maps());
         check(maps.maps().stream().allMatch(m -> java.nio.file.Files.exists(home.resolve("web/icons").resolve(m.icon()))),
                 "every arena map has its icon in web/icons");
+        {
+            NewsRepository news = new NewsRepository(home.resolve("data/news"));
+            Map<String, Hero> pool = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
+            List<String> newsProblems = news.validate(pool.keySet(), home.resolve("web/news"));
+            check(newsProblems.isEmpty(), "every news article reads cleanly, with its images in web/news/ and real heroes: " + newsProblems);
+            NewsRepository.Article tpl = NewsRepository.parse(home.resolve("data/news/_TEMPLATE.txt"));
+            check(tpl.heroes().equals(List.of("Granger", "Claude")) && tpl.body().startsWith("Write the story here") && !tpl.bodyKm().isEmpty()
+                    && news.all().stream().noneMatch(a -> a.slug().startsWith("_")),
+                    "the news template reads as a valid article but never shows on the site");
+        }
         MapEffects fx = MapEffects.load(home.resolve("data"));
         Map<String, Hero> heroes = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
         check(fx.maps().size() == 7 && fx.maps().stream().allMatch(m -> maps.maps().stream().anyMatch(a -> a.name().equals(m))),

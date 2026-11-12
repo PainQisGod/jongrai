@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>News - Jongrai</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/kit.css">
+<link rel="stylesheet" href="/pages.css">
+<link rel="stylesheet" href="/css/news.css"></head><body>
+
+<main class="wrap news" id="list">
+ <p class="eyebrow" data-i18n="news.eyebrow">NEWS</p>
+ <h2 class="t" data-i18n="news.title">Latest news</h2>
+ <p class="l" data-i18n="news.lead">Patches, new skins, events and esports from the world of Mobile Legends.</p>
+ <nav class="cats" id="types" aria-label="News type"></nav>
+ <div class="feed" id="feed" aria-live="polite"></div>
+</main>
+
+<main class="wrap news" id="article" hidden>
+ <a class="back" href="/news" data-i18n="news.back">← All news</a>
+ <article id="story"></article>
+</main>
+
+<footer><span>Project Jongrai</span><span class="sp" data-i18n="news.footer">News written by the Jongrai team</span></footer>
+
+<script src="/app.js"></script>
+<script src="/kit.js"></script>
+<script src="/js/news.js"></script>
+</body></html>

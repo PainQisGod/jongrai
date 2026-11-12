@@ -1,0 +1,33 @@
+title: Welcome to MPL Cambodia Season 11 Playoffs, Day 1
+title_km: សូមស្វាគមន៍មកកាន់ការប្រកួត MPL Cambodia រដូវកាលទី១១ វគ្គ Playoffs ថ្ងៃទី១
+type: esports
+date: 2026-11-12
+image: news_1.jpg
+summary: PRO Esports begin their title defense today against newcomers TNR Esports, while Team Flash KH take on Valhalla after finishing third at CAEC in Nanning last week.
+summary_km: ក្រុមការពារតំណែងជើងឯក PRO ចាប់ផ្ដើមការប្រកួតជាមួយក្រុមចំណូលថ្មី ចំណែកឯ FLKH នឹងប៉ះគ្នាជាមួយ VAL បន្ទាប់ពីពួកគេយកបានចំណាត់ថ្នាក់លេខ៣ នៅឯការប្រកួត CAEC នៅទីក្រុង Nanning កាលពីសប្ដាហ៍មុន។
+author: PainQ
+
+## PRO Esports vs TNR Esports
+
+PRO Esports begin the defense of their title against TNR Esports, a newcomer that came up through this season's MPL Cambodia Qualifier. After finishing 3rd in the regular season with a 6-3 record, the defending champions start their playoff run in the play-ins.
+
+TNR are a new team with an old-school roster, and they will try to upset the Season 10 champions to book a place in the Upper Bracket Semifinals against Vigor Apex, who topped the regular season.
+
+## Team Flash KH vs Valhalla
+
+Meanwhile, Team Flash KH, with the same roster as last season, meet Valhalla. The two teams finished 4th and 5th respectively, both with a 5-4 record in the regular season.
+
+Fresh off a third-place finish at the China-ASEAN competition, Team Flash KH are eager to give everything against dark horse Valhalla. Valhalla haven't won a play-ins series since their upset of PRO Esports back in Season 8, which was also their debut season.
+
+---km
+## PRO Esports ទល់នឹង TNR Esports
+
+ក្រុម PRO Esports កំពុងតែព្យាយាមការពារតំណែងជើងឯករបស់ខ្លួន ដោយប៉ះក្រុម TNR Esports ដែលជាក្រុមថ្មីដែលឡើងមកពីការប្រកួតវគ្គជម្រុះនៅរដូវកាលនេះ។ បន្ទាប់ពីឈរនៅចំណាត់ថ្នាក់លេខ៣ ជាមួយនឹងលទ្ធផលឈ្នះ-ចាញ់ ៦-៣ នៅវគ្គ Regular Season ក្រុមការពារតំណែងជើងឯក នឹងចាប់ផ្ដើមដំណើរនៃវគ្គ Playoffs នៅការប្រកួតវគ្គ Play-ins។
+
+ចំណែកឯក្រុមថ្មីតែសមាជិកជើងចាស់ TNR នឹងព្យាយាមបង្កការភ្ញាក់ផ្អើល យកឈ្នះក្រុមខ្លាំង ដើម្បីដណ្ដើមកៅអីទៅកាន់ការប្រកួតវគ្គ Upper Bracket Semifinals ទល់នឹងក្រុមលេខ១ Regular Season ក្រុម Vigor Apex។
+
+## Team Flash KH ទល់នឹង Valhalla
+
+ដោយឡែកក្រុម Team Flash KH ដែលមានសមាជិកក្រុមដដែលពីរដូវកាលទី១០ នឹងប្រកួតជាមួយក្រុម Valhalla ដោយក្រុមទាំងពីរឈរលេខ៤ និងលេខ៥ រៀងៗខ្លួន ជាមួយនឹងលទ្ធផលឈ្នះ-ចាញ់ ៥-៤ នៅវគ្គ Regular Season។
+
+បន្ទាប់ពីដណ្ដើមបានចំណាត់ថ្នាក់លេខ៣ នៅក្នុងការប្រកួត China-ASEAN ពួកគេនឹងខិតខំបញ្ចេញឲ្យបានមួយរយភាគរយទៅលើក្រុម Dark Horse Valhalla ដែលមិនដែលឈ្នះវគ្គ Play-ins ចាប់តាំងពីពួកគេយកឈ្នះ PRO Esports កាលពីរដូវកាលទី៨ ដ៏គួរឲ្យភ្ញាក់ផ្អើល ដែលវាក៏ជារដូវកាលដំបូងរបស់ពួកគេផងដែរ។

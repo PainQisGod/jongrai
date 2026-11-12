@@ -1,0 +1,41 @@
+# HOW TO WRITE A NEWS ARTICLE
+# 1. Copy this file and rename the copy, e.g. 2026-11-20-zetian-new-skin.txt
+#    The file name becomes the article's address: /news/2026-11-20-zetian-new-skin
+#    Files that start with _ (like this one) never show on the site, so use _ for drafts.
+# 2. Put your images in web/news/ and write just the file name below.
+# 3. Save. The article shows up on /news straight away (no restart needed).
+#
+# Lines starting with # are notes and are ignored. Only "title" and "date" are required.
+# Keep the header lines at the top, then ONE BLANK LINE, then the story.
+#
+# type:    patch, skin, event, esports or news
+# date:    the day you publish, written YYYY-MM-DD
+# ends:    optional. When an event or a skin sale ends; the page counts down to it
+# heroes:  optional. Heroes this is about, separated by ; and spelled as on the site
+# image:   optional. The cover picture, from web/news/ (jpg, png, webp or avif; wide 16:9 looks best)
+#
+title: Write the English headline here
+title_km: ចំណងជើងជាភាសាខ្មែរ
+type: news
+date: 2026-11-12
+ends:
+heroes: Granger; Claude
+image: cover.jpg
+summary: One or two sentences shown on the news list.
+summary_km: សេចក្ដីសង្ខេបខ្លីជាភាសាខ្មែរ។
+author: PainQ
+
+Write the story here. A blank line starts a new paragraph.
+
+## A line starting with ## is a sub-heading
+
+- A line starting with - is a bullet point
+- **Two stars** around words make them bold
+
+[image: another-picture.png | A caption under the picture (optional)]
+
+Mention a hero as [[Granger]] and it becomes a link to Granger's page.
+
+---km
+Khmer story goes after a line that says only ---km. It uses the same rules as above.
+Leave this part out and the Khmer page shows the English story.

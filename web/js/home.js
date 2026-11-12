@@ -33,8 +33,24 @@ function tips(){
  show();
  setInterval(()=>{if(paused||document.hidden||Date.now()-t0<7000)return;t0=Date.now();i=(i+1)%pool.length;show()},250);
 }
+/** The three newest articles from /news (data/news/*.txt); the section stays hidden until there is one. */
+async function drawNews(){
+ const list=await call('/api/news');
+ if(!Array.isArray(list)||!list.length)return;
+ const TY={patch:'Patch',skin:'Skin',event:'Event',esports:'Esports',news:'News'};
+ const km=(a,en,k)=>LANG==='km'&&a[k]?a[k]:a[en];
+ const left=a=>{if(!a.ends)return'';const end=new Date(a.ends+'T23:59:59'),d=Math.ceil((end-new Date())/864e5);
+  return end<new Date()?`<span class="cd over">${t('news.ended','Ended')}</span>`:`<span class="cd">${d<=1?t('news.endsToday','Ends today'):t('news.endsIn','Ends in {n} days',{n:d})}</span>`};
+ $('#nws').className='nws n'+Math.min(list.length,3);
+ $('#nws').innerHTML=list.slice(0,3).map(a=>`<a class="nw" href="/news/${encodeURIComponent(a.slug)}">
+   <div class="cv">${a.image?`<img src="/news-media/${encodeURIComponent(a.image)}" alt="" loading="lazy">`:''}</div>
+   <div class="tx"><div class="mt"><span class="ty ${esc(a.type)}">${esc(t('news.type.'+a.type,TY[a.type]||a.type))}</span><time>${esc(fmtDate(a.date))}</time>${left(a)}</div>
+   <h3>${esc(km(a,'title','titleKm'))}</h3>${a.summary?`<p>${esc(km(a,'summary','summaryKm'))}</p>`:''}</div></a>`).join('');
+ $('#news').hidden=false;
+}
 (async()=>{
  const m=await shell(location.pathname);
+ drawNews();
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
  heroes=await localizeTips(hs);heroes.forEach(h=>byName[h.name]=h);
  const vals={hero:m.heroes||heroes.length,item:m.items||0,banned:heroes.filter(h=>h.metaBan).length};

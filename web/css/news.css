@@ -1,0 +1,65 @@
+/* Jongrai - styles for /news.html only. Shared styles live in /kit.css and /pages.css. */
+.news.wrap{max-width:1100px;margin:0 auto;padding:44px 16px}
+.news .eyebrow{color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600;margin:0}
+.news p.l{margin:0 0 20px;max-width:65ch}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.cats a{text-decoration:none;font-size:12px;color:var(--ink-3);background:var(--stone-2);border:1px solid var(--hair-2);border-radius:999px;padding:6px 13px;transition:color .15s,border-color .15s}
+.cats a:hover{color:var(--ink)}.cats a.on{color:var(--ink);border-color:rgba(241,222,186,.3);background:var(--stone-3)}
+
+/* type colours */
+.ty{font:600 10px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:999px;color:var(--night);background:var(--ink-3)}
+.lang-km .ty{letter-spacing:0;font-size:11px}
+.ty.patch{background:var(--blue-hi)}.ty.skin{background:var(--gold)}.ty.event{background:var(--jade)}.ty.esports{background:var(--red-hi)}.ty.news{background:var(--ink-2)}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:12px;color:var(--ink-3)}
+.cd{font:600 11px/1 var(--display);color:var(--ember);border:1px solid rgba(255,122,69,.4);border-radius:999px;padding:4px 9px}
+.cd.over{color:var(--ink-3);border-color:var(--hair-2)}
+
+/* cards */
+.ncard{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:linear-gradient(180deg,var(--stone-2),var(--stone-1));
+  border:1px solid var(--hair);border-radius:var(--r-lg);overflow:hidden;transition:border-color .2s,transform .2s var(--ease-out)}
+.ncard:hover{border-color:var(--gold-lo);transform:translateY(-2px)}
+.ncard .cover{aspect-ratio:16/9;background:var(--stone-3);display:grid;place-items:center;overflow:hidden}
+.ncard .cover img{width:100%;height:100%;object-fit:cover}
+.ncard .cover span{font:700 22px/1 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--hair-2)}
+.ncard .txt{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px}
+.ncard h3{margin:0;font:700 18px/1.3 var(--display);color:var(--ink)}
+.lang-km .ncard h3{font-family:var(--body);line-height:1.5}
+.ncard p{margin:0;font-size:14px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.lead-card .ncard{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.lead-card .ncard .cover{aspect-ratio:auto;min-height:300px}
+.lead-card .ncard .txt{padding:28px;justify-content:center}
+.lead-card .ncard h3{font-size:clamp(22px,2.4vw,30px)}
+.lead-card .ncard p{-webkit-line-clamp:5}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:18px}
+
+/* article */
+#article{max-width:760px}
+.back{display:inline-block;margin-bottom:22px;text-decoration:none;font-size:13px;color:var(--ink-3)}
+.back:hover{color:var(--gold-hi)}
+#story h1{font:700 clamp(28px,4.4vw,42px)/1.15 var(--display);margin:14px 0 12px;color:var(--ink)}
+.lang-km #story h1{font-family:var(--body);line-height:1.45}
+#story .dek{font-size:18px;color:var(--ink-2);margin:0 0 22px}
+#story .hero-img{width:100%;border-radius:var(--r-lg);border:1px solid var(--hair);margin:0 0 22px}
+#story .heroes{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 24px;font-size:12px;color:var(--ink-3)}
+#story .heroes>span{margin-right:4px}
+.hchip{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:13px;color:var(--ink);background:var(--stone-1);border:1px solid var(--hair-2);border-radius:20px;padding:3px 11px 3px 3px}
+.hchip:hover{border-color:var(--gold-lo)}
+.hchip i{width:24px;height:24px;border-radius:50%;background:var(--stone-3);overflow:hidden;flex:none}
+.hchip i img{width:100%;height:100%;object-fit:cover}
+.body{font-size:16px;line-height:1.75;color:var(--ink-2)}
+.lang-km .body{line-height:1.9}
+.body p{margin:0 0 18px}
+.body h3{font:700 20px/1.3 var(--display);color:var(--ink);margin:32px 0 12px;letter-spacing:.02em}
+.body ul{margin:0 0 18px;padding-left:22px}.body li{margin:0 0 8px}
+.body b{color:var(--ink)}
+.body .nb{white-space:nowrap} /* keep scores like 6-3 on one line */
+.body a{color:var(--gold-hi);text-decoration-color:var(--gold-lo)}
+.body figure{margin:26px 0}
+.body figure img{max-width:100%;max-height:440px;margin:0 auto;border-radius:var(--r-md);border:1px solid var(--hair)}
+.body figcaption{margin-top:8px;text-align:center;font-size:13px;color:var(--ink-3)}
+
+@media (max-width:760px){
+  .lead-card .ncard{grid-template-columns:1fr}
+  .lead-card .ncard .cover{aspect-ratio:16/9;min-height:0}
+  .lead-card .ncard .txt{padding:18px}
+}

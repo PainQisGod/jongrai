@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 public class WebServer {
 
     private static Path home;                               // folder holding data/ and web/
+    private static NewsRepository news;                     // data/news/*.txt, re-read when a file changes
     private static int port;
     private static Map<String, Hero> pool;
     private static final Map<String, Hero> heroBySlug = new HashMap<>();
@@ -75,6 +76,7 @@ public class WebServer {
             "/draft", "draft.html",
             "/items", "items.html",
             "/about", "about.html",
+            "/news", "news.html",
             "/index.html", "draft.html"); // old bookmark
 
     public static void main(String[] args) throws Exception {
@@ -98,6 +100,8 @@ public class WebServer {
         warnings.addAll(gear.validate(pool.keySet(), home.resolve("web/icons")));
         warnings.addAll(pro.validate(pool.keySet(), home.resolve("web/teams")));
         mapEffects.unknownHeroes(pool.keySet()).forEach(b -> warnings.add("hero-traits.csv names an unknown hero " + b));
+        news = new NewsRepository(home.resolve("data/news"));
+        warnings.addAll(news.validate(pool.keySet(), home.resolve("web/news")));
         icons.forEach((hero, file) -> {
             if (!Files.isRegularFile(home.resolve("web/icons").resolve(file))) warnings.add("hero icon '" + file + "' for " + hero + " is missing");
         });
@@ -279,10 +283,11 @@ public class WebServer {
         if (path.startsWith("/js/")) { serveFile(ex, "web/js", path.substring(4), false); return; }
         if (path.startsWith("/lang/")) { serveFile(ex, "web/lang", path.substring(6), false); return; }
         if (path.startsWith("/video/")) { serveFile(ex, "web/video", path.substring(7), true); return; }
+        if (path.startsWith("/news-media/")) { serveFile(ex, "web/news", path.substring(12), true); return; }
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
             case "/" -> servePage(ex, "home.html");
-            case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/index.html" -> servePage(ex, PAGES.get(path));
+            case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/news", "/index.html" -> servePage(ex, PAGES.get(path));
             case "/app.js", "/kit.css", "/kit.js", "/pages.css" -> serveFile(ex, "web", path.substring(1), false);
             case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH) + ",\"updated\":" + Json.str(HeroRepository.DATA_DATE)
                     + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
@@ -305,6 +310,9 @@ public class WebServer {
             case "/api/bans" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
                 sendJson(ex, 200, locked(() -> suggestionsJson(engine.suggestBans(draft(), s, 5, mapStats, m)))); }
             case "/api/maps" -> sendJson(ex, 200, mapsJson());
+            case "/api/news" -> { String slug = q.getOrDefault("slug", "");
+                if (slug.isEmpty()) sendJson(ex, 200, newsListJson());
+                else { NewsRepository.Article a = news.find(slug); sendJson(ex, a == null ? 404 : 200, a == null ? "{\"error\":\"no such article\"}" : articleJson(a, true)); } }
             case "/api/mapplan" -> { Draft.Side s = Draft.Side.parse(q.getOrDefault("side", "blue")); String m = q.getOrDefault("map", "");
                 sendJson(ex, 200, locked(() -> mapPlanJson(draft(), s, m))); }
             case "/api/me" -> sendJson(ex, 200, meJson(ex));
@@ -315,6 +323,7 @@ public class WebServer {
                 // Per-hero pages such as /heroes/obsidia render client-side from the same file.
                 if (path.startsWith("/heroes/") && heroBySlug.containsKey(path.substring(8))) servePage(ex, "hero-statistics.html");
                 else if (path.startsWith("/items/") && itemBySlug.containsKey(path.substring(7))) servePage(ex, "items.html");
+                else if (path.startsWith("/news/") && news.find(path.substring(6)) != null) servePage(ex, "news.html");
                 else servePage(ex, 404, "404.html");
             }
         }
@@ -502,6 +511,24 @@ public class WebServer {
                 .collect(Collectors.joining(",", "[", "]"));
         return "{\"picks\":" + picks
                 + ",\"bans\":" + Json.list(t.bans().stream().map(Hero::name).toList()) + "}";
+    }
+
+    private static String newsListJson() {
+        return news.all().stream().map(a -> articleJson(a, false)).collect(Collectors.joining(",", "[", "]"));
+    }
+
+    /** One article; the body only when asked for (the list page needs titles and covers, not whole stories). */
+    private static String articleJson(NewsRepository.Article a, boolean withBody) {
+        StringBuilder sb = new StringBuilder("{");
+        sb.append("\"slug\":").append(Json.str(a.slug())).append(",\"title\":").append(Json.str(a.title()))
+                .append(",\"titleKm\":").append(Json.str(a.titleKm())).append(",\"type\":").append(Json.str(a.type()))
+                .append(",\"date\":").append(Json.str(a.date().toString()))
+                .append(",\"ends\":").append(Json.str(a.ends() == null ? "" : a.ends().toString()))
+                .append(",\"heroes\":").append(Json.list(a.heroes())).append(",\"image\":").append(Json.str(a.image()))
+                .append(",\"summary\":").append(Json.str(a.summary())).append(",\"summaryKm\":").append(Json.str(a.summaryKm()))
+                .append(",\"author\":").append(Json.str(a.author()));
+        if (withBody) sb.append(",\"body\":").append(Json.str(a.body())).append(",\"bodyKm\":").append(Json.str(a.bodyKm()));
+        return sb.append('}').toString();
     }
 
     /** Every arena map: icon, pro games, what its mechanic does, and how that moves hero value. */
