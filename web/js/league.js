@@ -143,7 +143,8 @@ function renderTeams(data){
  </div>`).join('');
 }
 function fmtWhen(s){const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(s||'');
- return m?`${fmtDate(`${m[1]}-${m[2]}-${m[3]}`)} - ${m[4]}${m[5]?' '+m[5]:''}`:(s||'')}
+ // English keeps the zone code (ICT, PHT, ...); Khmer says whose local time it is (tz.<code> in km.json)
+ return m?`${fmtDate(`${m[1]}-${m[2]}-${m[3]}`)} - ${m[4]}${m[5]?' '+t('tz.'+m[5],m[5]):''}`:(s||'')}
 const fmtDur=s=>s>0?`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`:'';
 function heroFallback(img){const s=document.createElement('span');s.className=img.className+' hero-ic-miss';s.textContent=img.alt.slice(0,2);img.replaceWith(s)}
 function heroHtml(name,side){
