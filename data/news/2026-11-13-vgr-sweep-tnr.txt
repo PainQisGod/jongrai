@@ -5,8 +5,8 @@ tags: MPL KH
 date: 2026-11-13 14:45
 heroes: Marcel; Harith; Aulus; Barats; Bruno
 image: news_vgr_vs_tnr_ubsf.jpg
-summary: The favorites swept TNR Esports to book their place in the Upper Bracket Final and send TNR to the Lower Bracket Semifinal.
-summary_km: ក្រុមគេរំពឹងច្រើនបានដាក់ខ្ទប់ TNR Esports ដើម្បីកក់កៅអីទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket និងបញ្ជូន TNR Esports ទៅលេងវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។
+summary: The favorites Vigor Apex swept TNR Esports to book their place in the Upper Bracket Final and send TNR to the Lower Bracket Semifinal.
+summary_km: ក្រុមដែលគេរំពឹងខ្ពស់ Vigor Apex បានដាក់ខ្ទប់ TNR Esports ដើម្បីកក់កៅអីទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket និងបញ្ជូន TNR Esports ទៅលេងវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។
 author: PainQ
 
 Yesterday, TNR Esports knocked out the defending champions. Today, Vigor Apex made sure there would be no reverse sweep this time, by sweeping TNR instead.
@@ -24,7 +24,7 @@ TNR went with comfort picks for every member in Game 3, while Vincen got his han
 Vincen was a deserved MVP in all three games, the first player to take three MVPs in one series since Sakzuuu did it for Team Max in Season 9.
 
 ---km
-ក្រុម TNR Esports បានយកជ័យជម្នះទៅលើក្រុមដែលគេរំពឹងថានឹងឈ្នះពានកាលពីម្សិលមិញ។ យ៉ាងណាក៏ដោយ Vigor Apex មិនអនុញ្ញាតឲ្យ TNR វាយបកនោះទេ ដោយបានដាក់ពួកគេខ្ទប់តែម្ដង។
+ក្រុម TNR Esports បានយកជ័យជម្នះទៅលើម្ចាស់ជើងឯករដូវកាលមុនកាលពីម្សិលមិញ។ យ៉ាងណាក៏ដោយ Vigor Apex មិនអនុញ្ញាតឲ្យ TNR វាយបកនោះទេ ដោយបានដាក់ពួកគេខ្ទប់តែម្ដង។
 
 ## វគ្គទី១ និងវគ្គទី២
 
