@@ -1,6 +1,7 @@
 title: Bigetron by Vitality Clinch Their Ticket to Istanbul!
 title_km: Bigetron by Vitality កក់សំបុត្រទៅកាន់ទីក្រុងអ៊ីស្តង់ប៊ុល
 type: esports
+tags: MPL ID
 date: 2026-11-07 22:22
 heroes: Lesley; Hirara; Harley; Kalea; Kimmy; Estes; Atlas; Yu Zhong
 image: news_btr_lower.jpg

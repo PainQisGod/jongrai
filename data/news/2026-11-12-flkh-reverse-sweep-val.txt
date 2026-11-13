@@ -1,6 +1,7 @@
 title: REVERSE SWEEP, AGAIN! Team Flash KH Deny Valhalla's Hopes of the Upper Bracket Semifinals
 title_km: វាយបកទៀតហើយ! Team Flash KH បានបញ្ចប់ក្ដីស្រម៉ៃរបស់ Valhalla ក្នុងការឡើងទៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket
 type: esports
+tags: MPL KH
 date: 2026-11-12 20:40
 heroes: Esmeralda; Lesley; Valir; Saber
 image: news_flkhval_playoff.jpg

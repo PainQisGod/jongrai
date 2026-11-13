@@ -4,6 +4,13 @@
 .news p.l{margin:0 0 20px;max-width:65ch}
 .cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
 .cats a{text-decoration:none;font-size:12px;color:var(--ink-3);background:var(--stone-2);border:1px solid var(--hair-2);border-radius:999px;padding:6px 13px;transition:color .15s,border-color .15s}
+.cats.tags{margin-top:-12px}.cats.tags[hidden]{display:none}
+.cats.tags a{font-size:11px;padding:5px 11px;display:inline-flex;align-items:center;gap:7px}
+.cats.tags a i{font-style:normal;font-size:10px;color:var(--ink-3)}
+.tgs{display:flex;flex-wrap:wrap;gap:6px}
+.tg{font:600 11px/1 var(--display);color:var(--gold-hi);border:1px solid rgba(255,202,104,.3);border-radius:6px;padding:4px 8px;cursor:pointer}
+.tg:hover{border-color:var(--gold)}
+.lang-km .tg{font-family:var(--body);font-weight:500}
 .cats a:hover{color:var(--ink)}.cats a.on{color:var(--ink);border-color:rgba(241,222,186,.3);background:var(--stone-3)}
 
 /* type colours */

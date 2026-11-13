@@ -1,6 +1,7 @@
 title: BACK-TO-BACK! Bigetron by Vitality Are Your MPL Indonesia Season 18 Champions
 title_km: BACK-TO-BACK! Bigetron by Vitality គឺជាជើងឯកការប្រកួត MPL Indonesia រដូវកាលទី១៨
 type: esports
+tags: MPL ID
 date: 2026-11-08 23:00
 heroes: Yu Zhong; Fanny; Chou; Hirara
 image: news_btr_champion_s18.jpg

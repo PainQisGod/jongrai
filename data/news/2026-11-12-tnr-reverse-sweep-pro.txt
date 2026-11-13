@@ -1,6 +1,7 @@
 title: UPSET ALERT! TNR Esports Stun PRO Esports with a 3-2 Reverse Sweep
 title_km: លទ្ធផលមិនគួរឲ្យជឿ! TNR Esports វាយបកយកឈ្នះ PRO Esports ក្នុងលទ្ធផល ៣-២ យ៉ាងគួរឲ្យភ្ញាក់ផ្អើល
 type: esports
+tags: MPL KH
 date: 2026-11-12 18:55
 heroes: Hirara; Obsidia; Claude; Yu Zhong; Nolan
 image: news_playoff_1.jpg

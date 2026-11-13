@@ -28,7 +28,7 @@ public class NewsRepository {
      * time is the optional "HH:MM" after the date ("date: 2026-11-12 18:55"); it only orders articles of the same day.
      */
     public record Article(String slug, String title, String titleKm, String type, LocalDate date, String time, LocalDate ends,
-                          List<String> heroes, String image, String credit, String summary, String summaryKm, String author,
+                          List<String> heroes, List<String> tags, String image, String credit, String summary, String summaryKm, String author,
                           String body, String bodyKm) {
         /** When the article goes live: its date and time in Cambodia time (no time = midnight). */
         public java.time.ZonedDateTime publishAt() {
@@ -147,7 +147,9 @@ public class NewsRepository {
         LocalDate ends = date(head.get("ends"), "ends", false);
         List<String> heroes = new ArrayList<>();
         for (String h : head.getOrDefault("heroes", "").split(";")) if (!h.isBlank()) heroes.add(h.strip());
-        return new Article(slug, title, head.getOrDefault("title_km", ""), type, date, time, ends, List.copyOf(heroes),
+        List<String> tags = new ArrayList<>();   // free labels such as "MPL KH; National Team", shown as filters on /news
+        for (String g : head.getOrDefault("tags", "").split(";")) if (!g.isBlank() && !tags.contains(g.strip())) tags.add(g.strip());
+        return new Article(slug, title, head.getOrDefault("title_km", ""), type, date, time, ends, List.copyOf(heroes), List.copyOf(tags),
                 head.getOrDefault("image", ""), head.getOrDefault("credit", ""), head.getOrDefault("summary", ""), head.getOrDefault("summary_km", ""),
                 head.getOrDefault("author", "PainQ"), body.strip(), bodyKm.strip());
     }

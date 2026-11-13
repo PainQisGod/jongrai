@@ -13,6 +13,8 @@
 #          A date and time in the future keeps the article hidden until then (Cambodia time), so you can write ahead
 # ends:    optional. When an event or a skin sale ends; the page counts down to it
 # heroes:  optional. Heroes this is about, separated by ; and spelled as on the site
+# tags:    optional. Topics, separated by ; e.g. MPL KH; National Team. Each one becomes a filter on /news
+#          (spell a tag the same way every time). Khmer name: add news.tag.<tag-in-lowercase-with-dashes> to km.json
 # image:   optional. The cover picture, from web/news/ (jpg, png, webp or avif; wide 16:9 looks best)
 # credit:  optional. Who the cover picture belongs to; shown under it as "Photo: ..."
 #
@@ -22,6 +24,7 @@ type: news
 date: 2026-11-12
 ends:
 heroes: Granger; Claude
+tags: MPL KH
 image: cover.jpg
 credit:
 summary: One or two sentences shown on the news list.

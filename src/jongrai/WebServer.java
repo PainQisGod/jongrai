@@ -524,7 +524,7 @@ public class WebServer {
                 .append(",\"titleKm\":").append(Json.str(a.titleKm())).append(",\"type\":").append(Json.str(a.type()))
                 .append(",\"date\":").append(Json.str(a.date().toString()))
                 .append(",\"ends\":").append(Json.str(a.ends() == null ? "" : a.ends().toString()))
-                .append(",\"heroes\":").append(Json.list(a.heroes())).append(",\"image\":").append(Json.str(a.image()))
+                .append(",\"heroes\":").append(Json.list(a.heroes())).append(",\"tags\":").append(Json.list(a.tags())).append(",\"image\":").append(Json.str(a.image()))
                 .append(",\"credit\":").append(Json.str(a.credit()))
                 .append(",\"summary\":").append(Json.str(a.summary())).append(",\"summaryKm\":").append(Json.str(a.summaryKm()))
                 .append(",\"author\":").append(Json.str(a.author()));

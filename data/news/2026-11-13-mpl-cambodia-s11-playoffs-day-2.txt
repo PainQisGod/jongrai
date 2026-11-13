@@ -1,6 +1,7 @@
 title: Two Newcomers in the Upper Bracket Semifinals! What to Expect from MPL Cambodia Season 11 Playoffs Day 2
 title_km: ក្រុមចំណូលថ្មីពីរក្រុមនៅក្នុងវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket! តើត្រូវរំពឹងអ្វីពីការប្រកួត MPL Cambodia រដូវកាលទី១១ វគ្គ Playoffs ថ្ងៃទី២?
 type: esports
+tags: MPL KH
 date: 2026-11-13 06:07
 image: news_po_day2_mplkh.jpg
 summary: Vigor Apex vs TNR Esports and Team RVZ vs Team Flash KH, with places in the Upper Bracket Final on the line.
