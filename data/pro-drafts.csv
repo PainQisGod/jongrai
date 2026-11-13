@@ -160,6 +160,10 @@ mpl_kh_s11_po_2_g5,mpl_kh_s11_po_2,mpl_kh,Season 11,5,flkh,val,Esmeralda;Fanny;M
 mpl_kh_s11_po_3_g1,mpl_kh_s11_po_3,mpl_kh,Season 11,1,vgr,tnr,Esmeralda;Kalea;Paquito;Sora;Alice,Freya;Hirara;Masha;Zetian;Yve,Uranus;Suyou;Valir;Marcel;Claude,Atlas;Nolan;Kimmy;Minotaur;Obsidia,0,vgr,2.2.23,Golden Turret,10:53,Vincen
 mpl_kh_s11_po_3_g2,mpl_kh_s11_po_3,mpl_kh,Season 11,2,vgr,tnr,Esmeralda;Kalea;Paquito;Alice;Sora,Hirara;Marcel;Atlas;Phoveus;Yu Zhong,Barats;Aulus;Zhuxin;Masha;Harith,Freya;Suyou;Kimmy;Gatotkaca;Claude,0,vgr,2.2.23,Healing Turtle,15:17,Vincen
 mpl_kh_s11_po_3_g3,mpl_kh_s11_po_3,mpl_kh,Season 11,3,vgr,tnr,Kalea;Paquito;Freya;Belerick;Gloo,Hirara;Marcel;Masha;Phoveus;Alice,Uranus;Suyou;Valir;Atlas;Bruno,Sora;Nolan;Zhuxin;Grock;Claude,0,vgr,2.2.23,Revealing Wisps,14:34,Vincen
+mpl_kh_s11_po_4_g1,mpl_kh_s11_po_4,mpl_kh,Season 11,1,rvz,flkh,Kimmy;Zhuxin;Nolan;Obsidia;Lylia,Masha;Kalea;Paquito;Aulus;Leomord,Phoveus;Hayabusa;Eudora;Carmilla;Claude,Uranus;Suyou;Zetian;Marcel;Bruno,0,rvz,2.2.23,Healing Turtle,14:03,Virgil
+mpl_kh_s11_po_4_g2,mpl_kh_s11_po_4,mpl_kh,Season 11,2,flkh,rvz,Esmeralda;Paquito;Carmilla;Lylia;Zetian,Kimmy;Masha;Nolan;Barats;Claude,Uranus;Aulus;Zhuxin;Kalea;Bruno,Phoveus;Suyou;Xavier;Atlas;Obsidia,0,flkh,2.2.23,Flying Cloud,13:52,Sakzuuu
+mpl_kh_s11_po_4_g3,mpl_kh_s11_po_4,mpl_kh,Season 11,3,rvz,flkh,Kimmy;Zhuxin;Nolan;Lylia;Valir,Masha;Paquito;Kalea;Aulus;Leomord,Phoveus;Hirara;Eudora;Carmilla;Harith,Barats;Suyou;Gord;Marcel;Claude,0,flkh,2.2.23,Revealing Wisps,19:36,Oppi
+mpl_kh_s11_po_4_g4,mpl_kh_s11_po_4,mpl_kh,Season 11,4,flkh,rvz,Esmeralda;Paquito;Carmilla;Zetian;Lylia,Kimmy;Masha;Nolan;Valir;Bruno,Barats;Suyou;Lunox;Kalea;Obsidia,Alice;Aulus;Kadita;Atlas;Claude,0,flkh,2.2.23,Golden Turret,11:13,Layy
 # MPL PH Season 18: bans, sides, winners and picks from mlbbhub.com match scoreboards (Liquipedia data, CC BY-SA 3.0), checked 2026-11-07.
 # Picks are put in lane order from each player's season role. Maps, game times and the three Week 8 matches mlbbhub lacked come from
 #   Liquipedia screenshots. MVPs are per match, in pro-matches.csv.
