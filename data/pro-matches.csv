@@ -72,10 +72,10 @@ mpl_kh_s11_w5_d3_m2,mpl_kh,Season 11,5,3,gxp,eye,0,2,finished,2026-11-01 - 15:30
 mpl_kh_s11_w5_d3_m3,mpl_kh,Season 11,5,3,pro,rvz,1,2,finished,2026-11-01 - 18:00 ICT,,regular,3
 mpl_kh_s11_po_1,mpl_kh,Season 11,6,1,pro,tnr,2,3,finished,2026-11-12 - 13:00 ICT,,play-in,5
 mpl_kh_s11_po_2,mpl_kh,Season 11,6,1,flkh,val,3,2,finished,2026-11-12 - 16:30 ICT,,play-in,5
-mpl_kh_s11_po_3,mpl_kh,Season 11,6,2,vgr,tnr,,,scheduled,2026-11-13 - 12:00 ICT,,upper semifinal,
+mpl_kh_s11_po_3,mpl_kh,Season 11,6,2,vgr,tnr,3,0,finished,2026-11-13 - 12:00 ICT,,upper semifinal,5
 mpl_kh_s11_po_4,mpl_kh,Season 11,6,2,rvz,flkh,,,scheduled,2026-11-13 - 15:30 ICT,,upper semifinal,
-mpl_kh_s11_po_5,mpl_kh,Season 11,6,2,TBD,TBD,,,scheduled,2026-11-13 - 19:00 ICT,,lower semifinal,
-mpl_kh_s11_po_6,mpl_kh,Season 11,6,3,TBD,TBD,,,scheduled,2026-11-14 - 13:00 ICT,,upper final,
+mpl_kh_s11_po_5,mpl_kh,Season 11,6,2,tnr,TBD,,,scheduled,2026-11-13 - 19:00 ICT,,lower semifinal,
+mpl_kh_s11_po_6,mpl_kh,Season 11,6,3,vgr,TBD,,,scheduled,2026-11-14 - 13:00 ICT,,upper final,
 mpl_kh_s11_po_7,mpl_kh,Season 11,6,3,TBD,TBD,,,scheduled,2026-11-14 - 16:30 ICT,,lower final,
 mpl_kh_s11_po_8,mpl_kh,Season 11,6,4,TBD,TBD,,,scheduled,2026-11-15 - 14:00 ICT,,grand final,
 # MPL PH Season 18: results from mlbbhub.com (checked 2026-11-07); the standings they produce match Wikipedia.
