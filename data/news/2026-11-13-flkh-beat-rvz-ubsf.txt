@@ -1,0 +1,39 @@
+title: LET TEAM FLASH KH COOK! Their Wonder Run Reaches the Upper Bracket Final
+title_km: ទុកឲ្យ TEAM FLASH KH ចម្អិន! ភាពអស្ចារ្យនៃក្រុម Team Flash KH បានឡើងទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket
+type: esports
+tags: MPL KH
+date: 2026-11-13 18:07
+heroes: Hayabusa; Gord; Lunox
+image: news_rvzflkh_ubsf.jpg
+summary: Team Flash KH beat Team RVZ 3-1 to book a place in the Upper Bracket Final against Vigor Apex, while RVZ face TNR Esports in the Lower Bracket Semifinal shortly.
+summary_km: Team Flash KH យកឈ្នះ Team RVZ ក្នុងលទ្ធផល ៣-១ ដើម្បីឈានទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket ដែលត្រូវជួបជាមួយ Vigor Apex រីឯ Team RVZ នឹងត្រូវជួបជាមួយ TNR Esports នៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket នាពេលបន្តិចទៀតនេះ។
+author: PainQ
+
+Team Flash KH reverse swept Valhalla last night to set up an Upper Bracket Semifinal against Team RVZ, a newcomer team full of promising young rookies. Experience won out, and FLKH prevailed.
+
+## Games 1 and 2
+
+RVZ opened Game 1 with a surprise: [[Hayabusa]] for VBEN, the hero's first pick of the season, and they took the game with ease. Game 2 was a back-and-forth affair that went FLKH's way, with Aries making up for the mistake he made in the first game.
+
+## Games 3 and 4
+
+Game 3 brought another season debut, this time from FLKH: [[Gord]] for Oppi. Neither team had a big advantage for the whole game, until Oppi's stun caught RVZ's Kwayne off guard with no Purify available. FLKH turned it into a full wipe and took Game 3.
+
+For Game 4, Oppi got [[Lunox]], a hero buffed in this week's patch, and he finished it off to send FLKH to the Upper Bracket Final.
+
+FLKH now face the undefeated Vigor Apex in the Upper Bracket Final, while RVZ get a second chance against TNR Esports in the Lower Bracket Semifinal, starting shortly.
+
+---km
+Team Flash KH បានវាយបកទៅលើ Valhalla កាលពីយប់មិញ និងកក់កៅអីទៅកាន់វគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket ទល់នឹង Team RVZ ដែលជាក្រុមចំណូលថ្មី ពោរពេញទៅដោយកីឡាករវ័យក្មេងដែលមានសក្ដានុពលខ្ពស់។ យ៉ាងណាក៏ដោយ បទពិសោធន៍ដ៏សម្បូរបែបរបស់ក្រុម FLKH បានយកឈ្នះទៅលើក្រុម RVZ។
+
+## វគ្គទី១ និងវគ្គទី២
+
+RVZ ចាប់ផ្ដើមវគ្គទី១ ដោយជ្រើសរើសតួអង្គ [[Hayabusa]] សម្រាប់ VBEN ជាលើកដំបូងដ៏ភ្ញាក់ផ្អើល និងបានឈ្នះវគ្គទី១ ដោយមិនលំបាក មុននឹងការប្រកួតដ៏ប្រទាញប្រទង់នៅវគ្គទី២ ត្រូវបាន FLKH យកឈ្នះ ដោយ Aries បានស្ដារកិត្តិយសរបស់ខ្លួនឡើងវិញ បន្ទាប់ពីកំហុសដែលគាត់បានបង្កើតកាលពីវគ្គមុន។
+
+## វគ្គទី៣ និងវគ្គទី៤
+
+ការជ្រើសរើសតួអង្គដ៏ភ្ញាក់ផ្អើលទៀតហើយគឺ [[Gord]] ដែលលើកនេះ FLKH យកឲ្យ Oppi លេង។ ក្រុមទាំងពីរមិនមានអ្នកណាលើអ្នកណាជាងប៉ុន្មានឡើយ តែការ Stun របស់ Oppi ជាប់ Kwayne របស់ RVZ ដែលមិនមាន Spell Purify ហើយ FLKH យកបានគ្រប់សមាជិក RVZ និងបញ្ចប់វគ្គទី៣។
+
+តួអង្គទើបតែគេ Buff គឺ [[Lunox]] ត្រូវបាន Oppi យកដើម្បីយកឈ្នះនៅវគ្គទី៤ និងយកកៅអីទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket។
+
+FLKH នឹងជួបជាមួយក្រុមមិនទាន់ស្គាល់ពាក្យថាចាញ់ Vigor Apex នៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket រីឯ RVZ នឹងមានឱកាសទី២ នៅក្នុងវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket ដែលត្រូវជួបជាមួយ TNR Esports នាពេលបន្តិចទៀតនេះ។
