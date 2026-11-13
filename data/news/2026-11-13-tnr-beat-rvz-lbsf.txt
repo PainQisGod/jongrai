@@ -1,27 +1,47 @@
-title: THE FAIRYTALE CONTINUES! TNR Esports defeat Team RVZ 3-1
+title: THE FAIRYTALE CONTINUES! TNR Esports Defeat Team RVZ 3-1
 title_km: ដំណើរផ្សងព្រេងមិនទាន់បញ្ចប់នៅឡើយ! TNR Esports បានយកឈ្នះ Team RVZ ក្នុងលទ្ធផល ៣-១
 type: esports
 tags: MPL KH
 date: 2026-11-13 21:48
 heroes: Masha
 image: news_tnrvsrvz_lbsf.jpg
-summary: TNR Esports continue their cinderella run after beating Team RVZ 3-1 to advance to the Lower Bracket Final.
+summary: TNR Esports kept their Cinderella run alive with a 3-1 win over Team RVZ, booking a place in the Lower Bracket Final.
 summary_km: TNR Esports បន្តដំណើរដ៏អស្ចារ្យរបស់ខ្លួនបន្ទាប់ពីបានឈ្នះ Team RVZ ៣-១ ដើម្បីបន្តទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។
 author: PainQ
 
-Two open qualifier teams proved themselves in the regular season. But both had just lost in the Upper Bracket Semifinals this afternoon, so they got a second chance to prove themselves in the Lower Bracket Semifinal.
+Two open qualifier teams, two strong regular seasons, and one afternoon that ended in the same way for both: a loss in the Upper Bracket Semifinals. The Lower Bracket Semifinal gave TNR Esports and Team RVZ a second chance, and only one of them was going to take it.
 
-Team RVZ took Game 1 with aggressive gameplay, built on Virgil's wonderful setup with [[Masha]]. TNR Esports quickly denied them in the next game with a split teamfight and a backdoor play from Alfonso.
+## Games 1 and 2
 
-RVZ started strong in Game 3 and led by 7 thousand gold, before Tyyy's setup and a blunder from RVZ itself secured a comeback for TNR. With a draft built solely on comfort picks, TNR dominated Game 4 and ended RVZ's run.
+RVZ struck first. Their aggressive style carried Game 1, with Virgil's [[Masha]] setting up the plays that put them in front.
 
-TNR will now wait for the loser of the Upper Bracket Final in the Lower Bracket Final.
+TNR answered straight away. A split teamfight turned Game 2 in their favour, and Alfonso finished it with a backdoor play that RVZ never saw coming.
+
+## Games 3 and 4
+
+RVZ came out strong in Game 3 and built a 7,000 gold lead. But Tyyy's setup swung the momentum, and a blunder from RVZ themselves handed TNR the comeback.
+
+In Game 4, TNR drafted nothing but comfort picks and dominated from start to finish, ending RVZ's run.
+
+## What's next
+
+TNR now wait in the Lower Bracket Final for the loser of the Upper Bracket Final. The fairytale goes on.
 
 ---km
-ក្រុមមកពីវគ្គជម្រុះទាំងពីរបានបង្ហាញពីភាពខ្លាំងក្លារបស់ខ្លួននៅវគ្គ Regular Season ប៉ុន្តែក្រុមទាំងពីរបានចាញ់នៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket នាថ្ងៃមិញនេះ ដូច្នេះពួកគេមានឱកាសទី២ ដើម្បីបង្ហាញមហិទ្ធិរិទ្ធរបស់ខ្លួននៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។
+ក្រុមមកពីវគ្គជម្រុះទាំងពីរបានបង្ហាញពីភាពខ្លាំងក្លារបស់ខ្លួននៅវគ្គ Regular Season ប៉ុន្តែទាំងពីរក្រុមបានចាញ់នៅវគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Upper Bracket នាថ្ងៃមិញនេះ។ វគ្គពាក់កណ្ដាលផ្ដាច់ព្រ័ត្រនៃ Lower Bracket ក៏បានផ្ដល់ឱកាសទី២ដល់ TNR Esports និង Team RVZ ប៉ុន្តែមានតែក្រុមមួយប៉ុណ្ណោះដែលអាចចាប់យកវាបាន។
 
-Team RVZ បានឈ្នះវគ្គទី១ តាមរយៈការលេងដ៏កាច ដែលបានមកពីការបង្កើតការលេងដ៏ល្អពីតួអង្គ [[Masha]] របស់ Virgil ប៉ុន្តែត្រូវបាន TNR Esports យកឈ្នះវគ្គទី២វិញ តាមរយៈការបំបែកកន្លែងវាយគ្នា និងការលេងលួចគាស់ផ្ទះពីសំណាក់កីឡាករ Alfonso ។
+## វគ្គទី១ និងវគ្គទី២
 
-RVZ ចាប់ផ្ដើមវគ្គទី៣ ល្អមែនទែន ព្រមទាំងនាំមុខដល់ទៅ ៧ ពាន់លុយ មុននឹងការបង្កើតវាយពីកីឡាករ Tyyy របស់ក្រុម TNR ព្រមទាំងកំហុសរបស់សមាជិកក្រុម RVZ ផ្ទាល់តែម្ដង បានធ្វើឲ្យ TNR វាយបកបាន។ ជាមួយនឹង Draft ដែលសុទ្ធសឹងតែជាតួអង្គស្និទ្ធស្នាល TNR គ្របដណ្ដប់វគ្គទី៤ និងបញ្ចប់ដំណើររបស់ RVZ។
+RVZ ជាអ្នកចាប់ផ្ដើមមុន។ ស្ទីលលេងដ៏កាចរបស់ពួកគេបាននាំឲ្យឈ្នះវគ្គទី១ ដោយមានតួអង្គ [[Masha]] របស់ Virgil ជាអ្នករៀបចំការលេងដ៏ល្អ ដែលជួយឲ្យក្រុមនាំមុខ។
 
-TNR ត្រូវរង់ចាំអ្នកដែលចាញ់ក្នុងការប្រកួតវគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket ដើម្បីប្រកួតជាមួយពួកគេនៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។
+TNR បានតបត្រឡប់វិញភ្លាមៗ។ ការបំបែកកន្លែងវាយគ្នាជួយឲ្យពួកគេឈ្នះវគ្គទី២ ហើយកីឡាករ Alfonso បានបញ្ចប់វគ្គដោយការលេងលួចគាស់ផ្ទះ ដែល RVZ មិនបានរំពឹងទុកទាល់តែសោះ។
+
+## វគ្គទី៣ និងវគ្គទី៤
+
+RVZ ចាប់ផ្ដើមវគ្គទី៣បានល្អមែនទែន ហើយនាំមុខដល់ទៅ ៧ ពាន់លុយ។ ប៉ុន្តែការបង្កើតការវាយរបស់កីឡាករ Tyyy បានបង្វិលសភាពការណ៍ ព្រមទាំងកំហុសរបស់សមាជិកក្រុម RVZ ផ្ទាល់ បានធ្វើឲ្យ TNR វាយបកបាន។
+
+នៅវគ្គទី៤ TNR ជ្រើស Draft សុទ្ធតែតួអង្គស្និទ្ធស្នាល ហើយគ្របដណ្ដប់ពីដើមដល់ចប់ ដើម្បីបញ្ចប់ដំណើររបស់ RVZ។
+
+## ជំហានបន្ទាប់
+
+TNR ត្រូវរង់ចាំអ្នកដែលចាញ់ក្នុងវគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket ដើម្បីប្រកួតជាមួយពួកគេនៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។ ដំណើរផ្សងព្រេងនេះនៅតែបន្ត។
