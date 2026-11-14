@@ -1,0 +1,43 @@
+title: 3-0! Vigor Apex Are Heading to the Grand Final!
+title_km: ៣-០! Vigor Apex បានឡើងទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រ!
+type: esports
+tags: MPL KH
+date: 2026-11-14 15:00
+heroes: Esmeralda; Minotaur
+image: news_vgr_vs_flkh_ubf.jpg
+summary: Vigor Apex secured their Grand Final ticket after sweeping Team Flash KH in the Upper Bracket Final.
+summary_km: Vigor Apex បានសំបុត្រទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រ បន្ទាប់ពីវាយ Team Flash KH ដាច់ ៣-០ នៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket។
+author: PainQ
+
+Yesterday, Vigor Apex completely dominated TNR Esports in a 3-0 sweep, while Team Flash KH took down the young guns of Team RVZ 3-1. That set up a battle for the ages in the Upper Bracket Final.
+
+## Games 1 and 2
+
+Game 1 was total domination from VGR, and Vincen grabbed the MVP once again, his fourth of these playoffs.
+
+Game 2 was a real back-and-forth. Neither team wanted to commit before the first Lord, until a huge teamfight broke out. VGR's Detective came out of it with the first Savage of the season, putting VGR on match point.
+
+## Game 3
+
+FLKH banned five of BOXI's heroes in both Game 1 and Game 3, and the strategy paid off early: they held the advantage through the early and mid game. But a double setup from Shadoww's [[Esmeralda]] and BOXI's [[Minotaur]] created a wombo combo that flipped the game around and sealed the deal for VGR.
+
+## What's next
+
+Vigor Apex wait in the Grand Final. FLKH drop to the Lower Bracket Final and face TNR Esports this evening at 16:30.
+
+---km
+កាលពីម្សិលមិញ Vigor Apex បានគ្របដណ្ដប់ TNR Esports យ៉ាងស្រឡះក្នុងលទ្ធផល ៣-០ រីឯ Team Flash KH បានយកឈ្នះក្រុមសម្បូរទៅដោយកីឡាករវ័យក្មេង Team RVZ ក្នុងលទ្ធផល ៣-១។ ការប្រកួតទាំងនេះបានបង្កើតជាការប្រជែងដ៏ជក់ចិត្តមួយនៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Upper Bracket។
+
+## វគ្គទី១ និងវគ្គទី២
+
+វគ្គទី១គឺជាការគ្របដណ្ដប់ទាំងស្រុងពី VGR ហើយ Vincen បានយក MVP ម្ដងទៀត ដែលជា MVP ទីបួនរបស់គាត់ក្នុងវគ្គ Playoffs នេះ។
+
+វគ្គទី២ជាការប្រទាញប្រទង់គ្នាខ្លាំង។ ក្រុមទាំងពីរមិនហ៊ានវាយគ្នាមុន Lord ទីមួយ រហូតដល់មានការវាយគ្នាទ្រង់ទ្រាយធំ ដែលកីឡាករ Detective របស់ VGR ទទួលបាន Savage លើកដំបូងនៃរដូវកាលនេះ ជួយឲ្យ VGR សល់តែមួយវគ្គទៀតដើម្បីឈ្នះ។
+
+## វគ្គទី៣
+
+FLKH បានបិទតួអង្គរបស់ BOXI ចំនួន ៥ ទាំងក្នុងវគ្គទី១ និងវគ្គទី៣ ហើយយុទ្ធសាស្ត្រនេះបានដំណើរការល្អនៅដើមវគ្គ ដោយពួកគេនាំមុខអំឡុងពេលដើមទៅពាក់កណ្ដាលវគ្គ។ ប៉ុន្តែការបង្កើតឈុតឆាកវាយគ្នាពីតួអង្គ [[Esmeralda]] របស់ Shadoww និងតួអង្គ [[Minotaur]] របស់ BOXI បានបង្កើតជា Combo ដ៏អស្ចារ្យ បង្វែរស្ថានការណ៍ និងបញ្ចប់ការប្រកួតសម្រាប់ VGR។
+
+## ជំហានបន្ទាប់
+
+Vigor Apex កំពុងរង់ចាំនៅវគ្គផ្ដាច់ព្រ័ត្រ។ រីឯ FLKH ធ្លាក់ទៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket ហើយត្រូវជួបក្រុម TNR Esports នៅល្ងាចនេះម៉ោង ១៦:៣០។
