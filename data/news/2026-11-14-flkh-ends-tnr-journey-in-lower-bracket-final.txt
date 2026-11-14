@@ -1,0 +1,39 @@
+title: The Underdog Story Comes to an End! Team Flash KH Are Going to the Grand Final!
+title_km: ដំណើររបស់ក្រុមដែលបង្កភាពភ្ញាក់ផ្អើលត្រូវបានបញ្ចប់! Team Flash KH ឡើងទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រ!
+type: esports
+tags: MPL KH
+date: 2026-11-14 18:59
+heroes: Lapu-Lapu; Alice
+image: news_flkh_vs_tnr_lbf.jpg
+summary: Team Flash KH swept TNR Esports 3-0 and will face Vigor Apex in a Grand Final rematch.
+summary_km: Team Flash KH បានវាយ TNR Esports ដាច់ ៣-០ ដើម្បីជួប Vigor Apex ក្នុងការប្រកួតសងសឹកនៅវគ្គផ្ដាច់ព្រ័ត្រ។
+author: PainQ
+
+## The road to the Lower Bracket Final
+
+TNR Esports beat PRO Esports 3-2, then lost 3-0 to Vigor Apex and dropped to the Lower Bracket, where they beat Team RVZ 3-1. Meanwhile, Team Flash KH got past Valhalla 3-2 and RVZ 3-1, but lost 3-0 to VGR this afternoon and dropped into the Lower Bracket Final to meet TNR.
+
+## Games 1 and 2
+
+[[Lapu-Lapu]] made its debut for TNR's Mercyy in Game 1. TNR drafted for an early spike, but FLKH's late-game draft held up from the very start, and Layy took over with a Savage, the second Savage of the day.
+
+In Game 2, FLKH's Sakzuuu debuted his [[Alice]] and carried his team to the win, despite a fierce comeback attempt from TNR.
+
+## Game 3
+
+No surprises in Game 3. FLKH stomped TNR to complete the sweep and earned a chance at revenge against VGR in the Grand Final.
+
+---km
+## ដំណើរឆ្ពោះទៅវគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket
+
+TNR Esports បានយកឈ្នះ PRO Esports ៣-២ មុននឹងចាញ់ Vigor Apex ៣-០ ហើយធ្លាក់ទៅ Lower Bracket ដែលពួកគេបានយកឈ្នះ Team RVZ ៣-១។ ចំណែក Team Flash KH បានយកឈ្នះ Valhalla ៣-២ និង RVZ ៣-១ ប៉ុន្តែបានចាញ់ VGR ៣-០ នៅរសៀលនេះ ហើយធ្លាក់មកវគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket ដើម្បីជួប TNR។
+
+## វគ្គទី១ និងវគ្គទី២
+
+[[Lapu-Lapu]] ត្រូវបានជ្រើសរើសជាលើកដំបូងសម្រាប់កីឡាករ Mercyy របស់ TNR នៅវគ្គទី១។ ទោះបី TNR រៀប Draft សម្រាប់បង្កើនសម្ពាធនៅដើមវគ្គក៏ដោយ Draft ចុងវគ្គរបស់ FLKH នៅតែអាចលេងបានយ៉ាងល្អតាំងពីដើមម៉ោង ហើយ Layy បានយក Savage ដែលជា Savage ទីពីរប្រចាំថ្ងៃ។
+
+នៅវគ្គទី២ កីឡាករ Sakzuuu បានលេង [[Alice]] ជាលើកដំបូង ហើយនាំក្រុមឈ្នះ ទោះបីជាមានការវាយបកយ៉ាងសាហាវពី TNR ក្ដី។
+
+## វគ្គទី៣
+
+គ្មានអ្វីភ្ញាក់ផ្អើលក្នុងវគ្គទី៣ទេ ព្រោះ FLKH បានគ្របដណ្ដប់ TNR យ៉ាងស្រឡះ ហើយបិទបញ្ចប់ការប្រកួតដោយលទ្ធផលដាច់ ៣-០ ព្រមទាំងទទួលបានឱកាសសងសឹក VGR នៅវគ្គផ្ដាច់ព្រ័ត្រ។
