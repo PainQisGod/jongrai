@@ -3,7 +3,7 @@ title_km: ដំណើរផ្សងព្រេងមិនទាន់បញ�
 type: esports
 tags: MPL KH
 date: 2026-11-13 21:48
-heroes: Masha
+heroes: Masha; Grock
 image: news_tnrvsrvz_lbsf.jpg
 summary: TNR Esports kept their Cinderella run alive with a 3-1 win over Team RVZ, booking a place in the Lower Bracket Final.
 summary_km: TNR Esports បន្តដំណើរដ៏អស្ចារ្យរបស់ខ្លួនបន្ទាប់ពីបានឈ្នះ Team RVZ ៣-១ ដើម្បីបន្តទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រនៃ Lower Bracket។
