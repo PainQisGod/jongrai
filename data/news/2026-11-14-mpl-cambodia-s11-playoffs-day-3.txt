@@ -1,5 +1,5 @@
 title: THE ROAD TO THE GRAND FINAL IS HERE! 3 Teams Will Battle for Their Seat on Playoffs Day 3
-title_km: ដំណើរឆ្ពោះទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រគឺនៅទីនេះ! បីក្រុមនឹងប្រឹងប្រែងអស់ពីសមត្ថភាពនៅក្នុងការប្រកួតវគ្គ Playoffs ថ្ងៃទី៣
+title_km: ដំណើរឆ្ពោះទៅកាន់វគ្គផ្ដាច់ព្រ័ត្រគឺនៅទីនេះ! បីក្រុមនឹងប្រឹងប្រែងឲ្យអស់ពីសមត្ថភាពនៅក្នុងការប្រកួតវគ្គ Playoffs ថ្ងៃទី៣
 type: esports
 tags: MPL KH
 date: 2026-11-14 09:59
