@@ -74,7 +74,7 @@ mpl_kh_s11_po_1,mpl_kh,Season 11,6,1,pro,tnr,2,3,finished,2026-11-12 - 13:00 ICT
 mpl_kh_s11_po_2,mpl_kh,Season 11,6,1,flkh,val,3,2,finished,2026-11-12 - 16:30 ICT,,play-in,5
 mpl_kh_s11_po_3,mpl_kh,Season 11,6,2,vgr,tnr,3,0,finished,2026-11-13 - 12:00 ICT,,upper semifinal,5
 mpl_kh_s11_po_4,mpl_kh,Season 11,6,2,rvz,flkh,1,3,finished,2026-11-13 - 15:30 ICT,,upper semifinal,5
-mpl_kh_s11_po_5,mpl_kh,Season 11,6,2,tnr,rvz,,,scheduled,2026-11-13 - 19:00 ICT,,lower semifinal,
+mpl_kh_s11_po_5,mpl_kh,Season 11,6,2,tnr,rvz,3,1,finished,2026-11-13 - 19:00 ICT,,lower semifinal,5
 mpl_kh_s11_po_6,mpl_kh,Season 11,6,3,vgr,flkh,,,scheduled,2026-11-14 - 13:00 ICT,,upper final,
 mpl_kh_s11_po_7,mpl_kh,Season 11,6,3,TBD,TBD,,,scheduled,2026-11-14 - 16:30 ICT,,lower final,
 mpl_kh_s11_po_8,mpl_kh,Season 11,6,4,TBD,TBD,,,scheduled,2026-11-15 - 14:00 ICT,,grand final,
