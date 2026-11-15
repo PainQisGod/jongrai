@@ -1,12 +1,20 @@
-# Professional League data: league_id, name, region, country, season, year, status, logo
+# Professional League data: league_id, name, region, country, season, year, status, logo, points_rule
 # One row per season of a league; league_id groups the seasons. The league bar shows one
 # entry per league_id, the season bar shows its rows in file order (newest first).
 # status: active, completed, upcoming
+# points_rule (optional, last column): how this season's table awards points per finished regular-season series.
+#   Blank = 1 point per series win, nothing for a loss. Otherwise a ;-separated list (no commas):
+#     win=3        points for the winner of any series         (default 1)
+#     loss=0       points for the loser of any series          (default 0)
+#     draw=1       points for each team when a series ends level, e.g. a Bo2 that finishes 1-1 (default 0)
+#     2-1=2:1      one exact score, winner's games-loser's games = winner's points:loser's points; beats win/loss
+#   Examples:  win=3   |   2-0=3:0;2-1=2:1   |   2-0=2:0;1-1=1:1   (a Bo2: 2 for a sweep, 1 each for a 1-1)
+#   Each season row has its own rule, so a league can change its scoring between seasons.
 # Sources: mplcambodia.com (official MPL KH site) and Liquipedia, verified 2026-10-11.
-league_id,name,region,country,season,year,status,logo
+league_id,name,region,country,season,year,status,logo,points_rule
 mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 11,2026,active,MPL_Cambodia.png
 mpl_ph,MPL Philippines,Southeast Asia,Philippines,Season 18,2026,completed,MPL_Philippines.png
 mpl_my,MPL Malaysia,Southeast Asia,Malaysia,Season 18,2026,completed,MPL_Malaysia.png
 mpl_id,MPL Indonesia,Southeast Asia,Indonesia,Season 18,2026,completed,MPL_Indonesia.png
 msl_mm,MSL Myanmar,Southeast Asia,Myanmar,Season 4,2026,completed,MSL_Myanmar.png
-mtc,MTC Türkiye Championship,Europe,Türkiye,Season 8,2026,completed,MTC.png
+mtc,MTC Türkiye Championship,Europe,Türkiye,Season 8,2026,completed,MTC.png,2-0=3:0;2-1=2:1

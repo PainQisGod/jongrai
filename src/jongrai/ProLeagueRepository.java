@@ -40,7 +40,12 @@ public final class ProLeagueRepository {
         Map<String, ProLeague> leagues = new LinkedHashMap<>();
         for (Csv.Row r : Csv.read(file, 8)) {
             ProLeague l = new ProLeague(r.text(0), r.text(1), r.text(2), r.text(3),
-                    r.text(4), r.integer(5, 0), r.text(6), r.text(7));
+                    r.text(4), r.integer(5, 0), r.text(6), r.text(7), r.text(8));
+            try {
+                PointsRule.parse(l.pointsRule());
+            } catch (IllegalArgumentException e) {
+                throw r.fail("column 9 (points_rule): " + e.getMessage());
+            }
             if (leagues.putIfAbsent(l.id() + "|" + l.season(), l) != null) {
                 throw r.fail("duplicate league '" + l.id() + "' season '" + l.season() + "'");
             }
@@ -148,36 +153,53 @@ public final class ProLeagueRepository {
     }
 
     /**
-     * The table for one season, calculated from its finished regular-season series: 1 point per series win
-     * (the MPL KH rule), gf/ga are games won and lost. Ties are broken by game difference, then games won,
-     * then team name. Every listed team appears, so a team that has not played yet shows 0-0.
+     * The table for one season, calculated from its finished regular-season series. Points come from the
+     * season's points_rule in pro-leagues.csv ({@link PointsRule}); with no rule that is 1 point per series
+     * win (the MPL KH rule). gf/ga are games won and lost, and a series that ends level counts as a draw.
+     * Ties are broken by wins, then game difference, then games won, then team name. Every listed team
+     * appears, so a team that has not played yet shows 0-0.
      */
     public List<ProStanding> standings(String leagueId, String season) {
-        Map<String, int[]> row = new LinkedHashMap<>();           // won, lost, gf, ga
-        Map<String, StringBuilder> results = new LinkedHashMap<>(); // W/L in date order
+        ProLeague league = leagues.get(leagueId + "|" + season);
+        PointsRule rule = league == null ? PointsRule.DEFAULT : PointsRule.parse(league.pointsRule());
+        Map<String, int[]> row = new LinkedHashMap<>();           // won, lost, gf, ga, drawn, points
+        Map<String, StringBuilder> results = new LinkedHashMap<>(); // W/L/D in date order
         for (ProTeam t : teamsInLeague(leagueId, season)) {
-            row.put(t.id(), new int[4]);
+            row.put(t.id(), new int[6]);
             results.put(t.id(), new StringBuilder());
         }
         String last = "";
         for (ProMatch m : matches(leagueId, season)) {          // already sorted by scheduled time
             boolean done = m.status().equals("finished") || m.status().equals("completed");
             if (!done || !m.matchType().equals("regular") || m.team1Score() < 0 || m.team2Score() < 0) continue;
-            int[] a = row.computeIfAbsent(m.team1Id(), k -> new int[4]);
-            int[] b = row.computeIfAbsent(m.team2Id(), k -> new int[4]);
-            boolean aWon = m.team1Score() > m.team2Score();
-            a[aWon ? 0 : 1]++;
-            b[aWon ? 1 : 0]++;
-            a[2] += m.team1Score(); a[3] += m.team2Score();
-            b[2] += m.team2Score(); b[3] += m.team1Score();
-            results.computeIfAbsent(m.team1Id(), k -> new StringBuilder()).append(aWon ? 'W' : 'L');
-            results.computeIfAbsent(m.team2Id(), k -> new StringBuilder()).append(aWon ? 'L' : 'W');
+            int[] a = row.computeIfAbsent(m.team1Id(), k -> new int[6]);
+            int[] b = row.computeIfAbsent(m.team2Id(), k -> new int[6]);
+            int s1 = m.team1Score(), s2 = m.team2Score();
+            a[2] += s1; a[3] += s2;
+            b[2] += s2; b[3] += s1;
+            char r1, r2;
+            if (s1 == s2) {
+                a[4]++; b[4]++;
+                a[5] += rule.drawPoints(); b[5] += rule.drawPoints();
+                r1 = 'D'; r2 = 'D';
+            } else {
+                boolean aWon = s1 > s2;
+                int hi = Math.max(s1, s2), lo = Math.min(s1, s2);
+                a[aWon ? 0 : 1]++;
+                b[aWon ? 1 : 0]++;
+                a[5] += aWon ? rule.winnerPoints(hi, lo) : rule.loserPoints(hi, lo);
+                b[5] += aWon ? rule.loserPoints(hi, lo) : rule.winnerPoints(hi, lo);
+                r1 = aWon ? 'W' : 'L'; r2 = aWon ? 'L' : 'W';
+            }
+            results.computeIfAbsent(m.team1Id(), k -> new StringBuilder()).append(r1);
+            results.computeIfAbsent(m.team2Id(), k -> new StringBuilder()).append(r2);
             last = m.scheduledTime().length() >= 10 ? m.scheduledTime().substring(0, 10) : m.scheduledTime();
         }
         Map<String, String> names = new LinkedHashMap<>();
         teamsInLeague(leagueId, season).forEach(t -> names.put(t.id(), t.name()));
         List<String> order = new ArrayList<>(row.keySet());
-        order.sort(Comparator.<String>comparingInt(id -> -row.get(id)[0])
+        order.sort(Comparator.<String>comparingInt(id -> -row.get(id)[5])
+                .thenComparingInt(id -> -row.get(id)[0])
                 .thenComparingInt(id -> -(row.get(id)[2] - row.get(id)[3]))
                 .thenComparingInt(id -> -row.get(id)[2])
                 .thenComparing(id -> names.getOrDefault(id, id)));
@@ -186,8 +208,8 @@ public final class ProLeagueRepository {
             String id = order.get(i);
             int[] r = row.get(id);
             String res = results.getOrDefault(id, new StringBuilder()).toString();
-            table.add(new ProStanding(leagueId, id, season, i + 1, r[0] + r[1], r[0], r[1], 0,
-                    r[2], r[3], r[2] - r[3], r[0], streak(res), res.length() > 5 ? res.substring(res.length() - 5) : res, last));
+            table.add(new ProStanding(leagueId, id, season, i + 1, r[0] + r[1] + r[4], r[0], r[1], r[4],
+                    r[2], r[3], r[2] - r[3], r[5], streak(res), res.length() > 5 ? res.substring(res.length() - 5) : res, last));
         }
         return table;
     }
@@ -224,7 +246,7 @@ public final class ProLeagueRepository {
     }
 
     public record ProLeague(String id, String name, String region, String country,
-                            String season, int year, String status, String logo) {}
+                            String season, int year, String status, String logo, String pointsRule) {}
 
     public record ProTeam(String id, String leagueId, String season, String name, String shortName,
                           String logo, int founded, String city, String coach, String status) {}

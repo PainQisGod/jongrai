@@ -258,6 +258,47 @@ public final class SelfCheck {
         }
     }
 
+    /** The points_rule column: parsing, bad input, and a rule changing a real season's table. */
+    private static void pointsRules(Path home) throws Exception {
+        PointsRule d = PointsRule.parse("");
+        check(d.winnerPoints(2, 0) == 1 && d.loserPoints(2, 1) == 0 && d.drawPoints() == 0, "a blank points_rule is 1 point per win");
+        PointsRule three = PointsRule.parse("win=3");
+        check(three.winnerPoints(2, 1) == 3 && three.loserPoints(2, 1) == 0, "win=3 gives 3 points for any win");
+        PointsRule split = PointsRule.parse("2-0=3:0; 2-1=2:1 ;draw=1");
+        check(split.winnerPoints(2, 0) == 3 && split.winnerPoints(2, 1) == 2 && split.loserPoints(2, 1) == 1
+                && split.loserPoints(2, 0) == 0 && split.winnerPoints(3, 0) == 1 && split.drawPoints() == 1,
+                "a score override beats win/loss, other scores keep the default, draw= applies");
+        for (String bad : List.of("win", "win=x", "2-2=1:1", "1-2=1:0", "2-1=2", "color=3", "win=1;win=2", "2-1=2:1:0")) {
+            boolean failed = false;
+            try { PointsRule.parse(bad); } catch (IllegalArgumentException e) { failed = true; }
+            check(failed, "points_rule '" + bad + "' is rejected");
+        }
+        // the same MPL KH S11 results under a 3/2/1/0 rule: vgr won 5 series 2-0 and 4 series 2-1
+        Path dir = Files.createTempDirectory("jongrai-rules");
+        try {
+            for (String f : List.of("pro-teams.csv", "pro-matches.csv", "pro-drafts.csv")) {
+                Files.copy(home.resolve("data").resolve(f), dir.resolve(f));
+            }
+            String leagues = Files.readString(home.resolve("data/pro-leagues.csv"));
+            String changed = leagues.replace("mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 11,2026,active,MPL_Cambodia.png",
+                    "mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 11,2026,active,MPL_Cambodia.png,2-0=3:0;2-1=2:1");
+            check(!changed.equals(leagues), "the MPL KH S11 row is in pro-leagues.csv for the points rule check");
+            Files.writeString(dir.resolve("pro-leagues.csv"), changed);
+            ProLeagueRepository custom = ProLeagueRepository.load(dir);
+            ProLeagueRepository.ProStanding top = custom.standings("mpl_kh", "Season 11").get(0);
+            check(top.teamId().equals("vgr") && top.won() == 9 && top.points() == 23,
+                    "a 2-0=3:0;2-1=2:1 rule gives vgr 23 points: " + top);
+            Files.writeString(dir.resolve("pro-leagues.csv"), leagues.replace("Season 11,2026,active,MPL_Cambodia.png",
+                    "Season 11,2026,active,MPL_Cambodia.png,2-0=oops"));
+            boolean rejected = false;
+            try { ProLeagueRepository.load(dir); } catch (java.io.IOException e) { rejected = e.getMessage().contains("points_rule"); }
+            check(rejected, "a bad points_rule stops the data load and names the column");
+        } finally {
+            try (var files = Files.list(dir)) { for (Path f : files.toList()) Files.deleteIfExists(f); }
+            Files.deleteIfExists(dir);
+        }
+    }
+
     private static void pro(Path home) throws Exception {
         ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
         List<ProLeagueRepository.ProStanding> table = pro.standings("mpl_kh", "Season 11");
@@ -271,6 +312,7 @@ public final class SelfCheck {
         String official = "vgr 9-0 18-4 9;rvz 8-1 17-8 8;pro 6-3 14-8 6;flkh 5-4 13-8 5;val 5-4 12-10 5;"
                 + "tnr 5-4 13-12 5;gxl 4-5 11-11 4;eye 2-7 7-14 2;sys 1-8 4-16 1;gxp 0-9 0-18 0;";
         check(got.toString().equals(official), "calculated standings match the official MPL KH S11 table: " + got);
+        pointsRules(home);
         StringBuilder ph = new StringBuilder();
         for (ProLeagueRepository.ProStanding s : pro.standings("mpl_ph", "Season 18")) {
             ph.append(s.teamId()).append(' ').append(s.won()).append('-').append(s.lost()).append(' ')
