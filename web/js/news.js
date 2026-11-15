@@ -18,10 +18,20 @@ const heroChip=n=>{const h=heroLower[n.toLowerCase()];if(!h)return`<span class="
  return`<a class="hchip" href="/heroes/${esc(h.slug)}"><i>${h.icon?`<img src="/icons/${esc(h.icon)}" alt="">`:''}</i>${esc(h.name)}</a>`};
 
 /** The story text: blank line = new paragraph, "## " sub-heading, "- " bullet, "[image: file | caption]",
- *  **bold** and [[Hero]] links. Everything is escaped first, so a story can never inject HTML. */
+ *  **bold**, [[Hero]] links and [text](link) links (a site path like /news/<slug>, or an https:// address).
+ *  Everything is escaped first, so a story can never inject HTML. */
 function story(text){
- const inline=s=>esc(s).replace(/(\d+-\d+)/g,'<span class="nb">$1</span>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
-  .replace(/\[\[([^\]]+)\]\]/g,(m,n)=>{const h=heroLower[n.trim().toLowerCase()];return h?`<a href="/heroes/${esc(h.slug)}">${esc(h.name)}</a>`:esc(n)});
+ const inline=s=>{
+  // links are lifted out first so the score highlighter below cannot touch digits inside an address
+  const links=[];
+  const h=esc(s).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,label,url)=>{
+   if(!/^(\/(?!\/)|https?:\/\/)/i.test(url))return m;   // only site paths and http(s); anything else stays plain text
+   const ext=/^https?:/i.test(url);
+   links.push(`<a href="${url}"${ext?' target="_blank" rel="noopener noreferrer"':''}>${label}</a>`);
+   return`\u0000${links.length-1}\u0000`});
+  return h.replace(/(\d+-\d+)/g,'<span class="nb">$1</span>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+   .replace(/\[\[([^\]]+)\]\]/g,(m,n)=>{const g=heroLower[n.trim().toLowerCase()];return g?`<a href="/heroes/${esc(g.slug)}">${esc(g.name)}</a>`:esc(n)})
+   .replace(/\u0000(\d+)\u0000/g,(m,i)=>links[i])};
  const out=[];let para=[],ul=[];
  const flush=()=>{if(para.length){out.push(`<p>${para.map(inline).join(' ')}</p>`);para=[]}if(ul.length){out.push(`<ul>${ul.map(x=>`<li>${inline(x)}</li>`).join('')}</ul>`);ul=[]}};
  for(const raw of text.split('\n')){

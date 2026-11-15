@@ -163,11 +163,23 @@ public class NewsRepository {
         catch (DateTimeParseException e) { throw new IllegalArgumentException("'" + field + ": " + v + "' must be a date like 2026-11-12"); }
     }
 
-    /** Images named in articles (cover and [image: ...] lines) that are not in web/news/, plus heroes nobody knows. */
+    /**
+     * Images named in articles (cover and [image: ...] lines) that are not in web/news/, heroes nobody knows,
+     * and [text](/news/slug) links to an article that does not exist.
+     */
     public List<String> validate(Set<String> heroKeys, Path imageDir) {
         List<String> out = new ArrayList<>(problems());
         java.util.regex.Pattern img = java.util.regex.Pattern.compile("(?m)^\\[image:\\s*([^|\\]]+)");
+        java.util.regex.Pattern link = java.util.regex.Pattern.compile("\\]\\(/news/([^)\\s#?]+)");
+        Set<String> slugs = new java.util.HashSet<>();
+        for (Article a : loaded()) slugs.add(a.slug());
         for (Article a : loaded()) {
+            for (String b : List.of(a.body(), a.bodyKm())) {
+                var m = link.matcher(b);
+                while (m.find())
+                    if (!slugs.contains(m.group(1)))
+                        out.add("news " + a.slug() + ": link to /news/" + m.group(1) + " but there is no such article");
+            }
             List<String> files = new ArrayList<>();
             if (!a.image().isEmpty()) files.add(a.image());
             for (String b : List.of(a.body(), a.bodyKm())) { var m = img.matcher(b); while (m.find()) files.add(m.group(1).strip()); }

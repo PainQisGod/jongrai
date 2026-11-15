@@ -359,6 +359,21 @@ public final class SelfCheck {
             Map<String, Hero> pool = HeroRepository.loadCsv(home.resolve("data/heroes.csv"));
             List<String> newsProblems = news.validate(pool.keySet(), home.resolve("web/news"));
             check(newsProblems.isEmpty(), "every news article reads cleanly, with its images in web/news/ and real heroes: " + newsProblems);
+            Path linkDir = Files.createTempDirectory("jongrai-news-links");
+            try {
+                Files.writeString(linkDir.resolve("2026-01-01-a.txt"),
+                        "title: A\ndate: 2026-01-01\n\nRead [the B story](/news/2026-01-02-b) and [site](https://example.com).\n");
+                Files.writeString(linkDir.resolve("2026-01-02-b.txt"),
+                        "title: B\ndate: 2026-01-02\n\nBack to [A](/news/2026-01-01-a).\n\n---km\nត្រឡប់ទៅ [A](/news/2026-01-01-a)។\n");
+                check(new NewsRepository(linkDir).validate(java.util.Set.of(), linkDir).isEmpty(),
+                        "links between news articles that exist are fine");
+                Files.writeString(linkDir.resolve("2026-01-03-c.txt"), "title: C\ndate: 2026-01-03\n\nSee [gone](/news/2026-09-09-nope).\n");
+                List<String> broken = new NewsRepository(linkDir).validate(java.util.Set.of(), linkDir);
+                check(broken.size() == 1 && broken.get(0).contains("2026-09-09-nope"), "a link to a missing article is reported: " + broken);
+            } finally {
+                try (var files = Files.list(linkDir)) { for (Path f : files.toList()) Files.deleteIfExists(f); }
+                Files.deleteIfExists(linkDir);
+            }
             NewsRepository.Article tpl = NewsRepository.parse(home.resolve("data/news/_TEMPLATE.txt"));
             check(tpl.heroes().equals(List.of("Granger", "Claude")) && tpl.body().startsWith("Write the story here") && !tpl.bodyKm().isEmpty()
                     && news.all().stream().noneMatch(a -> a.slug().startsWith("_")),

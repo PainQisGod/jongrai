@@ -37,6 +37,8 @@ Write the story here. A blank line starts a new paragraph.
 
 - A line starting with - is a bullet point
 - **Two stars** around words make them bold
+- [Link text](/news/2026-11-15-some-article) links to another article (use the file name without .txt),
+  and [Link text](https://example.com) links to another website
 
 [image: another-picture.png | A caption under the picture (optional)]
 
