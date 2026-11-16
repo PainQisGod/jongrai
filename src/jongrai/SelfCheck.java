@@ -280,16 +280,16 @@ public final class SelfCheck {
                 Files.copy(home.resolve("data").resolve(f), dir.resolve(f));
             }
             String leagues = Files.readString(home.resolve("data/pro-leagues.csv"));
-            String changed = leagues.replace("mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 11,2026,active,MPL_Cambodia.png",
-                    "mpl_kh,MPL Cambodia,Southeast Asia,Cambodia,Season 11,2026,active,MPL_Cambodia.png,2-0=3:0;2-1=2:1");
+            // the MPL KH Season 11 row, whatever its status is now (active, completed, ...)
+            String s11Row = "(?m)^(mpl_kh,[^\\r\\n]*Season 11,[^\\r\\n]*)$";
+            String changed = leagues.replaceFirst(s11Row, "$1,2-0=3:0;2-1=2:1");
             check(!changed.equals(leagues), "the MPL KH S11 row is in pro-leagues.csv for the points rule check");
             Files.writeString(dir.resolve("pro-leagues.csv"), changed);
             ProLeagueRepository custom = ProLeagueRepository.load(dir);
             ProLeagueRepository.ProStanding top = custom.standings("mpl_kh", "Season 11").get(0);
             check(top.teamId().equals("vgr") && top.won() == 9 && top.points() == 23,
                     "a 2-0=3:0;2-1=2:1 rule gives vgr 23 points: " + top);
-            Files.writeString(dir.resolve("pro-leagues.csv"), leagues.replace("Season 11,2026,active,MPL_Cambodia.png",
-                    "Season 11,2026,active,MPL_Cambodia.png,2-0=oops"));
+            Files.writeString(dir.resolve("pro-leagues.csv"), leagues.replaceFirst(s11Row, "$1,2-0=oops"));
             boolean rejected = false;
             try { ProLeagueRepository.load(dir); } catch (java.io.IOException e) { rejected = e.getMessage().contains("points_rule"); }
             check(rejected, "a bad points_rule stops the data load and names the column");

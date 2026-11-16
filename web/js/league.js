@@ -121,8 +121,8 @@ function renderMatches(data){
   const ls=m.team1Score, rs=m.team2Score, bo=boOf(m,ls,rs,done);
   const s1=done&&ls<rs?'is-lose':'', s2=done&&rs<ls?'is-lose':'';
   const score=done
-   ?`<div class="match-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>`
-   :`<div class="match-score vs">${t('pl.vs','vs')}${bo?`<small>(${bo})</small>`:''}</div>`;
+   ?`<div class="match-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}${patches.length?`<small class="pt">${esc(t('pl.patch','Patch'))} ${patches.map(esc).join(' · ')}</small>`:''}</div>`
+   :`<div class="match-score vs">${t('pl.vs','vs')}${bo?`<small>(${bo})</small>`:''}${patches.length?`<small class="pt">${esc(t('pl.patch','Patch'))} ${patches.map(esc).join(' · ')}</small>`:''}</div>`;
   return `<div class="match-card">
    <div class="match-top"><span class="match-status ${STATUS_CLS[m.status]||''}">${esc(statusTxt(m.status))}</span><span class="match-meta">${m.matchType==='regular'?t('pl.weekDay','Week {w} · Day {d}',{w:m.week,d:m.day}):esc(roundTxt(m.matchType))}</span></div>
    ${m.scheduledTime?`<div class="match-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
@@ -201,11 +201,12 @@ function matchCard(m,games){
  if(done){ls=m.team1Score;rs=m.team2Score}
  else{ls=games.filter(g=>g.winnerTeamId===leftId).length;rs=games.filter(g=>g.winnerTeamId===rightId).length}
  const bo=boOf(m,ls,rs,done);
+ const patches=[...new Set(games.map(g=>g.patch).filter(Boolean))];   // normally one patch per match; a match that spans two shows both
  return `<details class="mc">
   <summary>
    ${m&&m.scheduledTime?`<div class="mc-when"><span>${esc(fmtWhen(m.scheduledTime))}</span></div>`:''}
    <div class="mc-head">${teamBox(leftId,false)}
-    <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}</div>
+    <div class="mc-score"><span class="${ls>rs?'w':''}">${ls}</span> : <span class="${rs>ls?'w':''}">${rs}</span>${bo?`<small>(${bo})</small>`:''}${patches.length?`<small class="pt">${esc(t('pl.patch','Patch'))} ${patches.map(esc).join(' · ')}</small>`:''}</div>
     ${teamBox(rightId,true)}</div>
    <div class="mc-more" data-show="${esc(t('pl.showDraft','Show draft'))}" data-hide="${esc(t('pl.hideDraft','Hide draft'))}"></div>
   </summary>
