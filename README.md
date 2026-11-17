@@ -176,7 +176,7 @@ All plain CSV with `#` comment lines, so you can edit them freely. A malformed r
   - `draft_id` is the match id plus `_g<game number>`, and every id includes the season.
   - Picks are listed in lane order: EXP, Jungle, Mid, Gold, Roam.
 
-Standings are not stored: they are calculated from the finished `regular` rows in `pro-matches.csv` (1 point per series win), so a result only needs entering once.
+Standings are not stored: they are calculated from the finished `regular` rows in `pro-matches.csv`, using each season's `points_rule` in `pro-leagues.csv` (for example, MTC Season 8 awards 3 points for a 2-0 win and 2 points for a 2-1 win). Restart the server after changing league data.
 
 ## Console commands
 

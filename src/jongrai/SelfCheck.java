@@ -301,6 +301,9 @@ public final class SelfCheck {
 
     private static void pro(Path home) throws Exception {
         ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
+        ProLeagueRepository.ProStanding mtcTop = pro.standings("mtc", "Season 8").get(0);
+        check(mtcTop.teamId().equals("aur") && mtcTop.won() == 13 && mtcTop.points() == 37,
+                "MTC S8 applies 3 points for 2-0 and 2 points for 2-1 wins: " + mtcTop);
         List<ProLeagueRepository.ProStanding> table = pro.standings("mpl_kh", "Season 11");
         check(table.size() == 10, "the MPL KH S11 table lists all 10 teams");
         StringBuilder got = new StringBuilder();
