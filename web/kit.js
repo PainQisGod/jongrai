@@ -22,9 +22,11 @@ async function shell(current) {
   await i18nReady();
   document.body.insertAdjacentHTML('afterbegin', `<div class="grain"></div><canvas id="embers" aria-hidden="true"></canvas>
   <header class="bar page"><a class="mark" href="/" aria-label="${esc(t('nav.homeLabel', 'Jongrai home'))}"><span class="kh" lang="km">ចង្រៃ</span><span class="lat">JONGRAI</span></a>
-  <nav class="nav">${PAGES.map(([href, label, key]) => `<a href="${href}"${href === navKey(current) ? ' aria-current="page"' : ''}>${esc(t(key, label))}</a>`).join('')}</nav>
-  <span class="sp"></span><span class="live" id="live"><i></i><span>${esc(t('shell.engine', 'ENGINE'))}</span></span><span class="ticket" title="${esc(t('shell.patchTitle', 'Hero stats from the official rank page'))}">${esc(t('shell.patch', 'PATCH'))} <span data-patch>-</span><span class="asof">${esc(t('shell.asOf', 'as of'))} <span data-updated>-</span></span></span>
-  <span class="langsw" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="${LANG === 'en'}">${FLAG_EN}EN</button><button type="button" data-l="km" lang="km" aria-pressed="${LANG === 'km'}">${FLAG_KM}ខ្មែរ</button></span></header>`);
+  <div class="nav-panel" id="navPanel"><nav class="nav">${PAGES.map(([href, label, key]) => `<a href="${href}"${href === navKey(current) ? ' aria-current="page"' : ''}>${esc(t(key, label))}</a>`).join('')}</nav>
+  <span class="sp"></span><span class="live" id="live"><i></i><span>${esc(t('shell.engine', 'ENGINE'))}</span></span><span class="ticket" title="${esc(t('shell.patchTitle', 'Hero stats from the official rank page'))}">${esc(t('shell.patch', 'PATCH'))} <span data-patch>-</span><span class="asof">${esc(t('shell.asOf', 'as of'))} <span data-updated>-</span></span></span></div>
+  <span class="langsw" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="${LANG === 'en'}">${FLAG_EN}EN</button><button type="button" data-l="km" lang="km" aria-pressed="${LANG === 'km'}">${FLAG_KM}ខ្មែរ</button></span>
+  <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navPanel" aria-label="${esc(t('nav.menu', 'Menu'))}"><span></span><span></span><span></span></button></header>`);
+  navMenu();
   document.querySelectorAll('.langsw button').forEach(b => b.onclick = () => { if (b.dataset.l !== LANG) setLang(b.dataset.l); });
   embers();
   const m = await meta();
@@ -32,6 +34,21 @@ async function shell(current) {
   live.classList.add(m.error ? 'off' : 'on');
   live.title = m.error || t('shell.engineLive', 'Engine live: {heroes} heroes, {items} items', {heroes: m.heroes, items: m.items});
   return m;
+}
+
+/** Phone menu (750px and narrower): the three-stripe button opens the nav in a dropdown. Esc, a tap outside or a link closes it. */
+function navMenu() {
+  const bar = document.querySelector('.bar'), btn = document.getElementById('navToggle');
+  const set = open => {
+    bar.classList.toggle('menu-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', t(open ? 'nav.menuClose' : 'nav.menu', open ? 'Close menu' : 'Menu'));
+  };
+  btn.onclick = () => set(!bar.classList.contains('menu-open'));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && bar.classList.contains('menu-open')) { set(false); btn.focus(); } });
+  addEventListener('click', e => { if (bar.classList.contains('menu-open') && !bar.contains(e.target)) set(false); });
+  document.querySelectorAll('#navPanel .nav a').forEach(a => a.addEventListener('click', () => set(false)));
+  matchMedia('(min-width:751px)').addEventListener('change', e => { if (e.matches) set(false); });
 }
 
 /** A few slow sparks rising from the bottom edge. Off for reduced motion and hidden tabs. */

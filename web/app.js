@@ -148,7 +148,11 @@ async function initAuth() {
   } else {
     box.innerHTML = `<a class="auth-in" href="/auth/login?next=${encodeURIComponent(location.pathname + location.search)}">Sign in with Google</a>`;
   }
-  header.appendChild(box);
+  // on a phone the sign-in box sits inside the menu dropdown; on a wide screen it stays at the end of the bar
+  const phone = matchMedia('(max-width:750px)'), panel = header.querySelector('.nav-panel');
+  const place = () => (panel && phone.matches ? panel : header).appendChild(box);
+  place();
+  phone.addEventListener('change', place);
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAuth); else initAuth();
 

@@ -98,10 +98,34 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   #embers{display:none}
 }
-@media (max-width:760px){
-  .bar{gap:12px;padding:0 16px;overflow-x:auto}
-  .nav a{padding:22px 8px}
-  .mark .lat,.live span{display:none}
+/* ---------- phone menu: three stripes open the nav as a dropdown (750px and narrower) ---------- */
+.nav-panel{display:contents}      /* on a wide screen the panel adds no box of its own, so the bar looks as before */
+.nav-toggle{display:none}
+@media (max-width:750px){
+  .bar{gap:12px;padding:0 16px}
+  .mark .lat{display:none}
+  .bar .mark{margin-right:auto}
+  .langsw{margin-left:0}
+  .nav-toggle{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;flex:none;
+    width:44px;height:44px;margin-right:-8px;padding:0;background:none;border:1px solid var(--hair-2);border-radius:var(--r-sm);cursor:pointer}
+  .nav-toggle span{display:block;width:20px;height:2px;border-radius:2px;background:var(--ink);transition:transform .2s,opacity .2s}
+  .nav-toggle:hover{border-color:var(--gold-lo)}
+  .nav-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .bar.menu-open .nav-toggle{border-color:var(--gold-lo)}
+  .bar.menu-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .bar.menu-open .nav-toggle span:nth-child(2){opacity:0}
+  .bar.menu-open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-panel{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;
+    padding:6px 16px 16px;background:var(--night);border-bottom:1px solid var(--hair-2);
+    box-shadow:0 22px 40px rgba(0,0,0,.55);max-height:calc(100vh - 60px);overflow-y:auto}
+  .bar.menu-open .nav-panel{display:flex}
+  .nav-panel .nav{flex-direction:column;gap:0;margin:0}
+  .nav-panel .nav a{padding:15px 6px;font-size:14px;border-bottom:1px solid var(--hair)}
+  .nav-panel .nav a[aria-current]{color:var(--gold-hi)}
+  .nav-panel .nav a[aria-current]::after{left:auto;right:8px;bottom:auto;top:50%;transform:translateY(-50%) rotate(45deg)}
+  .nav-panel .sp{display:none}
+  .nav-panel .live,.nav-panel .ticket,.nav-panel .auth{align-self:flex-start;margin-top:14px}
+  .nav-panel .ticket .asof{display:inline}
 }
 
 /* ---------- sign-in (added by /app.js when Google sign-in is set up) ---------- */
@@ -132,4 +156,3 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
 .lang-km body :not(.num){letter-spacing:0!important;text-transform:none}
 .lang-km .mark .lat{letter-spacing:.34em!important} /* the Latin wordmark keeps its spacing in Khmer mode too */
 .i18n-wait main,.i18n-wait footer{visibility:hidden}
-
