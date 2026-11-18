@@ -106,6 +106,11 @@ function heroStats(drafts){
  return {games,rows:[...m.values()].map(r=>({...r,pickRate:share(r.picks,games),banRate:share(r.bans,games),
   presence:share(r.picks+r.bans,games),winRate:share(r.wins,r.decided)}))};
 }
+// a hero that is in the roster links to its page (/heroes/<slug>), same as its icon
+function heroName(name){
+ const h=heroIcons[String(name).toLowerCase()];
+ return h&&h.slug?`<a class="hs-name" href="/heroes/${esc(h.slug)}">${esc(name)}</a>`:esc(name);
+}
 function renderHeroes(drafts){
  hsDrafts=drafts||[];
  const body=$('#heroesBody'), empty=$('#heroesEmpty'), sel=$('#hsMin');
@@ -124,7 +129,7 @@ function renderHeroes(drafts){
   const known=r.winRate>=0, wcls=known?(r.winRate>.5?'win':r.winRate<.5?'loss':''):'dim';
   return `<tr>
    <td class="c-pos">${i+1}</td>
-   <td class="c-team"><div class="hs-hero">${heroHtml(r.name,'')}<span class="team-name">${esc(r.name)}</span></div></td>
+   <td class="c-team"><div class="hs-hero">${heroHtml(r.name,'')}<span class="team-name">${heroName(r.name)}</span></div></td>
    <td>${r.picks}</td><td>${hsPct(r.pickRate)}</td>
    <td>${r.bans}</td><td>${hsPct(r.banRate)}</td>
    <td><span class="pts">${hsPct(r.presence)}</span></td>

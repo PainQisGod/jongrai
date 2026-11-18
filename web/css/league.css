@@ -155,5 +155,7 @@ table.hs th[data-sort]:hover{color:var(--tx)}
 table.hs th.sorted{color:var(--gold)}
 table.hs th.sorted::after{content:" " attr(data-dir);font-size:9px}
 .hs-hero{display:flex;align-items:center;gap:10px;text-align:left}
+a.hs-name{color:inherit;text-decoration:none}
+a.hs-name:hover,a.hs-name:focus-visible{color:var(--gold);text-decoration:underline}
 table.hs .hero-ic{width:32px;height:32px}
 .hs-note{color:var(--mut);font-size:12px;margin:10px 2px 0;max-width:940px}
