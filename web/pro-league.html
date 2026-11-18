@@ -18,6 +18,7 @@
   <button class="tab" data-tab="matches" data-i18n="pl.tab.matches">Matches</button>
   <button class="tab" data-tab="teams" data-i18n="pl.tab.teams">Teams</button>
   <button class="tab" data-tab="drafts" data-i18n="pl.tab.drafts">Drafts</button>
+  <button class="tab" data-tab="heroes" data-i18n="pl.tab.heroes">Heroes</button>
  </div>
 
  <div id="standingsPanel">
@@ -40,6 +41,25 @@
  <div id="draftsPanel" hidden>
   <div id="draftsList"></div>
   <div id="draftsEmpty" class="empty" hidden data-i18n="pl.empty.drafts">No drafts</div>
+ </div>
+ <div id="heroesPanel" hidden>
+  <div class="hs-controls">
+   <label><span data-i18n="pl.hs.min">Show win % from</span> <select id="hsMin" aria-label="Minimum picks for win rate"></select></label>
+   <span id="hsGames"></span>
+  </div>
+  <div class="stand-wrap"><table class="stand hs"><thead><tr>
+   <th class="c-pos">#</th>
+   <th class="c-team" data-sort="name" data-i18n="pl.col.hero">Hero</th>
+   <th data-sort="picks" title="Games where the hero was picked" data-i18n="pl.col.picks" data-i18n-title="pl.col.picksT">Picks</th>
+   <th data-sort="pickRate" title="Share of games where the hero was picked" data-i18n="pl.col.pickPct" data-i18n-title="pl.col.pickPctT">Pick %</th>
+   <th data-sort="bans" title="Games where the hero was banned" data-i18n="pl.col.bans" data-i18n-title="pl.col.bansT">Bans</th>
+   <th data-sort="banRate" title="Share of games where the hero was banned" data-i18n="pl.col.banPct" data-i18n-title="pl.col.banPctT">Ban %</th>
+   <th data-sort="presence" title="Pick % plus ban %" data-i18n="pl.col.presence" data-i18n-title="pl.col.presenceT">Presence</th>
+   <th data-sort="wins" title="Games won with the hero" data-i18n="pl.col.heroWins" data-i18n-title="pl.col.heroWinsT">Wins</th>
+   <th data-sort="winRate" title="Wins divided by picks" data-i18n="pl.col.winPct" data-i18n-title="pl.col.winPctT">Win %</th>
+  </tr></thead><tbody id="heroesBody"></tbody></table></div>
+  <p class="hs-note" data-i18n="pl.hs.note">Pick %, ban % and presence are shares of all games in this season. Win % is wins divided by picks and only shows once a hero has enough picks.</p>
+  <div id="heroesEmpty" class="empty" hidden data-i18n="pl.empty.heroes">No draft data for this season</div>
  </div>
 </main>
 

@@ -56,7 +56,7 @@ async function selectSeason(season){
 }
 function setTab(tab){
  $$('#tabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
- $$('#standingsPanel,#matchesPanel,#teamsPanel,#draftsPanel').forEach(p=>p.hidden=true);
+ $$('#standingsPanel,#matchesPanel,#teamsPanel,#draftsPanel,#heroesPanel').forEach(p=>p.hidden=true);
  $('#'+tab+'Panel').hidden=false;
 }
 $$('#tabs .tab').forEach(t=>t.onclick=()=>setTab(t.dataset.tab));
@@ -78,14 +78,65 @@ async function loadData(){
   renderMatches(matches);
   renderTeams(teams);
   renderDrafts(drafts,matches);
+  renderHeroes(drafts);
  }catch(e){
   console.error(e);
   $('#standingsEmpty').hidden=false;
   $('#matchesEmpty').hidden=false;
   $('#teamsEmpty').hidden=false;
   $('#draftsEmpty').hidden=false;
+  $('#heroesEmpty').hidden=false;
  }
 }
+// Heroes tab: how often each hero was picked, banned and won with in the chosen season, counted from its drafts.
+// Pick %, ban % and presence are shares of all games; win % is wins divided by picks (only shown once a hero has enough picks).
+let hsDrafts=[], hsSort={key:'presence',dir:-1};
+const hsPct=v=>(v*100).toFixed(1)+'%';
+function heroStats(drafts){
+ const m=new Map();
+ const row=n=>{let r=m.get(n);if(!r){r={name:n,picks:0,bans:0,wins:0,decided:0};m.set(n,r)}return r};
+ drafts.forEach(d=>{
+  [[d.bluePicks,d.blueTeamId],[d.redPicks,d.redTeamId]].forEach(([picks,team])=>(picks||[]).forEach(n=>{
+   const r=row(n); r.picks++;
+   if(d.winnerTeamId){r.decided++; if(d.winnerTeamId===team)r.wins++}   // a game with no recorded winner counts as a pick only
+  }));
+  [...(d.blueBans||[]),...(d.redBans||[])].forEach(n=>row(n).bans++);
+ });
+ const games=drafts.length, share=(n,of)=>of?n/of:0;
+ return {games,rows:[...m.values()].map(r=>({...r,pickRate:share(r.picks,games),banRate:share(r.bans,games),
+  presence:share(r.picks+r.bans,games),winRate:share(r.wins,r.decided)}))};
+}
+function renderHeroes(drafts){
+ hsDrafts=drafts||[];
+ const body=$('#heroesBody'), empty=$('#heroesEmpty'), sel=$('#hsMin');
+ const keep=sel.value||'5';
+ sel.innerHTML=[1,3,5,10].map(n=>`<option value="${n}"${String(n)===keep?' selected':''}>${esc(t('pl.hs.picksN','{n}+ picks',{n}))}</option>`).join('');
+ const {games,rows}=heroStats(hsDrafts);
+ $('#hsGames').textContent=games?t('pl.hs.games','{n} games',{n:games}):'';
+ if(!rows.length){body.innerHTML='';empty.hidden=false;return}
+ empty.hidden=true;
+ const min=+sel.value, {key,dir}=hsSort;
+ // a win rate from too few picks is hidden, and sinks to the bottom when sorting by win %
+ rows.forEach(r=>{if(r.decided<min)r.winRate=-1});
+ rows.sort((a,b)=>dir*(key==='name'?a.name.localeCompare(b.name):a[key]-b[key])||b.presence-a.presence||a.name.localeCompare(b.name));
+ $$('#heroesPanel th[data-sort]').forEach(th=>{const on=th.dataset.sort===key;th.classList.toggle('sorted',on);th.dataset.dir=on?(dir<0?'\u25BC':'\u25B2'):''});
+ body.innerHTML=rows.map((r,i)=>{
+  const known=r.winRate>=0, wcls=known?(r.winRate>.5?'win':r.winRate<.5?'loss':''):'dim';
+  return `<tr>
+   <td class="c-pos">${i+1}</td>
+   <td class="c-team"><div class="hs-hero">${heroHtml(r.name,'')}<span class="team-name">${esc(r.name)}</span></div></td>
+   <td>${r.picks}</td><td>${hsPct(r.pickRate)}</td>
+   <td>${r.bans}</td><td>${hsPct(r.banRate)}</td>
+   <td><span class="pts">${hsPct(r.presence)}</span></td>
+   <td>${r.wins}</td><td class="${wcls}">${known?hsPct(r.winRate):'\u2013'}</td>
+  </tr>`}).join('');
+}
+$$('#heroesPanel th[data-sort]').forEach(th=>th.onclick=()=>{
+ const k=th.dataset.sort;
+ hsSort=hsSort.key===k?{key:k,dir:-hsSort.dir}:{key:k,dir:k==='name'?1:-1};
+ renderHeroes(hsDrafts);
+});
+$('#hsMin').onchange=()=>renderHeroes(hsDrafts);
 function renderStandings(data){
  const body=$('#standingsBody'), empty=$('#standingsEmpty');
  if(!data.length){body.innerHTML='';empty.hidden=false;return}
