@@ -1,58 +1,315 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>About - Jongrai</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/kit.css">
-<link rel="stylesheet" href="/pages.css">
-<link rel="stylesheet" href="/css/about.css"></head><body>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>About - Jongrai</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/kit.css">
+  <link rel="stylesheet" href="/pages.css">
+  <link rel="stylesheet" href="/css/about.css">
+</head>
+
+<body>
 
 <main class="wrap">
- <p class="eyebrow" style="color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600">ABOUT</p>
- <h2 class="t">About Project Jongrai</h2>
- <p class="l">A draft board for Mobile Legends: Bang Bang. Everything runs from one CSV file on your machine.</p>
 
- <section><h3>What it is</h3>
-  <p>A tool for running a ranked draft: pick and ban both sides, assign lanes, and get a live read of who
-  won the draft and why. The aim is to explain the draft, not to predict the match.</p></section>
+  <p class="eyebrow" style="color:var(--gold);letter-spacing:2px;font-size:11px;font-weight:600">
+    ABOUT
+  </p>
 
- <section><h3>Where the data comes from</h3>
-  <ul>
-   <li><b>Roster</b> - the shipped <code>data/heroes.csv</code>, patch <span data-patch></span>.</li>
-   <li><b>Tiers</b> - November 2026 lane tier lists, mapped to S-D; each hero keeps the tier of its best lane.</li>
-   <li><b>Win, pick and ban rates</b> - the official mobilelegends.com rank page, past 30 days, all ranks (updated 6 November 2026).</li>
-   <li><b>Counters and synergies</b> - Moonton's official in-game relations, via
-       github.com/p3hndrx/MLBB-API (MIT).</li>
-   <li><b>Durability, offense, control and speciality tags</b> - Moonton's in-game hero ratings.</li>
-   <li><b>Power spike (EARLY / MID / LATE)</b> - the community dataset at
-       github.com/Amirul-Hakimi/MLBB-DRAFT-ANALYSIS (ISC). One author's judgement, not official.</li>
-   <li><b>Item catalog (tier, cost, stats, passives)</b> - the shipped <code>data/items.csv</code>, from
-       mlbbhub.com, itself derived from Moonton and Liquipedia structural item data.</li>
-   <li><b>Core builds per hero</b> - the shipped <code>data/hero-builds.csv</code>: hand-curated loadouts
-       from mlbbhub.com, five per hero, reviewed against patch <span data-patch></span>. Editorial, not official.</li>
-  </ul>
-  <p>Win, pick and ban rates come from the official mobilelegends.com rank page (past 30 days, all ranks). A ban rate of 15% or more counts as a meta ban.</p></section>
+  <h2 class="t">About Project Jongrai</h2>
 
- <section><h3>The AI coach</h3>
-  <p>The final verdict comes from an AI model you configure yourself. It is told the draft is patch <span data-patch></span>
-  data and is asked to judge only what is on screen.</p>
-  <p>Two rules the app enforces: it does not call the model at all while the draft is in progress, and the
-  reply for a given draft is cached so re-rendering never re-bills you. Put your key in
-  <code>ai-config.txt</code>, which is gitignored.</p>
-  <p>The coach is an opinion, not a source of truth. The counters, tiers and win rates are the data.</p></section>
+  <p class="l">
+    An independent draft analysis tool for Mobile Legends: Bang Bang.
+    Designed to help players understand team compositions, evaluate draft
+    decisions, and identify the strengths and weaknesses of both teams.
+  </p>
 
- <section><h3>Running it</h3>
-  <p>Requires Java 17 or newer and nothing else: no build tool, no dependencies.</p>
-  <p style="color:#e8eaf0;background:var(--stone-1);border:1px solid var(--line);border-radius:6px;padding:10px;font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:1.7">
-  ./build.sh &nbsp;(Windows: .\build.ps1)<br>
-  java -cp out jongrai.WebServer</p></section>
+  <p style="font-size:12px;color:var(--muted)">
+    This page is currently available in English. Khmer translation is planned.
+  </p>
 
- <section><h3>Not affiliated with Moonton</h3>
-  <p>Project Jongrai is an independent fan tool. Mobile Legends: Bang Bang and its heroes are trademarks of
-  their respective owners.</p></section>
+  <!-- WHAT IS JONGRAI -->
 
- <a class="btn" href="/">Back to Home</a>
+  <section>
+    <h3>What is Jongrai?</h3>
+
+    <p>
+      Jongrai is a draft board designed to help you manage and analyze
+      a ranked draft from beginning to end. Pick and ban heroes for both
+      teams, assign lanes, and receive a live assessment of the draft
+      as it develops.
+    </p>
+
+    <p>
+      Once the draft is completed, Jongrai provides a final assessment
+      explaining each team's strengths and weaknesses.
+      Its purpose is to explain the draft, not predict the match result.
+    </p>
+  </section>
+
+  <!-- DATA SOURCES -->
+
+  <section>
+    <h3>Data Sources &amp; Methodology</h3>
+
+    <p>
+      Jongrai combines publicly available information, community-maintained
+      datasets, and manually curated content.
+    </p>
+
+    <ul>
+      <li>
+        <b>Hero roster</b> - The shipped
+        <code>data/heroes.csv</code>, based on patch
+        <span data-patch></span>.
+      </li>
+
+      <li>
+        <b>Hero tiers</b> - November 2026 lane tier lists,
+        mapped to the S-D scale. Each hero receives the tier
+        of its strongest lane.
+      </li>
+
+      <li>
+        <b>Win, pick and ban rates</b> -
+        Official
+        <a href="https://www.mobilelegends.com/"
+           target="_blank" rel="noopener noreferrer">Mobile Legends</a>
+        rank statistics, covering all ranks over the past 30 days.
+        Updated 6 November 2026.
+      </li>
+
+      <li>
+        <b>Counters and synergies</b> - Moonton's official in-game
+        hero relations, obtained through
+        <a href="https://github.com/p3hndrx/MLBB-API"
+           target="_blank" rel="noopener noreferrer">MLBB-API</a>
+        (MIT License).
+      </li>
+
+      <li>
+        <b>Hero attributes</b> - Moonton's in-game ratings for
+        durability, offense, control, and speciality.
+      </li>
+
+      <li>
+        <b>Power spikes (EARLY / MID / LATE)</b> -
+        The community dataset
+        <a href="https://github.com/Amirul-Hakimi/MLBB-DRAFT-ANALYSIS"
+           target="_blank" rel="noopener noreferrer">MLBB-DRAFT-ANALYSIS</a>
+        (ISC License). These classifications reflect one author's
+        judgement and are not official ratings.
+      </li>
+
+      <li>
+        <b>Item catalog</b> - The shipped
+        <code>data/items.csv</code>, sourced from
+        <a href="https://mlbbhub.com/"
+           target="_blank" rel="noopener noreferrer">MLBBHub</a>,
+        with structural item data derived from Moonton and Liquipedia.
+      </li>
+
+      <li>
+        <b>Core builds per hero</b> - The shipped
+        <code>data/hero-builds.csv</code>, containing five manually
+        curated core builds per hero, sourced from MLBBHub and
+        reviewed against patch <span data-patch></span>.
+        These builds are editorial recommendations, not official builds.
+      </li>
+    </ul>
+
+    <h4>Meta Ban Classification</h4>
+
+    <p>
+      Jongrai classifies a hero as a <b>meta ban</b> when its ban
+      rate reaches 15% or higher.
+    </p>
+
+    <p>
+      All statistics are reference data and do not guarantee
+      in-game performance.
+    </p>
+  </section>
+
+  <!-- AI COACH -->
+
+  <section>
+    <h3>The AI Coach</h3>
+
+    <p>
+      Jongrai includes an optional AI-powered coach that provides
+      a final draft verdict using an AI model configured by the user.
+      The coach is instructed to evaluate the draft using patch
+      <span data-patch></span> data and the information visible
+      on the draft board.
+    </p>
+
+    <h4>How It Works</h4>
+
+    <ul>
+      <li>
+        The AI is not called while a draft is still in progress.
+      </li>
+
+      <li>
+        Once a draft is completed, the coach can evaluate
+        the available information.
+      </li>
+
+      <li>
+        Its response is cached for that draft, preventing
+        unnecessary repeat requests and charges when the
+        interface re-renders.
+      </li>
+
+      <li>
+        Your API key is stored locally in
+        <code>ai-config.txt</code>, which is excluded from Git
+        through <code>.gitignore</code>.
+      </li>
+    </ul>
+
+    <p>
+      <b>Important:</b> The AI coach provides an opinion,
+      not an authoritative source of truth. Hero statistics,
+      counters, tiers, and other underlying data should be
+      treated as the primary references.
+    </p>
+  </section>
+
+  <!-- RUNNING JONGRAI -->
+
+  <section>
+    <h3>Running Jongrai</h3>
+
+    <p>
+      Jongrai requires <b>Java 17 or newer</b>.
+      No build tools, external dependencies, or additional
+      installations are required.
+    </p>
+
+    <p style="color:#e8eaf0;background:var(--stone-1);border:1px solid var(--line);border-radius:6px;padding:10px;font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:1.7">
+      ./build.sh &nbsp;(Windows: .\build.ps1)<br>
+      java -cp out jongrai.WebServer
+    </p>
+  </section>
+
+  <!-- DEVELOPER AND CREDITS -->
+
+  <section>
+    <h3>Developer &amp; Credits</h3>
+
+    <p>
+      Project Jongrai is independently developed and maintained
+      by <b>PainQisGod</b>.
+    </p>
+
+    <p>
+      Built with the goal of making Mobile Legends: Bang Bang
+      draft analysis more accessible, understandable, and practical.
+    </p>
+
+    <h4>Development Team</h4>
+
+<p>
+  Project Jongrai is independently developed and maintained
+  by two contributors.
+</p>
+
+<ul>
+  <li>
+    <b>PainQisGod</b> —
+    <b>Lead Developer</b>
+    <br>
+    <a href="https://github.com/PainQisGod"
+       target="_blank" rel="noopener noreferrer">
+      GitHub Profile
+    </a>
+  </li>
+
+  <li>
+    <b>TerribleWalrus</b> —
+    <b>Co-Developer</b>
+    <br>
+    <a href="https://github.com/TerribleWalrus"
+       target="_blank" rel="noopener noreferrer">
+      GitHub Profile
+    </a>
+  </li>
+</ul>
+
+    <h4>Acknowledgements</h4>
+
+    <p>
+      Special thanks to the creators and maintainers of the
+      external datasets and resources that helped make Jongrai possible:
+    </p>
+
+    <ul>
+      <li>
+        <a href="https://github.com/p3hndrx/MLBB-API"
+           target="_blank" rel="noopener noreferrer">
+          p3hndrx/MLBB-API
+        </a>
+      </li>
+
+      <li>
+        <a href="https://github.com/Amirul-Hakimi/MLBB-DRAFT-ANALYSIS"
+           target="_blank" rel="noopener noreferrer">
+          Amirul-Hakimi/MLBB-DRAFT-ANALYSIS
+        </a>
+      </li>
+
+      <li>
+        <a href="https://mlbbhub.com/"
+           target="_blank" rel="noopener noreferrer">
+          MLBBHub
+        </a>
+      </li>
+
+      <li>
+        The Mobile Legends community and its contributors.
+      </li>
+    </ul>
+
+    <p>
+      All third-party resources remain the property of their
+      respective authors and are subject to their applicable
+      licenses. Additional license information is provided
+      in the project's <code>NOTICE</code> file.
+    </p>
+  </section>
+
+  <!-- DISCLAIMER -->
+
+  <section>
+    <h3>Independence &amp; Disclaimer</h3>
+
+    <p>
+      Project Jongrai is an independent fan-made project and is
+      not affiliated with, endorsed by, or sponsored by Moonton.
+    </p>
+
+    <p>
+      Mobile Legends: Bang Bang, its heroes, and related assets
+      are trademarks and property of their respective owners.
+      Hero artwork and other game assets belong to their
+      respective copyright holders.
+    </p>
+  </section>
+
+  <a class="btn" href="/">Back to Home</a>
+
 </main>
+
 <script src="/app.js"></script>
 <script src="/kit.js"></script>
-<script>shell('/about')</script>
-</body></html>
+<script>
+  shell('/about');
+</script>
+
+</body>
+</html>
