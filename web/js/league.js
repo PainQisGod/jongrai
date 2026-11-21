@@ -78,7 +78,8 @@ async function loadData(){
   renderMatches(matches);
   renderTeams(teams);
   renderDrafts(drafts,matches);
-  renderHeroes(drafts);
+  hsSeason=drafts;
+  refreshHeroes();
  }catch(e){
   console.error(e);
   $('#standingsEmpty').hidden=false;
@@ -90,7 +91,7 @@ async function loadData(){
 }
 // Heroes tab: how often each hero was picked, banned and won with in the chosen season, counted from its drafts.
 // Pick %, ban % and presence are shares of all games; win % is wins divided by picks (only shown once a hero has enough picks).
-let hsDrafts=[], hsSort={key:'presence',dir:-1};
+let hsSeason=[], hsAll=null, hsScope='season', hsShown=[], hsSort={key:'presence',dir:-1};
 const hsPct=v=>(v*100).toFixed(1)+'%';
 function heroStats(drafts){
  const m=new Map();
@@ -111,13 +112,23 @@ function heroName(name){
  const h=heroIcons[String(name).toLowerCase()];
  return h&&h.slug?`<a class="hs-name" href="/heroes/${esc(h.slug)}">${esc(name)}</a>`:esc(name);
 }
+// the Heroes tab counts this season's games, or (scope "all") every recorded game of every league, fetched once on first use
+async function refreshHeroes(){
+ let list=hsSeason;
+ if(hsScope==='all'){
+  if(!hsAll){const r=await call('/api/drafts?league=all').catch(()=>[]);hsAll=Array.isArray(r)?r:[]}
+  list=hsAll;
+ }
+ renderHeroes(list);
+}
 function renderHeroes(drafts){
- hsDrafts=drafts||[];
+ hsShown=drafts||[];
  const body=$('#heroesBody'), empty=$('#heroesEmpty'), sel=$('#hsMin');
  const keep=sel.value||'5';
  sel.innerHTML=[1,3,5,10].map(n=>`<option value="${n}"${String(n)===keep?' selected':''}>${esc(t('pl.hs.picksN','{n}+ picks',{n}))}</option>`).join('');
- const {games,rows}=heroStats(hsDrafts);
- $('#hsGames').textContent=games?t('pl.hs.games','{n} games',{n:games}):'';
+ const {games,rows}=heroStats(hsShown);
+ const leagues=new Set(hsShown.map(d=>d.leagueId)).size;
+ $('#hsGames').textContent=!games?'':hsScope==='all'?t('pl.hs.gamesLeagues','{n} games from {l} leagues',{n:games,l:leagues}):t('pl.hs.games','{n} games',{n:games});
  if(!rows.length){body.innerHTML='';empty.hidden=false;return}
  empty.hidden=true;
  const min=+sel.value, {key,dir}=hsSort;
@@ -139,9 +150,10 @@ function renderHeroes(drafts){
 $$('#heroesPanel th[data-sort]').forEach(th=>th.onclick=()=>{
  const k=th.dataset.sort;
  hsSort=hsSort.key===k?{key:k,dir:-hsSort.dir}:{key:k,dir:k==='name'?1:-1};
- renderHeroes(hsDrafts);
+ renderHeroes(hsShown);
 });
-$('#hsMin').onchange=()=>renderHeroes(hsDrafts);
+$('#hsMin').onchange=()=>renderHeroes(hsShown);
+$('#hsScope').onchange=e=>{hsScope=e.target.value;refreshHeroes()};
 function renderStandings(data){
  const body=$('#standingsBody'), empty=$('#standingsEmpty');
  if(!data.length){body.innerHTML='';empty.hidden=false;return}

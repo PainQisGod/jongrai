@@ -486,8 +486,9 @@ public class WebServer {
     }
 
     private static String draftsJson(String leagueId, String season, String matchId) {
-        if (leagueId == null || leagueId.isBlank() || season == null || season.isBlank()) return "[]";
-        return pro.drafts(leagueId, season).stream()
+        boolean all = "all".equals(leagueId);          // league=all: every recorded game of every league and season (hero stats)
+        if (!all && (leagueId == null || leagueId.isBlank() || season == null || season.isBlank())) return "[]";
+        return (all ? pro.allDrafts() : pro.drafts(leagueId, season)).stream()
                 .filter(d -> matchId == null || matchId.isBlank() || d.matchId().equals(matchId))
                 .map(d -> String.format(Locale.ROOT,
                         "{\"id\":%s,\"matchId\":%s,\"leagueId\":%s,\"season\":%s,\"gameNumber\":%d,\"blueTeamId\":%s,\"redTeamId\":%s,\"blueBans\":%s,\"redBans\":%s,\"bluePicks\":%s,\"redPicks\":%s,\"blueSide\":%b,\"winnerTeamId\":%s,\"patch\":%s,\"map\":%s,\"duration\":%d,\"mvp\":%s}",
