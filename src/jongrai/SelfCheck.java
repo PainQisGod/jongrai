@@ -312,7 +312,14 @@ public final class SelfCheck {
         check(mtcTop.teamId().equals("aur") && mtcTop.won() == 13 && mtcTop.points() == 37,
                 "MTC S8 applies 3 points for 2-0 and 2 points for 2-1 wins: " + mtcTop);
         List<ProLeagueRepository.ProStanding> table = pro.standings("mpl_kh", "Season 11");
-        check(table.size() == 10, "the MPL KH S11 table lists all 10 teams");\n        List<ProLeagueRepository.ProTeam> sgTeams = pro.teamsInLeague("mpl_sg", "Season 12");\n        check(sgTeams.size() == 10 && sgTeams.stream().filter(t -> t.group().equals("A")).count() == 5\n                && sgTeams.stream().filter(t -> t.group().equals("B")).count() == 5,\n                "MPL Singapore S12 has five teams in each regular-season group");\n        List<ProLeagueRepository.ProStanding> sgStandings = pro.standings("mpl_sg", "Season 12");\n        check(sgStandings.size() == 10 && sgStandings.stream().filter(s -> s.position() <= 5).count() == 10,\n                "MPL Singapore group standings rank independently");
+        check(table.size() == 10, "the MPL KH S11 table lists all 10 teams");
+        List<ProLeagueRepository.ProTeam> sgTeams = pro.teamsInLeague("mpl_sg", "Season 12");
+        check(sgTeams.size() == 10 && sgTeams.stream().filter(t -> t.group().equals("A")).count() == 5
+                && sgTeams.stream().filter(t -> t.group().equals("B")).count() == 5,
+                "MPL Singapore S12 has five teams in each regular-season group");
+        List<ProLeagueRepository.ProStanding> sgStandings = pro.standings("mpl_sg", "Season 12");
+        check(sgStandings.size() == 10 && sgStandings.stream().filter(s -> s.position() <= 5).count() == 10,
+                "MPL Singapore group standings rank independently");
         StringBuilder got = new StringBuilder();
         for (ProLeagueRepository.ProStanding s : table) {
             got.append(s.teamId()).append(' ').append(s.won()).append('-').append(s.lost()).append(' ')
