@@ -10,6 +10,7 @@
 # Empty for now: per-game bans/picks for MPL KH are not published in a scrapeable
 # source (they need match VODs or Liquipedia match pages). Append verified drafts
 # here - never invent them.
+# Global split: 2026 Split 2
 draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch,map,duration,mvp
 # MPL Cambodia Season 11
 mpl_kh_s11_w1_d1_m1_g1,mpl_kh_s11_w1_d1_m1,mpl_kh,Season 11,1,gxl,pro,Uranus;Atlas;Barats;Miya;Minotaur,Freya;Carmilla;Paquito;Chou;Kalea,Ruby;Hirara;Selena;Belerick;Melissa,Lukas;Nolan;Eudora;Gloo;Clint,0,pro,2.2.16,Default Map,14:08,MP the King

@@ -31,9 +31,24 @@ public final class ProLeagueRepository {
     public static ProLeagueRepository load(Path base) throws IOException {
         return new ProLeagueRepository(
                 loadLeagues(base.resolve("pro-leagues.csv")),
-                loadTeams(base.resolve("pro-teams.csv")),
-                loadMatches(base.resolve("pro-matches.csv")),
-                loadDrafts(base.resolve("pro-drafts.csv")));
+                loadTeams(seasonFiles(base, "pro-teams.csv")),
+                loadMatches(seasonFiles(base, "pro-matches.csv")),
+                loadDrafts(seasonFiles(base, "pro-drafts.csv")));
+    }
+
+    /** One set of pro CSVs per global split; folder names are chronological archive labels. */
+    private static List<Path> seasonFiles(Path base, String filename) throws IOException {
+        Path root = base.resolve("pro-seasons");
+        if (!Files.isDirectory(root)) throw new IOException(root + ": missing pro-seasons directory");
+        List<Path> files;
+        try (var dirs = Files.list(root)) {
+            files = dirs.filter(Files::isDirectory).sorted().map(dir -> dir.resolve(filename)).toList();
+        }
+        if (files.isEmpty()) throw new IOException(root + ": no season folders");
+        for (Path file : files) {
+            if (!Files.isRegularFile(file)) throw new IOException(file + ": missing required file");
+        }
+        return files;
     }
 
     private static Map<String, ProLeague> loadLeagues(Path file) throws IOException {
@@ -53,40 +68,46 @@ public final class ProLeagueRepository {
         return leagues;
     }
 
-    private static Map<String, ProTeam> loadTeams(Path file) throws IOException {
+    private static Map<String, ProTeam> loadTeams(List<Path> files) throws IOException {
         Map<String, ProTeam> teams = new LinkedHashMap<>();
-        for (Csv.Row r : Csv.read(file, 10)) {
-            ProTeam t = new ProTeam(r.text(0), r.text(1), r.text(2), r.text(3),
-                    r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9));
-            String key = t.leagueId() + "|" + t.season() + "|" + t.id();
-            if (teams.putIfAbsent(key, t) != null) {
-                throw r.fail("duplicate team '" + t.id() + "' in " + t.leagueId() + " " + t.season());
+        for (Path file : files) {
+            for (Csv.Row r : Csv.read(file, 10)) {
+                ProTeam t = new ProTeam(r.text(0), r.text(1), r.text(2), r.text(3),
+                        r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9));
+                String key = t.leagueId() + "|" + t.season() + "|" + t.id();
+                if (teams.putIfAbsent(key, t) != null) {
+                    throw r.fail("duplicate team '" + t.id() + "' in " + t.leagueId() + " " + t.season());
+                }
             }
         }
         return teams;
     }
 
-    private static Map<String, List<ProMatch>> loadMatches(Path file) throws IOException {
+    private static Map<String, List<ProMatch>> loadMatches(List<Path> files) throws IOException {
         Map<String, List<ProMatch>> matches = new LinkedHashMap<>();
         Set<String> seen = new HashSet<>();
-        for (Csv.Row r : Csv.read(file, 13)) {
-            ProMatch m = new ProMatch(r.text(0), r.text(1), r.text(2), r.integer(3, 0), r.integer(4, 0),
-                    r.text(5), r.text(6), r.integer(7, -1), r.integer(8, -1),
-                    r.text(9), r.text(10), r.text(11), r.text(12), r.integer(13, 0), r.text(14));
-            if (!seen.add(m.id())) throw r.fail("duplicate match '" + m.id() + "'");
-            matches.computeIfAbsent(m.leagueId(), k -> new ArrayList<>()).add(m);
+        for (Path file : files) {
+            for (Csv.Row r : Csv.read(file, 13)) {
+                ProMatch m = new ProMatch(r.text(0), r.text(1), r.text(2), r.integer(3, 0), r.integer(4, 0),
+                        r.text(5), r.text(6), r.integer(7, -1), r.integer(8, -1),
+                        r.text(9), r.text(10), r.text(11), r.text(12), r.integer(13, 0), r.text(14));
+                if (!seen.add(m.id())) throw r.fail("duplicate match '" + m.id() + "'");
+                matches.computeIfAbsent(m.leagueId(), k -> new ArrayList<>()).add(m);
+            }
         }
         matches.values().forEach(list -> list.sort(Comparator.comparing(ProMatch::scheduledTime)));
         return matches;
     }
 
-    private static Map<String, List<ProDraft>> loadDrafts(Path file) throws IOException {
+    private static Map<String, List<ProDraft>> loadDrafts(List<Path> files) throws IOException {
         Map<String, List<ProDraft>> drafts = new LinkedHashMap<>();
-        for (Csv.Row r : Csv.read(file, 16)) {
-            ProDraft d = new ProDraft(r.text(0), r.text(1), r.text(2), r.text(3), r.integer(4, 0),
-                    r.text(5), r.text(6), r.list(7), r.list(8), r.list(9), r.list(10),
-                    r.text(11).equals("1"), r.text(12), r.text(13), r.text(14), duration(r, 15), r.text(16));
-            drafts.computeIfAbsent(d.leagueId(), k -> new ArrayList<>()).add(d);
+        for (Path file : files) {
+            for (Csv.Row r : Csv.read(file, 16)) {
+                ProDraft d = new ProDraft(r.text(0), r.text(1), r.text(2), r.text(3), r.integer(4, 0),
+                        r.text(5), r.text(6), r.list(7), r.list(8), r.list(9), r.list(10),
+                        r.text(11).equals("1"), r.text(12), r.text(13), r.text(14), duration(r, 15), r.text(16));
+                drafts.computeIfAbsent(d.leagueId(), k -> new ArrayList<>()).add(d);
+            }
         }
         return drafts;
     }
