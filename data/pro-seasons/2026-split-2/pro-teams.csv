@@ -3,7 +3,7 @@
 # source was found (the official site and Liquipedia do not list them) - do not invent them.
 # Logos: web/teams/ (from the official MPL KH site).
 # Global split: 2026 Split 2
-team_id,league_id,season,name,short_name,logo,founded,city,coach,status
+team_id,league_id,season,name,short_name,logo,founded,city,coach,status,group
 # MPL Cambodia Season 11
 flkh,mpl_kh,Season 11,Team Flash KH,FLKH,Team_Flash.png,2019,Phnom Penh,SeoBaby,active
 rvz,mpl_kh,Season 11,Team Rvz,RVZ,Team_RVZ.png,2026,Phnom Penh,K S,active
@@ -73,13 +73,13 @@ tec,mpl_mena,Season 10,Titan Esports Club,TEC,Titan_Esports_Club.png,,,,active
 gs,mpl_mena,Season 10,GS Team,GS,GS_Team.png,,,,active
 wod,mpl_mena,Season 10,Will of D,WoD,Will_of_D.png,,,,active
 # MPL Singapore Season 12
-ign,mpl_sg,Season 12,IGNITE Gaming,IGN,IGNITE_Gaming.png,,,,active
-evil,mpl_sg,Season 12,Evil,Evil,Evil_SG.png,,,,active
-az,mpl_sg,Season 12,Absolute Zero,AZ,Absolute_Zero.png,,,,active
-kgdm,mpl_sg,Season 12,Kingdom Esports,KGDM,Kingdom_Esports.png,,,,active
-sin,mpl_sg,Season 12,Sindicate Esports,SIN,Sindicate_Esports.png,,,,active
-nxr,mpl_sg,Season 12,Nexora,NXR,Nexora.png,,,,active
-lfx,mpl_sg,Season 12,Lefaucheux Esports,LFX,Lefaucheux_Esports.png,,,,active
-wsp,mpl_sg,Season 12,Wisp Inc,WSP,Wisp_Inc.png,,,,active
-ex,mpl_sg,Season 12,EX Factor,EX,EX_FACTOR.png,,,,active
-evg,mpl_sg,Season 12,EverGarden,EVG,MPL_Singapore.png,,,,active
+ign,mpl_sg,Season 12,IGNITE Gaming,IGN,IGNITE_Gaming.png,,,,active,A
+evil,mpl_sg,Season 12,Evil,Evil,Evil_SG.png,,,,active,B
+az,mpl_sg,Season 12,Absolute Zero,AZ,Absolute_Zero.png,,,,active,B
+kgdm,mpl_sg,Season 12,Kingdom Esports,KGDM,Kingdom_Esports.png,,,,active,A
+sin,mpl_sg,Season 12,Sindicate Esports,SIN,Sindicate_Esports.png,,,,active,A
+nxr,mpl_sg,Season 12,Nexora,NXR,Nexora.png,,,,active,B
+lfx,mpl_sg,Season 12,Lefaucheux Esports,LFX,Lefaucheux_Esports.png,,,,active,B
+wsp,mpl_sg,Season 12,Wisp Inc,WSP,Wisp_Inc.png,,,,active,A
+ex,mpl_sg,Season 12,EX Factor,EX,EX_FACTOR.png,,,,active,A
+evg,mpl_sg,Season 12,EverGarden,EVG,MPL_Singapore.png,,,,active,B
