@@ -4,6 +4,7 @@
 # Logos: web/teams/ (from the official MPL KH site).
 # Global split: 2026 Split 2
 team_id,league_id,season,name,short_name,logo,founded,city,coach,status
+# MPL Cambodia Season 11
 flkh,mpl_kh,Season 11,Team Flash KH,FLKH,Team_Flash.png,2019,Phnom Penh,SeoBaby,active
 rvz,mpl_kh,Season 11,Team Rvz,RVZ,Team_RVZ.png,2026,Phnom Penh,K S,active
 vgr,mpl_kh,Season 11,Vigor Apex,VGR,Vigor_Apex.png,2025,Phnom Penh,Naga,active
@@ -14,6 +15,7 @@ eye,mpl_kh,Season 11,Evil Eye Esports,EYE,Evil_Eye_Esports.png,2024,Phnom Penh,A
 val,mpl_kh,Season 11,Valhalla,VAL,Valhalla.png,2024,Phnom Penh,XE ON,active
 sys,mpl_kh,Season 11,See You Soon,SYS,See_You_Soon.png,2020,Phnom Penh,ATEV,active
 gxp,mpl_kh,Season 11,Queen Phoenix,QP,Galaxy_Phoenix.png,2025,Phnom Penh,RiRith,active
+# MPL Philippines Season 18
 tlph,mpl_ph,Season 18,Team Liquid PH,TLPH,Team_Liquid.png,,,,active
 flcn,mpl_ph,Season 18,Team Falcons PH,FLCN,Team_Falcons.png,,,,active
 onic,mpl_ph,Season 18,ONIC Philippines,ONIC,ONIC_Philippines.png,,,,active
@@ -22,6 +24,7 @@ omg,mpl_ph,Season 18,Smart Omega,OMG,Smart_Omega.png,,,,active
 tnc,mpl_ph,Season 18,TNC Pro Team,TNC,TNC_Pro_Team.png,,,,active
 apbr,mpl_ph,Season 18,AP Bren,APBR,AP_Bren.png,,,,active
 twis,mpl_ph,Season 18,Twisted Minds PH,TWIS,Twisted_Minds.png,,,,active
+# MPL Malaysia Season 18
 srg,mpl_my,Season 18,Selangor Red Giants,SRG,Selangor_Red_Giants.png,,,,active
 tr,mpl_my,Season 18,Team Rey,TR,Team_Rey.png,,,,active
 vms,mpl_my,Season 18,Team Vamos,VMS,Team_Vamos.png,,,,active
@@ -30,6 +33,7 @@ btrm,mpl_my,Season 18,Bigetron MY by VIT,BTRM,Bigetron.png,,,,active
 flmy,mpl_my,Season 18,Team Flash MY,FL,Team_Flash.png,,,,active
 ac,mpl_my,Season 18,AC Esports,AC,AC_Esports.png,,,,active
 rrq,mpl_my,Season 18,RRQ Tora,RRQ,RRQ.png,,,,active
+# MPL Indonesia Season 18
 tlid,mpl_id,Season 18,Team Liquid ID,TLID,Team_Liquid.png,,,,active
 navi,mpl_id,Season 18,NAVI,NAVI,Natus_Vincere.png,,,,active
 ae,mpl_id,Season 18,Alter Ego Esports,AE,Alter_Ego.png,,,,active
@@ -39,6 +43,7 @@ onicid,mpl_id,Season 18,ONIC,ONIC,ONIC_Esports.png,,,,active
 dewa,mpl_id,Season 18,Dewa United,DEWA,Dewa_United_Esports.png,,,,active
 rrqid,mpl_id,Season 18,RRQ Hoshi,RRQ,RRQ.png,,,,active
 geek,mpl_id,Season 18,Geek Fam,GEEK,Geek_Fam.png,,,,active
+# MSL Myanmar Season 18
 yg,msl_mm,Season 4,Yangon Galacticos,YG,Yangon_Galacticos.png,,,,active
 t7,msl_mm,Season 4,Team 7,T7,Team_7.png,,,,active
 fcon,msl_mm,Season 4,Falcon Esports,FCON,Falcon_Esports.png,,,,active
@@ -49,6 +54,7 @@ aies,msl_mm,Season 4,AI Esports,AI,AI_Esports.png,,,,active
 secret,msl_mm,Season 4,Team Secret,TS,Team_Secret.png,,,,active
 tecbg,msl_mm,Season 4,TEC BG,TEC BG,TEC_BG.png,,,,active
 dfam,msl_mm,Season 4,D Family,DF,Dfamily.png,,,,active
+# MTC Turkiye Championship Season 8 
 aur,mtc,Season 8,Aurora Gaming,AUR,Aurora_Gaming.png,,,,active
 fut,mtc,Season 8,FUT Esports,FUT,FUT_Esports.png,,,,active
 bw,mtc,Season 8,Bushido Wildcats,BW,Bushido_Wildcats.png,,,,active
@@ -57,6 +63,7 @@ pcf,mtc,Season 8,PCIFIC Esports,PCF,PCIFIC_Esports.png,,,,active
 bgt,mtc,Season 8,Boostgate Esports,BGT,Boostgate_Esports.png,,,,active
 ida,mtc,Season 8,IDA Esports,IDA,IDA_Esports.png,,,,active
 dp,mtc,Season 8,Dark Passage,DP,Dark_Passage.png,,,,active
+# MPL MENA Season 10
 flcn,mpl_mena,Season 10,Team Falcons,FLCN,Team_Falcons.png,,,,active
 gk,mpl_mena,Season 10,Geekay Esports,GK,Geekay_Esports.png,,,,active
 twis,mpl_mena,Season 10,Twisted Minds,TWIS,Twisted_Minds.png,,,,active
@@ -65,3 +72,14 @@ xo,mpl_mena,Season 10,Axe Okami,XO,Axe_Okami.png,,,,active
 tec,mpl_mena,Season 10,Titan Esports Club,TEC,Titan_Esports_Club.png,,,,active
 gs,mpl_mena,Season 10,GS Team,GS,GS_Team.png,,,,active
 wod,mpl_mena,Season 10,Will of D,WoD,Will_of_D.png,,,,active
+# MPL Singapore Season 12
+ign,mpl_sg,Season 12,IGNITE Gaming,IGN,IGNITE_Gaming.png,,,,active
+evil,mpl_sg,Season 12,Evil,Evil,Evil_SG.png,,,,active
+az,mpl_sg,Season 12,Absolute Zero,AZ,Absolute_Zero.png,,,,active
+kgdm,mpl_sg,Season 12,Kingdom Esports,KGDM,Kingdom_Esports.png,,,,active
+sin,mpl_sg,Season 12,Sindicate Esports,SIN,Sindicate_Esports.png,,,,active
+nxr,mpl_sg,Season 12,Nexora,NXR,Nexora.png,,,,active
+lfx,mpl_sg,Season 12,Lefaucheux Esports,LFX,Lefaucheux_Esports.png,,,,active
+wsp,mpl_sg,Season 12,Wisp Inc,WSP,Wisp_Inc.png,,,,active
+ex,mpl_sg,Season 12,EX Factor,EX,EX_FACTOR.png,,,,active
+evg,mpl_sg,Season 12,EverGarden,EVG,MPL_Singapore.png,,,,active
