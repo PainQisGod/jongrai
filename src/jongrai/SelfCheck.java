@@ -305,7 +305,7 @@ public final class SelfCheck {
 
     private static void pro(Path home) throws Exception {
         ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
-        check(pro.leagues().size() == 7 && pro.allDrafts().size() == 1093
+        check(pro.leagues().size() == 8 && pro.allDrafts().size() == 1093
                 && pro.currentDrafts().size() == 1093,
                 "all seven 2026 Split 2 leagues load from the season archive");
         ProLeagueRepository.ProStanding mtcTop = pro.standings("mtc", "Season 8").get(0);
@@ -313,6 +313,13 @@ public final class SelfCheck {
                 "MTC S8 applies 3 points for 2-0 and 2 points for 2-1 wins: " + mtcTop);
         List<ProLeagueRepository.ProStanding> table = pro.standings("mpl_kh", "Season 11");
         check(table.size() == 10, "the MPL KH S11 table lists all 10 teams");
+        List<ProLeagueRepository.ProTeam> sgTeams = pro.teamsInLeague("mpl_sg", "Season 12");
+        check(sgTeams.size() == 10 && sgTeams.stream().filter(t -> t.group().equals("A")).count() == 5
+                && sgTeams.stream().filter(t -> t.group().equals("B")).count() == 5,
+                "MPL Singapore S12 has five teams in each regular-season group");
+        List<ProLeagueRepository.ProStanding> sgStandings = pro.standings("mpl_sg", "Season 12");
+        check(sgStandings.size() == 10 && sgStandings.stream().filter(s -> s.position() <= 5).count() == 10,
+                "MPL Singapore group standings rank independently");
         StringBuilder got = new StringBuilder();
         for (ProLeagueRepository.ProStanding s : table) {
             got.append(s.teamId()).append(' ').append(s.won()).append('-').append(s.lost()).append(' ')

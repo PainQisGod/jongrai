@@ -459,9 +459,9 @@ public class WebServer {
 
     private static String teamJson(ProLeagueRepository.ProTeam t) {
         return String.format(Locale.ROOT,
-                "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s}",
+                "{\"id\":%s,\"leagueId\":%s,\"season\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"founded\":%d,\"city\":%s,\"coach\":%s,\"status\":%s,\"group\":%s}",
                 Json.str(t.id()), Json.str(t.leagueId()), Json.str(t.season()), Json.str(t.name()), Json.str(t.shortName()), Json.str(t.logo()),
-                t.founded(), Json.str(t.city()), Json.str(t.coach()), Json.str(t.status()));
+                t.founded(), Json.str(t.city()), Json.str(t.coach()), Json.str(t.status()), Json.str(t.group()));
     }
 
     private static String standingsJson(String leagueId, String season) {
