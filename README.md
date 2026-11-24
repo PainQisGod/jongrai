@@ -170,11 +170,11 @@ All plain CSV with `#` comment lines, so you can edit them freely. A malformed r
 **Pro leagues**
 
 - `pro-leagues.csv`: `league_id,name,region,country,season,year,status,logo,points_rule`, one row per league season (newest first). The league's own season name (for example, `Season 18`) stays unchanged.
-- `pro-seasons/<year>-split-<n>/pro-teams.csv`: `team_id,league_id,season,name,short_name,logo,founded,city,coach,status`
+- `pro-seasons/<year>-split-<n>/pro-teams.csv`: `team_id,league_id,season,name,short_name,logo,founded,city,coach,status,group`
 - `pro-seasons/<year>-split-<n>/pro-matches.csv`: `match_id,league_id,season,week,day,team1_id,team2_id,team1_score,team2_score,status,scheduled_time,completed_time,match_type,best_of,mvp`
 - `pro-seasons/<year>-split-<n>/pro-drafts.csv`: `draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch,map,duration,mvp`
   - Each folder is one cross-league split (for example, `2026-split-2`) and contains the three CSVs for every league tracked in that period. Add a new folder for the next split; the loader combines all folders automatically. Keep each row's league-specific `season` value and existing IDs unchanged.
-  - `draft_id` is the match id plus `_g<game number>`, and every id includes the season.
+  - `group` is optional and assigns a team to a regular-season group (for example, `A` or `B`). Grouped seasons show one standings table per group; leave it blank for leagues with one table.\n  - `draft_id` is the match id plus `_g<game number>`, and every id includes the season.
   - Picks are listed in lane order: EXP, Jungle, Mid, Gold, Roam.
 
 Standings are not stored: they are calculated from the finished `regular` rows in each split folder's `pro-matches.csv`, using each league season's `points_rule` in `pro-leagues.csv` (for example, MTC Season 8 awards 3 points for a 2-0 win and 2 points for a 2-1 win). Restart the server after changing league data.
