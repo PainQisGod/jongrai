@@ -168,16 +168,24 @@ function renderStandings(data){
    return `<section class="group-standing">
     <h3>Group ${esc(group)}</h3>
     <div class="stand-wrap"><table class="stand group-table"><thead><tr>
-     <th class="c-pos">#</th><th class="c-team">${esc(t('pl.col.team','Participant'))}</th>
-     <th title="Match record">${esc(t('pl.col.match','Match'))}</th><th title="Game record">${esc(t('pl.col.game','Game'))}</th>
-     <th>${esc(t('pl.col.pts','Pts'))}</th><th>${esc(t('pl.col.gd','GD'))}</th>
+     <th class="c-pos">#</th><th class="c-team">${esc(t('pl.col.team','Team'))}</th>
+     <th title="Matches played">${esc(t('pl.col.p','P'))}</th>
+     <th title="Wins">${esc(t('pl.col.w','W'))}</th>
+     <th title="Draws">${esc(t('pl.col.d','D'))}</th>
+     <th title="Losses">${esc(t('pl.col.l','L'))}</th>
+     <th title="Games won">GF</th><th title="Games lost">GA</th>
+     <th title="Game difference">GD</th><th title="Points">${esc(t('pl.col.pts','Pts'))}</th>
     </tr></thead><tbody>${rows.map(s=>{
      const team=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
+     const dim=v=>v===0?' dim':'';
      return `<tr>
       <td class="c-pos"><span class="rank${s.position<=3?' r'+s.position:''}">${s.position}</span></td>
       <td class="c-team"><div class="team-cell"><img class="team-logo" src="/teams/${esc(team.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(team.name||s.teamId)}</div><div class="team-short">${esc(team.shortName||'')}</div></div></div></td>
-      <td>${s.won}-${s.draw}-${s.lost}</td><td>${s.gf}-${s.ga}</td>
-      <td><span class="pts">${s.points}</span></td><td class="${s.gd>0?'win':s.gd<0?'loss':'dim'}">${s.gd>0?'+':''}${s.gd}</td>
+      <td>${s.played}</td><td class="win${dim(s.won)}">${s.won}</td>
+      <td class="draw${dim(s.draw)}">${s.draw}</td><td class="loss${dim(s.lost)}">${s.lost}</td>
+      <td>${s.gf}</td><td>${s.ga}</td>
+      <td class="${s.gd>0?'win':s.gd<0?'loss':'dim'}">${s.gd>0?'+':''}${s.gd}</td>
+      <td><span class="pts">${s.points}</span></td>
      </tr>`;
     }).join('')}</tbody></table></div>
    </section>`;
