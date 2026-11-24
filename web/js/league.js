@@ -156,22 +156,45 @@ $('#hsMin').onchange=()=>renderHeroes(hsShown);
 $('#hsScope').onchange=e=>{hsScope=e.target.value;refreshHeroes()};
 function renderStandings(data){
  const body=$('#standingsBody'), empty=$('#standingsEmpty');
- if(!data.length){body.innerHTML='';empty.hidden=false;return}
+ const normalWrap=$('#standingsPanel .stand-wrap'), groupsWrap=$('#standingsGroups');
+ const grouped=data.some(s=>(teamsById[s.teamId]?.group||'').trim());
+ if(!data.length){body.innerHTML='';groupsWrap.innerHTML='';groupsWrap.hidden=true;normalWrap.hidden=false;empty.hidden=false;return}
  empty.hidden=true;
+ if(grouped){
+  normalWrap.hidden=true;groupsWrap.hidden=false;
+  const groups=[...new Set(data.map(s=>(teamsById[s.teamId]?.group||'').trim()).filter(Boolean))].sort();
+  groupsWrap.innerHTML=groups.map(group=>{
+   const rows=data.filter(s=>(teamsById[s.teamId]?.group||'').trim()===group);
+   return `<section class="group-standing">
+    <h3>Group ${esc(group)}</h3>
+    <div class="stand-wrap"><table class="stand group-table"><thead><tr>
+     <th class="c-pos">#</th><th class="c-team">${esc(t('pl.col.team','Participant'))}</th>
+     <th title="Match record">${esc(t('pl.col.match','Match'))}</th><th title="Game record">${esc(t('pl.col.game','Game'))}</th>
+     <th>${esc(t('pl.col.pts','Pts'))}</th><th>${esc(t('pl.col.gd','GD'))}</th>
+    </tr></thead><tbody>${rows.map(s=>{
+     const team=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
+     return `<tr>
+      <td class="c-pos"><span class="rank${s.position<=3?' r'+s.position:''}">${s.position}</span></td>
+      <td class="c-team"><div class="team-cell"><img class="team-logo" src="/teams/${esc(team.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(team.name||s.teamId)}</div><div class="team-short">${esc(team.shortName||'')}</div></div></div></td>
+      <td>${s.won}-${s.draw}-${s.lost}</td><td>${s.gf}-${s.ga}</td>
+      <td><span class="pts">${s.points}</span></td><td class="${s.gd>0?'win':s.gd<0?'loss':'dim'}">${s.gd>0?'+':''}${s.gd}</td>
+     </tr>`;
+    }).join('')}</tbody></table></div>
+   </section>`;
+  }).join('');
+  body.innerHTML='';
+  return;
+ }
+ groupsWrap.hidden=true;groupsWrap.innerHTML='';normalWrap.hidden=false;
  const dim=v=>v===0?' dim':'';
  body.innerHTML=data.map(s=>{
-  const t=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
+  const team=teamsById[s.teamId]||{name:s.teamId,logo:'',shortName:''};
   return `<tr>
    <td class="c-pos"><span class="rank${s.position<=3?' r'+s.position:''}">${s.position}</span></td>
-   <td class="c-team"><div class="team-cell"><img class="team-logo" src="/teams/${esc(t.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(t.name||s.teamId)}</div><div class="team-short">${esc(t.shortName||'')}</div></div></div></td>
-   <td>${s.played}</td>
-   <td class="win${dim(s.won)}">${s.won}</td>
-   <td class="loss${dim(s.lost)}">${s.lost}</td>
-   <td class="draw${dim(s.draw)}">${s.draw}</td>
-   <td>${s.gf}</td>
-   <td>${s.ga}</td>
-   <td class="${s.gd>0?'win':s.gd<0?'loss':'dim'}">${s.gd>0?'+':''}${s.gd}</td>
-   <td><span class="pts">${s.points}</span></td>
+   <td class="c-team"><div class="team-cell"><img class="team-logo" src="/teams/${esc(team.logo||'')}" alt="" onerror="this.remove()"><div><div class="team-name">${esc(team.name||s.teamId)}</div><div class="team-short">${esc(team.shortName||'')}</div></div></div></td>
+   <td>${s.played}</td><td class="win${dim(s.won)}">${s.won}</td><td class="loss${dim(s.lost)}">${s.lost}</td>
+   <td class="draw${dim(s.draw)}">${s.draw}</td><td>${s.gf}</td><td>${s.ga}</td>
+   <td class="${s.gd>0?'win':s.gd<0?'loss':'dim'}">${s.gd>0?'+':''}${s.gd}</td><td><span class="pts">${s.points}</span></td>
   </tr>`;
  }).join('');
 }
