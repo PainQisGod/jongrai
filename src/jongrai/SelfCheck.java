@@ -297,8 +297,9 @@ public final class SelfCheck {
             try { ProLeagueRepository.load(dir); } catch (java.io.IOException e) { rejected = e.getMessage().contains("points_rule"); }
             check(rejected, "a bad points_rule stops the data load and names the column");
         } finally {
-            try (var files = Files.list(dir)) { for (Path f : files.toList()) Files.deleteIfExists(f); }
-            Files.deleteIfExists(dir);
+            try (var paths = Files.walk(dir)) {
+                for (Path path : paths.sorted(java.util.Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+            }
         }
     }
 
