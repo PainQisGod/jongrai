@@ -73,7 +73,7 @@ public final class ProLeagueRepository {
         for (Path file : files) {
             for (Csv.Row r : Csv.read(file, 10)) {
                 ProTeam t = new ProTeam(r.text(0), r.text(1), r.text(2), r.text(3),
-                        r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9));
+                        r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9), r.text(10));
                 String key = t.leagueId() + "|" + t.season() + "|" + t.id();
                 if (teams.putIfAbsent(key, t) != null) {
                     throw r.fail("duplicate team '" + t.id() + "' in " + t.leagueId() + " " + t.season());
@@ -217,19 +217,22 @@ public final class ProLeagueRepository {
             last = m.scheduledTime().length() >= 10 ? m.scheduledTime().substring(0, 10) : m.scheduledTime();
         }
         Map<String, String> names = new LinkedHashMap<>();
-        teamsInLeague(leagueId, season).forEach(t -> names.put(t.id(), t.name()));
+        Map<String, String> groups = new LinkedHashMap<>();
+        teamsInLeague(leagueId, season).forEach(t -> { names.put(t.id(), t.name()); groups.put(t.id(), t.group()); });
         List<String> order = new ArrayList<>(row.keySet());
-        order.sort(Comparator.<String>comparingInt(id -> -row.get(id)[5])
+        order.sort(Comparator.<String, String>comparing(id -> groups.getOrDefault(id, ""))
+                .thenComparingInt(id -> -row.get(id)[5])
                 .thenComparingInt(id -> -row.get(id)[0])
                 .thenComparingInt(id -> -(row.get(id)[2] - row.get(id)[3]))
                 .thenComparingInt(id -> -row.get(id)[2])
                 .thenComparing(id -> names.getOrDefault(id, id)));
         List<ProStanding> table = new ArrayList<>();
-        for (int i = 0; i < order.size(); i++) {
-            String id = order.get(i);
+        Map<String, Integer> groupPositions = new LinkedHashMap<>();
+        for (String id : order) {
             int[] r = row.get(id);
             String res = results.getOrDefault(id, new StringBuilder()).toString();
-            table.add(new ProStanding(leagueId, id, season, i + 1, r[0] + r[1] + r[4], r[0], r[1], r[4],
+            int position = groupPositions.merge(groups.getOrDefault(id, ""), 1, Integer::sum);
+            table.add(new ProStanding(leagueId, id, season, position, r[0] + r[1] + r[4], r[0], r[1], r[4],
                     r[2], r[3], r[2] - r[3], r[5], streak(res), res.length() > 5 ? res.substring(res.length() - 5) : res, last));
         }
         return table;
@@ -270,7 +273,7 @@ public final class ProLeagueRepository {
                             String season, int year, String status, String logo, String pointsRule) {}
 
     public record ProTeam(String id, String leagueId, String season, String name, String shortName,
-                          String logo, int founded, String city, String coach, String status) {}
+                          String logo, int founded, String city, String coach, String status, String group) {}
 
     public record ProStanding(String leagueId, String teamId, String season, int position,
                               int played, int won, int lost, int draw, int gf, int ga, int gd,
