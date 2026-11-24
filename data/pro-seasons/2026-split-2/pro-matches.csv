@@ -10,6 +10,7 @@
 # S11 regular season (Weeks 1-5, all 45 series) checked against mplcambodia.com/schedule on 2026-11-07.
 # Standings are calculated from the finished regular-season rows here (1 point per series win), so a
 # result only needs entering once.
+# Global split: 2026 Split 2
 match_id,league_id,season,week,day,team1_id,team2_id,team1_score,team2_score,status,scheduled_time,completed_time,match_type,best_of,mvp
 # MPL Cambodia Season 11
 mpl_kh_s11_w1_d1_m1,mpl_kh,Season 11,1,1,pro,gxl,2,1,finished,2026-09-18 - 13:00 ICT,,regular,3

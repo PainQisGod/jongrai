@@ -2,6 +2,7 @@
 # One row per team per league per season. founded/city/coach are blank where no reliable
 # source was found (the official site and Liquipedia do not list them) - do not invent them.
 # Logos: web/teams/ (from the official MPL KH site).
+# Global split: 2026 Split 2
 team_id,league_id,season,name,short_name,logo,founded,city,coach,status
 flkh,mpl_kh,Season 11,Team Flash KH,FLKH,Team_Flash.png,2019,Phnom Penh,SeoBaby,active
 rvz,mpl_kh,Season 11,Team Rvz,RVZ,Team_RVZ.png,2026,Phnom Penh,K S,active

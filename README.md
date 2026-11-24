@@ -12,7 +12,7 @@ Hero data is from **patch 2.2.23**.
 - **Pick and ban suggestions** from counters, synergies, lane coverage, win rate, ban rate and the chosen map.
 - **Map plan**: pick one of the seven arena maps and the board explains what that map changes, then lists heroes to **pick**, to **ban** and to **avoid** on it. It weighs each map's mechanic (more bushes favour ambushers, Golden Turret favours pushers, and so on) together with how heroes have done on that map in pro games.
 - **Draft analysis**: Edge breakdown (counters, meta power, synergy, lockdown, coordination), the Lotus profile (nine axes, blue against red) and a coordination check per lane.
-- **Pro League**: MPL Cambodia, MPL Philippines, MPL Malaysia, MPL Indonesia and MSL Myanmar, with a league bar and a season bar. Each season has standings, every match by round (regular season, play-ins, upper and lower bracket, grand final), and every game's draft with map, duration and MVP. The tracked seasons hold 330 series and 834 drafted games.
+- **Pro League**: MPL Cambodia, MPL Philippines, MPL Malaysia, MPL Indonesia and MSL Myanmar, with a league bar and a season bar. Each season has standings, every match by round (regular season, play-ins, upper and lower bracket, grand final), and every game's draft with map, duration and MVP. The tracked seasons hold 418 series and 1,093 drafted games.
 - **Hero Statistics**: all 133 heroes with tier, rates, ratings, matchups and Jongrai's tips, plus a page for each hero.
 - **Items and builds**: 104 shop items and 5 curated builds per hero.
 - **English / Khmer**: switch with the flags in the top bar. The choice is remembered on that browser.
@@ -169,14 +169,15 @@ All plain CSV with `#` comment lines, so you can edit them freely. A malformed r
 
 **Pro leagues**
 
-- `pro-leagues.csv`: `league_id,name,region,country,season,year,status,logo`, one row per season (newest first).
-- `pro-teams.csv`: `team_id,league_id,season,name,short_name,logo,founded,city,coach,status`
-- `pro-matches.csv`: `match_id,league_id,season,week,day,team1_id,team2_id,team1_score,team2_score,status,scheduled_time,completed_time,match_type,best_of,mvp`
-- `pro-drafts.csv`: `draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch,map,duration,mvp`
+- `pro-leagues.csv`: `league_id,name,region,country,season,year,status,logo,points_rule`, one row per league season (newest first). The league's own season name (for example, `Season 18`) stays unchanged.
+- `pro-seasons/<year>-split-<n>/pro-teams.csv`: `team_id,league_id,season,name,short_name,logo,founded,city,coach,status`
+- `pro-seasons/<year>-split-<n>/pro-matches.csv`: `match_id,league_id,season,week,day,team1_id,team2_id,team1_score,team2_score,status,scheduled_time,completed_time,match_type,best_of,mvp`
+- `pro-seasons/<year>-split-<n>/pro-drafts.csv`: `draft_id,match_id,league_id,season,game_number,blue_team_id,red_team_id,blue_bans,red_bans,blue_picks,red_picks,blue_side,winner_team_id,patch,map,duration,mvp`
+  - Each folder is one cross-league split (for example, `2026-split-2`) and contains the three CSVs for every league tracked in that period. Add a new folder for the next split; the loader combines all folders automatically. Keep each row's league-specific `season` value and existing IDs unchanged.
   - `draft_id` is the match id plus `_g<game number>`, and every id includes the season.
   - Picks are listed in lane order: EXP, Jungle, Mid, Gold, Roam.
 
-Standings are not stored: they are calculated from the finished `regular` rows in `pro-matches.csv`, using each season's `points_rule` in `pro-leagues.csv` (for example, MTC Season 8 awards 3 points for a 2-0 win and 2 points for a 2-1 win). Restart the server after changing league data.
+Standings are not stored: they are calculated from the finished `regular` rows in each split folder's `pro-matches.csv`, using each league season's `points_rule` in `pro-leagues.csv` (for example, MTC Season 8 awards 3 points for a 2-0 win and 2 points for a 2-1 win). Restart the server after changing league data.
 
 ## Console commands
 
@@ -199,7 +200,7 @@ help, quit
 ```
 src/jongrai/   Java source (engine, analyzer, map stats and effects, pro leagues, web server, AI coach, sign-in, SelfCheck)
 web/           pages, kit.css, pages.css, app.js, kit.js, css/, js/, lang/, icons/, teams/, league/, video/
-data/          heroes, items, builds, icons, maps, map effects, hero traits, pro-*.csv
+data/          heroes, items, builds, icons, maps, map effects, hero traits, pro-leagues.csv, pro-seasons/
 docs/          readable overview of every hero's counters and synergies
 ```
 

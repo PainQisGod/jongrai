@@ -275,11 +275,14 @@ public final class SelfCheck {
         }
         // the same MPL KH S11 results under a 3/2/1/0 rule: vgr won 5 series 2-0 and 4 series 2-1
         Path dir = Files.createTempDirectory("jongrai-rules");
+        Path seasonDir = dir.resolve("pro-seasons/2026-split-2");
+        Files.createDirectories(seasonDir);
         try {
+            Files.copy(home.resolve("data/pro-leagues.csv"), dir.resolve("pro-leagues.csv"));
             for (String f : List.of("pro-teams.csv", "pro-matches.csv", "pro-drafts.csv")) {
-                Files.copy(home.resolve("data").resolve(f), dir.resolve(f));
+                Files.copy(home.resolve("data/pro-seasons/2026-split-2").resolve(f), seasonDir.resolve(f));
             }
-            String leagues = Files.readString(home.resolve("data/pro-leagues.csv"));
+            String leagues = Files.readString(dir.resolve("pro-leagues.csv"));
             // the MPL KH Season 11 row, whatever its status is now (active, completed, ...)
             String s11Row = "(?m)^(mpl_kh,[^\\r\\n]*Season 11,[^\\r\\n]*)$";
             String changed = leagues.replaceFirst(s11Row, "$1,2-0=3:0;2-1=2:1");
@@ -301,6 +304,9 @@ public final class SelfCheck {
 
     private static void pro(Path home) throws Exception {
         ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
+        check(pro.leagues().size() == 7 && pro.allDrafts().size() == 1093
+                && pro.currentDrafts().size() == 1093,
+                "all seven 2026 Split 2 leagues load from the season archive");
         ProLeagueRepository.ProStanding mtcTop = pro.standings("mtc", "Season 8").get(0);
         check(mtcTop.teamId().equals("aur") && mtcTop.won() == 13 && mtcTop.points() == 37,
                 "MTC S8 applies 3 points for 2-0 and 2 points for 2-1 wins: " + mtcTop);
