@@ -57,14 +57,7 @@ table.stand tbody tr:last-child td{border-bottom:0}
 .group-standing{min-width:0}
 .group-standing h3{font-size:18px;font-weight:600;margin:8px 0 10px}
 .group-standing .stand-wrap{max-width:none}
-table.group-table{min-width:0;font-size:12px}
-table.group-table th{padding:10px 6px;letter-spacing:.4px}
-table.group-table td{padding:9px 6px}
-table.group-table th.c-pos,table.group-table td.c-pos{width:34px;padding-left:8px}
-table.group-table .team-cell{gap:7px}
-table.group-table .team-logo{width:28px;height:28px}
-table.group-table .team-name{font-size:12px;line-height:1.25}
-table.group-table .team-short{font-size:10px}
+table.group-table{min-width:600px}
 @media(max-width:760px){.standings-groups{grid-template-columns:1fr;gap:18px}}
 /* matches */
 #matchesList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:14px}
