@@ -53,12 +53,12 @@ table.stand tbody tr:last-child td{border-bottom:0}
 .pos{font-weight:700;font-variant-numeric:tabular-nums;color:var(--gold2)}
 .win{color:#22c55e}.loss{color:#ef4444}.draw{color:#f5c518}
 
-.standings-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
-.group-standing{min-width:0}
+.standings-groups{display:block}
+.group-standing{min-width:0;margin:0 0 18px}
+.group-standing:last-child{margin-bottom:0}
 .group-standing h3{font-size:18px;font-weight:600;margin:8px 0 10px}
-.group-standing .stand-wrap{max-width:none}
+.group-standing .stand-wrap{max-width:940px}
 table.group-table{min-width:600px}
-@media(max-width:760px){.standings-groups{grid-template-columns:1fr;gap:18px}}
 /* matches */
 #matchesList{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:14px}
 .match-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px 16px;display:flex;flex-direction:column;gap:12px}
