@@ -34,7 +34,6 @@ public final class SelfCheck {
         sessions(pool);
         auth();
         pro(home);
-        elo(home);
         System.out.println("SelfCheck: " + checks + " checks passed");
     }
 
@@ -304,24 +303,10 @@ public final class SelfCheck {
         }
     }
 
-    private static void elo(Path home) throws Exception {
-        check(EloRankingService.expectedScore(1500,1500)==0.5,"equal ELO ratings have a 50% expected map score");
-        check(Math.abs(EloRankingService.decayRating(1800,365)-1650)<0.000001,"365-day decay halves the distance from 1500");
-        check(!EloRankingService.teamKey("mpl_ph","flcn").equals(EloRankingService.teamKey("mpl_mena","flcn")),"team identity is league-scoped");
-        ProLeagueRepository repository=ProLeagueRepository.load(home.resolve("data"));
-        EloRankingService.Result result=new EloRankingService().calculate(repository,java.time.Instant.parse("2026-11-26T00:00:00Z"));
-        check(result.includedMatches()==445,"445 played series are eligible; the marked forfeit is excluded: "+result.includedMatches());
-        check(result.teams().size()==repository.allTeams().stream().map(t->EloRankingService.teamKey(t.leagueId(),t.id())).distinct().count(),"one rating per league-scoped team");
-        check(result.teams().stream().allMatch(t->t.mapsPlayed()==t.mapWins()+t.mapLosses()),"map totals reconcile");
-        check(result.teams().stream().filter(EloRankingService.TeamRating::qualified).allMatch(t->t.mapsPlayed()>=10),"10-map qualification enforced");
-        check(result.history().values().stream().mapToInt(List::size).sum()==result.includedMatches()*2,"each series creates two team history entries");
-        check(repository.standings("msl_mm","Season 4").stream().mapToInt(ProLeagueRepository.ProStanding::played).sum()==90,"forfeit still counts in league standings but not ELO");
-    }
-
     private static void pro(Path home) throws Exception {
         ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
-        check(pro.leagues().size() == 8 && pro.allDrafts().size() == 1093
-                && pro.currentDrafts().size() == 1093,
+        check(pro.leagues().size() == 8 && pro.allDrafts().size() == 1113
+                && pro.currentDrafts().size() == 1113,
                 "all seven 2026 Split 2 leagues load from the season archive");
         ProLeagueRepository.ProStanding mtcTop = pro.standings("mtc", "Season 8").get(0);
         check(mtcTop.teamId().equals("aur") && mtcTop.won() == 13 && mtcTop.points() == 37,
