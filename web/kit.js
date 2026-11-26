@@ -21,7 +21,7 @@ const FLAG_KM = `<svg class="lang-flag" viewBox="0 0 20 20" aria-hidden="true"><
 async function shell(current) {
   await i18nReady();
   document.body.insertAdjacentHTML('afterbegin', `<div class="grain"></div><canvas id="embers" aria-hidden="true"></canvas>
-  <header class="bar page"><a class="mark" href="/" aria-label="${esc(t('nav.homeLabel', 'Jongrai home'))}"><span class="kh" lang="km">ចង្រៃ</span><span class="lat">JONGRAI</span></a>
+  <header class="bar page"><a class="mark" href="/" aria-label="${esc(t('nav.homeLabel', 'Jongrai home'))}"><img class="brand-full" src="/icons/Jongrai_logo_full.png" alt="Jongrai"></a>
   <div class="nav-panel" id="navPanel"><nav class="nav">${PAGES.map(([href, label, key]) => `<a href="${href}"${href === navKey(current) ? ' aria-current="page"' : ''}>${esc(t(key, label))}</a>`).join('')}</nav></div>
   <span class="sp"></span><span class="live" id="live"><i></i><span>${esc(t('shell.engine', 'ENGINE'))}</span></span><span class="ticket" title="${esc(t('shell.patchTitle', 'Hero stats from the official rank page'))}">${esc(t('shell.patch', 'PATCH'))} <span data-patch>-</span><span class="asof">${esc(t('shell.asOf', 'as of'))} <span data-updated>-</span></span></span>
   <span class="langsw" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="${LANG === 'en'}">${FLAG_EN}EN</button><button type="button" data-l="km" lang="km" aria-pressed="${LANG === 'km'}">${FLAG_KM}ខ្មែរ</button></span>
