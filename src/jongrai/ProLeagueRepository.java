@@ -168,6 +168,16 @@ public final class ProLeagueRepository {
         return List.copyOf(leagues.values());
     }
 
+    /** Every team record across all archived league seasons. */
+    public List<ProTeam> allTeams() {
+        return List.copyOf(teams.values());
+    }
+
+    /** Every recorded series across all archived league seasons. */
+    public List<ProMatch> allMatches() {
+        return matches.values().stream().flatMap(List::stream).toList();
+    }
+
     public List<ProTeam> teamsInLeague(String leagueId, String season) {
         return teams.values().stream()
                 .filter(t -> t.leagueId().equals(leagueId) && t.season().equals(season)).toList();
