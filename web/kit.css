@@ -169,3 +169,9 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
 .section-nav-inner a:hover{color:var(--ink);background:var(--stone-2)}
 .section-nav-inner a[aria-current="page"]{color:var(--gold-hi);background:var(--gold-wash);border-color:var(--gold-lo)}
 @media(max-width:750px){.section-nav-inner{gap:4px}.section-nav-inner a{flex:1;justify-content:center;padding:0 9px;font-size:10px}}
+
+
+/* Full Jongrai brand lockup */
+.mark{align-items:center;gap:0;flex:none;height:48px;min-width:150px}
+.mark .brand-full{display:block;width:150px;height:44px;object-fit:contain;object-position:left center}
+@media(max-width:750px){.mark{min-width:0;width:112px;height:42px}.mark .brand-full{width:112px;height:40px}}
