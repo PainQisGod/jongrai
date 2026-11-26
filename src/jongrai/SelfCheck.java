@@ -305,8 +305,8 @@ public final class SelfCheck {
 
     private static void pro(Path home) throws Exception {
         ProLeagueRepository pro = ProLeagueRepository.load(home.resolve("data"));
-        check(pro.leagues().size() == 8 && pro.allDrafts().size() == 1093
-                && pro.currentDrafts().size() == 1093,
+        check(pro.leagues().size() == 8 && pro.allDrafts().size() == 1113
+                && pro.currentDrafts().size() == 1113,
                 "all seven 2026 Split 2 leagues load from the season archive");
         ProLeagueRepository.ProStanding mtcTop = pro.standings("mtc", "Season 8").get(0);
         check(mtcTop.teamId().equals("aur") && mtcTop.won() == 13 && mtcTop.points() == 37,

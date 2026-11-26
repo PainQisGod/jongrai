@@ -1,6 +1,6 @@
 // Jongrai - shared shell for the redesigned pages. Loaded after /app.js (esc, call, store, laneIcon, meta).
 
-const PAGES = [['/', 'Home', 'nav.home'], ['/news', 'News', 'nav.news'], ['/heroes', 'Heroes', 'nav.heroes'], ['/items', 'Items', 'nav.items'], ['/league', 'Pro League', 'nav.league'], ['/draft', 'Draft', 'nav.draft'], ['/about', 'About', 'nav.about']];
+const PAGES = [['/', 'Home', 'nav.home'], ['/news', 'News', 'nav.news'], ['/heroes', 'Heroes', 'nav.heroes'], ['/items', 'Items', 'nav.items'], ['/league', 'Pro League', 'nav.league'], ['/elo', 'ELO Ranking', 'nav.elo'], ['/draft', 'Draft', 'nav.draft'], ['/about', 'About', 'nav.about']];
 /** The nav entry for this address: /home counts as /, /heroes/<slug> as /heroes and /news/<slug> as /news. */
 const navKey = p => p === '/home' ? '/' : p.startsWith('/heroes/') ? '/heroes' : p.startsWith('/news/') ? '/news' : p;
 const icon = f => '/icons/' + encodeURIComponent(f);

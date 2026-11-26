@@ -1,5 +1,5 @@
 # Matches: match_id, league_id, season, week, day, team1_id, team2_id, team1_score, team2_score, status, scheduled_time, completed_time, match_type, best_of, mvp
-# status: scheduled, live, completed, postponed, cancelled
+# status: scheduled, live, completed, forfeit, postponed, cancelled
 # match_type: regular for the regular season (only these count towards the standings); playoff rows use the
 #   round name: play-in, upper quarterfinal, upper semifinal, lower semifinal, upper final, lower final, grand final.
 # Playoff weeks continue the numbering (week 6 = the playoff week). A team not decided yet is TBD.
@@ -319,7 +319,7 @@ msl_mm_s4_w5_d1_m2,msl_mm,Season 4,5,1,yg,pld,2,0,finished,2026-10-08 - 16:00 MM
 msl_mm_s4_w5_d1_m3,msl_mm,Season 4,5,1,tecbg,wyv,2,0,finished,2026-10-08 - 18:00 MMT,,regular,3,
 msl_mm_s4_w5_d2_m1,msl_mm,Season 4,5,2,yg,secret,2,1,finished,2026-10-09 - 14:00 MMT,,regular,3,
 msl_mm_s4_w5_d2_m2,msl_mm,Season 4,5,2,dfam,pld,2,0,finished,2026-10-09 - 16:00 MMT,,regular,3,
-msl_mm_s4_w5_d2_m3,msl_mm,Season 4,5,2,mseal,fcon,0,2,finished,2026-10-09 - 18:00 MMT,,regular,3,
+msl_mm_s4_w5_d2_m3,msl_mm,Season 4,5,2,mseal,fcon,0,2,forfeit,2026-10-09 - 18:00 MMT,,regular,3,
 msl_mm_s4_w5_d3_m1,msl_mm,Season 4,5,3,aies,t7,2,0,finished,2026-10-10 - 14:00 MMT,,regular,3,
 msl_mm_s4_w5_d3_m2,msl_mm,Season 4,5,3,secret,wyv,0,2,finished,2026-10-10 - 16:00 MMT,,regular,3,
 msl_mm_s4_w5_d3_m3,msl_mm,Season 4,5,3,yg,tecbg,2,0,finished,2026-10-10 - 18:00 MMT,,regular,3,

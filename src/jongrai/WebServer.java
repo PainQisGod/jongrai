@@ -73,6 +73,7 @@ public class WebServer {
             "/home", "home.html",
             "/heroes", "hero-statistics.html",
             "/league", "pro-league.html",
+            "/elo", "elo.html",
             "/draft", "draft.html",
             "/items", "items.html",
             "/about", "about.html",
@@ -287,7 +288,7 @@ public class WebServer {
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
             case "/" -> servePage(ex, "home.html");
-            case "/home", "/heroes", "/league", "/draft", "/about", "/items", "/news", "/index.html" -> servePage(ex, PAGES.get(path));
+            case "/home", "/heroes", "/league", "/elo", "/draft", "/about", "/items", "/news", "/index.html" -> servePage(ex, PAGES.get(path));
             case "/app.js", "/kit.css", "/kit.js", "/pages.css" -> serveFile(ex, "web", path.substring(1), false);
             case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH) + ",\"updated\":" + Json.str(HeroRepository.DATA_DATE)
                     + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
@@ -295,6 +296,8 @@ public class WebServer {
             case "/api/items" -> sendJson(ex, 200, itemsJson());
             case "/api/builds" -> sendJson(ex, 200, buildsJson(q.getOrDefault("hero", "")));
             case "/api/leagues" -> sendJson(ex, 200, leaguesJson());
+            case "/api/elo" -> sendJson(ex, 200, eloRankingJson());
+            case "/api/elo/history" -> sendJson(ex, 200, eloHistoryJson(q.getOrDefault("team", "")));
             case "/api/teams" -> sendJson(ex, 200, teamsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
             case "/api/standings" -> sendJson(ex, 200, standingsJson(q.getOrDefault("league", ""), q.getOrDefault("season", "")));
             case "/api/matches" -> sendJson(ex, 200, matchesJson(q.getOrDefault("league", ""), q.getOrDefault("season", ""), q.getOrDefault("status", "")));
@@ -442,6 +445,21 @@ public class WebServer {
                     Json.str(name), Json.str(it == null ? "" : it.slug()), Json.str(it == null ? "" : it.icon()),
                     it == null ? 0 : it.cost(), b.isCore(name));
         }).collect(Collectors.joining(",", "[", "]"));
+    }
+
+    private static EloRankingService.Result eloResult() { return new EloRankingService().calculate(pro, Instant.now()); }
+    private static String eloRankingJson() {
+        EloRankingService.Result result = eloResult();
+        String teams = result.teams().stream().map(t -> String.format(Locale.ROOT,
+                "{\"teamKey\":%s,\"teamId\":%s,\"leagueId\":%s,\"leagueName\":%s,\"region\":%s,\"country\":%s,\"name\":%s,\"shortName\":%s,\"logo\":%s,\"rating\":%.2f,\"mapWins\":%d,\"mapLosses\":%d,\"mapsPlayed\":%d,\"seriesPlayed\":%d,\"mapWinRate\":%.4f,\"lastMatch\":%s,\"status\":%s,\"qualified\":%b,\"rank\":%d}",
+                Json.str(t.teamKey()),Json.str(t.teamId()),Json.str(t.leagueId()),Json.str(t.leagueName()),Json.str(t.region()),Json.str(t.country()),Json.str(t.name()),Json.str(t.shortName()),Json.str(t.logo()),t.rating(),t.mapWins(),t.mapLosses(),t.mapsPlayed(),t.seriesPlayed(),t.mapWinRate(),Json.str(t.lastMatch()),Json.str(t.status()),t.qualified(),t.rank())).collect(Collectors.joining(",", "[", "]"));
+        return "{\"generatedAt\":"+Json.str(result.generatedAt().toString())+",\"includedMatches\":"+result.includedMatches()+",\"skippedMatches\":"+result.skippedMatches()+",\"teams\":"+teams+"}";
+    }
+    private static String eloHistoryJson(String teamKey) {
+        if(teamKey==null||teamKey.isBlank()) return "[]";
+        return eloResult().history().getOrDefault(teamKey,List.of()).stream().map(h -> String.format(Locale.ROOT,
+                "{\"matchId\":%s,\"date\":%s,\"opponent\":%s,\"score\":%s,\"ratingBefore\":%.2f,\"ratingAfter\":%.2f,\"change\":%.2f,\"mapsWon\":%d,\"mapsLost\":%d}",
+                Json.str(h.matchId()),Json.str(h.date().toString()),Json.str(h.opponent()),Json.str(h.score()),h.ratingBefore(),h.ratingAfter(),h.change(),h.mapsWon(),h.mapsLost())).collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String leaguesJson() {

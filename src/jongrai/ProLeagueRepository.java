@@ -168,6 +168,16 @@ public final class ProLeagueRepository {
         return List.copyOf(leagues.values());
     }
 
+    /** Every team record across all archived league seasons. */
+    public List<ProTeam> allTeams() {
+        return List.copyOf(teams.values());
+    }
+
+    /** Every recorded series across all archived league seasons. */
+    public List<ProMatch> allMatches() {
+        return matches.values().stream().flatMap(List::stream).toList();
+    }
+
     public List<ProTeam> teamsInLeague(String leagueId, String season) {
         return teams.values().stream()
                 .filter(t -> t.leagueId().equals(leagueId) && t.season().equals(season)).toList();
@@ -191,7 +201,7 @@ public final class ProLeagueRepository {
         }
         String last = "";
         for (ProMatch m : matches(leagueId, season)) {          // already sorted by scheduled time
-            boolean done = m.status().equals("finished") || m.status().equals("completed");
+            boolean done = m.status().equals("finished") || m.status().equals("completed") || m.status().equals("forfeit");
             if (!done || !m.matchType().equals("regular") || m.team1Score() < 0 || m.team2Score() < 0) continue;
             int[] a = row.computeIfAbsent(m.team1Id(), k -> new int[6]);
             int[] b = row.computeIfAbsent(m.team2Id(), k -> new int[6]);
