@@ -4,7 +4,7 @@ const tr=(...a)=>t(...a);   // t() under another name, for functions where a tea
 const seasonName=s=>{const m=/^Season\s+(\d+)$/i.exec(s||'');return m?t('pl.seasonN','Season {n}',{n:m[1]}):s};
 // Jongrai - script for /pro-league.html. Runs after /app.js and /kit.js.
 const $$=s=>document.querySelectorAll(s);
-const STATUS_CLS={finished:'completed',completed:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
+const STATUS_CLS={finished:'completed',completed:'completed',forfeit:'completed',scheduled:'scheduled',live:'live',postponed:'postponed',cancelled:'cancelled'};
 // Arena icons live in web/icons as the map name with underscores (Flying Cloud -> Flying_Cloud.png); "Default Map" has none.
 const mapIcon=m=>m&&!/^default/i.test(m)?`<img class="map-ic" src="/icons/${encodeURIComponent(m.trim().replace(/ /g,'_'))}.png" alt="" onerror="this.remove()">`:'';
 let leagues=[], currentLeague=null, currentSeason=null, teamsById={}, heroIcons={};
