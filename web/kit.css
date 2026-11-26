@@ -161,3 +161,11 @@ kbd{font:600 11px/1 var(--display);padding:3px 5px;border-radius:4px;border:1px 
 .lang-km body :not(.num){letter-spacing:0!important;text-transform:none}
 .lang-km .mark .lat{letter-spacing:.34em!important} /* the Latin wordmark keeps its spacing in Khmer mode too */
 .i18n-wait main,.i18n-wait footer{visibility:hidden}
+
+/* Shared second-level navigation for Professional League and ELO Ranking. */
+.section-nav{position:relative;z-index:4;max-width:1180px;margin:0 auto;padding:0 16px}
+.section-nav-inner{display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--hair-2);padding:0 0 12px}
+.section-nav-inner a{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border:1px solid transparent;border-radius:var(--r-sm);color:var(--ink-3);font:600 11px var(--display);letter-spacing:.06em;text-decoration:none;transition:background .15s,border-color .15s,color .15s}
+.section-nav-inner a:hover{color:var(--ink);background:var(--stone-2)}
+.section-nav-inner a[aria-current="page"]{color:var(--gold-hi);background:var(--gold-wash);border-color:var(--gold-lo)}
+@media(max-width:750px){.section-nav-inner{gap:4px}.section-nav-inner a{flex:1;justify-content:center;padding:0 9px;font-size:10px}}

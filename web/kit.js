@@ -1,8 +1,8 @@
 // Jongrai - shared shell for the redesigned pages. Loaded after /app.js (esc, call, store, laneIcon, meta).
 
-const PAGES = [['/', 'Home', 'nav.home'], ['/news', 'News', 'nav.news'], ['/heroes', 'Heroes', 'nav.heroes'], ['/items', 'Items', 'nav.items'], ['/league', 'Pro League', 'nav.league'], ['/elo', 'ELO Ranking', 'nav.elo'], ['/draft', 'Draft', 'nav.draft'], ['/about', 'About', 'nav.about']];
+const PAGES = [['/', 'Home', 'nav.home'], ['/news', 'News', 'nav.news'], ['/heroes', 'Heroes', 'nav.heroes'], ['/items', 'Items', 'nav.items'], ['/league', 'Pro League', 'nav.league'], ['/draft', 'Draft', 'nav.draft'], ['/about', 'About', 'nav.about']];
 /** The nav entry for this address: /home counts as /, /heroes/<slug> as /heroes and /news/<slug> as /news. */
-const navKey = p => p === '/home' ? '/' : p.startsWith('/heroes/') ? '/heroes' : p.startsWith('/news/') ? '/news' : p;
+const navKey = p => p === '/home' ? '/' : p.startsWith('/heroes/') ? '/heroes' : p.startsWith('/news/') ? '/news' : (p === '/elo' || p.startsWith('/league/')) ? '/league' : p;
 const icon = f => '/icons/' + encodeURIComponent(f);
 
 /* Small round flags for the language switch, drawn inline (no image files).
@@ -27,6 +27,16 @@ async function shell(current) {
   <span class="langsw" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="${LANG === 'en'}">${FLAG_EN}EN</button><button type="button" data-l="km" lang="km" aria-pressed="${LANG === 'km'}">${FLAG_KM}ខ្មែរ</button></span>
   <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navPanel" aria-label="${esc(t('nav.menu', 'Menu'))}"><span></span><span></span><span></span></button></header>`);
   navMenu();
+  if (current === '/league' || current === '/elo' || current === '/league/elo') {
+    const active = current === '/league' ? 'league' : 'elo';
+    document.querySelector('.bar').insertAdjacentHTML('afterend', `
+      <div class="section-nav page" aria-label="Pro League sections">
+        <nav class="section-nav-inner">
+          <a href="/league" ${active === 'league' ? 'aria-current="page"' : ''}>${esc(t('pl.subnav.professional', 'Professional League'))}</a>
+          <a href="/league/elo" ${active === 'elo' ? 'aria-current="page"' : ''}>${esc(t('pl.subnav.elo', 'ELO Ranking'))}</a>
+        </nav>
+      </div>`);
+  }
   document.querySelectorAll('.langsw button').forEach(b => b.onclick = () => { if (b.dataset.l !== LANG) setLang(b.dataset.l); });
   embers();
   const m = await meta();
