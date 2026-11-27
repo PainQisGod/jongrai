@@ -2,11 +2,11 @@
 <html lang="en"><head><meta charset="utf-8"><title>Jongrai - MLBB draft helper</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/kit.css">
-<link rel="stylesheet" href="/css/home.css"></head><body>
+<link rel="stylesheet" href="/css/home.css"></head><body class="home-page">
 <main class="page">
  <section class="hero">
   <div class="art" aria-hidden="true"></div>
-  <div>
+  <div class="hero-intro">
    <span class="eyebrow" data-i18n="home.eyebrow">MLBB draft room</span>
    <div class="word"><img src="/icons/Jongrai_logo_full.png" alt="Jongrai" fetchpriority="high"></div>
    <h1 class="say" data-i18n-html="home.say">The MLBB pro scene, <em>reimagined</em> for every fan.</h1>
@@ -21,17 +21,49 @@
   <div><b class="num" data-to="20">0</b><span data-i18n="home.strip.steps">draft steps scored</span></div>
   <div><b class="num" data-to="banned">0</b><span data-i18n="home.strip.bans">heroes the meta bans</span></div>
  </div>
+
  <section class="s news" id="news" hidden>
-  <div class="s-h"><div><span class="eyebrow" data-i18n="home.news.eyebrow">News</span><h2 data-i18n="home.news.title">What's new in MLBB</h2></div><a href="/news" data-i18n="home.news.all">All news →</a></div>
+  <div class="s-h"><div><span class="eyebrow" data-i18n="home.news.eyebrow">The latest from the scene</span><h2>Jongrai <em>Newsroom</em></h2></div><a href="/news" data-i18n="home.news.all">All news →</a></div>
   <div class="nws" id="nws"></div>
  </section>
- <section class="s">
-  <div class="s-h"><div><span class="eyebrow" data-i18n-html="home.pulse.eyebrow">Meta pulse · patch <span data-patch></span> · as of <span data-updated></span></span><h2 data-i18n="home.pulse.title">Who's winning, who's feared</h2></div><a href="/heroes" data-i18n-html="home.pulse.all">All <span data-hero-count></span> heroes →</a></div>
+
+ <section class="s competition-section" id="competition">
+  <div class="s-h"><div><span class="eyebrow">Stay ahead of the game</span><h2>The <em>Competition</em></h2></div><a href="/league">View all matches ↗</a></div>
+  <div class="competition-layout">
+   <div class="competition-column">
+    <article class="matches panel">
+     <div class="panel-top"><h3>Upcoming Matches</h3><span class="tiny-gold" id="match-season">LOADING SEASON…</span></div>
+     <div id="home-matches" aria-live="polite"><div class="skel" style="height:170px"></div></div>
+    </article>
+    <a class="league-card panel" href="/league">
+     <span class="league-art" aria-hidden="true"></span><span class="league-content"><span class="eyebrow">Season overview</span><strong id="home-league-title">Pro League</strong><span id="home-league-meta">Every region. Every rivalry. One place to follow it all.</span><span class="gold-link">Explore seasons ↗</span></span><span class="watermark" aria-hidden="true">J</span>
+    </a>
+   </div>
+   <article class="leader panel" id="home-leaderboard">
+    <div class="panel-top"><div><span class="eyebrow">The table never lies</span><h3>The Leaderboard</h3></div><span class="tiny-gold" id="leader-season">CURRENT SEASON</span></div>
+    <div class="tabs" role="tablist" aria-label="Leaderboard category">
+     <button type="button" class="selected" data-home-tab="regular" role="tab" aria-selected="true">Regular Season</button>
+     <button type="button" data-home-tab="playoffs" role="tab" aria-selected="false">Playoffs</button>
+     <button type="button" data-home-tab="elo" role="tab" aria-selected="false">ELO Ranking</button>
+    </div>
+    <div class="table-head"><span># / Team</span><span>W</span><span>L</span><span>Pts / ELO</span></div>
+    <div id="home-leader-rows" aria-live="polite"><p class="leader-empty">Loading standings…</p></div>
+    <a class="table-link" href="/league" id="leader-link">Full standings ↗</a>
+   </article>
+  </div>
+ </section>
+
+ <section class="s heroes-section" id="heroes">
+  <div class="s-h"><div><span class="eyebrow" data-i18n-html="home.pulse.eyebrow">The numbers behind the meta · patch <span data-patch></span> · as of <span data-updated></span></span><h2>Heroes in <em>Focus</em></h2></div><a href="/heroes" data-i18n-html="home.pulse.all">All <span data-hero-count></span> heroes →</a></div>
   <div class="pulse"><div class="tops" id="tops"></div><div class="bans panel" id="bans"><h3 data-i18n="home.bans.title">Most banned</h3></div></div>
-  <div class="tipcard panel" id="tip"></div>
+ </section>
+
+ <section class="s tips-section" id="hero-tips">
+  <div class="s-h"><div><span class="eyebrow">Play smarter</span><h2>Tips from <em>the Heroes</em></h2></div><a href="/heroes">Explore hero guides ↗</a></div>
+  <div class="tipcard panel" id="tip" aria-live="polite"></div>
  </section>
 </main>
-<footer class="page"><span data-i18n="footer.fan">Fan-made, non-commercial. Not affiliated with or endorsed by Moonton.</span><span class="sp kh" lang="km">ចង្រៃ</span><span data-i18n-html="footer.patch">UI mockup · data patch <span data-patch></span></span></footer>
+<footer class="page"><span data-i18n="footer.fan">Fan-made, non-commercial. Not affiliated with or endorsed by Moonton.</span><span class="sp kh" lang="km">ចង្រៃ</span><span data-i18n-html="footer.patch">Data patch <span data-patch></span></span></footer>
 <script src="/app.js"></script>
 <script src="/kit.js"></script>
 <script src="/js/home.js"></script></body></html>
