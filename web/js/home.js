@@ -54,7 +54,7 @@ async function drawNews(){
  $('#news').hidden=false;
 }
 
-let homeLeague=null,homeTeams={},homeStandings=[],homeMatches=[],homeAllMatches=[],homeElo=[];
+let homeLeague=null,homeTeams={},homeLeagueNames={},homeStandings=[],homeMatches=[],homeAllMatches=[],homeElo=[];
 function teamData(id,leagueId){return homeTeams[String(leagueId||'')+'|'+String(id)]||{id,name:id,shortName:id,logo:''}}
 function teamMark(team){return team.logo?`<img src="/teams/${encodeURIComponent(team.logo)}" alt="" loading="lazy" onerror="this.remove()">`:'<span class="home-team-mark">'+esc((team.shortName||team.name||'?').slice(0,2))+'</span>'}
 function dateTimeLabel(value){
@@ -73,7 +73,7 @@ function renderUpcoming(){
  if(!list.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.none','There are no upcoming fixtures recorded for this season yet.')+' <a href="/league">'+t('home.competition.schedule','View the full schedule ↗')+'</a></p>';return}
  host.innerHTML=list.map(m=>{
   const a=teamData(m.team1Id,m.leagueId),b=teamData(m.team2Id,m.leagueId),live=String(m.status).toLowerCase()==='live',done=['completed','finished','forfeit'].includes(String(m.status).toLowerCase());
-  return `<a class="home-match" href="/league"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(m.leagueId||'')}</span>
+  return `<a class="home-match" href="/league"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(homeLeagueNames[m.leagueId]||m.leagueId||'')}</span>
    <span class="home-match-team">${teamMark(a)}<b>${esc(a.shortName||a.name)}</b></span>
    <strong class="home-match-vs">${done||live?esc(m.team1Score+' : '+m.team2Score):'VS'}</strong>
    <span class="home-match-team away">${teamMark(b)}<b>${esc(b.shortName||b.name)}</b></span>
@@ -88,7 +88,7 @@ function renderLeaderboard(tab){
   rows=homeStandings.slice().sort((a,b)=>a.position-b.position).slice(0,6).map(s=>{const tm=teamData(s.teamId);return{rank:s.position,name:tm.name||s.teamId,logo:tm.logo,w:s.won,l:s.lost,value:s.points}});
   link.href='/league';link.textContent=t('home.leader.full','Full standings ↗');
  }else if(tab==='playoffs'){
-  const playoff=homeMatches.filter(m=>/play.?off|quarter|semi|final|bracket/i.test(m.matchType||'')&&['completed','finished','forfeit'].includes(String(m.status).toLowerCase()));
+  const playoff=homeMatches.filter(m=>/play.?off|play.?in|quarter|semi|final|bracket/i.test(m.matchType||'')&&['completed','finished','forfeit'].includes(String(m.status).toLowerCase()));
   const record={};
   playoff.forEach(m=>{[[m.team1Id,m.team1Score,m.team2Score],[m.team2Id,m.team2Score,m.team1Score]].forEach(([id,w,l])=>{if(!record[id])record[id]={w:0,l:0};if(w>l)record[id].w++;else if(w<l)record[id].l++})});
   rows=Object.entries(record).sort((a,b)=>b[1].w-a[1].w||a[1].l-b[1].l).slice(0,6).map(([id,r],i)=>{const tm=teamData(id);return{rank:i+1,name:tm.name||id,logo:tm.logo,w:r.w,l:r.l,value:'—'}});
@@ -115,7 +115,7 @@ async function drawCompetition(){
   const [teams,standings,matches]=await Promise.all([call('/api/teams?'+qs),call('/api/standings?'+qs),call('/api/matches?'+qs)]);
   return{league:l,teams:Array.isArray(teams)?teams:[],standings:Array.isArray(standings)?standings:[],matches:Array.isArray(matches)?matches:[]};
  }));
- packs.forEach(p=>p.teams.forEach(tm=>homeTeams[p.league.id+'|'+tm.id]=tm));
+ packs.forEach(p=>{homeLeagueNames[p.league.id]=p.league.name;p.teams.forEach(tm=>homeTeams[p.league.id+'|'+tm.id]=tm)});
  const primary=packs.find(p=>p.league.id===homeLeague.id);
  homeStandings=primary?primary.standings:[];
  homeMatches=primary?primary.matches:[];
