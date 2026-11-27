@@ -54,15 +54,20 @@ async function drawNews(){
  $('#news').hidden=false;
 }
 
-let homeLeague=null,homeTeams={},homeLeagueNames={},homeStandings=[],homeMatches=[],homeAllMatches=[],homeElo=[];
+let homeLeague=null,homeTeams={},homeLeagueNames={},homeAllMatches=[],homeElo=[];
 function teamData(id,leagueId){return homeTeams[String(leagueId||'')+'|'+String(id)]||{id,name:id,shortName:id,logo:''}}
-function teamMark(team){return team.logo?`<img src="/teams/${encodeURIComponent(team.logo)}" alt="" loading="lazy" onerror="this.remove()">`:'<span class="home-team-mark">'+esc((team.shortName||team.name||'?').slice(0,2))+'</span>'}
+function teamMark(team){return team.logo?'<img src="/teams/'+encodeURIComponent(team.logo)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="home-team-mark">'+esc((team.shortName||team.name||'?').slice(0,2))+'</span>'}
 function dateTimeLabel(value){
  const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(value||'');
  if(!m)return value||'Time TBC';
  return `${fmtDate(`${m[1]}-${m[2]}-${m[3]}`)} · ${m[4]}${m[5]?' '+m[5]:''}`;
 }
-function renderUpcoming(){
+function stageLabel(match){
+ const type=String(match.matchType||'').trim();
+ if(!type||type.toLowerCase()==='regular')return `Regular Season · Week ${match.week||'—'}`;
+ return type.replace(/\b\w/g,c=>c.toUpperCase());
+}
+function renderMatches(){
  const host=$('#home-matches');
  const upcoming=homeAllMatches.filter(m=>['scheduled','live'].includes(String(m.status).toLowerCase()))
   .sort((a,b)=>String(a.scheduledTime||'').localeCompare(String(b.scheduledTime||''))).slice(0,4);
@@ -72,65 +77,48 @@ function renderUpcoming(){
  $('#home-matches-title').textContent=showingResults?t('home.competition.latest','Latest Results'):t('home.competition.matches','Upcoming Matches');
  if(!list.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.none','There are no upcoming fixtures recorded for this season yet.')+' <a href="/league">'+t('home.competition.schedule','View the full schedule ↗')+'</a></p>';return}
  host.innerHTML=list.map(m=>{
-  const a=teamData(m.team1Id,m.leagueId),b=teamData(m.team2Id,m.leagueId),live=String(m.status).toLowerCase()==='live',done=['completed','finished','forfeit'].includes(String(m.status).toLowerCase());
-  return `<a class="home-match" href="/league"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(homeLeagueNames[m.leagueId]||m.leagueId||'')}</span>
-   <span class="home-match-team">${teamMark(a)}<b>${esc(a.shortName||a.name)}</b></span>
-   <strong class="home-match-vs">${done||live?esc(m.team1Score+' : '+m.team2Score):'VS'}</strong>
-   <span class="home-match-team away">${teamMark(b)}<b>${esc(b.shortName||b.name)}</b></span>
-   <span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):done?t('home.competition.final','FINAL'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span></a>`;
+  const a=teamData(m.team1Id,m.leagueId),b=teamData(m.team2Id,m.leagueId);
+  const status=String(m.status).toLowerCase(),live=status==='live',done=['completed','finished','forfeit'].includes(status);
+  const score=done||live?esc(m.team1Score+' : '+m.team2Score):'VS';
+  return `<a class="home-match" href="/league">
+   <span class="home-match-meta"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(homeLeagueNames[m.leagueId]||m.leagueId||'')}</span><span class="home-match-stage">${esc(stageLabel(m))}</span></span>
+   <span class="home-match-team home-match-left">${teamMark(a)}<b>${esc(a.name||a.shortName||m.team1Id)}</b></span>
+   <strong class="home-match-vs">${score}</strong>
+   <span class="home-match-team home-match-right"><b>${esc(b.name||b.shortName||m.team2Id)}</b>${teamMark(b)}</span>
+   <span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):done?t('home.competition.final','FINAL'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span>
+  </a>`;
  }).join('');
 }
-function renderLeaderboard(tab){
- document.querySelectorAll('[data-home-tab]').forEach(b=>{const on=b.dataset.homeTab===tab;b.classList.toggle('selected',on);b.setAttribute('aria-selected',String(on))});
+function renderElo(){
  const body=$('#home-leader-rows'),link=$('#leader-link');
- let rows=[],empty=t('home.leader.noneRegular','No standings are available for this season yet.');
- if(tab==='regular'){
-  rows=homeStandings.slice().sort((a,b)=>a.position-b.position).slice(0,6).map(s=>{const tm=teamData(s.teamId);return{rank:s.position,name:tm.name||s.teamId,logo:tm.logo,w:s.won,l:s.lost,value:s.points}});
-  link.href='/league';link.textContent=t('home.leader.full','Full standings ↗');
- }else if(tab==='playoffs'){
-  const playoff=homeMatches.filter(m=>/play.?off|play.?in|quarter|semi|final|bracket/i.test(m.matchType||'')&&['completed','finished','forfeit'].includes(String(m.status).toLowerCase()));
-  const record={};
-  playoff.forEach(m=>{[[m.team1Id,m.team1Score,m.team2Score],[m.team2Id,m.team2Score,m.team1Score]].forEach(([id,w,l])=>{if(!record[id])record[id]={w:0,l:0};if(w>l)record[id].w++;else if(w<l)record[id].l++})});
-  rows=Object.entries(record).sort((a,b)=>b[1].w-a[1].w||a[1].l-b[1].l).slice(0,6).map(([id,r],i)=>{const tm=teamData(id);return{rank:i+1,name:tm.name||id,logo:tm.logo,w:r.w,l:r.l,value:'—'}});
-  empty=t('home.leader.nonePlayoffs','No completed playoff matches are recorded for this season yet.');
-  link.href='/league';link.textContent=t('home.leader.playoffLink','View playoff matches ↗');
- }else{
-  rows=homeElo.filter(t=>t.qualified).sort((a,b)=>a.rank-b.rank).slice(0,6).map(t=>({rank:t.rank,name:t.name,logo:t.logo,w:t.mapWins,l:t.mapLosses,value:Math.round(t.rating).toLocaleString()}));
-  empty=t('home.leader.noneElo','No qualified teams in the global ELO ranking yet.');
-  link.href='/league/elo';link.textContent=t('home.leader.eloLink','Full ELO ranking ↗');
- }
- body.innerHTML=rows.length?rows.map(r=>`<div class="leader-row"><span class="leader-team"><b>${String(r.rank).padStart(2,'0')}</b>${r.logo?`<img src="/teams/${encodeURIComponent(r.logo)}" alt="" onerror="this.remove()">`:''}<span>${esc(r.name)}</span></span><span>${r.w}</span><span>${r.l}</span><strong>${esc(r.value)}</strong></div>`).join(''):`<p class="leader-empty">${esc(empty)}</p>`;
+ const rows=homeElo.filter(t=>t.qualified).sort((a,b)=>a.rank-b.rank).slice(0,6);
+ body.innerHTML=rows.length?rows.map(team=>`<div class="leader-row">
+  <span class="leader-team"><b>${String(team.rank).padStart(2,'0')}</b>${team.logo?'<img src="/teams/'+encodeURIComponent(team.logo)+'" alt="" loading="lazy" onerror="this.remove()">':''}<span>${esc(team.name)}</span></span>
+  <span>${team.mapWins}</span><span>${team.mapLosses}</span><strong>${Math.round(team.rating).toLocaleString()}</strong>
+ </div>`).join(''):`<p class="leader-empty">${esc(t('home.leader.noneElo','No qualified teams in the global ELO ranking yet.'))}</p>`;
+ link.href='/league/elo';link.textContent=t('home.leader.eloLink','Full ELO ranking ↗');
 }
 async function drawCompetition(){
  const host=$('#home-matches');
  const leagues=await call('/api/leagues');
- if(!Array.isArray(leagues)||!leagues.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.unavailable','Pro League data is not available yet.')+' <a href="/league">'+t('home.competition.open','Open Pro League ↗')+'</a></p>';$('#home-leader-rows').innerHTML='<p class="leader-empty">'+t('home.leader.unavailable','Standings are not available.')+'</p>';return}
- // The league file is ordered newest season first. Load each league's newest season for a global match strip.
- const latestByLeague=new Map();
- leagues.forEach(l=>{if(!latestByLeague.has(l.id))latestByLeague.set(l.id,l)});
+ if(!Array.isArray(leagues)||!leagues.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.unavailable','Pro League data is not available yet.')+' <a href="/league">'+t('home.competition.open','Open Pro League ↗')+'</a></p>';$('#home-leader-rows').innerHTML='<p class="leader-empty">'+t('home.leader.unavailable','ELO ranking is not available.')+'</p>';return}
+ const latestByLeague=new Map();leagues.forEach(l=>{if(!latestByLeague.has(l.id))latestByLeague.set(l.id,l)});
  const latestLeagues=[...latestByLeague.values()];
  homeLeague=latestLeagues.find(l=>l.status==='active')||latestLeagues[0];
  const packs=await Promise.all(latestLeagues.map(async l=>{
   const qs='league='+encodeURIComponent(l.id)+'&season='+encodeURIComponent(l.season);
-  const [teams,standings,matches]=await Promise.all([call('/api/teams?'+qs),call('/api/standings?'+qs),call('/api/matches?'+qs)]);
-  return{league:l,teams:Array.isArray(teams)?teams:[],standings:Array.isArray(standings)?standings:[],matches:Array.isArray(matches)?matches:[]};
+  const [teams,matches]=await Promise.all([call('/api/teams?'+qs),call('/api/matches?'+qs)]);
+  return{league:l,teams:Array.isArray(teams)?teams:[],matches:Array.isArray(matches)?matches:[]};
  }));
  packs.forEach(p=>{homeLeagueNames[p.league.id]=p.league.name;p.teams.forEach(tm=>homeTeams[p.league.id+'|'+tm.id]=tm)});
- const primary=packs.find(p=>p.league.id===homeLeague.id);
- homeStandings=primary?primary.standings:[];
- homeMatches=primary?primary.matches:[];
  homeAllMatches=packs.flatMap(p=>p.matches);
- const elo=await call('/api/elo');
- homeElo=elo&&!elo.error&&Array.isArray(elo.teams)?elo.teams:[];
+ const elo=await call('/api/elo');homeElo=elo&&!elo.error&&Array.isArray(elo.teams)?elo.teams:[];
  $('#match-season').textContent='ALL LEAGUES · LATEST SEASONS';
- $('#leader-season').textContent=homeLeague.season||'CURRENT SEASON';
+ $('#leader-season').textContent='GLOBAL · ALL LEAGUES';
  $('#home-league-title').textContent=homeLeague.name||'Pro League';
  $('#home-league-meta').textContent=[homeLeague.region,homeLeague.country,homeLeague.season].filter(Boolean).join(' · ')||'Professional MLBB competition';
- renderUpcoming();
- renderLeaderboard('regular');
- document.querySelectorAll('[data-home-tab]').forEach(b=>b.addEventListener('click',()=>renderLeaderboard(b.dataset.homeTab)));
+ renderMatches();renderElo();
 }
-
 /** Page boot: shared shell retains live patch/as-of, language switch, auth and mobile navigation. */
 (async()=>{
  const m=await shell(location.pathname);
