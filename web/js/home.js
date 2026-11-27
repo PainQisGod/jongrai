@@ -54,8 +54,8 @@ async function drawNews(){
  $('#news').hidden=false;
 }
 
-let homeLeague=null,homeTeams={},homeStandings=[],homeMatches=[],homeElo=[];
-function teamData(id){return homeTeams[id]||{id,name:id,shortName:id,logo:''}}
+let homeLeague=null,homeTeams={},homeStandings=[],homeMatches=[],homeAllMatches=[],homeElo=[];
+function teamData(id,leagueId){return homeTeams[String(leagueId||'')+'|'+String(id)]||{id,name:id,shortName:id,logo:''}}
 function teamMark(team){return team.logo?`<img src="/teams/${encodeURIComponent(team.logo)}" alt="" loading="lazy" onerror="this.remove()">`:'<span class="home-team-mark">'+esc((team.shortName||team.name||'?').slice(0,2))+'</span>'}
 function dateTimeLabel(value){
  const m=/^(\d{4})-(\d{2})-(\d{2})\s*-?\s*(\d{1,2}:\d{2})\s*(\w+)?/.exec(value||'');
@@ -64,16 +64,20 @@ function dateTimeLabel(value){
 }
 function renderUpcoming(){
  const host=$('#home-matches');
- const upcoming=homeMatches.filter(m=>['scheduled','live'].includes(String(m.status).toLowerCase()))
+ const upcoming=homeAllMatches.filter(m=>['scheduled','live'].includes(String(m.status).toLowerCase()))
   .sort((a,b)=>String(a.scheduledTime||'').localeCompare(String(b.scheduledTime||''))).slice(0,4);
- if(!upcoming.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.none','There are no upcoming fixtures recorded for this season yet.')+' <a href="/league">'+t('home.competition.schedule','View the full schedule ↗')+'</a></p>';return}
- host.innerHTML=upcoming.map(m=>{
-  const a=teamData(m.team1Id),b=teamData(m.team2Id),live=String(m.status).toLowerCase()==='live';
-  return `<a class="home-match" href="/league"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))}</span>
+ const showingResults=!upcoming.length;
+ const list=showingResults?homeAllMatches.filter(m=>['completed','finished','forfeit'].includes(String(m.status).toLowerCase()))
+  .sort((a,b)=>String(b.scheduledTime||'').localeCompare(String(a.scheduledTime||''))).slice(0,4):upcoming;
+ $('#home-matches-title').textContent=showingResults?t('home.competition.latest','Latest Results'):t('home.competition.matches','Upcoming Matches');
+ if(!list.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.none','There are no upcoming fixtures recorded for this season yet.')+' <a href="/league">'+t('home.competition.schedule','View the full schedule ↗')+'</a></p>';return}
+ host.innerHTML=list.map(m=>{
+  const a=teamData(m.team1Id,m.leagueId),b=teamData(m.team2Id,m.leagueId),live=String(m.status).toLowerCase()==='live',done=['completed','finished','forfeit'].includes(String(m.status).toLowerCase());
+  return `<a class="home-match" href="/league"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(m.leagueId||'')}</span>
    <span class="home-match-team">${teamMark(a)}<b>${esc(a.shortName||a.name)}</b></span>
-   <strong class="home-match-vs">${live?esc(m.team1Score+' : '+m.team2Score):'VS'}</strong>
+   <strong class="home-match-vs">${done||live?esc(m.team1Score+' : '+m.team2Score):'VS'}</strong>
    <span class="home-match-team away">${teamMark(b)}<b>${esc(b.shortName||b.name)}</b></span>
-   <span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span></a>`;
+   <span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):done?t('home.competition.final','FINAL'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span></a>`;
  }).join('');
 }
 function renderLeaderboard(tab){
@@ -101,18 +105,24 @@ async function drawCompetition(){
  const host=$('#home-matches');
  const leagues=await call('/api/leagues');
  if(!Array.isArray(leagues)||!leagues.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.unavailable','Pro League data is not available yet.')+' <a href="/league">'+t('home.competition.open','Open Pro League ↗')+'</a></p>';$('#home-leader-rows').innerHTML='<p class="leader-empty">'+t('home.leader.unavailable','Standings are not available.')+'</p>';return}
- homeLeague=leagues.find(l=>l.status==='active')||leagues[0];
- const [teams,standings,matches,elo]=await Promise.all([
-  call('/api/teams?league='+encodeURIComponent(homeLeague.id)+'&season='+encodeURIComponent(homeLeague.season)),
-  call('/api/standings?league='+encodeURIComponent(homeLeague.id)+'&season='+encodeURIComponent(homeLeague.season)),
-  call('/api/matches?league='+encodeURIComponent(homeLeague.id)+'&season='+encodeURIComponent(homeLeague.season)),
-  call('/api/elo')
- ]);
- if(Array.isArray(teams))teams.forEach(tm=>homeTeams[tm.id]=tm);
- homeStandings=Array.isArray(standings)?standings:[];
- homeMatches=Array.isArray(matches)?matches:[];
+ // The league file is ordered newest season first. Load each league's newest season for a global match strip.
+ const latestByLeague=new Map();
+ leagues.forEach(l=>{if(!latestByLeague.has(l.id))latestByLeague.set(l.id,l)});
+ const latestLeagues=[...latestByLeague.values()];
+ homeLeague=latestLeagues.find(l=>l.status==='active')||latestLeagues[0];
+ const packs=await Promise.all(latestLeagues.map(async l=>{
+  const qs='league='+encodeURIComponent(l.id)+'&season='+encodeURIComponent(l.season);
+  const [teams,standings,matches]=await Promise.all([call('/api/teams?'+qs),call('/api/standings?'+qs),call('/api/matches?'+qs)]);
+  return{league:l,teams:Array.isArray(teams)?teams:[],standings:Array.isArray(standings)?standings:[],matches:Array.isArray(matches)?matches:[]};
+ }));
+ packs.forEach(p=>p.teams.forEach(tm=>homeTeams[p.league.id+'|'+tm.id]=tm));
+ const primary=packs.find(p=>p.league.id===homeLeague.id);
+ homeStandings=primary?primary.standings:[];
+ homeMatches=primary?primary.matches:[];
+ homeAllMatches=packs.flatMap(p=>p.matches);
+ const elo=await call('/api/elo');
  homeElo=elo&&!elo.error&&Array.isArray(elo.teams)?elo.teams:[];
- $('#match-season').textContent=(homeLeague.name||'PRO LEAGUE')+' · '+(homeLeague.season||'CURRENT SEASON');
+ $('#match-season').textContent='ALL LEAGUES · LATEST SEASONS';
  $('#leader-season').textContent=homeLeague.season||'CURRENT SEASON';
  $('#home-league-title').textContent=homeLeague.name||'Pro League';
  $('#home-league-meta').textContent=[homeLeague.region,homeLeague.country,homeLeague.season].filter(Boolean).join(' · ')||'Professional MLBB competition';
