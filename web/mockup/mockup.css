@@ -21,3 +21,10 @@
 .tip-card a{margin-top:auto;color:var(--gold);text-decoration:none;font-size:8px;letter-spacing:.12em;font-weight:700}
 @media(max-width:1000px){.competition-layout{grid-template-columns:1fr}.competition-layout .leader{min-height:300px}}
 @media(max-width:650px){.competition-layout{grid-template-columns:1fr}.tips-grid{grid-template-columns:1fr}.competition-layout .leader{padding:16px}.competition-layout .leader .tabs button{font-size:7px;padding:10px 4px}.competition-column .league-card{min-height:210px}}
+
+
+/* Patch information in the navigation */
+.patch-asof{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;color:#aaa;font-size:8px;font-weight:700;letter-spacing:.12em;border:1px solid var(--line);padding:9px 11px}
+.patch-asof i{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px #d8b46b88}
+.patch-asof b{color:var(--gold);font-weight:800}
+@media(max-width:650px){.nav-actions{display:flex;position:absolute;right:62px;top:50%;transform:translateY(-50%)}.nav-actions .icon-btn,.nav-actions .lang{display:none}.patch-asof{font-size:7px;padding:8px}}
