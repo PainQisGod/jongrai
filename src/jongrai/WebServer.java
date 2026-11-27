@@ -278,6 +278,8 @@ public class WebServer {
         Map<String, String> q = query(ex.getRequestURI().getRawQuery());
         if (mutating) q.putAll(query(new String(ex.getRequestBody().readNBytes(65536), StandardCharsets.UTF_8)));
 
+        if (path.equals("/mockup") || path.equals("/mockup/")) { servePage(ex, "mockup/index.html"); return; }
+        if (path.startsWith("/mockup/")) { serveFile(ex, "web/mockup", path.substring(8), false); return; }
         if (path.startsWith("/icons/")) { serveFile(ex, "web/icons", path.substring(7), true); return; }
         if (path.startsWith("/teams/")) { serveFile(ex, "web/teams", path.substring(7), true); return; }
         if (path.startsWith("/leagues/")) { serveFile(ex, "web/league", path.substring(9), true); return; }
