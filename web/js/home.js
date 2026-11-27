@@ -85,7 +85,6 @@ function renderMatches(){
    <span class="home-match-team home-match-left">${teamMark(a)}<b>${esc(a.name||a.shortName||m.team1Id)}</b></span>
    <strong class="home-match-vs">${score}</strong>
    <span class="home-match-team home-match-right"><b>${esc(b.name||b.shortName||m.team2Id)}</b>${teamMark(b)}</span>
-   <span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):done?t('home.competition.final','FINAL'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span>
   </a>`;
  }).join('');
 }
