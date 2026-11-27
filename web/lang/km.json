@@ -449,7 +449,7 @@
   "home.competition.unavailable": "មិនអាចផ្ទុកទិន្នន័យលីគអាជីពបានទេ។",
   "home.competition.open": "បើកលីគអាជីព ↗",
   "home.leader.eyebrow": "តារាងពិន្ទុមិនកុហកទេ",
-  "home.leader.title": "តារាងចំណាត់ថ្នាក់",
+  "home.leader.title": "ចំណាត់ថ្នាក់ ELO",
   "home.leader.current": "រដូវកាលបច្ចុប្បន្ន",
   "home.leader.regular": "វគ្គវិលជុំសន្សំពិន្ទុ",
   "home.leader.playoffs": "វគ្គផ្ដាច់ព្រ័ត្រ",
@@ -469,5 +469,8 @@
   "home.tips.guides": "មើលមគ្គុទ្ទេសក៍តួអង្គ ↗",
   "home.tips.none": "មិនមានគន្លឹះតួអង្គនៅពេលនេះទេ។",
   "home.competition.latest": "លទ្ធផលថ្មីៗ",
-  "home.competition.final": "បញ្ចប់"
+  "home.competition.final": "បញ្ចប់",
+  "home.leader.mapWins": "ឈ្នះ",
+  "home.leader.mapLosses": "ចាញ់",
+  "home.leader.eloValue": "ELO"
 }
