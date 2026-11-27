@@ -66,7 +66,7 @@ function renderUpcoming(){
  const host=$('#home-matches');
  const upcoming=homeMatches.filter(m=>['scheduled','live'].includes(String(m.status).toLowerCase()))
   .sort((a,b)=>String(a.scheduledTime||'').localeCompare(String(b.scheduledTime||''))).slice(0,4);
- if(!upcoming.length){host.innerHTML='<p class="leader-empty">There are no upcoming fixtures recorded for this season yet. <a href="/league">View the full schedule ↗</a></p>';return}
+ if(!upcoming.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.none','There are no upcoming fixtures recorded for this season yet.')+' <a href="/league">'+t('home.competition.schedule','View the full schedule ↗')+'</a></p>';return}
  host.innerHTML=upcoming.map(m=>{
   const a=teamData(m.team1Id),b=teamData(m.team2Id),live=String(m.status).toLowerCase()==='live';
   return `<a class="home-match" href="/league"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))}</span>
