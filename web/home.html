@@ -1,51 +1,37 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>Jongrai — MLBB Esports</title>
+<html lang="en"><head><meta charset="utf-8"><title>Jongrai - MLBB draft helper</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/kit.css"><link rel="stylesheet" href="/css/home.css"></head><body>
-<main class="page home">
+<link rel="stylesheet" href="/kit.css">
+<link rel="stylesheet" href="/css/home.css"></head><body>
+<main class="page">
  <section class="hero">
-  <div class="hero-art" aria-hidden="true"></div>
-  <div class="hero-copy">
-   <span class="eyebrow" data-i18n="home.eyebrow">MLBB ESPORTS PLATFORM</span>
-   <img class="hero-wordmark" src="/icons/Jongrai_logo_full.png" alt="Jongrai" fetchpriority="high">
-   <h1 data-i18n-html="home.say">MLBB esports,<br><em>like never before.</em></h1>
-   <p class="hero-sub" data-i18n="home.sub">Follow the pro scene. Explore the meta. Master every draft.</p>
-   <div class="hero-actions"><a class="btn gold" href="/league" data-i18n="home.cta.league">Explore Pro League <span>→</span></a><a class="btn line" href="/draft" data-i18n="home.cta.draft">Open Draft</a></div>
+  <div class="art" aria-hidden="true"></div>
+  <div>
+   <span class="eyebrow" data-i18n="home.eyebrow">MLBB draft room</span>
+   <div class="word"><img src="/icons/Jongrai_logo_full.png" alt="Jongrai" fetchpriority="high"></div>
+   <h1 class="say" data-i18n-html="home.say">The MLBB pro scene, <em>reimagined</em> for every fan.</h1>
+   <p class="sub" data-i18n="home.sub">Explore professional matches, global ELO ratings, hero statistics and live draft intelligence — all in one place.</p>
+   <div class="ctas"><a class="btn gold" href="/draft"><span data-i18n="home.cta.draft">Open the draft board</span> <span class="arr">→</span></a><a class="btn line" href="/heroes" data-i18n="home.cta.heroes">Browse the tier river</a></div>
   </div>
-  <aside class="board panel" id="board" aria-live="polite"><h2><span data-i18n="home.board.title">Live Draft</span><small><span class="live" id="dot"><i></i></span><span id="stamp">LIVE BOARD</span></small></h2><div class="skel"></div></aside>
-  <div class="hero-bottom"><span>JONGRAI <i>◆</i> COMPETE · FOLLOW · BE THE BEST</span><span class="hero-index">01 <b>/</b> 03</span></div>
+  <aside class="board panel" id="board" aria-live="polite"><h2><span data-i18n="home.board.title">Live board</span> <small><span class="live" id="dot"><i></i></span><span id="stamp" data-i18n="home.board.checking">checking…</span></small></h2><div class="skel" style="height:150px"></div></aside>
  </section>
-
- <section class="dashboard">
-  <article class="panel matches-card">
-   <div class="section-head"><div><span class="eyebrow">THE SCHEDULE</span><h2 data-i18n="home.matches.title">Upcoming Matches</h2></div><a href="/league">View all →</a></div>
-   <div id="upcomingMatches" class="upcoming-list"><div class="loading-line"></div><div class="loading-line"></div><div class="loading-line"></div></div>
-  </article>
-  <a class="panel league-feature" id="leagueFeature" href="/league">
-   <div class="league-feature-copy"><span class="eyebrow">MLBB PRO LEAGUE</span><h2>PRO<br>LEAGUE</h2><p id="leagueSeason">Explore the latest season</p><span class="feature-link">Explore standings <b>→</b></span></div>
-   <div class="trophy-art" aria-hidden="true"><span>✦</span></div>
-  </a>
-  <article class="panel side-card teams-card">
-   <div class="section-head"><div><span class="eyebrow">THE CONTENDERS</span><h2>Popular Teams</h2></div><a href="/league">All teams →</a></div>
-   <div id="popularTeams" class="team-rail"><div class="loading-line"></div></div>
-  </article>
-  <article class="panel side-card heroes-card">
-   <div class="section-head"><div><span class="eyebrow">THE META</span><h2>Top Heroes</h2></div><a href="/heroes">View all →</a></div>
-   <div id="tops" class="tops"></div>
-  </article>
+ <div class="strip panel" style="max-width:1272px" aria-label="What Jongrai tracks" data-i18n-label="home.strip.label">
+  <div><b class="num" data-to="hero">0</b><span data-i18n="home.strip.heroes">heroes tracked</span></div>
+  <div><b class="num" data-to="item">0</b><span data-i18n="home.strip.items">shop items</span></div>
+  <div><b class="num" data-to="20">0</b><span data-i18n="home.strip.steps">draft steps scored</span></div>
+  <div><b class="num" data-to="banned">0</b><span data-i18n="home.strip.bans">heroes the meta bans</span></div>
+ </div>
+ <section class="s news" id="news" hidden>
+  <div class="s-h"><div><span class="eyebrow" data-i18n="home.news.eyebrow">News</span><h2 data-i18n="home.news.title">What's new in MLBB</h2></div><a href="/news" data-i18n="home.news.all">All news →</a></div>
+  <div class="nws" id="nws"></div>
  </section>
-
- <section class="lower-grid">
-  <section class="panel news-panel" id="news" hidden>
-   <div class="section-head"><div><span class="eyebrow">THE LATEST</span><h2 data-i18n="home.news.title">Latest News</h2></div><a href="/news">All news →</a></div>
-   <div class="nws" id="nws"></div>
-  </section>
-  <section class="panel featured-panel">
-   <div class="section-head"><div><span class="eyebrow">A LITTLE INSIGHT</span><h2>Featured</h2></div><a href="/heroes">Explore →</a></div>
-   <div class="tipcard" id="tip"></div>
-  </section>
-  <section class="panel bans-panel" id="bans"><h3 data-i18n="home.bans.title">Most Banned</h3><div class="loading-line"></div></section>
+ <section class="s">
+  <div class="s-h"><div><span class="eyebrow" data-i18n-html="home.pulse.eyebrow">Meta pulse · patch <span data-patch></span> · as of <span data-updated></span></span><h2 data-i18n="home.pulse.title">Who's winning, who's feared</h2></div><a href="/heroes" data-i18n-html="home.pulse.all">All <span data-hero-count></span> heroes →</a></div>
+  <div class="pulse"><div class="tops" id="tops"></div><div class="bans panel" id="bans"><h3 data-i18n="home.bans.title">Most banned</h3></div></div>
+  <div class="tipcard panel" id="tip"></div>
  </section>
 </main>
-<footer class="page"><span data-i18n="footer.fan">Fan-made, non-commercial. Not affiliated with or endorsed by Moonton.</span><span class="sp kh" lang="km">ចង្រៃ</span><span>JONGRAI · TOGETHER STRONGER</span></footer>
-<script src="/app.js"></script><script src="/kit.js"></script><script src="/js/home.js"></script></body></html>
+<footer class="page"><span data-i18n="footer.fan">Fan-made, non-commercial. Not affiliated with or endorsed by Moonton.</span><span class="sp kh" lang="km">ចង្រៃ</span><span data-i18n-html="footer.patch">UI mockup · data patch <span data-patch></span></span></footer>
+<script src="/app.js"></script>
+<script src="/kit.js"></script>
+<script src="/js/home.js"></script></body></html>
