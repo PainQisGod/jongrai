@@ -28,7 +28,7 @@ function drawPulse(){
 /** Rotating tip uses the real hero tips from heroes.csv and preserves the Khmer translation. */
 function tips(){
  const pool=heroes.filter(h=>h.tip).map(h=>{const s=tipSections(h.tip);return{...h,tipPart:s[Math.floor(Math.random()*s.length)]}}).sort(()=>Math.random()-.5).slice(0,6);
- if(!pool.length){$('#tip').innerHTML='<p class="leader-empty">Hero tips are not available right now.</p>';return}
+ if(!pool.length){$('#tip').innerHTML='<p class="leader-empty">'+t('home.tips.none','Hero tips are not available right now.')+'</p>';return}
  let i=0,paused=false,t0=Date.now();const el=$('#tip');
  el.onmouseenter=()=>paused=true;el.onmouseleave=()=>{paused=false;t0=Date.now()};
  const show=()=>{const h=pool[i];el.classList.add('out');setTimeout(()=>{
@@ -73,34 +73,34 @@ function renderUpcoming(){
    <span class="home-match-team">${teamMark(a)}<b>${esc(a.shortName||a.name)}</b></span>
    <strong class="home-match-vs">${live?esc(m.team1Score+' : '+m.team2Score):'VS'}</strong>
    <span class="home-match-team away">${teamMark(b)}<b>${esc(b.shortName||b.name)}</b></span>
-   <span class="home-match-state ${live?'is-live':''}">${live?'LIVE':esc(m.bestOf?'BO'+m.bestOf:'UPCOMING')}</span></a>`;
+   <span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span></a>`;
  }).join('');
 }
 function renderLeaderboard(tab){
  document.querySelectorAll('[data-home-tab]').forEach(b=>{const on=b.dataset.homeTab===tab;b.classList.toggle('selected',on);b.setAttribute('aria-selected',String(on))});
  const body=$('#home-leader-rows'),link=$('#leader-link');
- let rows=[],empty='No standings are available for this season yet.';
+ let rows=[],empty=t('home.leader.noneRegular','No standings are available for this season yet.');
  if(tab==='regular'){
   rows=homeStandings.slice().sort((a,b)=>a.position-b.position).slice(0,6).map(s=>{const tm=teamData(s.teamId);return{rank:s.position,name:tm.name||s.teamId,logo:tm.logo,w:s.won,l:s.lost,value:s.points}});
-  link.href='/league';link.textContent='Full standings ↗';
+  link.href='/league';link.textContent=t('home.leader.full','Full standings ↗');
  }else if(tab==='playoffs'){
   const playoff=homeMatches.filter(m=>/play.?off|quarter|semi|final|bracket/i.test(m.matchType||'')&&['completed','finished','forfeit'].includes(String(m.status).toLowerCase()));
   const record={};
   playoff.forEach(m=>{[[m.team1Id,m.team1Score,m.team2Score],[m.team2Id,m.team2Score,m.team1Score]].forEach(([id,w,l])=>{if(!record[id])record[id]={w:0,l:0};if(w>l)record[id].w++;else if(w<l)record[id].l++})});
   rows=Object.entries(record).sort((a,b)=>b[1].w-a[1].w||a[1].l-b[1].l).slice(0,6).map(([id,r],i)=>{const tm=teamData(id);return{rank:i+1,name:tm.name||id,logo:tm.logo,w:r.w,l:r.l,value:'—'}});
-  empty='No completed playoff matches are recorded for this season yet.';
-  link.href='/league';link.textContent='View playoff matches ↗';
+  empty=t('home.leader.nonePlayoffs','No completed playoff matches are recorded for this season yet.');
+  link.href='/league';link.textContent=t('home.leader.playoffLink','View playoff matches ↗');
  }else{
   rows=homeElo.filter(t=>t.qualified).sort((a,b)=>a.rank-b.rank).slice(0,6).map(t=>({rank:t.rank,name:t.name,logo:t.logo,w:t.mapWins,l:t.mapLosses,value:Math.round(t.rating).toLocaleString()}));
-  empty='No qualified teams in the global ELO ranking yet.';
-  link.href='/league/elo';link.textContent='Full ELO ranking ↗';
+  empty=t('home.leader.noneElo','No qualified teams in the global ELO ranking yet.');
+  link.href='/league/elo';link.textContent=t('home.leader.eloLink','Full ELO ranking ↗');
  }
  body.innerHTML=rows.length?rows.map(r=>`<div class="leader-row"><span class="leader-team"><b>${String(r.rank).padStart(2,'0')}</b>${r.logo?`<img src="/teams/${encodeURIComponent(r.logo)}" alt="" onerror="this.remove()">`:''}<span>${esc(r.name)}</span></span><span>${r.w}</span><span>${r.l}</span><strong>${esc(r.value)}</strong></div>`).join(''):`<p class="leader-empty">${esc(empty)}</p>`;
 }
 async function drawCompetition(){
  const host=$('#home-matches');
  const leagues=await call('/api/leagues');
- if(!Array.isArray(leagues)||!leagues.length){host.innerHTML='<p class="leader-empty">Pro League data is not available yet. <a href="/league">Open Pro League ↗</a></p>';$('#home-leader-rows').innerHTML='<p class="leader-empty">Standings are not available.</p>';return}
+ if(!Array.isArray(leagues)||!leagues.length){host.innerHTML='<p class="leader-empty">'+t('home.competition.unavailable','Pro League data is not available yet.')+' <a href="/league">'+t('home.competition.open','Open Pro League ↗')+'</a></p>';$('#home-leader-rows').innerHTML='<p class="leader-empty">'+t('home.leader.unavailable','Standings are not available.')+'</p>';return}
  homeLeague=leagues.find(l=>l.status==='active')||leagues[0];
  const [teams,standings,matches,elo]=await Promise.all([
   call('/api/teams?league='+encodeURIComponent(homeLeague.id)+'&season='+encodeURIComponent(homeLeague.season)),
