@@ -4,3 +4,8 @@
 .elo-table th[data-sort]:hover,.elo-table th[data-sort]:focus-visible{color:var(--gold-hi);outline:none}
 .elo-table th[data-sort].sorted{color:var(--gold)}
 .elo-table th[data-sort].sorted::after{content:" " attr(data-dir);font-size:9px}
+
+/* Explicit ELO leaderboard sorting control */
+.elo-sort{min-width:205px}
+.elo-sort select{width:100%}
+@media(max-width:700px){.elo-sort{width:100%}}
