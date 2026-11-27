@@ -7,35 +7,44 @@ let heroes=[],byKey={},role='',lastFocus=null;
 const cap=s=>s[0].toUpperCase()+s.slice(1).toLowerCase();
 const key=n=>n.toLowerCase();
 
-/** Places each tier's heroes along the win-rate axis, nudging them up or down until no two faces overlap. */
-function drawRiver(){
- const el=$('#river'),W=el.clientWidth-112,D=32,lo=Math.floor(Math.min(...heroes.map(h=>h.winRate))),hi=Math.ceil(Math.max(...heroes.map(h=>h.winRate)));
- const x=w=>(w-lo)/(hi-lo)*W;
- let html='';
- for(const t of'SABCD'){
-  const placed=[];
-  for(const h of heroes.filter(h=>h.tier===t).sort((a,b)=>a.winRate-b.winRate)){
-   const px=x(h.winRate);let k=0,py=0;
-   do{py=(k%2?1:-1)*Math.ceil(k/2)*D*.52;k++}while(placed.some(p=>Math.hypot(p.x-px,p.y-py)<D));
-   placed.push({x:px,y:py,h});
-  }
-  const half=Math.max(...placed.map(p=>Math.abs(p.y)))+D*.6;
-  html+=`<div class="band" style="height:${Math.max(60,half*2)}px"><div class="band-l"><span class="tier ${t}">${t}</span><small>${tr('he.tier.'+t,TIER_LABEL[t])} · ${placed.length}</small></div>
-   ${placed.map((p,i)=>`<button class="dot in${p.h.metaBan?' banned':''}" style="left:${p.x}px;top:calc(50% + ${p.y}px);animation-delay:${(p.x/W*.5+i*.006).toFixed(3)}s" data-h="${esc(p.h.slug)}"
-    aria-label="${esc(p.h.name)}, ${esc(tr('he.tierWord','tier'))} ${t}, ${esc(tr('he.wr','win rate'))} ${p.h.winRate.toFixed(2)}%, ${esc(tr('he.br','ban rate'))} ${p.h.banRate.toFixed(1)}%"><img src="${icon(p.h.icon)}" alt=""><span class="lbl">${esc(p.h.name)}<b>${p.h.winRate.toFixed(1)}%</b></span></button>`).join('')}</div>`;
- }
- const ticks=[];for(let w=lo;w<=hi;w++)ticks.push(`<i class="${w===50?'half':''}" style="left:${x(w)}px"></i><span class="${w===50?'half':''}" style="left:${x(w)}px">${w}${w===50?'%':''}</span>`);
- el.innerHTML=html+`<div class="axis" aria-hidden="true">${ticks.join('')}<span class="flip" style="left:${x(50)}px">${tr('he.coinFlip','COIN FLIP')}</span><span class="cap">${tr('he.axis','WIN RATE')} →</span></div>`;
- applyFilter();
+/** Responsive tier board plus a complete sortable hero statistics table. */
+let sortBy='winRate';
+function visibleHeroes(){
+ const q=$('#q').value.trim().toLowerCase();
+ return heroes.filter(h=>(!q||h.name.toLowerCase().includes(q))&&(!role||h.roles.includes(role)));
+}
+function heroButton(h,compact=false){
+ return `<button class="hero-card${h.metaBan?' banned':''}" data-h="${esc(h.slug)}" aria-label="${esc(h.name)}, tier ${h.tier}, win rate ${h.winRate.toFixed(2)} percent">
+  <span class="hero-face"><img src="${icon(h.icon)}" alt="" loading="lazy"></span>
+  <span class="hero-card-name">${esc(h.name)}</span>
+  <span class="hero-card-rate">${h.winRate.toFixed(1)}%</span>
+ </button>`;
+}
+function drawTierBoard(){
+ const host=$('#tier-board'),list=visibleHeroes();
+ host.innerHTML='SABCD'.split('').map(tier=>{
+  const members=list.filter(h=>h.tier===tier).sort((a,b)=>b.winRate-a.winRate);
+  return `<section class="tier-row tier-${tier}">
+   <div class="tier-label"><span class="tier ${tier}">${tier}</span><div><b>${tr('he.tier.'+tier,TIER_LABEL[tier])}</b><small>${members.length} ${tr('he.heroes','heroes')}</small></div></div>
+   <div class="tier-heroes">${members.length?members.map(h=>heroButton(h)).join(''):`<p class="tier-empty">${tr('he.noTierMatches','No heroes match these filters.')}</p>`}</div>
+  </section>`;
+ }).join('');
+}
+function drawStatsTable(){
+ const list=visibleHeroes().slice().sort((a,b)=>sortBy==='name'?a.name.localeCompare(b.name):b[sortBy]-a[sortBy]);
+ $('#hero-stat-rows').innerHTML=list.map(h=>`<tr>
+  <td><button class="stat-hero" data-h="${esc(h.slug)}"><span class="stat-face${h.metaBan?' banned':''}"><img src="${icon(h.icon)}" alt="" loading="lazy"></span><b>${esc(h.name)}</b></button></td>
+  <td>${esc(h.roles.map(cap).join(' / '))}</td>
+  <td><span class="tier ${h.tier}">${h.tier}</span></td>
+  <td class="num">${h.winRate.toFixed(2)}%</td><td class="num">${h.pickRate.toFixed(2)}%</td><td class="num ${h.metaBan?'meta-ban':''}">${h.banRate.toFixed(1)}%</td>
+ </tr>`).join('');
 }
 function applyFilter(){
- const q=$('#q').value.trim().toLowerCase();let n=0;
- document.querySelectorAll('.dot').forEach(d=>{const h=byKey[d.dataset.h],ok=(!q||h.name.toLowerCase().includes(q))&&(!role||h.roles.includes(role));
-  d.classList.toggle('dim',!ok);d.classList.toggle('hit',ok&&!!q);d.tabIndex=ok?0:-1;n+=ok});
- $('#match').textContent=q||role?tr('he.matchN','{n} of {total} match',{n,total:heroes.length}):tr('he.count','{n} heroes',{n:heroes.length});
+ const list=visibleHeroes();
+ $('#match').textContent=$('#q').value.trim()||role?tr('he.matchN','{n} of {total} match',{n:list.length,total:heroes.length}):tr('he.count','{n} heroes',{n:heroes.length});
+ drawTierBoard();drawStatsTable();
 }
 function drawRoles(){$('#roles').innerHTML=Object.entries(ROLE_ICON).map(([r,f])=>`<button class="chip" data-role="${r}" aria-pressed="${role===r}"><img src="${icon(f)}" alt="">${cap(r)}</button>`).join('')}
-
 /* ---------- build footer: lane, emblem with its three talents, battle spell, all as icons ---------- */
 const file=s=>String(s).trim().replace(/ /g,'_')+'.png';
 /** "Tank with Vitality, Bargain Hunter, Concussive Blast" -> {main:'Tank', talents:[...]} */
@@ -80,8 +89,8 @@ async function open(slug,push=true){
    <div class="sect"><h3>${tr('he.builds','Builds')}</h3><div id="builds"><div class="skel"></div></div></div>
   </div>`;
  $('#drawer').classList.add('open');$('#scrim').classList.add('open');
- document.querySelectorAll('.dot.on').forEach(x=>x.classList.remove('on'));
- const dot=document.querySelector(`.dot[data-h="${CSS.escape(slug)}"]`);if(dot)dot.classList.add('on');
+ document.querySelectorAll('.hero-card.on,.stat-hero.on').forEach(x=>x.classList.remove('on'));
+ const trigger=document.querySelector(`[data-h="${CSS.escape(slug)}"]`);if(trigger)trigger.classList.add('on');
  $('#drawer').scrollTop=0;$('#drawer').focus({preventScroll:true});
  const bs=await call('/api/builds?hero='+encodeURIComponent(h.name));
  if(byKey[slug]!==h||!$('#builds'))return;
@@ -92,25 +101,26 @@ async function open(slug,push=true){
 }
 function close(){
  $('#drawer').classList.remove('open');$('#scrim').classList.remove('open');history.replaceState(null,'','/heroes');
- document.querySelectorAll('.dot.on').forEach(x=>x.classList.remove('on'));
+ document.querySelectorAll('.hero-card.on,.stat-hero.on').forEach(x=>x.classList.remove('on'));
  if(lastFocus)lastFocus.focus({preventScroll:true});
 }
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-h]'),r=e.target.closest('[data-role]');
- if(b){if(b.classList.contains('dot'))lastFocus=b;open(b.dataset.h)}
+ if(b){lastFocus=b;open(b.dataset.h)}
  else if(r){role=role===r.dataset.role?'':r.dataset.role;drawRoles();applyFilter()}
  else if(e.target.id==='close'||e.target.id==='scrim')close();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classList.contains('open'))close()});
 $('#q').oninput=applyFilter;
-$('#q').onkeydown=e=>{if(e.key==='Enter'){const d=document.querySelector('.dot:not(.dim)');if(d){lastFocus=d;open(d.dataset.h)}}};
+$('#q').onkeydown=e=>{if(e.key==='Enter'){const d=visibleHeroes()[0];if(d){lastFocus=document.querySelector('[data-h="'+CSS.escape(d.slug)+'"]');open(d.slug)}}};
+$('#hero-sort').onchange=e=>{sortBy=e.target.value;drawStatsTable()};
 addEventListener('hashchange',()=>location.hash?open(location.hash.slice(1),false):close());
-let rw;addEventListener('resize',()=>{clearTimeout(rw);rw=setTimeout(drawRiver,150)});
+
 (async()=>{
  await shell('/heroes');
  const hs=await call('/api/heroes');if(hs.error){toast(hs.error,'var(--ember)');return}
  heroes=await localizeTips(hs);heroes.forEach(h=>byKey[h.slug]=h);
- drawRoles();drawRiver();
+ drawRoles();applyFilter();
  const path=location.pathname.match(/^\/heroes\/([^/]+)$/);
  if(path)open(decodeURIComponent(path[1]),false);
  else if(location.hash)open(location.hash.slice(1),false); // old #slug links
