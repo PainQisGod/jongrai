@@ -32,7 +32,7 @@
   <div class="competition-layout">
    <div class="competition-column">
     <article class="matches panel">
-     <div class="panel-top"><h3 id="home-matches-title" data-i18n="home.competition.matches">Upcoming Matches</h3><span class="tiny-gold" id="match-season" data-i18n="home.competition.loading">LOADING SEASON…</span></div>
+     <div class="panel-top"><h3 id="home-matches-title" data-i18n="home.competition.matches">Upcoming Matches</h3><span class="tiny-gold" id="match-season" data-i18n="home.competition.loading">ALL LEAGUES · LATEST SEASONS</span></div>
      <div id="home-matches" aria-live="polite"><div class="skel" style="height:170px"></div></div>
     </article>
     <a class="league-card panel" href="/league">
@@ -40,13 +40,8 @@
     </a>
    </div>
    <article class="leader panel" id="home-leaderboard">
-    <div class="panel-top"><div><span class="eyebrow" data-i18n="home.leader.eyebrow">The table never lies</span><h3 data-i18n="home.leader.title">The Leaderboard</h3></div><span class="tiny-gold" id="leader-season" data-i18n="home.leader.current">CURRENT SEASON</span></div>
-    <div class="tabs" role="tablist" aria-label="Leaderboard category">
-     <button type="button" class="selected" data-home-tab="regular" role="tab" aria-selected="true" data-i18n="home.leader.regular">Regular Season</button>
-     <button type="button" data-home-tab="playoffs" role="tab" aria-selected="false" data-i18n="home.leader.playoffs">Playoffs</button>
-     <button type="button" data-home-tab="elo" role="tab" aria-selected="false" data-i18n="home.leader.elo">ELO Ranking</button>
-    </div>
-    <div class="table-head"><span data-i18n="home.leader.team"># / Team</span><span>W</span><span>L</span><span>Pts / ELO</span></div>
+    <div class="panel-top"><div><span class="eyebrow" data-i18n="home.leader.eyebrow">The table never lies</span><h3 data-i18n="home.leader.title">ELO Ranking</h3></div><span class="tiny-gold" id="leader-season">GLOBAL · ALL LEAGUES</span></div>
+    <div class="table-head"><span data-i18n="home.leader.team"># / Team</span><span>MAP W</span><span>MAP L</span><span>ELO</span></div>
     <div id="home-leader-rows" aria-live="polite"><p class="leader-empty" data-i18n="home.leader.loading">Loading standings…</p></div>
     <a class="table-link" href="/league" id="leader-link" data-i18n="home.leader.full">Full standings ↗</a>
    </article>
