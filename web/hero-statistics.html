@@ -5,16 +5,22 @@
 <link rel="stylesheet" href="/css/heroes.css"></head><body>
 <main class="page">
  <div class="intro"><div><span class="eyebrow" data-i18n-html="he.eyebrow">Hero codex · patch <span data-patch></span> · as of <span data-updated></span></span>
-  <h1 data-i18n-html="he.title">The tier <em>river</em></h1>
-  <p class="lede" data-i18n-html="he.lede">All <span data-hero-count></span> heroes, each one placed by win rate inside its tier band. The gold line is a coin flip, 50%. <b>Red rings</b> are the heroes the meta bans. Click any face for the full profile.</p></div>
+  <h1>Hero <em>Tier List</em></h1>
+  <p class="lede">Explore the current meta across all <span data-hero-count></span> heroes. Compare tier placements, win rates, pick rates and ban rates. Red rings highlight meta-ban heroes. Select any hero to open its full profile.</p></div>
  </div>
  <div class="filters">
   <label class="search"><span class="sr" data-i18n="he.find">Find a hero</span><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input id="q" placeholder="Find a hero" data-i18n-ph="he.find" autocomplete="off"></label>
   <div id="roles" style="display:contents"></div>
   <span class="match num" id="match"></span>
  </div>
- <section class="river panel" id="river" aria-label="Heroes by tier and win rate" data-i18n-label="he.riverLabel"></section>
- <div class="key"><span><i></i> <span data-i18n="he.key.dot">hero, placed by win rate</span></span><span><i class="ring"></i> <span data-i18n="he.key.ring">banned in the current meta</span></span><span data-i18n-html="he.key.hint">Hover or focus a face for its name · <kbd>Esc</kbd> closes a profile</span></div>
+ <section class="tier-board" id="tier-board" aria-label="Hero tier board"></section>
+ <section class="stats-section panel" aria-labelledby="stats-title">
+  <div class="stats-heading"><div><span class="eyebrow">THE NUMBERS BEHIND THE META</span><h2 id="stats-title">Hero Statistics</h2></div>
+   <label class="sort-control">Sort by <select id="hero-sort" aria-label="Sort hero statistics"><option value="winRate">Win rate</option><option value="pickRate">Pick rate</option><option value="banRate">Ban rate</option><option value="name">Name</option></select></label>
+  </div>
+  <div class="stats-table-wrap"><table class="hero-stats-table"><thead><tr><th>Hero</th><th>Role</th><th>Tier</th><th>Win rate</th><th>Pick rate</th><th>Ban rate</th></tr></thead><tbody id="hero-stat-rows"></tbody></table></div>
+ </section>
+ <div class="key"><span><i class="ring"></i> <span>Red ring = meta-ban hero</span></span><span>Tap any hero portrait or name to open its full profile.</span></div>
 </main>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dname" tabindex="-1"></aside>
