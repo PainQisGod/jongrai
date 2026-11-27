@@ -81,7 +81,7 @@ function renderMatches(){
   const status=String(m.status).toLowerCase(),live=status==='live',done=['completed','finished','forfeit'].includes(status);
   const score=done||live?esc(m.team1Score+' : '+m.team2Score):'VS';
   return `<a class="home-match" href="/league">
-   <span class="home-match-meta"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(homeLeagueNames[m.leagueId]||m.leagueId||'')}</span><span class="home-match-stage">${esc(stageLabel(m))}</span></span>
+   <span class="home-match-meta"><span class="home-match-date">${esc(dateTimeLabel(m.scheduledTime))} · ${esc(homeLeagueNames[m.leagueId]||m.leagueId||'')}</span><span class="home-match-stage">${esc(stageLabel(m))}</span><span class="home-match-state ${live?'is-live':''}">${live?t('home.competition.live','LIVE'):done?t('home.competition.final','FINAL'):esc(m.bestOf?'BO'+m.bestOf:t('home.competition.upcoming','UPCOMING'))}</span></span>
    <span class="home-match-team home-match-left">${teamMark(a)}<b>${esc(a.name||a.shortName||m.team1Id)}</b></span>
    <strong class="home-match-vs">${score}</strong>
    <span class="home-match-team home-match-right"><b>${esc(b.name||b.shortName||m.team2Id)}</b>${teamMark(b)}</span>
