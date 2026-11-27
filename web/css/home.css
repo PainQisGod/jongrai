@@ -237,3 +237,115 @@ section.s{max-width:1320px;padding-top:30px}
  .home-page .heroes-section .tops .top:nth-child(3){display:none}
  .home-page .tipcard{grid-template-columns:1fr}
 }
+
+
+
+/* ---------- Competition layout repair ---------- */
+.home-page .competition-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);
+  align-items:start;
+  gap:18px;
+}
+.home-page .competition-column{min-width:0;align-content:start}
+.home-page .leader{
+  align-self:start;
+  height:auto;
+  min-height:0;
+  padding:24px;
+  display:block;
+}
+.home-page .leader .panel-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  margin:0 0 18px;
+}
+.home-page .leader .panel-top h3{margin:0}
+.home-page .leader .tabs{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  margin:0 0 14px;
+  border-bottom:1px solid var(--hair);
+}
+.home-page .leader .tabs button{
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 12px;
+  border:0;
+  border-bottom:2px solid transparent;
+  border-radius:0;
+  background:transparent;
+  color:var(--ink-3);
+  font:600 10px/1 var(--display);
+  letter-spacing:.06em;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.home-page .leader .tabs button:hover{color:var(--ink)}
+.home-page .leader .tabs button.selected{
+  color:var(--gold-hi);
+  background:rgba(216,180,107,.07);
+  border-bottom-color:var(--gold);
+}
+.home-page .leader .table-head,
+.home-page .leader .leader-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 38px 38px minmax(64px,82px);
+  align-items:center;
+  gap:10px;
+}
+.home-page .leader .table-head{
+  padding:10px 8px;
+  color:var(--ink-3);
+  border-bottom:1px solid var(--hair);
+  font:600 9px/1.2 var(--display);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.home-page .leader .table-head span:not(:first-child),
+.home-page .leader .leader-row>span:not(:first-child),
+.home-page .leader .leader-row>strong{text-align:right}
+.home-page .leader .leader-row{
+  min-height:48px;
+  padding:8px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  color:var(--ink-2);
+  font:500 12px/1.25 var(--display);
+  font-variant-numeric:tabular-nums;
+}
+.home-page .leader .leader-row:last-child{border-bottom:0}
+.home-page .leader-team{display:flex;align-items:center;gap:9px;min-width:0}
+.home-page .leader-team>b{width:22px;color:var(--gold);font-weight:700}
+.home-page .leader-team img{width:26px;height:26px;object-fit:contain;flex:none}
+.home-page .leader-team>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.home-page .leader .leader-row strong{color:var(--gold-hi);font-weight:700}
+.home-page .leader .table-link{margin-top:18px}
+.home-page .matches{min-width:0}
+.home-page .matches .panel-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.home-page .home-match{grid-template-columns:minmax(100px,1fr) minmax(0,1fr) 48px minmax(0,1fr) auto}
+.home-page .home-match-date{font-size:10px}
+.home-page .home-match-team{font-size:12px}
+.home-page .home-match-vs{font-size:13px}
+.home-page .league-card{min-height:190px}
+@media(max-width:1050px){
+ .home-page .competition-layout{grid-template-columns:minmax(0,1fr) minmax(320px,.9fr)}
+ .home-page .leader{padding:20px}
+ .home-page .leader .table-head,.home-page .leader .leader-row{grid-template-columns:minmax(0,1fr) 30px 30px minmax(58px,70px);gap:7px}
+}
+@media(max-width:850px){
+ .home-page .competition-layout{grid-template-columns:1fr}
+ .home-page .leader{width:100%}
+}
+@media(max-width:560px){
+ .home-page .leader{padding:16px}
+ .home-page .leader .tabs{gap:2px}
+ .home-page .leader .tabs button{padding:0 8px;font-size:9px}
+ .home-page .leader .table-head,.home-page .leader .leader-row{grid-template-columns:minmax(0,1fr) 28px 28px 62px;gap:6px}
+ .home-page .home-match{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);gap:7px}
+}
