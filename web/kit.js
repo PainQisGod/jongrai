@@ -28,13 +28,15 @@ async function shell(current) {
   <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navPanel" aria-label="${esc(t('nav.menu', 'Menu'))}"><span></span><span></span><span></span></button></header>`);
   navMenu();
   if (current === '/league' || current === '/elo' || current.startsWith('/league/')) {
-    const section = current === '/league' || current === '/elo' || current === '/league/elo' ? 'league'
+    const section = current === '/league' ? 'league'
+      : current === '/elo' || current.startsWith('/league/elo') ? 'elo'
       : current.startsWith('/league/international') ? 'international'
       : current.startsWith('/league/nation') ? 'nation' : 'league';
     document.querySelector('.bar').insertAdjacentHTML('afterend', `
       <div class="section-nav page" aria-label="League sections">
         <nav class="section-nav-inner">
           <a href="/league" ${section === 'league' ? 'aria-current="page"' : ''}>League</a>
+          <a href="/league/elo" ${section === 'elo' ? 'aria-current="page"' : ''}>ELO Ranking</a>
           <a href="/league/international" ${section === 'international' ? 'aria-current="page"' : ''}>International Tournament</a>
           <a href="/league/nation" ${section === 'nation' ? 'aria-current="page"' : ''}>National Tournament</a>
         </nav>
