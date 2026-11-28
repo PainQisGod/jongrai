@@ -465,8 +465,8 @@ public class WebServer {
     private static String eloHistoryJson(String teamKey) {
         if(teamKey==null||teamKey.isBlank()) return "[]";
         return eloResult().history().getOrDefault(teamKey,List.of()).stream().map(h -> String.format(Locale.ROOT,
-                "{\"matchId\":%s,\"date\":%s,\"opponent\":%s,\"score\":%s,\"ratingBefore\":%.2f,\"ratingAfter\":%.2f,\"change\":%.2f,\"mapsWon\":%d,\"mapsLost\":%d}",
-                Json.str(h.matchId()),Json.str(h.date().toString()),Json.str(h.opponent()),Json.str(h.score()),h.ratingBefore(),h.ratingAfter(),h.change(),h.mapsWon(),h.mapsLost())).collect(Collectors.joining(",", "[", "]"));
+                "{\"matchId\":%s,\"date\":%s,\"opponent\":%s,\"leagueName\":%s,\"leagueId\":%s,\"score\":%s,\"ratingBefore\":%.2f,\"ratingAfter\":%.2f,\"change\":%.2f,\"mapsWon\":%d,\"mapsLost\":%d}",
+                Json.str(h.matchId()),Json.str(h.date().toString()),Json.str(h.opponent()),Json.str(h.leagueName()),Json.str(h.leagueId()),Json.str(h.score()),h.ratingBefore(),h.ratingAfter(),h.change(),h.mapsWon(),h.mapsLost())).collect(Collectors.joining(",", "[", "]"));
     }
 
     private static String leaguesJson() {
