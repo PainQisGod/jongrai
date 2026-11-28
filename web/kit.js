@@ -1,8 +1,8 @@
 // Jongrai - shared shell for the redesigned pages. Loaded after /app.js (esc, call, store, laneIcon, meta).
 
-const PAGES = [['/', 'Home', 'nav.home'], ['/news', 'News', 'nav.news'], ['/heroes', 'Heroes', 'nav.heroes'], ['/items', 'Items', 'nav.items'], ['/league', 'Pro League', 'nav.league'], ['/draft', 'Draft', 'nav.draft'], ['/about', 'About', 'nav.about']];
+const PAGES = [['/', 'Home', 'nav.home'], ['/news', 'News', 'nav.news'], ['/heroes', 'Heroes', 'nav.heroes'], ['/items', 'Items', 'nav.items'], ['/league', 'League', 'nav.league'], ['/international', 'International Tournament', 'nav.international'], ['/nation', 'Nation', 'nav.nation'], ['/draft', 'Draft', 'nav.draft'], ['/about', 'About', 'nav.about']];
 /** The nav entry for this address: /home counts as /, /heroes/<slug> as /heroes and /news/<slug> as /news. */
-const navKey = p => p === '/home' ? '/' : p.startsWith('/heroes/') ? '/heroes' : p.startsWith('/news/') ? '/news' : (p === '/elo' || p.startsWith('/league/')) ? '/league' : p;
+const navKey = p => p === '/home' ? '/' : p.startsWith('/heroes/') ? '/heroes' : p.startsWith('/news/') ? '/news' : (p === '/elo' || p.startsWith('/league/')) ? '/league' : p.startsWith('/international') ? '/international' : p.startsWith('/nation') ? '/nation' : p;
 const icon = f => '/icons/' + encodeURIComponent(f);
 
 /* Small round flags for the language switch, drawn inline (no image files).
@@ -30,10 +30,29 @@ async function shell(current) {
   if (current === '/league' || current === '/elo' || current === '/league/elo') {
     const active = current === '/league' ? 'league' : 'elo';
     document.querySelector('.bar').insertAdjacentHTML('afterend', `
-      <div class="section-nav page" aria-label="Pro League sections">
+      <div class="section-nav page" aria-label="League sections">
         <nav class="section-nav-inner">
           <a href="/league" ${active === 'league' ? 'aria-current="page"' : ''}>${esc(t('pl.subnav.professional', 'Professional League'))}</a>
-          <a href="/league/elo" ${active === 'elo' ? 'aria-current="page"' : ''}>${esc(t('pl.subnav.elo', 'ELO Ranking'))}</a>
+          <a href="/league/elo" ${active === 'elo' ? 'aria-current="page"' : ''}>${esc(t('pl.subnav.elo', 'Club ELO Ranking'))}</a>
+        </nav>
+      </div>`);
+  } else if (current.startsWith('/international')) {
+    document.querySelector('.bar').insertAdjacentHTML('afterend', `
+      <div class="section-nav page" aria-label="International tournament sections">
+        <nav class="section-nav-inner">
+          <a href="/international#m-series">M-Series</a>
+          <a href="/international#msc">MSC</a>
+          <a href="/international#mct">MCT</a>
+          <a href="/international#other">Other Tournaments</a>
+        </nav>
+      </div>`);
+  } else if (current.startsWith('/nation')) {
+    const active = current === '/nation/elo' ? 'elo' : 'competition';
+    document.querySelector('.bar').insertAdjacentHTML('afterend', `
+      <div class="section-nav page" aria-label="Nation sections">
+        <nav class="section-nav-inner">
+          <a href="/nation" ${active === 'competition' ? 'aria-current="page"' : ''}>National Competition</a>
+          <a href="/nation/elo" ${active === 'elo' ? 'aria-current="page"' : ''}>Nation ELO Ranking</a>
         </nav>
       </div>`);
   }
