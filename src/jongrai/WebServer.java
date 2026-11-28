@@ -69,17 +69,20 @@ public class WebServer {
             DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US).withZone(ZoneOffset.UTC);
 
     /** URL path -> HTML file. Static assets are served from web/ by name. */
-    private static final Map<String, String> PAGES = Map.of(
-            "/home", "home.html",
-            "/heroes", "hero-statistics.html",
-            "/league", "pro-league.html",
-            "/elo", "elo.html",
-            "/league/elo", "elo.html",
-            "/draft", "draft.html",
-            "/items", "items.html",
-            "/about", "about.html",
-            "/news", "news.html",
-            "/index.html", "draft.html"); // old bookmark
+    private static final Map<String, String> PAGES = Map.ofEntries(
+            Map.entry("/home", "home.html"),
+            Map.entry("/heroes", "hero-statistics.html"),
+            Map.entry("/league", "pro-league.html"),
+            Map.entry("/elo", "elo.html"),
+            Map.entry("/league/elo", "elo.html"),
+            Map.entry("/international", "international.html"),
+            Map.entry("/nation", "nation.html"),
+            Map.entry("/nation/elo", "nation-elo.html"),
+            Map.entry("/draft", "draft.html"),
+            Map.entry("/items", "items.html"),
+            Map.entry("/about", "about.html"),
+            Map.entry("/news", "news.html"),
+            Map.entry("/index.html", "draft.html")); // old bookmark
 
     public static void main(String[] args) throws Exception {
         port = parsePort(args);
@@ -289,7 +292,7 @@ public class WebServer {
         if (DRAFT_PATHS.contains(path)) CURRENT.set(sessionFor(ex).draft);
         switch (path) {
             case "/" -> servePage(ex, "home.html");
-            case "/home", "/heroes", "/league", "/elo", "/league/elo", "/draft", "/about", "/items", "/news", "/index.html" -> servePage(ex, PAGES.get(path));
+            case "/home", "/heroes", "/league", "/elo", "/league/elo", "/international", "/nation", "/nation/elo", "/draft", "/about", "/items", "/news", "/index.html" -> servePage(ex, PAGES.get(path));
             case "/app.js", "/kit.css", "/kit.js", "/pages.css" -> serveFile(ex, "web", path.substring(1), false);
             case "/api/meta" -> sendJson(ex, 200, "{\"patch\":" + Json.str(HeroRepository.PATCH) + ",\"updated\":" + Json.str(HeroRepository.DATA_DATE)
                     + ",\"heroes\":" + pool.size() + ",\"items\":" + gear.items().size() + "}");
