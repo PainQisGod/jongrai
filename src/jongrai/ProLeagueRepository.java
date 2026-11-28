@@ -73,7 +73,7 @@ public final class ProLeagueRepository {
         for (Path file : files) {
             for (Csv.Row r : Csv.read(file, 10)) {
                 ProTeam t = new ProTeam(r.text(0), r.text(1), r.text(2), r.text(3),
-                        r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9), r.text(10));
+                        r.text(4), r.text(5), r.integer(6, 0), r.text(7), r.text(8), r.text(9), r.text(10), r.text(11));
                 String key = t.leagueId() + "|" + t.season() + "|" + t.id();
                 if (teams.putIfAbsent(key, t) != null) {
                     throw r.fail("duplicate team '" + t.id() + "' in " + t.leagueId() + " " + t.season());
@@ -283,7 +283,7 @@ public final class ProLeagueRepository {
                             String season, int year, String status, String logo, String pointsRule) {}
 
     public record ProTeam(String id, String leagueId, String season, String name, String shortName,
-                          String logo, int founded, String city, String coach, String status, String group) {}
+                          String logo, int founded, String city, String coach, String status, String group, String clubId) {}
 
     public record ProStanding(String leagueId, String teamId, String season, int position,
                               int played, int won, int lost, int draw, int gf, int ga, int gd,
