@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,15 +38,29 @@ public final class EloRankingService {
     public Result calculate(ProLeagueRepository repository, Instant now) {
         Map<String, ProLeagueRepository.ProLeague> leagues = new LinkedHashMap<>();
         repository.leagues().forEach(l -> leagues.putIfAbsent(l.id(), l));
-        Map<String, ProLeagueRepository.ProTeam> teams = new LinkedHashMap<>();
-        repository.allTeams().forEach(t -> teams.put(teamKey(t.leagueId(), t.id()), t));
+        Map<String, ProLeagueRepository.ProTeam> registrations = new LinkedHashMap<>();
+        Map<String, ProLeagueRepository.ProTeam> clubs = new LinkedHashMap<>();
+        Map<String, Set<String>> clubCompetitions = new LinkedHashMap<>();
+        Map<String, String> registrationClubs = new LinkedHashMap<>();
+        for (ProLeagueRepository.ProTeam team : repository.allTeams()) {
+            String registration = registrationKey(team.leagueId(), team.season(), team.id());
+            String club = teamKey(team.clubId(), team.leagueId(), team.id());
+            registrations.put(registration, team);
+            registrationClubs.put(registration, club);
+            clubs.putIfAbsent(club, team);
+            ProLeagueRepository.ProLeague league = leagues.get(team.leagueId());
+            clubCompetitions.computeIfAbsent(club, ignored -> new LinkedHashSet<>())
+                    .add(league == null ? team.leagueId() : league.name());
+        }
 
         List<TimedMatch> ordered = new ArrayList<>();
         int skipped = 0;
         for (ProLeagueRepository.ProMatch match : repository.allMatches()) {
             Instant at = matchInstant(match);
-            if (!eligible(match) || at == null || !teams.containsKey(teamKey(match.leagueId(), match.team1Id()))
-                    || !teams.containsKey(teamKey(match.leagueId(), match.team2Id()))) {
+            String registrationA = registrationKey(match.leagueId(), match.season(), match.team1Id());
+            String registrationB = registrationKey(match.leagueId(), match.season(), match.team2Id());
+            if (!eligible(match) || at == null || !registrationClubs.containsKey(registrationA)
+                    || !registrationClubs.containsKey(registrationB)) {
                 skipped++;
                 continue;
             }
@@ -56,8 +72,8 @@ public final class EloRankingService {
         Map<String, List<HistoryEntry>> history = new LinkedHashMap<>();
         for (TimedMatch timed : ordered) {
             ProLeagueRepository.ProMatch match = timed.match();
-            String keyA = teamKey(match.leagueId(), match.team1Id());
-            String keyB = teamKey(match.leagueId(), match.team2Id());
+            String keyA = registrationClubs.get(registrationKey(match.leagueId(), match.season(), match.team1Id()));
+            String keyB = registrationClubs.get(registrationKey(match.leagueId(), match.season(), match.team2Id()));
             RatingState a = states.computeIfAbsent(keyA, ignored -> new RatingState());
             RatingState b = states.computeIfAbsent(keyB, ignored -> new RatingState());
             double beforeA = effectiveAt(a, timed.at());
@@ -81,18 +97,20 @@ public final class EloRankingService {
             a.seriesPlayed++;
             b.seriesPlayed++;
 
-            String nameA = teams.get(keyA).name();
-            String nameB = teams.get(keyB).name();
+            String nameA = clubs.get(keyA).name();
+            String nameB = clubs.get(keyB).name();
+            ProLeagueRepository.ProLeague matchLeague = leagues.get(match.leagueId());
+            String competition = matchLeague == null ? match.leagueId() : matchLeague.name();
             history.computeIfAbsent(keyA, ignored -> new ArrayList<>()).add(new HistoryEntry(match.id(), timed.at(), nameB,
-                    match.team1Score() + "-" + match.team2Score(), beforeA, afterA, afterA - beforeA,
+                    competition, match.leagueId(), match.team1Score() + "-" + match.team2Score(), beforeA, afterA, afterA - beforeA,
                     match.team1Score(), match.team2Score()));
             history.computeIfAbsent(keyB, ignored -> new ArrayList<>()).add(new HistoryEntry(match.id(), timed.at(), nameA,
-                    match.team2Score() + "-" + match.team1Score(), beforeB, afterB, afterB - beforeB,
+                    competition, match.leagueId(), match.team2Score() + "-" + match.team1Score(), beforeB, afterB, afterB - beforeB,
                     match.team2Score(), match.team1Score()));
         }
 
         List<TeamRating> result = new ArrayList<>();
-        for (Map.Entry<String, ProLeagueRepository.ProTeam> entry : teams.entrySet()) {
+        for (Map.Entry<String, ProLeagueRepository.ProTeam> entry : clubs.entrySet()) {
             String key = entry.getKey();
             ProLeagueRepository.ProTeam team = entry.getValue();
             ProLeagueRepository.ProLeague league = leagues.get(team.leagueId());
@@ -102,7 +120,9 @@ public final class EloRankingService {
                     : Math.max(0, Duration.between(state.lastMatch, now).toDays());
             String status = state.lastMatch == null ? "unranked"
                     : inactiveDays >= INACTIVE_AFTER_DAYS ? "inactive" : "active";
-            result.add(new TeamRating(key, team.id(), team.leagueId(), league == null ? team.leagueId() : league.name(),
+            String competitionNames = String.join(" · ", clubCompetitions.getOrDefault(key, Set.of()));
+            result.add(new TeamRating(key, team.id(), team.leagueId(), competitionNames.isBlank()
+                    ? (league == null ? team.leagueId() : league.name()) : competitionNames,
                     league == null ? "" : league.region(), league == null ? "" : league.country(),
                     team.name(), team.shortName(), team.logo(), current, state.mapWins, state.mapLosses,
                     state.mapsPlayed, state.seriesPlayed,
@@ -128,8 +148,15 @@ public final class EloRankingService {
         return new Result(now, List.copyOf(ranked), Map.copyOf(immutableHistory), ordered.size(), skipped);
     }
 
-    public static String teamKey(String leagueId, String teamId) {
-        return leagueId + "::" + teamId;
+    private static String registrationKey(String leagueId, String season, String teamId) {
+        return leagueId + "::" + season + "::" + teamId;
+    }
+
+    /** Explicit club IDs link registrations across competitions; blank IDs stay safely competition-scoped. */
+    public static String teamKey(String clubId, String leagueId, String teamId) {
+        return clubId == null || clubId.isBlank()
+                ? leagueId + "::" + teamId
+                : "club::" + clubId.trim().toLowerCase(Locale.ROOT);
     }
 
     public static double expectedScore(double ratingA, double ratingB) {
@@ -211,7 +238,8 @@ public final class EloRankingService {
                              double rating, int mapWins, int mapLosses, int mapsPlayed, int seriesPlayed,
                              double mapWinRate, String lastMatch, String status, boolean qualified, int rank) {}
 
-    public record HistoryEntry(String matchId, Instant date, String opponent, String score,
+    public record HistoryEntry(String matchId, Instant date, String opponent,
+                               String leagueName, String leagueId, String score,
                                double ratingBefore, double ratingAfter, double change,
                                int mapsWon, int mapsLost) {}
 
